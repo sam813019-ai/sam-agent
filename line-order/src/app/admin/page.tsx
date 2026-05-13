@@ -977,14 +977,15 @@ function OrdersManagement({
             {o.salePrice > 0 && ` — NT$${(o.salePrice * o.quantity).toLocaleString()}`}
           </p>
           <select
-            value={o.status}
+            value=""
             disabled={updating === o.rowNum}
             onChange={(e) => handleStatusChange(o.rowNum, e.target.value)}
             className={`w-full text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-opacity ${
               updating === o.rowNum ? 'opacity-50 cursor-not-allowed bg-gray-100' : 'bg-gray-50 border-gray-200'
             }`}
           >
-            {STATUS_OPTIONS.map((s) => <option key={s}>{s}</option>)}
+            <option value="" disabled>— 改狀態 —</option>
+            {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
           {updating === o.rowNum && (
             <p className="text-xs text-gray-400 mt-1 text-center">同步中...</p>
