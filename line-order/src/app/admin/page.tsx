@@ -1040,26 +1040,29 @@ function SalesReport() {
 
   // 門市銷售：依日期；連線訂單：依選取連線（有選則忽略日期）
   useEffect(() => {
+    const controller = new AbortController();
     setLoading(true);
     const params = new URLSearchParams();
     const { start, end } = getDateRange(period);
     if (start) params.set('start', start);
     if (end) params.set('end', end);
     if (selectedCampaign) params.set('campaign', selectedCampaign);
-    fetch(`/api/admin/profit-report?${params}`)
+    fetch(`/api/admin/profit-report?${params}`, { signal: controller.signal })
       .then((r) => r.json())
       .then((d) => {
         setData(d);
         // 全部模式下，用 profit-report 回傳的連線名稱補充清單
         if (!selectedCampaign && d.campaigns?.length) {
           setCampaigns((prev) => {
-            const names = d.campaigns.map((c: CampaignStat) => c.campaign);
+            const names = (d.campaigns as CampaignStat[]).map((c) => c.campaign);
             const merged = Array.from(new Set([...names, ...prev]));
             return merged;
           });
         }
       })
+      .catch((e) => { if (e.name !== 'AbortError') console.error(e); })
       .finally(() => setLoading(false));
+    return () => controller.abort();
   }, [period, selectedCampaign]);
 
   const periods: { key: Period; label: string }[] = [
