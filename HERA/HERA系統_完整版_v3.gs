@@ -738,6 +738,53 @@ function replyLine(token, text) {
   });
 }
 
+// ==========================================
+// 狀態雙向同步：代購訂單 I欄 ↔ 訂單表 H欄
+// 在 Sheet 直接改狀態時自動同步另一張表
+// ==========================================
+function onEdit(e) {
+  var sheet = e.source.getActiveSheet();
+  var range = e.range;
+  var col   = range.getColumn();
+  var row   = range.getRow();
+
+  if (row <= 1) return; // 跳過標題列
+
+  var ss = e.source;
+  var proxySheet  = ss.getSheetByName("代購訂單");
+  var ordersSheet = ss.getSheetByName("訂單表");
+  if (!proxySheet || !ordersSheet) return;
+
+  var newStatus = String(range.getValue());
+  if (!newStatus) return;
+
+  // 代購訂單 I欄（第9欄）被改 → 同步到訂單表 H欄
+  if (sheet.getName() === "代購訂單" && col === 9) {
+    var orderId = String(sheet.getRange(row, 10).getValue()); // J欄 = orderId
+    if (!orderId) return;
+    var ordersData = ordersSheet.getDataRange().getValues();
+    for (var i = 1; i < ordersData.length; i++) {
+      if (String(ordersData[i][1]) === orderId) {
+        ordersSheet.getRange(i + 1, 8).setValue(newStatus);
+        break;
+      }
+    }
+  }
+
+  // 訂單表 H欄（第8欄）被改 → 同步到代購訂單 I欄
+  if (sheet.getName() === "訂單表" && col === 8) {
+    var orderId = String(sheet.getRange(row, 2).getValue()); // B欄 = orderId
+    if (!orderId) return;
+    var proxyData = proxySheet.getDataRange().getValues();
+    for (var i = 1; i < proxyData.length; i++) {
+      if (String(proxyData[i][9]) === orderId) {
+        proxySheet.getRange(i + 1, 9).setValue(newStatus);
+        break;
+      }
+    }
+  }
+}
+
 function pushMessage(to, text) {
   UrlFetchApp.fetch('https://api.line.me/v2/bot/message/push', {
     'headers': { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN },
