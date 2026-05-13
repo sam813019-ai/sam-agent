@@ -1130,6 +1130,7 @@ function SalesReport() {
             {/* 連線下拉選單 */}
             {campaigns.length > 0 && (
               <div className="mb-3">
+                <label className="block text-xs text-gray-500 mb-1">篩選連線</label>
                 <select
                   value={selectedCampaign || ''}
                   onChange={(e) => setSelectedCampaign(e.target.value || null)}
@@ -1155,7 +1156,7 @@ function SalesReport() {
             </div>
 
             {data.campaigns.length > 0 && (
-              <Card title="各連線明細">
+              <Card title={selectedCampaign ? '本期連線明細' : '各連線明細'}>
                 <div className="space-y-4">
                   {data.campaigns.map((c) => (
                     <div key={c.campaign} className="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
