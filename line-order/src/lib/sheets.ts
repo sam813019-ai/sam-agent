@@ -840,7 +840,7 @@ export async function getMonthlyProfitReport(
     const campaign = campaignMap.get(orderId) || "（無連線）";
     const revenue = Number(r[5] || 0) * Number(r[6] || 0);
     const profit = Number(r[7] || 0);
-    const confirmed = status === "已取貨" || status === "已付款";
+    const confirmed = status === "已完成" || status === "已取貨" || status === "已付款";
     const prev = campaignStats.get(campaign) || { campaign, itemCount: 0, revenue: 0, confirmedRevenue: 0, pendingRevenue: 0, profit: 0 };
     campaignStats.set(campaign, {
       ...prev,
