@@ -1127,28 +1127,19 @@ function SalesReport() {
           <div>
             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">連線訂單毛利</h3>
 
-            {/* 連線選擇按鈕 */}
+            {/* 連線下拉選單 */}
             {campaigns.length > 0 && (
-              <div className="flex gap-2 flex-wrap mb-3">
-                <button
-                  onClick={() => setSelectedCampaign(null)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    !selectedCampaign ? 'bg-blue-600 text-white' : 'bg-white border text-gray-600 hover:border-blue-400'
-                  }`}
+              <div className="mb-3">
+                <select
+                  value={selectedCampaign || ''}
+                  onChange={(e) => setSelectedCampaign(e.target.value || null)}
+                  className={inputCls}
                 >
-                  全部
-                </button>
-                {campaigns.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => setSelectedCampaign(c)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      selectedCampaign === c ? 'bg-blue-600 text-white' : 'bg-white border text-gray-600 hover:border-blue-400'
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
+                  <option value="">全部連線（依日期）</option>
+                  {campaigns.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
               </div>
             )}
 
