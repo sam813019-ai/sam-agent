@@ -764,6 +764,99 @@ export async function getSalesReport(
   };
 }
 
+// ─── 月結毛利報表（門市銷售 + 連線訂單 分開） ────────────────────────────────
+
+export interface CampaignStat {
+  campaign: string;
+  itemCount: number;
+  revenue: number;
+  confirmedRevenue: number;
+  pendingRevenue: number;
+  profit: number;
+}
+
+export interface MonthlyProfitReport {
+  sales: SalesReportData;
+  campaigns: CampaignStat[];
+  orderRevenue: number;
+  orderProfit: number;
+}
+
+export async function getMonthlyProfitReport(
+  startDate?: string,
+  endDate?: string
+): Promise<MonthlyProfitReport> {
+  const sheets = getClient();
+
+  const [salesRes, proxyRes, ordersRes] = await Promise.all([
+    sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${SALES_TAB}!A2:G` }),
+    sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${PROXY_ORDERS_TAB}!A2:J` }),
+    sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${ORDERS_TAB}!A2:I` }),
+  ]);
+
+  // --- 門市銷售紀錄 ---
+  let salesRows = (salesRes.data.values || []).filter((r) => r[0]);
+  if (startDate) salesRows = salesRows.filter((r) => String(r[0]) >= startDate);
+  if (endDate) salesRows = salesRows.filter((r) => String(r[0]) <= endDate);
+
+  const productMap = new Map<string, { quantity: number; amount: number }>();
+  const clerkMap = new Map<string, { count: number; amount: number }>();
+  salesRows.forEach((r) => {
+    const pKey = [r[2], r[3]].filter(Boolean).join(" ");
+    const pPrev = productMap.get(pKey) || { quantity: 0, amount: 0 };
+    productMap.set(pKey, { quantity: pPrev.quantity + Number(r[4] || 0), amount: pPrev.amount + Number(r[5] || 0) });
+    const clerk = String(r[1] || "（未記名）");
+    const cPrev = clerkMap.get(clerk) || { count: 0, amount: 0 };
+    clerkMap.set(clerk, { count: cPrev.count + 1, amount: cPrev.amount + Number(r[5] || 0) });
+  });
+  const sales: SalesReportData = {
+    totalAmount: salesRows.reduce((s, r) => s + Number(r[5] || 0), 0),
+    totalCount: salesRows.length,
+    byProduct: Array.from(productMap.entries()).map(([key, v]) => ({ key, ...v })).sort((a, b) => b.amount - a.amount).slice(0, 20),
+    byClerk: Array.from(clerkMap.entries()).map(([clerk, v]) => ({ clerk, ...v })).sort((a, b) => b.amount - a.amount),
+  };
+
+  // --- orderId → campaign 對照表 ---
+  const campaignMap = new Map<string, string>();
+  (ordersRes.data.values || []).forEach((r) => {
+    const orderId = String(r[1] || "");
+    if (orderId) campaignMap.set(orderId, String(r[8] || "（無連線）"));
+  });
+
+  // --- 代購訂單 → 依連線分組 ---
+  let proxyRows = (proxyRes.data.values || []).filter((r) => r[0]);
+  if (startDate) proxyRows = proxyRows.filter((r) => String(r[0]) >= startDate);
+  if (endDate) proxyRows = proxyRows.filter((r) => String(r[0]) <= endDate);
+
+  const campaignStats = new Map<string, CampaignStat>();
+  proxyRows.forEach((r) => {
+    const status = String(r[8] || "未取貨");
+    if (status === "已取消") return;
+    const orderId = String(r[9] || "");
+    const campaign = campaignMap.get(orderId) || "（無連線）";
+    const revenue = Number(r[5] || 0) * Number(r[6] || 0);
+    const profit = Number(r[7] || 0);
+    const confirmed = status === "已取貨" || status === "已付款";
+    const prev = campaignStats.get(campaign) || { campaign, itemCount: 0, revenue: 0, confirmedRevenue: 0, pendingRevenue: 0, profit: 0 };
+    campaignStats.set(campaign, {
+      ...prev,
+      itemCount: prev.itemCount + 1,
+      revenue: prev.revenue + revenue,
+      confirmedRevenue: prev.confirmedRevenue + (confirmed ? revenue : 0),
+      pendingRevenue: prev.pendingRevenue + (!confirmed ? revenue : 0),
+      profit: prev.profit + profit,
+    });
+  });
+
+  const campaigns = Array.from(campaignStats.values()).sort((a, b) => b.revenue - a.revenue);
+  return {
+    sales,
+    campaigns,
+    orderRevenue: campaigns.reduce((s, c) => s + c.revenue, 0),
+    orderProfit: campaigns.reduce((s, c) => s + c.profit, 0),
+  };
+}
+
 // ─── 商品管理（批次上下架）────────────────────────────────────────────────────
 
 export interface ManagedProduct {

@@ -995,9 +995,17 @@ function OrdersManagement({
 
 type Period = 'today' | 'week' | 'month' | 'all';
 
+type CampaignStat = { campaign: string; itemCount: number; revenue: number; confirmedRevenue: number; pendingRevenue: number; profit: number };
+type ProfitReport = {
+  sales: { totalAmount: number; totalCount: number; byProduct: { key: string; quantity: number; amount: number }[]; byClerk: { clerk: string; count: number; amount: number }[] };
+  campaigns: CampaignStat[];
+  orderRevenue: number;
+  orderProfit: number;
+};
+
 function SalesReport() {
   const [period, setPeriod] = useState<Period>('month');
-  const [data, setData] = useState<{ totalAmount: number; totalCount: number; byProduct: { key: string; quantity: number; amount: number }[]; byClerk: { clerk: string; count: number; amount: number }[] } | null>(null);
+  const [data, setData] = useState<ProfitReport | null>(null);
   const [loading, setLoading] = useState(false);
 
   const getDateRange = (p: Period): { start?: string; end?: string } => {
@@ -1021,7 +1029,7 @@ function SalesReport() {
     const params = new URLSearchParams();
     if (start) params.set('start', start);
     if (end) params.set('end', end);
-    fetch(`/api/admin/sales-report?${params}`)
+    fetch(`/api/admin/profit-report?${params}`)
       .then((r) => r.json())
       .then(setData)
       .finally(() => setLoading(false));
@@ -1035,7 +1043,7 @@ function SalesReport() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex gap-2">
         {periods.map(({ key, label }) => (
           <button key={key} onClick={() => setPeriod(key)}
@@ -1051,45 +1059,87 @@ function SalesReport() {
 
       {data && !loading && (
         <>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <p className="text-xs text-gray-400 mb-1">總銷售額</p>
-              <p className="text-xl font-bold text-gray-900">NT${data.totalAmount.toLocaleString()}</p>
+          {/* ── 門市銷售紀錄 ── */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">門市銷售紀錄</h3>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+                <p className="text-xs text-gray-400 mb-1">門市營業額</p>
+                <p className="text-xl font-bold text-gray-900">NT${data.sales.totalAmount.toLocaleString()}</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+                <p className="text-xs text-gray-400 mb-1">銷售筆數</p>
+                <p className="text-xl font-bold text-gray-900">{data.sales.totalCount}</p>
+              </div>
             </div>
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <p className="text-xs text-gray-400 mb-1">銷售筆數</p>
-              <p className="text-xl font-bold text-gray-900">{data.totalCount}</p>
-            </div>
+
+            {data.sales.byProduct.length > 0 && (
+              <Card title="商品排行">
+                <div className="space-y-2">
+                  {data.sales.byProduct.map((p, i) => (
+                    <div key={p.key} className="flex items-center gap-2 text-sm">
+                      <span className="text-xs text-gray-400 w-5">{i + 1}</span>
+                      <span className="flex-1 text-gray-700 truncate">{p.key}</span>
+                      <span className="text-gray-500 text-xs">{p.quantity} 件</span>
+                      <span className="font-medium text-gray-900 w-20 text-right">NT${p.amount.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+            {data.sales.byClerk.length > 0 && (
+              <Card title="店員銷售">
+                <div className="space-y-2">
+                  {data.sales.byClerk.map((c) => (
+                    <div key={c.clerk} className="flex items-center text-sm gap-2">
+                      <span className="flex-1 text-gray-700">{c.clerk}</span>
+                      <span className="text-gray-500 text-xs">{c.count} 筆</span>
+                      <span className="font-medium text-gray-900 w-20 text-right">NT${c.amount.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
           </div>
 
-          {data.byProduct.length > 0 && (
-            <Card title="商品排行">
-              <div className="space-y-2">
-                {data.byProduct.map((p, i) => (
-                  <div key={p.key} className="flex items-center gap-2 text-sm">
-                    <span className="text-xs text-gray-400 w-5">{i + 1}</span>
-                    <span className="flex-1 text-gray-700 truncate">{p.key}</span>
-                    <span className="text-gray-500 text-xs">{p.quantity} 件</span>
-                    <span className="font-medium text-gray-900 w-20 text-right">NT${p.amount.toLocaleString()}</span>
-                  </div>
-                ))}
+          {/* ── 連線訂單毛利 ── */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">連線訂單毛利</h3>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+                <p className="text-xs text-gray-400 mb-1">訂單總收入</p>
+                <p className="text-xl font-bold text-gray-900">NT${data.orderRevenue.toLocaleString()}</p>
               </div>
-            </Card>
-          )}
+              <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+                <p className="text-xs text-gray-400 mb-1">訂單總毛利</p>
+                <p className="text-xl font-bold text-green-700">NT${data.orderProfit.toLocaleString()}</p>
+              </div>
+            </div>
 
-          {data.byClerk.length > 0 && (
-            <Card title="店員銷售">
-              <div className="space-y-2">
-                {data.byClerk.map((c) => (
-                  <div key={c.clerk} className="flex items-center text-sm gap-2">
-                    <span className="flex-1 text-gray-700">{c.clerk}</span>
-                    <span className="text-gray-500 text-xs">{c.count} 筆</span>
-                    <span className="font-medium text-gray-900 w-20 text-right">NT${c.amount.toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
+            {data.campaigns.length > 0 && (
+              <Card title="各連線明細">
+                <div className="space-y-4">
+                  {data.campaigns.map((c) => (
+                    <div key={c.campaign} className="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                      <p className="text-sm font-semibold text-gray-800 mb-2 truncate">{c.campaign}</p>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600">
+                        <span>筆數：{c.itemCount} 筆</span>
+                        <span>收入：<span className="font-medium text-gray-900">NT${c.revenue.toLocaleString()}</span></span>
+                        <span className="text-green-600">已確認：NT${c.confirmedRevenue.toLocaleString()}</span>
+                        <span className="text-yellow-600">待確認：NT${c.pendingRevenue.toLocaleString()}</span>
+                        <span className="col-span-2 text-green-700 font-semibold mt-1">毛利：NT${c.profit.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+            {data.campaigns.length === 0 && (
+              <p className="text-sm text-gray-400 text-center py-4">此區間無連線訂單</p>
+            )}
+          </div>
         </>
       )}
     </div>
