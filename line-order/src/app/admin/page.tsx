@@ -1030,11 +1030,12 @@ function SalesReport() {
     return {};
   };
 
-  // 載入連線清單
+  // 載入連線清單（API 失敗時以 profit-report 資料補救）
   useEffect(() => {
     fetch('/api/admin/campaigns')
       .then((r) => r.json())
-      .then((d) => setCampaigns(d.campaigns || []));
+      .then((d) => { if (d.campaigns?.length) setCampaigns(d.campaigns); })
+      .catch(() => {});
   }, []);
 
   // 門市銷售：依日期；連線訂單：依選取連線（有選則忽略日期）
@@ -1047,7 +1048,17 @@ function SalesReport() {
     if (selectedCampaign) params.set('campaign', selectedCampaign);
     fetch(`/api/admin/profit-report?${params}`)
       .then((r) => r.json())
-      .then(setData)
+      .then((d) => {
+        setData(d);
+        // 全部模式下，用 profit-report 回傳的連線名稱補充清單
+        if (!selectedCampaign && d.campaigns?.length) {
+          setCampaigns((prev) => {
+            const names = d.campaigns.map((c: CampaignStat) => c.campaign);
+            const merged = Array.from(new Set([...names, ...prev]));
+            return merged;
+          });
+        }
+      })
       .finally(() => setLoading(false));
   }, [period, selectedCampaign]);
 
