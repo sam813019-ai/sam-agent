@@ -728,9 +728,10 @@ export async function getSalesReport(
     range: `${SALES_TAB}!A2:G`,
   });
 
+  const dateOnly = (s: string) => String(s).split(" ")[0];
   let rows = (res.data.values || []).filter((r) => r[0]);
-  if (startDate) rows = rows.filter((r) => String(r[0]) >= startDate);
-  if (endDate) rows = rows.filter((r) => String(r[0]) <= endDate);
+  if (startDate) rows = rows.filter((r) => dateOnly(String(r[0])) >= startDate);
+  if (endDate) rows = rows.filter((r) => dateOnly(String(r[0])) <= endDate);
 
   const productMap = new Map<string, { quantity: number; amount: number }>();
   const clerkMap = new Map<string, { count: number; amount: number }>();
@@ -795,9 +796,12 @@ export async function getMonthlyProfitReport(
   ]);
 
   // --- 門市銷售紀錄 ---
+  // HERA bot 寫入 new Date()，Sheets 回傳含時間字串（"2026/5/13 下午3:45"），
+  // 需切掉空格後的時間部分才能正確比對日期
+  const dateOnly = (s: string) => String(s).split(" ")[0];
   let salesRows = (salesRes.data.values || []).filter((r) => r[0]);
-  if (startDate) salesRows = salesRows.filter((r) => String(r[0]) >= startDate);
-  if (endDate) salesRows = salesRows.filter((r) => String(r[0]) <= endDate);
+  if (startDate) salesRows = salesRows.filter((r) => dateOnly(String(r[0])) >= startDate);
+  if (endDate) salesRows = salesRows.filter((r) => dateOnly(String(r[0])) <= endDate);
 
   const productMap = new Map<string, { quantity: number; amount: number }>();
   const clerkMap = new Map<string, { count: number; amount: number }>();
