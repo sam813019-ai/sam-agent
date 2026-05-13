@@ -1012,7 +1012,6 @@ function SalesReport() {
   const [period, setPeriod] = useState<Period>('month');
   const [data, setData] = useState<ProfitReport | null>(null);
   const [loading, setLoading] = useState(false);
-  const [campaigns, setCampaigns] = useState<string[]>([]);
   const [selectedCampaign, setSelectedCampaign] = useState<string | null>(null);
 
   const getDateRange = (p: Period): { start?: string; end?: string } => {
@@ -1030,15 +1029,7 @@ function SalesReport() {
     return {};
   };
 
-  // 載入連線清單（API 失敗時以 profit-report 資料補救）
-  useEffect(() => {
-    fetch('/api/admin/campaigns')
-      .then((r) => r.json())
-      .then((d) => { if (d.campaigns?.length) setCampaigns(d.campaigns); })
-      .catch(() => {});
-  }, []);
-
-  // 門市銷售：依日期；連線訂單：依選取連線（有選則忽略日期）
+  // 只依日期抓門市銷售；連線訂單後端已全部回傳，在前端過濾
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
@@ -1046,24 +1037,13 @@ function SalesReport() {
     const { start, end } = getDateRange(period);
     if (start) params.set('start', start);
     if (end) params.set('end', end);
-    if (selectedCampaign) params.set('campaign', selectedCampaign);
     fetch(`/api/admin/profit-report?${params}`, { signal: controller.signal })
       .then((r) => r.json())
-      .then((d) => {
-        setData(d);
-        // 全部模式下，用 profit-report 回傳的連線名稱補充清單
-        if (!selectedCampaign && d.campaigns?.length) {
-          setCampaigns((prev) => {
-            const names = (d.campaigns as CampaignStat[]).map((c) => c.campaign);
-            const merged = Array.from(new Set([...names, ...prev]));
-            return merged;
-          });
-        }
-      })
+      .then(setData)
       .catch((e) => { if (e.name !== 'AbortError') console.error(e); })
       .finally(() => setLoading(false));
     return () => controller.abort();
-  }, [period, selectedCampaign]);
+  }, [period]);
 
   const periods: { key: Period; label: string }[] = [
     { key: 'today', label: '今日' },
@@ -1137,63 +1117,69 @@ function SalesReport() {
             )}
           </div>
 
-          {/* ── 連線訂單毛利 ── */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">連線訂單毛利</h3>
+          {/* ── 連線訂單毛利（client-side 過濾，不重新 fetch） ── */}
+          {(() => {
+            const shown = selectedCampaign
+              ? data.campaigns.filter((c) => c.campaign === selectedCampaign)
+              : data.campaigns;
+            const totalRev = shown.reduce((s, c) => s + c.revenue, 0);
+            const totalProfit = shown.reduce((s, c) => s + c.profit, 0);
+            return (
+              <div>
+                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">連線訂單毛利</h3>
 
-            {/* 連線下拉選單 */}
-            {campaigns.length > 0 && (
-              <div className="mb-3">
-                <label className="block text-xs text-gray-500 mb-1">篩選連線</label>
-                <select
-                  value={selectedCampaign || ''}
-                  onChange={(e) => setSelectedCampaign(e.target.value || null)}
-                  className={inputCls}
-                >
-                  <option value="">全部連線</option>
-                  {campaigns.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
-            )}
+                {data.campaigns.length > 0 && (
+                  <div className="mb-3">
+                    <label className="block text-xs text-gray-500 mb-1">篩選連線</label>
+                    <select
+                      value={selectedCampaign || ''}
+                      onChange={(e) => setSelectedCampaign(e.target.value || null)}
+                      className={inputCls}
+                    >
+                      <option value="">全部連線</option>
+                      {data.campaigns.map((c) => (
+                        <option key={c.campaign} value={c.campaign}>{c.campaign}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-                <p className="text-xs text-gray-400 mb-1">訂單總收入</p>
-                <p className="text-xl font-bold text-gray-900">NT${data.orderRevenue.toLocaleString()}</p>
-              </div>
-              <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-                <p className="text-xs text-gray-400 mb-1">訂單總毛利</p>
-                <p className="text-xl font-bold text-green-700">NT${data.orderProfit.toLocaleString()}</p>
-              </div>
-            </div>
-
-            {data.campaigns.length > 0 && (
-              <Card title={selectedCampaign ? '本期連線明細' : '各連線明細'}>
-                <div className="space-y-4">
-                  {data.campaigns.map((c) => (
-                    <div key={c.campaign} className="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
-                      <p className="text-sm font-semibold text-gray-800 mb-2 truncate">{c.campaign}</p>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600">
-                        <span>筆數：{c.itemCount} 筆</span>
-                        <span>收入：<span className="font-medium text-gray-900">NT${c.revenue.toLocaleString()}</span></span>
-                        <span className="text-green-600">已確認：NT${c.confirmedRevenue.toLocaleString()}</span>
-                        <span className="text-yellow-600">待確認：NT${c.pendingRevenue.toLocaleString()}</span>
-                        <span className="col-span-2 text-green-700 font-semibold mt-1">毛利：NT${c.profit.toLocaleString()}</span>
-                      </div>
-                    </div>
-                  ))}
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+                    <p className="text-xs text-gray-400 mb-1">訂單總收入</p>
+                    <p className="text-xl font-bold text-gray-900">NT${totalRev.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+                    <p className="text-xs text-gray-400 mb-1">訂單總毛利</p>
+                    <p className="text-xl font-bold text-green-700">NT${totalProfit.toLocaleString()}</p>
+                  </div>
                 </div>
-              </Card>
-            )}
 
-            {data.campaigns.length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-4">
-                {selectedCampaign ? `${selectedCampaign} 無訂單資料` : '此區間無連線訂單'}
-              </p>
-            )}
-          </div>
+                {shown.length > 0 && (
+                  <Card title={selectedCampaign ? '本期連線明細' : '各連線明細'}>
+                    <div className="space-y-4">
+                      {shown.map((c) => (
+                        <div key={c.campaign} className="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                          <p className="text-sm font-semibold text-gray-800 mb-2 truncate">{c.campaign}</p>
+                          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600">
+                            <span>筆數：{c.itemCount} 筆</span>
+                            <span>收入：<span className="font-medium text-gray-900">NT${c.revenue.toLocaleString()}</span></span>
+                            <span className="text-green-600">已確認：NT${c.confirmedRevenue.toLocaleString()}</span>
+                            <span className="text-yellow-600">待確認：NT${c.pendingRevenue.toLocaleString()}</span>
+                            <span className="col-span-2 text-green-700 font-semibold mt-1">毛利：NT${c.profit.toLocaleString()}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+
+                {shown.length === 0 && (
+                  <p className="text-sm text-gray-400 text-center py-4">無連線訂單資料</p>
+                )}
+              </div>
+            );
+          })()}
         </>
       )}
     </div>
