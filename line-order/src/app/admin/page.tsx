@@ -1147,7 +1147,7 @@ function SalesReport() {
                   onChange={(e) => setSelectedCampaign(e.target.value || null)}
                   className={inputCls}
                 >
-                  <option value="">全部連線（依日期）</option>
+                  <option value="">全部連線</option>
                   {campaigns.map((c) => (
                     <option key={c} value={c}>{c}</option>
                   ))}

@@ -847,17 +847,14 @@ export async function getMonthlyProfitReport(
 
   // --- 代購訂單 → 依連線分組 ---
   let proxyRows = (proxyRes.data.values || []).filter((r) => r[0]);
+  // 連線訂單不套日期，一檔期就是一檔期；僅在有指定連線時篩選
   if (campaignFilter) {
-    // 指定連線：只撈該連線的訂單（忽略日期）
     const campaignOrderIds = new Set(
       Array.from(campaignMap.entries())
         .filter(([, c]) => c === campaignFilter)
         .map(([id]) => id)
     );
     proxyRows = proxyRows.filter((r) => campaignOrderIds.has(String(r[9] || "")));
-  } else {
-    if (startDate) proxyRows = proxyRows.filter((r) => String(r[0]) >= startDate);
-    if (endDate) proxyRows = proxyRows.filter((r) => String(r[0]) <= endDate);
   }
 
   const campaignStats = new Map<string, CampaignStat>();
