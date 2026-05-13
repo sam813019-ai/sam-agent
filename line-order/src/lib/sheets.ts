@@ -834,7 +834,7 @@ export async function getMonthlyProfitReport(
   const sales: SalesReportData = {
     totalAmount: salesRows.reduce((s, r) => s + Number(r[5] || 0), 0),
     totalCount: salesRows.length,
-    byProduct: Array.from(productMap.entries()).map(([key, v]) => ({ key, ...v })).sort((a, b) => b.amount - a.amount).slice(0, 20),
+    byProduct: Array.from(productMap.entries()).map(([key, v]) => ({ key, ...v })).sort((a, b) => b.amount - a.amount).slice(0, 10),
     byClerk: Array.from(clerkMap.entries()).map(([clerk, v]) => ({ clerk, ...v })).sort((a, b) => b.amount - a.amount),
   };
 
