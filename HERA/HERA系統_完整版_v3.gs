@@ -392,7 +392,7 @@ function handleProxyOrder(parts, replyToken, userId) {
 
     var orderId = generateLiveOrderId_();
     proxySheet.appendRow([
-      new Date(), name, sku, spec, cost, price, qty, profit, "未取貨", orderId
+      new Date(), name, sku, spec, cost, price, qty, profit, "已到貨", orderId
     ]);
 
     // 2️⃣ Dual-Write 到 LIFF 訂單表 + 訂單明細
@@ -475,7 +475,7 @@ function handleProxyCustomerQuery(parts, replyToken) {
       var price = parseFloat(data[i][5]) || 0;
       var qty   = parseInt(data[i][6]) || 0;
       var sub   = price * qty;
-      var status = data[i][8] || "未取貨";
+      var status = data[i][8] || "已到貨";
       if (status === "已取消") continue;
 
       var markMap = { "已完成": "✅", "已取貨": "✅", "已付款": "💰" };
@@ -484,7 +484,7 @@ function handleProxyCustomerQuery(parts, replyToken) {
 
       totalQty    += qty;
       totalAmount += sub;
-      if (status === "未取貨") pendingCount++;
+      if (status === "已到貨" || status === "未取貨") pendingCount++;
     }
   }
 
@@ -618,7 +618,7 @@ function handleProxyDeliver(parts, replyToken) {
     }
 
     if (updatedCount === 0) {
-      replyLine(replyToken, "🔍 查無客戶「" + targetName + "」的未取貨訂單");
+      replyLine(replyToken, "🔍 查無客戶「" + targetName + "」的待完成訂單");
       return;
     }
 

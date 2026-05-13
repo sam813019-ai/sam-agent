@@ -176,7 +176,7 @@ export async function appendOrder(
           i.unitPrice,
           i.quantity,
           "",
-          "未取貨",
+          "已到貨",
           orderId,
         ]),
       },
@@ -841,6 +841,7 @@ export async function getMonthlyProfitReport(
     const revenue = Number(r[5] || 0) * Number(r[6] || 0);
     const profit = Number(r[7] || 0);
     const confirmed = status === "已完成" || status === "已取貨" || status === "已付款";
+    // 已到貨 = 待確認（到貨但尚未完成交易）
     const prev = campaignStats.get(campaign) || { campaign, itemCount: 0, revenue: 0, confirmedRevenue: 0, pendingRevenue: 0, profit: 0 };
     campaignStats.set(campaign, {
       ...prev,
