@@ -1012,6 +1012,8 @@ function SalesReport() {
   const [period, setPeriod] = useState<Period>('month');
   const [data, setData] = useState<ProfitReport | null>(null);
   const [loading, setLoading] = useState(false);
+  const [campaigns, setCampaigns] = useState<string[]>([]);
+  const [selectedCampaign, setSelectedCampaign] = useState<string | null>(null);
 
   const getDateRange = (p: Period): { start?: string; end?: string } => {
     const today = new Date();
@@ -1028,17 +1030,26 @@ function SalesReport() {
     return {};
   };
 
+  // 載入連線清單
+  useEffect(() => {
+    fetch('/api/admin/campaigns')
+      .then((r) => r.json())
+      .then((d) => setCampaigns(d.campaigns || []));
+  }, []);
+
+  // 門市銷售：依日期；連線訂單：依選取連線（有選則忽略日期）
   useEffect(() => {
     setLoading(true);
-    const { start, end } = getDateRange(period);
     const params = new URLSearchParams();
+    const { start, end } = getDateRange(period);
     if (start) params.set('start', start);
     if (end) params.set('end', end);
+    if (selectedCampaign) params.set('campaign', selectedCampaign);
     fetch(`/api/admin/profit-report?${params}`)
       .then((r) => r.json())
       .then(setData)
       .finally(() => setLoading(false));
-  }, [period]);
+  }, [period, selectedCampaign]);
 
   const periods: { key: Period; label: string }[] = [
     { key: 'today', label: '今日' },
@@ -1049,15 +1060,19 @@ function SalesReport() {
 
   return (
     <div className="space-y-5">
-      <div className="flex gap-2">
-        {periods.map(({ key, label }) => (
-          <button key={key} onClick={() => setPeriod(key)}
-            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
-              period === key ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border'
-            }`}>
-            {label}
-          </button>
-        ))}
+      {/* 日期區間（控制門市銷售） */}
+      <div>
+        <p className="text-xs text-gray-400 mb-1.5">門市銷售期間</p>
+        <div className="flex gap-2">
+          {periods.map(({ key, label }) => (
+            <button key={key} onClick={() => setPeriod(key)}
+              className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
+                period === key ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border'
+              }`}>
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {loading && <p className="text-sm text-gray-400 text-center py-8">載入中...</p>}
@@ -1110,7 +1125,33 @@ function SalesReport() {
 
           {/* ── 連線訂單毛利 ── */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">連線訂單毛利</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">連線訂單毛利</h3>
+
+            {/* 連線選擇按鈕 */}
+            {campaigns.length > 0 && (
+              <div className="flex gap-2 flex-wrap mb-3">
+                <button
+                  onClick={() => setSelectedCampaign(null)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    !selectedCampaign ? 'bg-blue-600 text-white' : 'bg-white border text-gray-600 hover:border-blue-400'
+                  }`}
+                >
+                  全部
+                </button>
+                {campaigns.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setSelectedCampaign(c)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      selectedCampaign === c ? 'bg-blue-600 text-white' : 'bg-white border text-gray-600 hover:border-blue-400'
+                    }`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div className="bg-white rounded-xl p-4 shadow-sm text-center">
                 <p className="text-xs text-gray-400 mb-1">訂單總收入</p>
@@ -1142,7 +1183,9 @@ function SalesReport() {
             )}
 
             {data.campaigns.length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-4">此區間無連線訂單</p>
+              <p className="text-sm text-gray-400 text-center py-4">
+                {selectedCampaign ? `${selectedCampaign} 無訂單資料` : '此區間無連線訂單'}
+              </p>
             )}
           </div>
         </>
