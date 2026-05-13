@@ -765,6 +765,23 @@ export async function getSalesReport(
   };
 }
 
+// ─── 取得所有連線名稱清單 ─────────────────────────────────────────────────────
+
+export async function getAvailableCampaigns(): Promise<string[]> {
+  const sheets = getClient();
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!I2:I`,
+  });
+  const rows = res.data.values || [];
+  const seen = new Set<string>();
+  rows.forEach((r) => {
+    const c = String(r[0] || "").trim();
+    if (c && c !== "（無連線）") seen.add(c);
+  });
+  return Array.from(seen).reverse(); // 最新連線排前面
+}
+
 // ─── 月結毛利報表（門市銷售 + 連線訂單 分開） ────────────────────────────────
 
 export interface CampaignStat {
@@ -785,7 +802,8 @@ export interface MonthlyProfitReport {
 
 export async function getMonthlyProfitReport(
   startDate?: string,
-  endDate?: string
+  endDate?: string,
+  campaignFilter?: string  // 傳入時忽略日期，只統計指定連線
 ): Promise<MonthlyProfitReport> {
   const sheets = getClient();
 
@@ -829,8 +847,18 @@ export async function getMonthlyProfitReport(
 
   // --- 代購訂單 → 依連線分組 ---
   let proxyRows = (proxyRes.data.values || []).filter((r) => r[0]);
-  if (startDate) proxyRows = proxyRows.filter((r) => String(r[0]) >= startDate);
-  if (endDate) proxyRows = proxyRows.filter((r) => String(r[0]) <= endDate);
+  if (campaignFilter) {
+    // 指定連線：只撈該連線的訂單（忽略日期）
+    const campaignOrderIds = new Set(
+      Array.from(campaignMap.entries())
+        .filter(([, c]) => c === campaignFilter)
+        .map(([id]) => id)
+    );
+    proxyRows = proxyRows.filter((r) => campaignOrderIds.has(String(r[9] || "")));
+  } else {
+    if (startDate) proxyRows = proxyRows.filter((r) => String(r[0]) >= startDate);
+    if (endDate) proxyRows = proxyRows.filter((r) => String(r[0]) <= endDate);
+  }
 
   const campaignStats = new Map<string, CampaignStat>();
   proxyRows.forEach((r) => {
@@ -838,8 +866,11 @@ export async function getMonthlyProfitReport(
     if (status === "已取消") return;
     const orderId = String(r[9] || "");
     const campaign = campaignMap.get(orderId) || "（無連線）";
-    const revenue = Number(r[5] || 0) * Number(r[6] || 0);
-    const profit = Number(r[7] || 0);
+    const costPrice = Number(r[4] || 0);
+    const salePrice = Number(r[5] || 0);
+    const quantity  = Number(r[6] || 0);
+    const revenue = salePrice * quantity;
+    const profit  = (salePrice - costPrice) * quantity;  // 實時計算，不信任 H 欄
     const confirmed = status === "已完成" || status === "已取貨" || status === "已付款";
     // 已到貨 = 待確認（到貨但尚未完成交易）
     const prev = campaignStats.get(campaign) || { campaign, itemCount: 0, revenue: 0, confirmedRevenue: 0, pendingRevenue: 0, profit: 0 };
