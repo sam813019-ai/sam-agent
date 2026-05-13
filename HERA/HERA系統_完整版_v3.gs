@@ -392,7 +392,7 @@ function handleProxyOrder(parts, replyToken, userId) {
 
     var orderId = generateLiveOrderId_();
     proxySheet.appendRow([
-      new Date(), name, sku, spec, cost, price, qty, profit, "已到貨", orderId
+      new Date(), name, sku, spec, cost, price, qty, profit, "手動加單", orderId
     ]);
 
     // 2️⃣ Dual-Write 到 LIFF 訂單表 + 訂單明細
@@ -475,16 +475,16 @@ function handleProxyCustomerQuery(parts, replyToken) {
       var price = parseFloat(data[i][5]) || 0;
       var qty   = parseInt(data[i][6]) || 0;
       var sub   = price * qty;
-      var status = data[i][8] || "已到貨";
+      var status = data[i][8] || "手動加單";
       if (status === "已取消") continue;
 
-      var markMap = { "已完成": "✅", "已取貨": "✅", "已付款": "💰" };
+      var markMap = { "已完成": "✅", "已取貨": "✅", "已付款": "💰", "已到貨": "📦" };
       var mark = markMap[status] || "⏳";
       lines.push(mark + " " + sku + " (" + spec + ") x" + qty + " = $" + sub.toLocaleString());
 
       totalQty    += qty;
       totalAmount += sub;
-      if (status === "已到貨" || status === "未取貨") pendingCount++;
+      if (status === "手動加單" || status === "已到貨" || status === "未取貨") pendingCount++;
     }
   }
 

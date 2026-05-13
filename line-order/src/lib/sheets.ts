@@ -176,7 +176,7 @@ export async function appendOrder(
           i.unitPrice,
           i.quantity,
           "",
-          "已到貨",
+          "手動加單",
           orderId,
         ]),
       },

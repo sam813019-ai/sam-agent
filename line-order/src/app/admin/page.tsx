@@ -862,6 +862,8 @@ interface ProxyOrderRow {
 
 const STATUS_OPTIONS = ['已到貨', '已完成', '已付款', '已取消'];
 const STATUS_COLOR: Record<string, string> = {
+  新訂單: 'bg-blue-50 text-blue-600',
+  手動加單: 'bg-yellow-100 text-yellow-800',
   未取貨: 'bg-yellow-100 text-yellow-800',
   已到貨: 'bg-orange-100 text-orange-700',
   已完成: 'bg-blue-100 text-blue-800',
