@@ -454,6 +454,8 @@ function SalesForm({
 
 // ─── 代購下單 ─────────────────────────────────────────────────────────────────
 
+type ProductOption = { id: string; code: string; name: string; spec: string; price: number; costPrice: number };
+
 function ProxyForm({
   campaignName,
   onSuccess,
@@ -464,16 +466,50 @@ function ProxyForm({
   onError: (m: string) => void;
 }) {
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState<ProductOption[]>([]);
   const [form, setForm] = useState({
     customerName: '',
     productCode: '',
+    productName: '',
     spec: '',
     costPrice: '',
     salePrice: '',
     quantity: '1',
   });
 
+  useEffect(() => {
+    fetch('/api/products')
+      .then((r) => r.json())
+      .then((data: { id: string; code?: string; name: string; spec?: string; price: number; costPrice: number }[]) => {
+        setProducts(
+          data.map((p) => ({
+            id: p.id,
+            code: p.code || '',
+            name: p.name,
+            spec: p.spec || '',
+            price: p.price,
+            costPrice: p.costPrice ?? 0,
+          }))
+        );
+      })
+      .catch(() => {});
+  }, []);
+
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const handleProductSelect = (id: string) => {
+    if (!id) return;
+    const p = products.find((x) => x.id === id);
+    if (!p) return;
+    setForm((f) => ({
+      ...f,
+      productCode: p.code,
+      productName: p.name,
+      spec: p.spec,
+      costPrice: p.costPrice > 0 ? String(p.costPrice) : f.costPrice,
+      salePrice: String(p.price),
+    }));
+  };
 
   const cost = Number(form.costPrice) || 0;
   const sale = Number(form.salePrice) || 0;
@@ -501,7 +537,7 @@ function ProxyForm({
         onSuccess(
           `代購已建立 ${data.orderId}｜毛利 NT$${Number(data.profit).toLocaleString()}`
         );
-        setForm({ customerName: '', productCode: '', spec: '', costPrice: '', salePrice: '', quantity: '1' });
+        setForm({ customerName: '', productCode: '', productName: '', spec: '', costPrice: '', salePrice: '', quantity: '1' });
       } else {
         onError(data.error || '建立失敗');
       }
@@ -519,14 +555,35 @@ function ProxyForm({
             onChange={(e) => set('customerName', e.target.value)}
             className={inputCls} placeholder="顧客直播用名字" />
         </Row>
+        {products.length > 0 && (
+          <Row label="選擇商品">
+            <select
+              className={inputCls}
+              defaultValue=""
+              onChange={(e) => handleProductSelect(e.target.value)}
+            >
+              <option value="">── 從商品表選擇（可手動填寫）──</option>
+              {products.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.code ? `[${p.code}] ` : ''}{p.name}{p.spec ? ` / ${p.spec}` : ''}
+                </option>
+              ))}
+            </select>
+          </Row>
+        )}
         <Row label="商品編號 *">
           <input required value={form.productCode}
             onChange={(e) => set('productCode', e.target.value)}
             className={inputCls} placeholder="F01" />
         </Row>
-        <Row label="規格 *">
-          <input required value={form.spec} onChange={(e) => set('spec', e.target.value)}
-            className={inputCls} placeholder="黑M" />
+        <Row label="商品名稱 *">
+          <input required value={form.productName}
+            onChange={(e) => set('productName', e.target.value)}
+            className={inputCls} placeholder="法式泡泡面膜" />
+        </Row>
+        <Row label="規格">
+          <input value={form.spec} onChange={(e) => set('spec', e.target.value)}
+            className={inputCls} placeholder="黑M（可留空）" />
         </Row>
         <Row label="進價 *">
           <input required type="number" min="0" value={form.costPrice}

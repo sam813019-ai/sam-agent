@@ -475,6 +475,7 @@ export async function addSalesRecord(
 export interface AddAdminProxyPayload {
   customerName: string;
   productCode: string;
+  productName: string;
   spec: string;
   costPrice: number;
   salePrice: number;
@@ -545,7 +546,7 @@ export async function addAdminProxyOrder(
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[
-        orderId, "", payload.productCode, payload.productCode,
+        orderId, "", payload.productCode, payload.productName || payload.productCode,
         payload.spec, payload.salePrice, payload.quantity,
         total, payload.campaignName,
       ]],
