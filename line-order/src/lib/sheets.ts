@@ -519,7 +519,7 @@ export async function addAdminProxyOrder(
       values: [[
         now, payload.customerName, payload.productCode, payload.spec,
         payload.costPrice, payload.salePrice, payload.quantity,
-        profit, "未取貨", orderId,
+        profit, "手動加單", orderId,
       ]],
     },
   });
