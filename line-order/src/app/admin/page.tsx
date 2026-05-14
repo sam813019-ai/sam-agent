@@ -467,6 +467,7 @@ function ProxyForm({
 }) {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<ProductOption[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
   const [form, setForm] = useState({
     customerName: '',
     productCode: '',
@@ -478,9 +479,10 @@ function ProxyForm({
   });
 
   useEffect(() => {
+    setProductsLoading(true);
     fetch('/api/products')
       .then((r) => r.json())
-      .then((data: { products: { id: string; code?: string; name: string; spec?: string; price: number; costPrice: number }[] }) => {
+      .then((data: { products?: { id: string; code?: string; name: string; spec?: string; price: number; costPrice: number }[] }) => {
         setProducts(
           (data.products || []).map((p) => ({
             id: p.id,
@@ -492,7 +494,8 @@ function ProxyForm({
           }))
         );
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setProductsLoading(false));
   }, []);
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
@@ -555,22 +558,22 @@ function ProxyForm({
             onChange={(e) => set('customerName', e.target.value)}
             className={inputCls} placeholder="顧客直播用名字" />
         </Row>
-        {products.length > 0 && (
-          <Row label="選擇商品">
-            <select
-              className={inputCls}
-              defaultValue=""
-              onChange={(e) => handleProductSelect(e.target.value)}
-            >
-              <option value="">── 從商品表選擇（可手動填寫）──</option>
-              {products.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.code ? `[${p.code}] ` : ''}{p.name}{p.spec ? ` / ${p.spec}` : ''}
-                </option>
-              ))}
-            </select>
-          </Row>
-        )}
+        <Row label="選擇商品">
+          <select
+            className={inputCls}
+            defaultValue=""
+            onChange={(e) => handleProductSelect(e.target.value)}
+          >
+            <option value="">
+              {productsLoading ? '載入商品中...' : products.length === 0 ? '（無商品，請手動填寫）' : '── 從商品表選擇 ──'}
+            </option>
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.code ? `[${p.code}] ` : ''}{p.name}{p.spec ? ` / ${p.spec}` : ''}
+              </option>
+            ))}
+          </select>
+        </Row>
         <Row label="商品編號 *">
           <input required value={form.productCode}
             onChange={(e) => set('productCode', e.target.value)}
