@@ -6,7 +6,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const start = searchParams.get('start') || undefined;
     const end = searchParams.get('end') || undefined;
-    const data = await getMonthlyProfitReport(start, end);
+    const campaign = searchParams.get('campaign') || undefined;
+    const data = await getMonthlyProfitReport(start, end, campaign);
     return NextResponse.json(data);
   } catch (e) {
     console.error('月結報表失敗:', e);

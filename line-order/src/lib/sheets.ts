@@ -22,6 +22,81 @@ function getClient() {
   return google.sheets({ version: "v4", auth });
 }
 
+// Google Sheet 頁籤不允許的字元：[ ] * ? : / \
+// 將連線名稱轉成合法頁籤名，例如 "5/27-6/3🇰🇷韓國連線" → "5.27-6.3🇰🇷韓國連線 代購"
+function campaignTabName(campaign: string, suffix: string): string {
+  const base = (campaign || "未分類")
+    .replace(/[[\]*?:/\\]/g, ".")
+    .trim()
+    .slice(0, 88); // 留空間給 suffix
+  return `${base} ${suffix}`;
+}
+
+// 頁籤的表頭定義
+const PROXY_HEADERS = ["日期", "姓名", "商品編號", "規格", "進價", "售價", "數量", "毛利", "狀態", "訂單編號"];
+const ORDERS_HEADERS = ["訂單時間", "訂單編號", "LINE UserId", "顧客名稱", "商品明細", "總金額", "備註", "狀態", "連線代購"];
+
+// Module-level cache: sheet tab name → numeric sheetId
+const _sheetIdCache: Record<string, number> = {};
+
+// 重新抓整份 spreadsheet metadata 並更新 cache
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function refreshSheetIdCache(sheets: any): Promise<void> {
+  const meta = await sheets.spreadsheets.get({ spreadsheetId: SHEET_ID });
+  for (const s of (meta.data.sheets || [])) {
+    const title = s.properties?.title;
+    const id = s.properties?.sheetId;
+    if (title != null && id != null) _sheetIdCache[title] = id;
+  }
+}
+
+// 確保頁籤存在（不存在時自動建立並寫表頭），回傳 numeric sheetId
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function ensureTab(sheets: any, tabName: string, headers: string[]): Promise<number> {
+  if (_sheetIdCache[tabName] == null) await refreshSheetIdCache(sheets);
+  if (_sheetIdCache[tabName] == null) {
+    // 頁籤不存在，建立
+    const res = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: SHEET_ID,
+      requestBody: { requests: [{ addSheet: { properties: { title: tabName } } }] },
+    });
+    const newId = res.data.replies?.[0]?.addSheet?.properties?.sheetId;
+    if (newId != null) {
+      _sheetIdCache[tabName] = newId;
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SHEET_ID,
+        range: `${tabName}!A1`,
+        valueInputOption: "USER_ENTERED",
+        requestBody: { values: [headers] },
+      });
+    }
+  }
+  return _sheetIdCache[tabName] ?? 0;
+}
+
+// 將 rows 插入到指定頁籤的第二列（表頭下方），新資料永遠在最上方
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function prependToLatestTab(sheets: any, tabName: string, headers: string[], rows: unknown[][]): Promise<void> {
+  const sheetId = await ensureTab(sheets, tabName, headers);
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId: SHEET_ID,
+    requestBody: {
+      requests: [{
+        insertDimension: {
+          range: { sheetId, dimension: "ROWS", startIndex: 1, endIndex: 1 + rows.length },
+          inheritFromBefore: false,
+        }
+      }]
+    }
+  });
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${tabName}!A2`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: rows },
+  });
+}
+
 function normalizeImageUrl(url: string): string {
   // 把 Google Drive 分享連結轉成可直接顯示的 lh3 格式
   const drivePatterns = [
@@ -114,27 +189,21 @@ export async function appendOrder(
     })
     .join("\n");
 
-  // 主訂單
+  // 主訂單（原始頁籤 append，系統讀取用）
   await sheets.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
     range: `${ORDERS_TAB}!A:I`,
     valueInputOption: "USER_ENTERED",
     requestBody: {
-      values: [
-        [
-          now,
-          orderId,
-          payload.userId,
-          payload.displayName,
-          itemsText,
-          total,
-          payload.note || "",
-          "新訂單",
-          campaign,
-        ],
-      ],
+      values: [[now, orderId, payload.userId, payload.displayName, itemsText, total, payload.note || "", "新訂單", campaign]],
     },
   });
+  // 以連線名稱為頁籤名（獨立，新在上）
+  try {
+    await prependToLatestTab(sheets, campaignTabName(campaign, "訂單"), ORDERS_HEADERS, [[
+      now, orderId, payload.userId, payload.displayName, itemsText, total, payload.note || "", "新訂單", campaign,
+    ]]);
+  } catch (e) { console.warn("連線訂單頁籤寫入失敗:", e); }
 
   // 訂單明細（一列一項商品，便於統計）
   try {
@@ -160,7 +229,7 @@ export async function appendOrder(
     console.warn("訂單明細分頁寫入失敗（可能尚未建立）:", e);
   }
 
-  // 代購訂單（與 HERA 共用分頁；10 欄：日期 姓名 商品編號 規格 進價 售價 數量 毛利 狀態 備註）
+  // 代購訂單（原始頁籤 append，與 HERA 共用）
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
@@ -168,22 +237,23 @@ export async function appendOrder(
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: payload.items.map((i) => [
-          now,
-          payload.displayName,
-          i.code || i.productId,
-          i.spec || "",
-          "",
-          i.unitPrice,
-          i.quantity,
-          "",
-          "手動加單",
-          orderId,
+          now, payload.displayName, i.code || i.productId, i.spec || "",
+          "", i.unitPrice, i.quantity, "", "手動加單", orderId,
         ]),
       },
     });
   } catch (e) {
     console.warn("代購訂單分頁寫入失敗（可能尚未建立）:", e);
   }
+  // 以連線名稱為頁籤名（獨立，新在上）
+  try {
+    await prependToLatestTab(sheets, campaignTabName(campaign, "代購"), PROXY_HEADERS,
+      payload.items.map((i) => [
+        now, payload.displayName, i.code || i.productId, i.spec || "",
+        "", i.unitPrice, i.quantity, "", "手動加單", orderId,
+      ])
+    );
+  } catch (e) { console.warn("連線代購頁籤寫入失敗:", e); }
 }
 
 /**
@@ -491,7 +561,7 @@ export async function addAdminProxyOrder(
     if (found) userId = String(found[1] || "");
   } catch {}
 
-  // 代購訂單（HERA 原生分頁）
+  // 代購訂單（原始頁籤 append，HERA 原生）
   await sheets.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
     range: `${PROXY_ORDERS_TAB}!A:J`,
@@ -504,10 +574,18 @@ export async function addAdminProxyOrder(
       ]],
     },
   });
+  // 以連線名稱為頁籤名（獨立，新在上）
+  try {
+    await prependToLatestTab(sheets, campaignTabName(payload.campaignName, "代購"), PROXY_HEADERS, [[
+      now, payload.customerName, payload.productCode, payload.spec,
+      payload.costPrice, payload.salePrice, payload.quantity,
+      profit, "未取貨", orderId,
+    ]]);
+  } catch (e) { console.warn("連線代購頁籤寫入失敗:", e); }
 
   const itemDesc = `${payload.productCode} / ${payload.spec} x${payload.quantity} (NT$${payload.salePrice})`;
 
-  // 訂單表（LIFF 共用）
+  // 訂單表（原始頁籤 append，LIFF 共用）
   await sheets.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
     range: `${ORDERS_TAB}!A:I`,
@@ -519,6 +597,13 @@ export async function addAdminProxyOrder(
       ]],
     },
   });
+  // 以連線名稱為頁籤名（獨立，新在上）
+  try {
+    await prependToLatestTab(sheets, campaignTabName(payload.campaignName, "訂單"), ORDERS_HEADERS, [[
+      now, orderId, userId, payload.customerName, itemDesc,
+      total, "", "手動加單", payload.campaignName,
+    ]]);
+  } catch (e) { console.warn("連線訂單頁籤寫入失敗:", e); }
 
   // 訂單明細（LIFF 共用）
   await sheets.spreadsheets.values.append({
