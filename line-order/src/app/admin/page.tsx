@@ -480,9 +480,9 @@ function ProxyForm({
   useEffect(() => {
     fetch('/api/products')
       .then((r) => r.json())
-      .then((data: { id: string; code?: string; name: string; spec?: string; price: number; costPrice: number }[]) => {
+      .then((data: { products: { id: string; code?: string; name: string; spec?: string; price: number; costPrice: number }[] }) => {
         setProducts(
-          data.map((p) => ({
+          (data.products || []).map((p) => ({
             id: p.id,
             code: p.code || '',
             name: p.name,
