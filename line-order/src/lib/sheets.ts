@@ -162,23 +162,41 @@ export async function appendOrder(
 
   // 代購訂單（與 HERA 共用分頁；10 欄：日期 姓名 商品編號 規格 進價 售價 數量 毛利 狀態 備註）
   try {
+    // 從庫存表查進價，建立 code+spec → costPrice 對照表
+    const costMap = new Map<string, number>();
+    try {
+      const invRes = await sheets.spreadsheets.values.get({
+        spreadsheetId: SHEET_ID,
+        range: `${INVENTORY_TAB}!A2:E`,
+      });
+      for (const r of invRes.data.values || []) {
+        const key = `${String(r[0] || "").trim()}||${String(r[2] || "").trim()}`;
+        costMap.set(key, Number(r[3] || 0));
+      }
+    } catch {}
+
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
       range: `${PROXY_ORDERS_TAB}!A:J`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: payload.items.map((i) => [
-          now,
-          payload.displayName,
-          i.code || i.productId,
-          i.spec || "",
-          "",
-          i.unitPrice,
-          i.quantity,
-          "",
-          "手動加單",
-          orderId,
-        ]),
+        values: payload.items.map((i) => {
+          const key = `${String(i.code || i.productId).trim()}||${String(i.spec || "").trim()}`;
+          const costPrice = costMap.get(key) ?? 0;
+          const profit = (i.unitPrice - costPrice) * i.quantity;
+          return [
+            now,
+            payload.displayName,
+            i.code || i.productId,
+            i.spec || "",
+            costPrice,
+            i.unitPrice,
+            i.quantity,
+            profit,
+            "新訂單",
+            orderId,
+          ];
+        }),
       },
     });
   } catch (e) {
