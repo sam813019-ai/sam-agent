@@ -46,14 +46,14 @@ function parseImages(raw: string | undefined): string[] {
 }
 
 /**
- * 商品表欄位 (A~I)：
- * id | code | name | spec | price | stock | image | description | active
+ * 商品表欄位 (A~J)：
+ * id | code | name | spec | price | stock | image | description | active | costPrice
  */
 export async function getProducts(): Promise<Product[]> {
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${PRODUCTS_TAB}!A2:I`,
+    range: `${PRODUCTS_TAB}!A2:J`,
   });
   const rows = res.data.values || [];
   return rows
@@ -64,6 +64,7 @@ export async function getProducts(): Promise<Product[]> {
       name: String(r[2] || ""),
       spec: r[3] ? String(r[3]) : undefined,
       price: Number(r[4] || 0),
+      costPrice: Number(r[9] || 0),
       stock: Number(r[5] || 0),
       images: parseImages(r[6] ? String(r[6]) : undefined),
       description: r[7] ? String(r[7]) : undefined,
@@ -162,16 +163,15 @@ export async function appendOrder(
 
   // 代購訂單（與 HERA 共用分頁；10 欄：日期 姓名 商品編號 規格 進價 售價 數量 毛利 狀態 備註）
   try {
-    // 從庫存表查進價，建立 code+spec → costPrice 對照表
+    // 從商品表查進價，建立 productId → costPrice 對照表
     const costMap = new Map<string, number>();
     try {
-      const invRes = await sheets.spreadsheets.values.get({
+      const prodRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SHEET_ID,
-        range: `${INVENTORY_TAB}!A2:E`,
+        range: `${PRODUCTS_TAB}!A2:J`,
       });
-      for (const r of invRes.data.values || []) {
-        const key = `${String(r[0] || "").trim()}||${String(r[2] || "").trim()}`;
-        costMap.set(key, Number(r[3] || 0));
+      for (const r of prodRes.data.values || []) {
+        if (r[0]) costMap.set(String(r[0]), Number(r[9] || 0));
       }
     } catch {}
 
@@ -181,8 +181,7 @@ export async function appendOrder(
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: payload.items.map((i) => {
-          const key = `${String(i.code || i.productId).trim()}||${String(i.spec || "").trim()}`;
-          const costPrice = costMap.get(key) ?? 0;
+          const costPrice = costMap.get(i.productId) ?? 0;
           const profit = (i.unitPrice - costPrice) * i.quantity;
           return [
             now,
@@ -381,7 +380,7 @@ export async function addInventoryProduct(
     const image = payload.imageUrl ? normalizeImageUrl(payload.imageUrl) : "";
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${PRODUCTS_TAB}!A:I`,
+      range: `${PRODUCTS_TAB}!A:J`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [[
@@ -394,6 +393,7 @@ export async function addInventoryProduct(
           image,
           payload.description || "",
           "TRUE",
+          payload.costPrice,   // J欄：進價
         ]],
       },
     });
