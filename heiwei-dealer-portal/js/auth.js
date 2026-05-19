@@ -1,6 +1,6 @@
 // ── HEIWEI 經銷商平台 — Token 驗證 ──────────────────────────
 // 填入 GAS Web App URL（部署後取得）
-const GAS_URL = 'YOUR_GAS_WEB_APP_URL';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzMX1cHsQHnYifmy_2SjJH7tzFy7WHtKmzUsFxcJP4DKs-1LphTDP8fOnen3x6071Ie/exec';
 
 async function init() {
   const params = new URLSearchParams(window.location.search);
