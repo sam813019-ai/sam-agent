@@ -34,86 +34,150 @@
       <p style="font-size:13px;color:#777;line-height:1.8;">何謂美，源自對美的探索與堅持<br>誠邀認同品牌理念的夥伴一起成長</p>
     </div>
 
-    <!-- 合作優勢 -->
-    <div class="section">
-      <div class="section-label">合作優勢</div>
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div class="card" style="display:flex;gap:14px;align-items:flex-start;">
-          <div style="font-size:24px;flex-shrink:0;">🎁</div>
-          <div>
-            <div style="font-size:14px;font-weight:700;margin-bottom:4px;">專屬進貨折扣</div>
-            <div style="font-size:12px;color:var(--text-muted);line-height:1.6;">依合作量級享有不同折扣結構，詳情於核准後在夥伴入口查看</div>
-          </div>
-        </div>
-        <div class="card" style="display:flex;gap:14px;align-items:flex-start;">
-          <div style="font-size:24px;flex-shrink:0;">🖼️</div>
-          <div>
-            <div style="font-size:14px;font-weight:700;margin-bottom:4px;">完整素材支援</div>
-            <div style="font-size:12px;color:var(--text-muted);line-height:1.6;">商品圖、品牌 Logo、活動 Banner、影片素材隨時可下載使用</div>
-          </div>
-        </div>
-        <div class="card" style="display:flex;gap:14px;align-items:flex-start;">
-          <div style="font-size:24px;flex-shrink:0;">💬</div>
-          <div>
-            <div style="font-size:14px;font-weight:700;margin-bottom:4px;">專屬 LINE 窗口</div>
-            <div style="font-size:12px;color:var(--text-muted);line-height:1.6;">核准後透過官方 LINE@ 直接與品牌方溝通，快速回應</div>
-          </div>
-        </div>
+    <!-- LINE 個人資料欄（LIFF 登入後顯示）-->
+    <div id="pub-profile-bar" class="profile-bar" style="display:none;">
+      <div id="pub-avatar-placeholder" class="profile-avatar-placeholder">👤</div>
+      <img id="pub-avatar" class="profile-avatar" style="display:none" src="" alt="" />
+      <div class="profile-info">
+        <div id="pub-display-name" class="profile-name">讀取中...</div>
       </div>
+      <div class="profile-badge">LINE 已驗證</div>
     </div>
 
     <!-- 申請表 -->
-    <div class="section">
-      <div class="section-label">申請加入</div>
+    <div style="padding:20px 16px 40px;">
+
+      <div class="form-notice">
+        <strong>填寫須知：</strong>資料將用於建立官方授權書，請確認填寫資訊真實有效。
+        若有多管道銷售，<strong>主要經營平台請全部勾選</strong>，將一併標示於授權書。
+      </div>
+
       <div id="apply-alert"></div>
+
       <form id="apply-form">
-        <div class="form-group">
-          <label>姓名 <span style="color:var(--error)">*</span></label>
-          <input type="text" name="name" placeholder="陳小美" required>
+
+        <!-- 基本資料 -->
+        <div class="form-card">
+          <div class="card-title">基本資料</div>
+
+          <div class="form-group">
+            <label>代理姓名 / 公司全銜 <span style="color:var(--error)">*</span></label>
+            <input type="text" name="company_name" placeholder="例：何謂美精品美容有限公司 / 陳○○" required>
+          </div>
+
+          <div class="form-group">
+            <label>身份證字號 / 統一編號 <span style="color:var(--error)">*</span>
+              <span class="form-hint">個人填身份證字號，公司填統一編號</span>
+            </label>
+            <input type="text" name="id_number" placeholder="例：A123456789 / 12345678" required>
+          </div>
+
+          <div class="form-group">
+            <label>負責人姓名 <span style="color:var(--error)">*</span></label>
+            <input type="text" name="owner_name" placeholder="請填寫負責人真實姓名" required>
+          </div>
         </div>
-        <div class="form-group">
-          <label>店名 / 品牌名稱</label>
-          <input type="text" name="store" placeholder="美麗日記店（無實體店可留空）">
+
+        <!-- 聯絡資料 -->
+        <div class="form-card">
+          <div class="card-title">聯絡資料</div>
+
+          <div class="form-group">
+            <label>聯繫電話 <span style="color:var(--error)">*</span></label>
+            <input type="tel" name="phone" placeholder="例：0912-345-678" required>
+          </div>
+
+          <div class="form-group">
+            <label>電子郵件 <span style="color:var(--error)">*</span>
+              <span class="form-hint">用於寄送電子授權書及官方通知</span>
+            </label>
+            <input type="email" name="email" placeholder="example@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label>公司 / 通訊地址 <span style="color:var(--error)">*</span></label>
+            <input type="text" name="address" placeholder="例：高雄市仁武區○○路○○號" required>
+          </div>
         </div>
-        <div class="form-group">
-          <label>聯絡電話 <span style="color:var(--error)">*</span></label>
-          <input type="tel" name="phone" placeholder="0912-345-678" required>
+
+        <!-- 經營資料 -->
+        <div class="form-card">
+          <div class="card-title">經營資料</div>
+
+          <div class="form-group">
+            <label>主要經營平台 <span style="color:var(--error)">*</span>
+              <span class="form-hint">多管道銷售請全部勾選，將標示於授權書</span>
+            </label>
+            <div class="platform-grid">
+              <label class="platform-item">
+                <input type="checkbox" name="platforms" value="實體店面">
+                <span>🏪 實體店面</span>
+              </label>
+              <label class="platform-item">
+                <input type="checkbox" name="platforms" value="自架官網">
+                <span>🌐 自架官網</span>
+              </label>
+              <label class="platform-item">
+                <input type="checkbox" name="platforms" value="蝦皮">
+                <span>🛍 蝦皮</span>
+              </label>
+              <label class="platform-item">
+                <input type="checkbox" name="platforms" value="社群團購">
+                <span>👥 社群團購</span>
+              </label>
+              <label class="platform-item">
+                <input type="checkbox" name="platforms" value="LINE購物">
+                <span>💚 LINE 購物</span>
+              </label>
+              <label class="platform-item">
+                <input type="checkbox" name="platforms" value="Instagram">
+                <span>📸 Instagram</span>
+              </label>
+              <label class="platform-item">
+                <input type="checkbox" name="platforms" value="Facebook">
+                <span>📘 Facebook</span>
+              </label>
+              <label class="platform-item platform-full" id="platform-other-label">
+                <input type="checkbox" name="platforms" value="其他" id="platform-other-check">
+                <span>➕ 其他</span>
+              </label>
+            </div>
+            <input type="text" id="platform-other-input" name="platform_other"
+                   placeholder="請填寫其他平台名稱" style="display:none;margin-top:8px;">
+          </div>
+
+          <div class="form-group">
+            <label>平台賣場連結
+              <span class="form-hint">供審核經營風格（可填多個，換行分隔）</span>
+            </label>
+            <textarea name="platform_links" placeholder="https://shopee.tw/yourshop&#10;https://www.instagram.com/yourpage"></textarea>
+          </div>
         </div>
-        <div class="form-group">
-          <label>LINE ID <span style="color:var(--error)">*</span></label>
-          <input type="text" name="lineId" placeholder="@example 或 手機號碼" required>
+
+        <!-- 貨源與 LINE -->
+        <div class="form-card">
+          <div class="card-title">貨源與 LINE 資料</div>
+
+          <div class="form-group">
+            <label>上級代理 / 貨源 LINE ID <span style="color:var(--error)">*</span>
+              <span class="form-hint">若直接向 HEIWEI 官方進貨，請填「官方」</span>
+            </label>
+            <input type="text" name="upstream_line_id" placeholder="例：heiwei_official / @yourdealer" required>
+          </div>
+
+          <div class="form-group">
+            <label>申請人 LINE ID <span style="color:var(--error)">*</span></label>
+            <input type="text" name="applicant_line_id" placeholder="例：@yourlineid" required>
+          </div>
         </div>
-        <div class="form-group">
-          <label>所在縣市 <span style="color:var(--error)">*</span></label>
-          <select name="city" required>
-            <option value="">請選擇</option>
-            <option>台北市</option><option>新北市</option><option>桃園市</option>
-            <option>台中市</option><option>台南市</option><option>高雄市</option>
-            <option>基隆市</option><option>新竹市</option><option>新竹縣</option>
-            <option>苗栗縣</option><option>彰化縣</option><option>南投縣</option>
-            <option>雲林縣</option><option>嘉義市</option><option>嘉義縣</option>
-            <option>屏東縣</option><option>宜蘭縣</option><option>花蓮縣</option>
-            <option>台東縣</option><option>澎湖縣</option><option>金門縣</option>
-            <option>連江縣</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>如何得知 HEIWEI</label>
-          <select name="source">
-            <option value="">請選擇</option>
-            <option>Instagram</option>
-            <option>Facebook</option>
-            <option>LINE</option>
-            <option>Threads</option>
-            <option>朋友介紹</option>
-            <option>展覽活動</option>
-            <option>其他</option>
-          </select>
-        </div>
+
+        <!-- 送出 -->
         <button type="submit" class="btn btn-dark" id="apply-btn">送出申請</button>
-        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;">
-          申請送出後，我們將在 3 個工作天內透過 LINE 與您聯繫
+        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.6;">
+          送出即表示您同意 HEIWEI 何謂美蒐集上述資料，用於經銷授權審核及後續聯繫。<br>
+          審核通過後將透過 LINE 發送專屬入口連結。
         </p>
+
       </form>
     </div>
 
@@ -124,7 +188,7 @@
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:32px;text-align:center;gap:16px;">
       <div style="font-size:52px;">🔒</div>
       <h2 style="font-size:20px;font-weight:700;">連結無效或已過期</h2>
-      <p style="font-size:13px;color:var(--text-muted);line-height:1.8;">此連結不存在或已被停用。<br>如需協助，請聯絡 HEIWEI 官方 LINE@。</p>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.8;">此連結不存在、已被停用，<br>或您的 LINE 帳號與此連結不符。<br>如需協助，請聯絡 HEIWEI 官方 LINE@。</p>
       <a href="https://line.me/R/ti/p/@000hmeaj" target="_blank" class="btn btn-dark" style="width:auto;padding:12px 32px;">
         聯絡 LINE@
       </a>
@@ -191,6 +255,7 @@
 
   </div><!-- /view-portal -->
 
+  <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/portal.js"></script>
 </body>

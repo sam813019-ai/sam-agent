@@ -1,0 +1,105 @@
+// ══════════════════════════════════════════════════════════
+//  HEIWEI 何謂美 — Sheet-bound 腳本（貼到 Google Sheet 的 Apps Script）
+//  Extensions → Apps Script → 貼入 → 存檔（不需要部署）
+// ══════════════════════════════════════════════════════════
+
+var LINE_TOKEN_SHEET = '07NJGWmyAXf+mYMQORdi6HlHRP45PKCPoTu18ihcXnwUI8TzLxOzoUIkAExqGHFMahLfGeNstCvAySBe9qQezi5iJBe8/aAJD64pJGWNchVus3bykOpoiu1zOetf9r3lAmck5S9nlAEgCs4BGtRzsgdB04t89/1O/w1cDnyilFU=';
+// ⚠️ 取得正確 userId 後請更新此行
+var OWNER_UID_SHEET = 'Ua2b29684b674dbf528710a842badb32a';
+
+// ── 自訂選單 ──────────────────────────────────────────────
+
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('✅ HEIWEI 核准')
+    .addItem('核准選取的申請', 'approveSelected')
+    .addToUi();
+}
+
+// ── 一鍵核准 ──────────────────────────────────────────────
+// 申請名單欄位（新結構）：
+// A=時間, B=代理姓名/公司, C=身份證/統編, D=負責人姓名,
+// E=電話, F=Email, G=地址, H=平台, I=平台連結,
+// J=上級代理LINE ID, K=申請人LINE ID, L=LINE User ID, M=狀態
+//
+// Token 白名單欄位：
+// A=token, B=name, C=store, D=phone, E=lineId, F=date, G=status, H=lineUserId
+
+function approveSelected() {
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getActiveSheet();
+  var ui    = SpreadsheetApp.getUi();
+  var row   = sheet.getActiveCell().getRow();
+
+  if (sheet.getName() !== '申請名單') {
+    ui.alert('請先切換到「申請名單」分頁');
+    return;
+  }
+  if (row <= 1) {
+    ui.alert('請點選資料列，不要點標題列');
+    return;
+  }
+
+  var data        = sheet.getRange(row, 1, 1, 13).getValues()[0];
+  var companyName = data[1];  // B: 代理姓名/公司
+  var ownerName   = data[3];  // D: 負責人姓名
+  var phone       = data[4];  // E: 電話
+  var lineUserId  = data[11]; // L: LINE User ID（申請時自動取得）
+  var status      = data[12]; // M: 狀態
+
+  if (!companyName) {
+    ui.alert('此列沒有資料，請確認選取正確');
+    return;
+  }
+  if (status === '核准') {
+    ui.alert('此申請已核准過了');
+    return;
+  }
+
+  // 產生 token
+  var chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var token = 'hw-';
+  for (var i = 0; i < 8; i++) token += chars[Math.floor(Math.random() * chars.length)];
+  var link = 'https://heiwei-dealer-portal.vercel.app/?token=' + token;
+
+  // 寫入 Token 白名單（A~H 欄，H = lineUserId 用於驗證）
+  var tokenSheet = ss.getSheetByName('Token 白名單');
+  tokenSheet.appendRow([token, ownerName, companyName, phone, lineUserId, new Date(), '啟用', lineUserId]);
+
+  // 更新申請名單狀態
+  sheet.getRange(row, 13).setValue('核准');
+
+  // LINE 推播連結給你
+  var msg = [
+    '✅ 已核准經銷商申請',
+    '',
+    '代理：' + companyName,
+    '負責人：' + ownerName,
+    '電話：' + phone,
+    'LINE UID：' + (lineUserId || '未記錄'),
+    '',
+    '專屬入口連結：',
+    link
+  ].join('\n');
+
+  pushFromSheet(msg);
+  ui.alert('核准成功！\n\n連結已推播到你的 LINE：\n' + link);
+}
+
+function pushFromSheet(text) {
+  if (!OWNER_UID_SHEET) return;
+  var url     = 'https://api.line.me/v2/bot/message/push';
+  var payload = JSON.stringify({
+    to:       OWNER_UID_SHEET,
+    messages: [{ type: 'text', text: text }]
+  });
+  UrlFetchApp.fetch(url, {
+    method:             'post',
+    headers: {
+      'Authorization':  'Bearer ' + LINE_TOKEN_SHEET,
+      'Content-Type':   'application/json'
+    },
+    payload:            payload,
+    muteHttpExceptions: true
+  });
+}

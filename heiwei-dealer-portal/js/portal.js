@@ -1,26 +1,20 @@
 // ── HEIWEI 經銷商平台 — 入口互動邏輯 ────────────────────────
 // GAS_URL 已在 auth.js 定義
-const LINE_AT_URL         = 'https://line.me/R/ti/p/@000hmeaj';
-const DRIVE_FOLDER_URL  = 'https://drive.google.com/drive/folders/1W-6LSn9Re1ETIF9W5kGh4ObcnGTNasgD?usp=drive_link';
-const CONTRACT_PDF_URL  = './爆白售價契約書2026.docx.pdf';
-const AUTH_TEMPLATE_URL = './爆白售價契約書2026.docx.pdf'; // 授權書範本待補，暫用合約書
+const LINE_AT_URL      = 'https://line.me/R/ti/p/@000hmeaj';
+const DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1W-6LSn9Re1ETIF9W5kGh4ObcnGTNasgD?usp=drive_link';
+const CONTRACT_PDF_URL = './爆白售價契約書2026.docx.pdf';
+const AUTH_TEMPLATE_URL= './爆白售價契約書2026.docx.pdf';
 
 // ══════════════════════════════════════════
-//  初始化入口
+//  申請表（公開層）
 // ══════════════════════════════════════════
 
-function initPortal() {
-  // 顯示店名（優先）或姓名
-  const displayName = window.DEALER.store || window.DEALER.name || '夥伴';
-  document.getElementById('portal-name').textContent = displayName;
-
-  // 載入公告摘要（2 則）
-  loadAnnouncements(2, 'ann-summary');
-}
-
-// ══════════════════════════════════════════
-//  申請表送出（公開層）
-// ══════════════════════════════════════════
+// 平台「其他」選項切換
+document.getElementById('platform-other-check')?.addEventListener('change', function() {
+  const inp = document.getElementById('platform-other-input');
+  inp.style.display = this.checked ? 'block' : 'none';
+  if (!this.checked) inp.value = '';
+});
 
 document.getElementById('apply-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -28,25 +22,42 @@ document.getElementById('apply-form')?.addEventListener('submit', async (e) => {
   const alert = document.getElementById('apply-alert');
   const form  = e.target;
 
+  // 收集平台 checkboxes
+  const platformsArr = Array.from(form.querySelectorAll('input[name="platforms"]:checked'))
+    .map(el => el.value);
+  const otherPlatform = form.platform_other?.value?.trim();
+  if (otherPlatform) platformsArr.push('其他：' + otherPlatform);
+
+  if (platformsArr.length === 0) {
+    alert.innerHTML = '<div class="alert alert-error">請至少選擇一個經營平台</div>';
+    return;
+  }
+
   btn.textContent = '送出中...';
   btn.disabled    = true;
 
   const data = {
-    action:  'apply',
-    name:    form.name.value.trim(),
-    store:   form.store.value.trim(),
-    phone:   form.phone.value.trim(),
-    lineId:  form.lineId.value.trim(),
-    city:    form.city.value,
-    source:  form.source.value
+    action:            'apply',
+    company_name:      form.company_name.value.trim(),
+    id_number:         form.id_number.value.trim(),
+    owner_name:        form.owner_name.value.trim(),
+    phone:             form.phone.value.trim(),
+    email:             form.email.value.trim(),
+    address:           form.address.value.trim(),
+    platforms:         platformsArr.join('、'),
+    platform_links:    form.platform_links.value.trim(),
+    upstream_line_id:  form.upstream_line_id.value.trim(),
+    applicant_line_id: form.applicant_line_id.value.trim(),
+    line_uid:          window.LINE_PROFILE?.userId || ''
   };
 
   try {
     const res  = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(data) });
     const json = await res.json();
     if (json.ok) {
-      alert.innerHTML = '<div class="alert alert-success">✓ 申請已送出！我們將在 3 個工作天內透過 LINE 與您聯繫。</div>';
+      alert.innerHTML = '<div class="alert alert-success">✓ 申請已送出！我們將在 3–5 個工作天內透過 LINE 與您聯繫。</div>';
       form.reset();
+      document.getElementById('platform-other-input').style.display = 'none';
     } else {
       throw new Error('server error');
     }
@@ -59,21 +70,28 @@ document.getElementById('apply-form')?.addEventListener('submit', async (e) => {
 });
 
 // ══════════════════════════════════════════
+//  初始化入口（私密層）
+// ══════════════════════════════════════════
+
+function initPortal() {
+  const displayName = window.DEALER.store || window.DEALER.name || '夥伴';
+  document.getElementById('portal-name').textContent = displayName;
+  loadAnnouncements(2, 'ann-summary');
+}
+
+// ══════════════════════════════════════════
 //  頁面導覽
 // ══════════════════════════════════════════
 
 function showSection(name) {
-  // 隱藏首頁元素
   document.getElementById('portal-hero').classList.add('hidden');
   document.getElementById('portal-ann-section').classList.add('hidden');
   document.getElementById('portal-cards-section').classList.add('hidden');
-  // 隱藏所有子頁
   document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
-  // 顯示目標子頁
+
   const target = document.getElementById(`section-${name}`);
   if (target) {
     target.classList.remove('hidden');
-    // 按需渲染（每次進入重新渲染，確保最新資料）
     if (name === 'announcements') renderAnnouncements();
     if (name === 'contracts')     renderContracts();
     if (name === 'auth-form')     renderAuthForm();
@@ -87,13 +105,10 @@ function showPortalHome() {
   document.getElementById('portal-ann-section').classList.remove('hidden');
   document.getElementById('portal-cards-section').classList.remove('hidden');
   document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
-  // 重新載入公告摘要
   loadAnnouncements(2, 'ann-summary');
 }
 
-function openLine() {
-  window.open(LINE_AT_URL, '_blank');
-}
+function openLine() { window.open(LINE_AT_URL, '_blank'); }
 
 // ══════════════════════════════════════════
 //  公告
@@ -104,8 +119,8 @@ async function loadAnnouncements(limit, containerId) {
   if (!container) return;
   container.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">載入中...</p>';
   try {
-    const res  = await fetch(`${GAS_URL}?action=announcements`);
-    const json = await res.json();
+    const res   = await fetch(`${GAS_URL}?action=announcements`);
+    const json  = await res.json();
     const items = (json.data || []).slice(0, limit);
     if (items.length === 0) {
       container.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">目前無公告</p>';
@@ -240,7 +255,6 @@ function renderAuthForm() {
     const btn   = document.getElementById('auth-btn');
     const alert = document.getElementById('auth-alert');
     const form  = e.target;
-
     btn.textContent = '送出中...';
     btn.disabled    = true;
 
@@ -260,9 +274,7 @@ function renderAuthForm() {
       if (json.ok) {
         alert.innerHTML = '<div class="alert alert-success">✓ 申請已送出！確認後我們將透過 LINE 通知您。</div>';
         form.reset();
-      } else {
-        throw new Error();
-      }
+      } else { throw new Error(); }
     } catch {
       alert.innerHTML = '<div class="alert alert-error">送出失敗，請稍後再試。</div>';
     } finally {
@@ -304,11 +316,130 @@ function renderMaterials() {
 }
 
 // ══════════════════════════════════════════
-//  訂購出貨
+//  訂購出貨 — 完整訂購表單
 // ══════════════════════════════════════════
 
+// 金額自動計算
+function orderRecalc() {
+  const planInput  = document.querySelector('#order-plan-grid input:checked');
+  const qty        = parseInt(document.getElementById('order-qty')?.value || '0', 10);
+  const calcEmpty  = document.getElementById('order-calc-empty');
+  const calcDetail = document.getElementById('order-calc-detail');
+  if (!calcEmpty || !calcDetail) return;
+
+  if (!planInput || !qty || qty <= 0) {
+    calcEmpty.style.display  = 'block';
+    calcDetail.style.display = 'none';
+    return;
+  }
+
+  const unitPrice = parseInt(planInput.value, 10);
+  const planLabel = planInput.dataset.label;
+  const total     = unitPrice * qty;
+
+  document.getElementById('order-calc-plan').textContent  = planLabel;
+  document.getElementById('order-calc-unit').textContent  = '$' + unitPrice.toLocaleString();
+  document.getElementById('order-calc-qty').textContent   = qty.toLocaleString() + ' 件';
+  document.getElementById('order-calc-total').textContent = '$' + total.toLocaleString();
+  document.getElementById('order-total-hidden').value     = total;
+  document.getElementById('order-unit-hidden').value      = unitPrice;
+  document.getElementById('order-label-hidden').value     = planLabel;
+
+  calcEmpty.style.display  = 'none';
+  calcDetail.style.display = 'block';
+}
+
+// 初始化訂購表單的事件監聽
+function initOrderForm() {
+  // 方案選擇
+  document.querySelectorAll('#order-plan-grid input').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const min = parseInt(this.dataset.min, 10);
+      document.getElementById('order-qty-hint').textContent = '最低訂購 ' + min + ' 件';
+      document.getElementById('order-qty').min = min;
+      orderRecalc();
+    });
+  });
+
+  // 數量輸入
+  document.getElementById('order-qty')?.addEventListener('input', orderRecalc);
+
+  // 發票類型切換
+  document.querySelectorAll('input[name="order_invoice_type"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const f = document.getElementById('order-company-invoice');
+      f.style.display = this.value === '三聯式統一發票' ? 'block' : 'none';
+    });
+  });
+
+  // 送出
+  document.getElementById('order-form')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // 違約協議必勾
+    if (!document.getElementById('order-agreement').checked) {
+      alert('請先勾選同意價格控管協議');
+      return;
+    }
+
+    const btn = document.getElementById('order-submit-btn');
+    btn.textContent = '送出中...';
+    btn.disabled    = true;
+
+    const form = e.target;
+    const fd   = new FormData(form);
+
+    const data = {
+      action:         'order',
+      line_uid:       window.DEALER?.lineUserId   || '',
+      line_display_name: window.DEALER?.displayName || window.DEALER?.name || '',
+      buyer_name:     fd.get('order_buyer_name'),
+      phone:          fd.get('order_phone'),
+      email:          fd.get('order_email'),
+      address:        fd.get('order_address'),
+      plan_label:     document.getElementById('order-label-hidden')?.value || '',
+      unit_price:     document.getElementById('order-unit-hidden')?.value  || '',
+      quantity:       fd.get('order_qty'),
+      total_amount:   document.getElementById('order-total-hidden')?.value || '',
+      transfer_code:  fd.get('order_transfer_code'),
+      invoice_type:   fd.get('order_invoice_type')   || '',
+      invoice_title:  fd.get('order_invoice_title')  || '',
+      invoice_tax_id: fd.get('order_invoice_tax_id') || ''
+    };
+
+    try {
+      const res  = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(data) });
+      const json = await res.json();
+      if (json.ok) {
+        document.getElementById('section-order').innerHTML = `
+          <div class="section" style="text-align:center;padding-top:60px;">
+            <div style="width:72px;height:72px;background:var(--success);border-radius:50%;
+                        display:flex;align-items:center;justify-content:center;
+                        margin:0 auto 20px;font-size:36px;">✓</div>
+            <div style="font-size:20px;font-weight:700;margin-bottom:10px;">訂單已送出！</div>
+            <p style="font-size:13px;color:var(--text-muted);line-height:1.8;margin-bottom:28px;">
+              確認收款後將盡快安排出貨，<br>並透過 LINE 通知出貨進度。<br><br>
+              <strong>請勿重複送出表單。</strong>
+            </p>
+            <button class="btn btn-outline" onclick="showPortalHome()" style="width:auto;padding:12px 32px;">
+              回到首頁
+            </button>
+          </div>
+        `;
+      } else { throw new Error(); }
+    } catch {
+      alert('送出失敗，請稍後再試或透過 LINE 聯絡。');
+      btn.textContent = '送出訂單';
+      btn.disabled    = false;
+    }
+  });
+}
+
 function renderOrder() {
-  const el = document.getElementById('section-order');
+  const el    = document.getElementById('section-order');
+  const name  = window.DEALER?.name  || '';
+  const phone = window.DEALER?.phone || '';
+
   el.innerHTML = `
     <div class="section" style="padding-bottom:8px;">
       <div style="display:flex;align-items:center;gap:12px;">
@@ -316,10 +447,164 @@ function renderOrder() {
         <div class="section-label" style="margin:0;">訂購出貨</div>
       </div>
     </div>
-    <iframe
-      src="https://tally.so/r/xXPxOd"
-      style="width:100%;height:82vh;border:none;display:block;"
-      title="HEIWEI 訂購表單"
-    ></iframe>
+
+    <div style="padding:0 16px 40px;">
+      <div class="form-notice">
+        <strong>填寫須知：</strong>請確認訂購資訊無誤後再送出，匯款完成請填寫後五碼，
+        我們確認收款後安排出貨。
+      </div>
+
+      <form id="order-form">
+
+        <!-- 訂購人資料 -->
+        <div class="form-card">
+          <div class="card-title">訂購人資料</div>
+          <div class="form-group">
+            <label>姓名 <span style="color:var(--error)">*</span></label>
+            <input type="text" name="order_buyer_name" value="${name}" placeholder="請填寫真實姓名" required>
+          </div>
+          <div class="form-group">
+            <label>聯繫電話 <span style="color:var(--error)">*</span></label>
+            <input type="tel" name="order_phone" value="${phone}" placeholder="例：0912-345-678" required>
+          </div>
+          <div class="form-group">
+            <label>電子郵件 <span style="color:var(--error)">*</span></label>
+            <input type="email" name="order_email" placeholder="example@gmail.com" required>
+          </div>
+          <div class="form-group">
+            <label>出貨地址 <span style="color:var(--error)">*</span></label>
+            <input type="text" name="order_address" placeholder="請填寫完整收貨地址" required>
+          </div>
+        </div>
+
+        <!-- 方案選擇 -->
+        <div class="form-card">
+          <div class="card-title">方案選擇</div>
+          <div class="plan-grid" id="order-plan-grid">
+            <label class="plan-item">
+              <input type="radio" name="order_plan" value="350" data-min="30" data-label="入門方案（30件以上）" required>
+              <div class="plan-info">
+                <div class="plan-name">入門方案</div>
+                <div class="plan-desc">最低訂購 30 件</div>
+              </div>
+              <div class="plan-price">$350 <span>/ 件</span></div>
+            </label>
+            <label class="plan-item">
+              <input type="radio" name="order_plan" value="300" data-min="100" data-label="進階方案（100件以上）">
+              <div class="plan-info">
+                <div class="plan-name">進階方案</div>
+                <div class="plan-desc">最低訂購 100 件</div>
+              </div>
+              <div class="plan-price">$300 <span>/ 件</span></div>
+            </label>
+            <label class="plan-item">
+              <input type="radio" name="order_plan" value="270" data-min="500" data-label="批量方案（500件以上）">
+              <div class="plan-info">
+                <div class="plan-name">批量方案</div>
+                <div class="plan-desc">最低訂購 500 件</div>
+              </div>
+              <div class="plan-price">$270 <span>/ 件</span></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 訂購數量 + 計算 -->
+        <div class="form-card">
+          <div class="card-title">訂購數量</div>
+          <div class="form-group">
+            <label>數量（件）<span style="color:var(--error)">*</span>
+              <span class="form-hint" id="order-qty-hint">請先選擇上方方案</span>
+            </label>
+            <input type="number" name="order_qty" id="order-qty" placeholder="請輸入訂購數量" min="1" required>
+          </div>
+          <div class="calc-card">
+            <div id="order-calc-empty" style="text-align:center;font-size:12px;color:var(--text-muted);padding:6px 0;">
+              選擇方案並填寫數量後，自動顯示匯款金額
+            </div>
+            <div id="order-calc-detail" style="display:none;">
+              <div class="calc-row"><span>選擇方案</span><span id="order-calc-plan">—</span></div>
+              <div class="calc-row"><span>每件單價</span><span id="order-calc-unit">—</span></div>
+              <div class="calc-row"><span>訂購數量</span><span id="order-calc-qty">—</span></div>
+              <div class="calc-row total">
+                <span>匯款總金額</span>
+                <span id="order-calc-total" style="color:var(--error);font-size:20px;font-weight:700;">—</span>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="order-total-hidden">
+          <input type="hidden" id="order-unit-hidden">
+          <input type="hidden" id="order-label-hidden">
+        </div>
+
+        <!-- 匯款資訊 -->
+        <div class="form-card">
+          <div class="card-title">匯款資訊</div>
+          <div class="bank-info">
+            <div class="bank-row"><span class="bank-label">戶名</span><span class="bank-value">何謂美國際有限公司</span></div>
+            <div class="bank-row"><span class="bank-label">銀行</span><span class="bank-value">台新國際商業銀行（812）</span></div>
+            <div style="margin-top:6px;">
+              <div style="font-size:11px;color:#888;margin-bottom:2px;">帳號</div>
+              <div class="bank-account">2046 0166 8899 92</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>匯款後五碼 <span style="color:var(--error)">*</span>
+              <span class="form-hint">請填寫匯款帳號末五碼，供對帳使用</span>
+            </label>
+            <input type="text" name="order_transfer_code" placeholder="例：89992" maxlength="5" required>
+          </div>
+        </div>
+
+        <!-- 發票資訊 -->
+        <div class="form-card">
+          <div class="card-title">發票資訊</div>
+          <div class="invoice-grid">
+            <label class="invoice-item">
+              <input type="radio" name="order_invoice_type" value="二聯式個人發票" required>
+              <span>二聯式<br><small style="font-weight:400;">個人發票</small></span>
+            </label>
+            <label class="invoice-item">
+              <input type="radio" name="order_invoice_type" value="三聯式統一發票">
+              <span>三聯式<br><small style="font-weight:400;">公司發票</small></span>
+            </label>
+          </div>
+          <div id="order-company-invoice" style="display:none;">
+            <div class="form-group">
+              <label>發票抬頭（公司名稱）<span style="color:var(--error)">*</span></label>
+              <input type="text" name="order_invoice_title" placeholder="請填寫公司全名">
+            </div>
+            <div class="form-group">
+              <label>統一編號 <span style="color:var(--error)">*</span></label>
+              <input type="text" name="order_invoice_tax_id" placeholder="請填寫 8 位統一編號" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <!-- 違約協議 -->
+        <div class="form-card">
+          <div class="card-title">價格控管與違約協議</div>
+          <div class="agreement-box">
+            本人同意嚴格遵守品牌之<strong>最低控管價格</strong>，若違反定價規範，
+            須支付<strong>總進貨貨款五倍之違約金</strong>作為賠償，並承擔一切法律訴追責任。
+            本人同意授權方得<strong>立即終止代理權並斷貨</strong>，不得異議。
+          </div>
+          <label class="agreement-check">
+            <input type="checkbox" id="order-agreement" name="order_agreement">
+            <span>我已閱讀並同意以上定價規範</span>
+          </label>
+        </div>
+
+        <!-- 送出 -->
+        <div style="padding:16px 0 8px;">
+          <button type="submit" class="btn btn-gold" id="order-submit-btn">送出訂單</button>
+          <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.6;">
+            送出即表示您確認訂購資訊無誤，<br>並已完成匯款及同意品牌違約協議。
+          </p>
+        </div>
+
+      </form>
+    </div>
   `;
+
+  initOrderForm();
 }

@@ -5,38 +5,45 @@
 
 const SHEET_ID = '1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0';
 const LINE_TOKEN = '07NJGWmyAXf+mYMQORdi6HlHRP45PKCPoTu18ihcXnwUI8TzLxOzoUIkAExqGHFMahLfGeNstCvAySBe9qQezi5iJBe8/aAJD64pJGWNchVus3bykOpoiu1zOetf9r3lAmck5S9nlAEgCs4BGtRzsgdB04t89/1O/w1cDnyilFU=';
+// ⚠️ 請到 LINE Developers → HEIWEI 頻道，傳訊息後查 Webhook Log Sheet 取得正確 userId
 const OWNER_LINE_USER_ID = 'Ua2b29684b674dbf528710a842badb32a';
 
 // ── 路由 ──────────────────────────────────────────────────
 
 function doGet(e) {
-  const action = e.parameter.action;
-  const token  = e.parameter.token;
+  const action     = e.parameter.action;
+  const token      = e.parameter.token;
+  const lineUserId = e.parameter.lineUserId || '';
 
-  if (action === 'verify')        return verifyToken(token);
+  if (action === 'verify')        return verifyToken(token, lineUserId);
   if (action === 'announcements') return getAnnouncements();
 
   return jsonResponse({ ok: false, error: 'unknown action' });
 }
 
 function doPost(e) {
-  const data   = JSON.parse(e.postData.contents);
-  const action = data.action;
+  const body = e.postData.contents;
+  const data = JSON.parse(body);
 
+  // LINE Webhook event
+  if (data.events) return handleLineWebhook(data.events);
+
+  const action = data.action;
   if (action === 'apply')     return handleApply(data);
   if (action === 'auth-form') return handleAuthForm(data);
+  if (action === 'order')     return handleOrder(data);
 
   return jsonResponse({ ok: false, error: 'unknown action' });
 }
 
-// CORS preflight
 function doOptions(e) {
   return ContentService.createTextOutput('').setMimeType(ContentService.MimeType.TEXT);
 }
 
-// ── Token 驗證 ────────────────────────────────────────────
+// ── Token 驗證（含 LINE User ID 比對）────────────────────
+// Token 白名單欄位：A=token, B=name, C=store, D=phone, E=lineId, F=date, G=status, H=lineUserId
 
-function verifyToken(token) {
+function verifyToken(token, lineUserId) {
   if (!token) return jsonResponse({ ok: false, error: 'no token' });
 
   const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Token 白名單');
@@ -44,6 +51,11 @@ function verifyToken(token) {
 
   for (let i = 1; i < data.length; i++) {
     if (data[i][0] === token && data[i][6] === '啟用') {
+      const stored = data[i][7] || '';
+      // 若 Token 有記錄 lineUserId，且前端也有提供，則比對
+      if (stored && lineUserId && stored !== lineUserId) {
+        return jsonResponse({ ok: false, error: 'user mismatch' });
+      }
       return jsonResponse({
         ok:    true,
         name:  data[i][1],
@@ -71,35 +83,42 @@ function getAnnouncements() {
       });
     }
   }
-  list.reverse(); // 最新在前
+  list.reverse();
   return jsonResponse({ ok: true, data: list });
 }
 
-// ── 申請表處理 ────────────────────────────────────────────
+// ── 申請表處理（新欄位）──────────────────────────────────
+// 申請名單欄位：A=時間, B=代理姓名/公司, C=身份證/統編, D=負責人姓名,
+//              E=電話, F=Email, G=地址, H=平台, I=平台連結,
+//              J=上級代理LINE ID, K=申請人LINE ID, L=LINE User ID, M=狀態
 
 function handleApply(data) {
   const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('申請名單');
   sheet.appendRow([
     new Date(),
-    data.name,
-    data.store   || '',
-    data.phone,
-    data.lineId,
-    data.city,
-    data.source  || '',
-    '待審',
-    ''
+    data.company_name      || '',
+    data.id_number         || '',
+    data.owner_name        || '',
+    data.phone             || '',
+    data.email             || '',
+    data.address           || '',
+    data.platforms         || '',
+    data.platform_links    || '',
+    data.upstream_line_id  || '',
+    data.applicant_line_id || '',
+    data.line_uid          || '',
+    '待審'
   ]);
 
   const msg = [
     '📋 新經銷商申請',
     '',
-    `姓名：${data.name}`,
-    `店名：${data.store || '未填'}`,
-    `電話：${data.phone}`,
-    `LINE ID：${data.lineId}`,
-    `縣市：${data.city}`,
-    `來源：${data.source || '未填'}`
+    `代理：${data.company_name || '未填'}`,
+    `負責人：${data.owner_name || '未填'}`,
+    `電話：${data.phone || '未填'}`,
+    `Email：${data.email || '未填'}`,
+    `平台：${data.platforms || '未填'}`,
+    `LINE UID：${data.line_uid || '未填'}`
   ].join('\n');
 
   pushLineMessage(msg);
@@ -135,92 +154,90 @@ function handleAuthForm(data) {
   return jsonResponse({ ok: true });
 }
 
+// ── 訂購單處理 ────────────────────────────────────────────
+// 訂購單欄位：A=時間, B=LINE UID, C=姓名, D=電話, E=Email, F=地址,
+//            G=方案, H=單價, I=數量, J=總金額, K=匯款後五碼,
+//            L=發票類型, M=發票抬頭, N=統編, O=狀態
+
+function handleOrder(data) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName('訂購單');
+  if (!sheet) {
+    sheet = ss.insertSheet('訂購單');
+    sheet.appendRow(['時間','LINE UID','姓名','電話','Email','地址','方案','單價','數量','總金額','匯款後五碼','發票類型','發票抬頭','統編','狀態']);
+  }
+
+  sheet.appendRow([
+    new Date(),
+    data.line_uid       || '',
+    data.buyer_name     || '',
+    data.phone          || '',
+    data.email          || '',
+    data.address        || '',
+    data.plan_label     || '',
+    data.unit_price     || '',
+    data.quantity       || '',
+    data.total_amount   || '',
+    data.transfer_code  || '',
+    data.invoice_type   || '',
+    data.invoice_title  || '',
+    data.invoice_tax_id || '',
+    '待確認'
+  ]);
+
+  const msg = [
+    '📦 新訂購單',
+    '',
+    `姓名：${data.buyer_name}`,
+    `電話：${data.phone}`,
+    `方案：${data.plan_label}（$${data.unit_price}/件）`,
+    `數量：${data.quantity} 件`,
+    `總金額：$${data.total_amount}`,
+    `匯款後五碼：${data.transfer_code}`
+  ].join('\n');
+
+  pushLineMessage(msg);
+  return jsonResponse({ ok: true });
+}
+
+// ── LINE Webhook 接收 → 記錄 userId ─────────────────────
+
+function handleLineWebhook(events) {
+  const ss  = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName('Webhook Log');
+  if (!sheet) {
+    sheet = ss.insertSheet('Webhook Log');
+    sheet.appendRow(['時間', 'userId', 'type', 'text']);
+  }
+
+  events.forEach(function(ev) {
+    const userId = ev.source && ev.source.userId ? ev.source.userId : '(unknown)';
+    const type   = ev.type || '';
+    const text   = (ev.message && ev.message.text) ? ev.message.text : '';
+    sheet.appendRow([new Date(), userId, type, text]);
+  });
+
+  return ContentService.createTextOutput('OK');
+}
+
 // ── LINE Messaging API 推播 ───────────────────────────────
 
 function pushLineMessage(text) {
+  if (!OWNER_LINE_USER_ID) return;
   const url     = 'https://api.line.me/v2/bot/message/push';
   const payload = {
     to:       OWNER_LINE_USER_ID,
     messages: [{ type: 'text', text: text }]
   };
   UrlFetchApp.fetch(url, {
-    method:           'post',
+    method:             'post',
     headers: {
-      'Authorization': 'Bearer ' + LINE_TOKEN,
-      'Content-Type':  'application/json'
+      'Authorization':  'Bearer ' + LINE_TOKEN,
+      'Content-Type':   'application/json'
     },
-    payload:          JSON.stringify(payload),
+    payload:            JSON.stringify(payload),
     muteHttpExceptions: true
   });
-}
-
-// ── 自訂選單（開啟 Sheet 時自動出現）────────────────────
-
-function onOpen() {
-  SpreadsheetApp.getUi()
-    .createMenu('✅ HEIWEI 核准')
-    .addItem('核准選取的申請', 'approveSelected')
-    .addToUi();
-}
-
-// ── 一鍵核准（從申請名單選取列執行）─────────────────────
-
-function approveSelected() {
-  const ss      = SpreadsheetApp.openById(SHEET_ID);
-  const applySheet = ss.getSheetByName('申請名單');
-  const ui      = SpreadsheetApp.getUi();
-
-  // 取得目前選取的列
-  const row = applySheet.getActiveRange().getRow();
-  if (row <= 1) {
-    ui.alert('請先點選一筆申請資料（不是標題列）');
-    return;
-  }
-
-  const data    = applySheet.getRange(row, 1, 1, 9).getValues()[0];
-  const name    = data[1]; // B：姓名
-  const store   = data[2]; // C：店名
-  const phone   = data[3]; // D：電話
-  const lineId  = data[4]; // E：LINE ID
-  const status  = data[7]; // H：狀態
-
-  if (!name) {
-    ui.alert('此列沒有資料，請確認選取正確');
-    return;
-  }
-  if (status === '核准') {
-    ui.alert('此申請已核准過了');
-    return;
-  }
-
-  // 產生 token
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let token   = 'hw-';
-  for (let i = 0; i < 8; i++) token += chars[Math.floor(Math.random() * chars.length)];
-  const link  = 'https://heiwei-dealer-portal.vercel.app/?token=' + token;
-
-  // 寫入 Token 白名單
-  const tokenSheet = ss.getSheetByName('Token 白名單');
-  tokenSheet.appendRow([token, name, store, phone, lineId, new Date(), '啟用']);
-
-  // 更新申請名單狀態為「核准」
-  applySheet.getRange(row, 8).setValue('核准');
-
-  // LINE 推播連結給你
-  const msg = [
-    '✅ 已核准經銷商申請',
-    '',
-    `姓名：${name}`,
-    `店名：${store || '無'}`,
-    `電話：${phone}`,
-    `LINE ID：${lineId}`,
-    '',
-    `專屬入口連結：`,
-    link
-  ].join('\n');
-  pushLineMessage(msg);
-
-  ui.alert(`核准成功！\n\n連結已推播到你的 LINE：\n${link}`);
 }
 
 // ── 工具 ──────────────────────────────────────────────────

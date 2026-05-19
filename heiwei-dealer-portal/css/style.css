@@ -200,3 +200,214 @@ body {
 .feature-card.dark .fc-title { color: var(--gold); }
 .feature-card.dark .fc-sub   { color: #555; }
 .feature-card.full { grid-column: span 2; }
+
+/* ── Profile Bar ───────────────────────── */
+.profile-bar {
+  background: #252525;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #333;
+}
+.profile-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  object-fit: cover;
+}
+.profile-avatar-placeholder {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: #333;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); font-size: 14px;
+  flex-shrink: 0;
+}
+.profile-info { flex: 1; }
+.profile-name { color: var(--white); font-size: 13px; font-weight: 500; }
+.profile-badge {
+  background: var(--gold);
+  color: var(--dark);
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 10px; letter-spacing: 0.5px;
+}
+
+/* ── Form Card (multi-section forms) ─── */
+.form-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 10px; font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.form-group label .form-hint {
+  font-weight: 400; color: var(--text-muted);
+  font-size: 11px; display: block; margin-top: 2px; line-height: 1.4;
+}
+
+/* ── Platform Checkbox Grid ────────────── */
+.platform-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+.platform-item {
+  display: flex; align-items: center;
+  gap: 8px;
+  background: var(--bg-soft);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.platform-item:has(input:checked) {
+  background: #FFF8EC;
+  border-color: var(--gold);
+}
+.platform-item input[type="checkbox"] {
+  width: 16px; height: 16px;
+  accent-color: var(--gold);
+  cursor: pointer; flex-shrink: 0;
+}
+.platform-item span { font-size: 13px; color: var(--dark); line-height: 1.3; }
+.platform-full { grid-column: 1 / -1; }
+
+/* ── Plan Selection ─────────────────────── */
+.plan-grid { display: flex; flex-direction: column; gap: 8px; }
+.plan-item {
+  display: flex; align-items: center;
+  gap: 12px;
+  background: var(--bg-soft);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.plan-item:has(input:checked) {
+  background: #FFF8EC;
+  border-color: var(--gold);
+}
+.plan-item input[type="radio"] {
+  width: 18px; height: 18px;
+  accent-color: var(--gold);
+  cursor: pointer; flex-shrink: 0;
+}
+.plan-info { flex: 1; }
+.plan-name { font-size: 14px; font-weight: 600; color: var(--dark); }
+.plan-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.plan-price { font-size: 18px; font-weight: 700; color: var(--gold); }
+.plan-price span { font-size: 11px; font-weight: 400; color: var(--text-muted); }
+
+/* ── Amount Calc Card ───────────────────── */
+.calc-card {
+  background: #FFF8EC;
+  border: 1.5px solid var(--gold-light);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-top: 12px;
+}
+.calc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; color: var(--text-body); padding: 4px 0;
+}
+.calc-row.total {
+  border-top: 1px solid var(--gold-light);
+  margin-top: 8px; padding-top: 10px;
+  font-size: 15px; font-weight: 700; color: var(--dark);
+}
+
+/* ── Bank Info ──────────────────────────── */
+.bank-info {
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px; line-height: 2;
+}
+.bank-row { display: flex; gap: 8px; }
+.bank-label { color: var(--text-muted); min-width: 60px; font-size: 12px; }
+.bank-value { color: var(--dark); font-weight: 600; }
+.bank-account {
+  font-size: 18px; font-weight: 700;
+  color: var(--gold); letter-spacing: 2px; margin-top: 4px;
+}
+
+/* ── Invoice Radio ──────────────────────── */
+.invoice-grid { display: flex; gap: 8px; margin-bottom: 12px; }
+.invoice-item {
+  flex: 1; display: flex; align-items: center;
+  gap: 8px;
+  background: var(--bg-soft);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  cursor: pointer; transition: all 0.15s;
+}
+.invoice-item:has(input:checked) {
+  background: #FFF8EC; border-color: var(--gold);
+}
+.invoice-item input[type="radio"] {
+  width: 16px; height: 16px;
+  accent-color: var(--gold); flex-shrink: 0;
+}
+.invoice-item span { font-size: 13px; color: var(--dark); line-height: 1.3; }
+
+/* ── Agreement Box ──────────────────────── */
+.agreement-box {
+  background: #FFF5F5;
+  border: 1.5px solid #F5C0C0;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 12px; color: var(--text-body);
+  line-height: 1.8; margin-bottom: 14px;
+}
+.agreement-box strong { color: var(--error); }
+.agreement-check {
+  display: flex; align-items: center;
+  gap: 10px;
+  background: var(--bg-soft);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px; cursor: pointer;
+}
+.agreement-check:has(input:checked) {
+  background: #F0FFF4; border-color: var(--success);
+}
+.agreement-check input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--success); flex-shrink: 0;
+}
+.agreement-check span { font-size: 13px; font-weight: 600; color: var(--dark); }
+
+/* ── Order / Apply Notices ──────────────── */
+.form-notice {
+  background: #FFF8EC;
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-size: 12px; color: var(--text-body); line-height: 1.6;
+}
+.form-notice strong { color: var(--dark); }
+
+/* ── Readonly field ─────────────────────── */
+.field-readonly {
+  background: var(--bg-soft) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed;
+}
