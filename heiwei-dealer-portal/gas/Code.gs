@@ -154,19 +154,73 @@ function pushLineMessage(text) {
   });
 }
 
-// ── Token 產生工具（手動在 GAS 執行，不是 API）──────────
+// ── 自訂選單（開啟 Sheet 時自動出現）────────────────────
 
-function generateToken(name, store, phone, lineId) {
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('✅ HEIWEI 核准')
+    .addItem('核准選取的申請', 'approveSelected')
+    .addToUi();
+}
+
+// ── 一鍵核准（從申請名單選取列執行）─────────────────────
+
+function approveSelected() {
+  const ss      = SpreadsheetApp.openById(SHEET_ID);
+  const applySheet = ss.getSheetByName('申請名單');
+  const ui      = SpreadsheetApp.getUi();
+
+  // 取得目前選取的列
+  const row = applySheet.getActiveRange().getRow();
+  if (row <= 1) {
+    ui.alert('請先點選一筆申請資料（不是標題列）');
+    return;
+  }
+
+  const data    = applySheet.getRange(row, 1, 1, 9).getValues()[0];
+  const name    = data[1]; // B：姓名
+  const store   = data[2]; // C：店名
+  const phone   = data[3]; // D：電話
+  const lineId  = data[4]; // E：LINE ID
+  const status  = data[7]; // H：狀態
+
+  if (!name) {
+    ui.alert('此列沒有資料，請確認選取正確');
+    return;
+  }
+  if (status === '核准') {
+    ui.alert('此申請已核准過了');
+    return;
+  }
+
+  // 產生 token
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
   let token   = 'hw-';
   for (let i = 0; i < 8; i++) token += chars[Math.floor(Math.random() * chars.length)];
+  const link  = 'https://heiwei-dealer-portal.vercel.app/?token=' + token;
 
-  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Token 白名單');
-  sheet.appendRow([token, name, store, phone, lineId, new Date(), '啟用']);
+  // 寫入 Token 白名單
+  const tokenSheet = ss.getSheetByName('Token 白名單');
+  tokenSheet.appendRow([token, name, store, phone, lineId, new Date(), '啟用']);
 
-  Logger.log('Token：' + token);
-  Logger.log('連結：https://heiwei-dealer-portal.vercel.app/?token=' + token);
-  return token;
+  // 更新申請名單狀態為「核准」
+  applySheet.getRange(row, 8).setValue('核准');
+
+  // LINE 推播連結給你
+  const msg = [
+    '✅ 已核准經銷商申請',
+    '',
+    `姓名：${name}`,
+    `店名：${store || '無'}`,
+    `電話：${phone}`,
+    `LINE ID：${lineId}`,
+    '',
+    `專屬入口連結：`,
+    link
+  ].join('\n');
+  pushLineMessage(msg);
+
+  ui.alert(`核准成功！\n\n連結已推播到你的 LINE：\n${link}`);
 }
 
 // ── 工具 ──────────────────────────────────────────────────
