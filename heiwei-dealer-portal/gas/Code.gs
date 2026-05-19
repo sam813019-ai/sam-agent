@@ -165,7 +165,7 @@ function generateToken(name, store, phone, lineId) {
   sheet.appendRow([token, name, store, phone, lineId, new Date(), '啟用']);
 
   Logger.log('Token：' + token);
-  Logger.log('連結：https://YOUR_VERCEL_URL/?token=' + token);
+  Logger.log('連結：https://heiwei-dealer-portal.vercel.app/?token=' + token);
   return token;
 }
 
