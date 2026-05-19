@@ -1,9 +1,9 @@
 // ── HEIWEI 經銷商平台 — 入口互動邏輯 ────────────────────────
 // GAS_URL 已在 auth.js 定義
 const LINE_AT_URL         = 'https://line.me/R/ti/p/@000hmeaj';
-const DRIVE_FOLDER_URL    = 'YOUR_GOOGLE_DRIVE_FOLDER_URL'; // ← 填入素材庫 Drive 連結
-const CONTRACT_PDF_URL    = 'YOUR_CONTRACT_PDF_URL';        // ← 填入合約書 PDF 連結
-const AUTH_TEMPLATE_URL   = 'YOUR_AUTH_TEMPLATE_PDF_URL';   // ← 填入授權書範本 PDF 連結
+const DRIVE_FOLDER_URL  = 'https://drive.google.com/drive/folders/1W-6LSn9Re1ETIF9W5kGh4ObcnGTNasgD?usp=drive_link';
+const CONTRACT_PDF_URL  = './爆白售價契約書2026.docx.pdf';
+const AUTH_TEMPLATE_URL = './爆白售價契約書2026.docx.pdf'; // 授權書範本待補，暫用合約書
 
 // ══════════════════════════════════════════
 //  初始化入口
