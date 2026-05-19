@@ -27,27 +27,31 @@ heiwei-dealer-portal/          ← 新資料夾，在 sam-agent/ 下建立
 
 ---
 
+## 前置資料（已確認，直接用）
+
+| 項目 | 值 |
+|---|---|
+| Google Sheet ID | `1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0` |
+| LINE Bot Token | `jt2P+BXndbz4m7WzmTEus3NhesXvqzM+CTLBYruY4zIzH8pVSo7VucdboYwETnqrcYh7G6ZXeiWtEwB9rzPmjTbWLfXr8CCeAnznC2HKCOhHsBtA9vXW+5ItApzBS/D23zKuq3nTl23YRXsl6dQRMgdB04t89/1o/w1cDnyilFU=` |
+| 陳育慶 LINE User ID | `Ua2b29684b674dbf528710a842badb32a` |
+
 ## 前置準備（手動操作，開始寫程式前完成）
 
-### P1: 建立 Google Sheet
+### P1: 沿用現有 Google Sheet，新增分頁
 
-- [ ] 在 Google Drive 新建試算表，命名「HEIWEI 經銷商管理」
-- [ ] 建立 **Sheet1**：`申請名單`，欄位依序：
+現有 Sheet（`1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0`）已有「**授權書申請**」分頁，直接沿用並新增欄位與分頁：
+
+- [ ] 開啟 Sheet，在「授權書申請」最後**新增 2 欄**：`token`、`狀態（待確認/已確認）`
+- [ ] 新增分頁 **`申請名單`**，欄位：
   `A:時間戳記 | B:姓名 | C:店名 | D:電話 | E:LINE ID | F:縣市 | G:來源管道 | H:狀態（待審/核准/婉拒）| I:備註`
-- [ ] 建立 **Sheet2**：`Token 白名單`，欄位依序：
+- [ ] 新增分頁 **`Token 白名單`**，欄位：
   `A:token | B:姓名 | C:店名 | D:電話 | E:LINE ID | F:授權日期 | G:狀態（啟用/停用）`
-- [ ] 建立 **Sheet3**：`授權書申請`，欄位依序：
-  `A:時間戳記 | B:token | C:店名 | D:負責人 | E:統編 | F:地址 | G:電話 | H:狀態（待確認/已確認）`
-- [ ] 建立 **Sheet4**：`公告`，欄位依序：
+- [ ] 新增分頁 **`公告`**，欄位：
   `A:日期 | B:標題 | C:內容 | D:顯示（TRUE/FALSE）`
-- [ ] 記下試算表 ID（URL 中 `/d/` 後面那串）
 
-### P2: 取得 LINE Bot Channel Access Token
+### P2: LINE Bot ✅ 已確認
 
-- [ ] 進入 [LINE Developers Console](https://developers.line.biz/)
-- [ ] 選擇 HEIWEI 的 Messaging API Channel
-- [ ] 複製 **Channel Access Token**（長期 token）
-- [ ] 記下你自己的 LINE **User ID**（在 Basic settings 頁面，或用 webhook 取得）
+HEIWEI LINE Bot 的 Channel Access Token 和 User ID 已填入 Task 1 的 GAS 程式碼，無需額外操作。
 
 ---
 
@@ -64,9 +68,9 @@ heiwei-dealer-portal/          ← 新資料夾，在 sam-agent/ 下建立
 // gas/Code.gs
 // 部署為 Google Apps Script Web App（執行身份：我、存取：任何人）
 
-const SHEET_ID = 'YOUR_SHEET_ID_HERE'; // ← 換成你的試算表 ID
-const LINE_TOKEN = 'YOUR_LINE_CHANNEL_ACCESS_TOKEN'; // ← 換成 HEIWEI LINE Bot token
-const OWNER_LINE_USER_ID = 'YOUR_LINE_USER_ID'; // ← 換成你自己的 LINE User ID
+const SHEET_ID = '1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0';
+const LINE_TOKEN = 'jt2P+BXndbz4m7WzmTEus3NhesXvqzM+CTLBYruY4zIzH8pVSo7VucdboYwETnqrcYh7G6ZXeiWtEwB9rzPmjTbWLfXr8CCeAnznC2HKCOhHsBtA9vXW+5ItApzBS/D23zKuq3nTl23YRXsl6dQRMgdB04t89/1o/w1cDnyilFU=';
+const OWNER_LINE_USER_ID = 'Ua2b29684b674dbf528710a842badb32a';
 
 function doGet(e) {
   const action = e.parameter.action;
