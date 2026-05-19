@@ -81,15 +81,32 @@ function approveSelected() {
     link
   ].join('\n');
 
-  pushFromSheet(msg);
-  ui.alert('核准成功！\n\n連結已推播到你的 LINE：\n' + link);
+  // 推播給 Owner（你）
+  pushToUser(OWNER_UID_SHEET, msg);
+
+  // 推播給申請者（使用他申請時的 LINE User ID）
+  if (lineUserId) {
+    var applicantMsg = [
+      '🎉 恭喜！您已獲得 HEIWEI 何謂美授權',
+      '',
+      '您的申請已通過審核，以下是您的專屬經銷商入口連結：',
+      '',
+      link,
+      '',
+      '⚠️ 此連結與您的 LINE 帳號綁定，請勿轉發他人。',
+      '如有疑問請聯絡 HEIWEI 官方 LINE@'
+    ].join('\n');
+    pushToUser(lineUserId, applicantMsg);
+  }
+
+  ui.alert('核准成功！\n\n連結已推播給你與申請者。\n' + link);
 }
 
-function pushFromSheet(text) {
-  if (!OWNER_UID_SHEET) return;
+function pushToUser(userId, text) {
+  if (!userId) return;
   var url     = 'https://api.line.me/v2/bot/message/push';
   var payload = JSON.stringify({
-    to:       OWNER_UID_SHEET,
+    to:       userId,
     messages: [{ type: 'text', text: text }]
   });
   UrlFetchApp.fetch(url, {
@@ -101,4 +118,8 @@ function pushFromSheet(text) {
     payload:            payload,
     muteHttpExceptions: true
   });
+}
+
+function pushFromSheet(text) {
+  pushToUser(OWNER_UID_SHEET, text);
 }
