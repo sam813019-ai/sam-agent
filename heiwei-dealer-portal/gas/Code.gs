@@ -5,8 +5,7 @@
 
 const SHEET_ID = '1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0';
 const LINE_TOKEN = '07NJGWmyAXf+mYMQORdi6HlHRP45PKCPoTu18ihcXnwUI8TzLxOzoUIkAExqGHFMahLfGeNstCvAySBe9qQezi5iJBe8/aAJD64pJGWNchVus3bykOpoiu1zOetf9r3lAmck5S9nlAEgCs4BGtRzsgdB04t89/1O/w1cDnyilFU=';
-// ⚠️ 請到 LINE Developers → HEIWEI 頻道，傳訊息後查 Webhook Log Sheet 取得正確 userId
-const OWNER_LINE_USER_ID = 'Ua2b29684b674dbf528710a842badb32a';
+const OWNER_LINE_USER_ID = 'U6d6118a4671462ee6e19344a04699ce8';
 
 // ── 路由 ──────────────────────────────────────────────────
 

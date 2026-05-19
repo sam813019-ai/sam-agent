@@ -4,8 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 var LINE_TOKEN_SHEET = '07NJGWmyAXf+mYMQORdi6HlHRP45PKCPoTu18ihcXnwUI8TzLxOzoUIkAExqGHFMahLfGeNstCvAySBe9qQezi5iJBe8/aAJD64pJGWNchVus3bykOpoiu1zOetf9r3lAmck5S9nlAEgCs4BGtRzsgdB04t89/1O/w1cDnyilFU=';
-// ⚠️ 取得正確 userId 後請更新此行
-var OWNER_UID_SHEET = 'Ua2b29684b674dbf528710a842badb32a';
+var OWNER_UID_SHEET = 'U6d6118a4671462ee6e19344a04699ce8';
 
 // ── 自訂選單 ──────────────────────────────────────────────
 
