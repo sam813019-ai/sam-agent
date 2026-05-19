@@ -32,7 +32,7 @@ heiwei-dealer-portal/          ← 新資料夾，在 sam-agent/ 下建立
 | 項目 | 值 |
 |---|---|
 | Google Sheet ID | `1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0` |
-| LINE Bot Token | `jt2P+BXndbz4m7WzmTEus3NhesXvqzM+CTLBYruY4zIzH8pVSo7VucdboYwETnqrcYh7G6ZXeiWtEwB9rzPmjTbWLfXr8CCeAnznC2HKCOhHsBtA9vXW+5ItApzBS/D23zKuq3nTl23YRXsl6dQRMgdB04t89/1o/w1cDnyilFU=` |
+| LINE Bot Token | `07NJGWmyAXf+mYMQORdi6HlHRP45PKCPoTu18ihcXnwUI8TzLxOzoUIkAExqGHFMahLfGeNstCvAySBe9qQezi5iJBe8/aAJD64pJGWNchVus3bykOpoiu1zOetf9r3lAmck5S9nlAEgCs4BGtRzsgdB04t89/1O/w1cDnyilFU=` |
 | 陳育慶 LINE User ID | `Ua2b29684b674dbf528710a842badb32a` |
 
 ## 前置準備（手動操作，開始寫程式前完成）
@@ -69,7 +69,7 @@ HEIWEI LINE Bot 的 Channel Access Token 和 User ID 已填入 Task 1 的 GAS �
 // 部署為 Google Apps Script Web App（執行身份：我、存取：任何人）
 
 const SHEET_ID = '1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0';
-const LINE_TOKEN = 'jt2P+BXndbz4m7WzmTEus3NhesXvqzM+CTLBYruY4zIzH8pVSo7VucdboYwETnqrcYh7G6ZXeiWtEwB9rzPmjTbWLfXr8CCeAnznC2HKCOhHsBtA9vXW+5ItApzBS/D23zKuq3nTl23YRXsl6dQRMgdB04t89/1o/w1cDnyilFU=';
+const LINE_TOKEN = '07NJGWmyAXf+mYMQORdi6HlHRP45PKCPoTu18ihcXnwUI8TzLxOzoUIkAExqGHFMahLfGeNstCvAySBe9qQezi5iJBe8/aAJD64pJGWNchVus3bykOpoiu1zOetf9r3lAmck5S9nlAEgCs4BGtRzsgdB04t89/1O/w1cDnyilFU=';
 const OWNER_LINE_USER_ID = 'Ua2b29684b674dbf528710a842badb32a';
 
 function doGet(e) {
