@@ -55,9 +55,29 @@ document.getElementById('apply-form')?.addEventListener('submit', async (e) => {
     const res  = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(data) });
     const json = await res.json();
     if (json.ok) {
-      alert.innerHTML = '<div class="alert alert-success">✓ 申請已送出！我們將在 3–5 個工作天內透過 LINE 與您聯繫。</div>';
-      form.reset();
-      document.getElementById('platform-other-input').style.display = 'none';
+      // 整個公開層換成成功畫面
+      document.getElementById('view-public').innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;
+                    justify-content:center;min-height:80vh;padding:40px 24px;text-align:center;gap:0;">
+          <div style="width:72px;height:72px;background:var(--success);border-radius:50%;
+                      display:flex;align-items:center;justify-content:center;
+                      font-size:36px;color:#fff;margin-bottom:20px;">✓</div>
+          <div style="font-size:22px;font-weight:700;color:var(--dark);margin-bottom:12px;">申請已送出！</div>
+          <div style="font-size:14px;color:var(--text-body);line-height:1.8;margin-bottom:32px;">
+            感謝您申請 HEIWEI 何謂美 經銷授權。<br>
+            我們將於 3–5 個工作天內，<br>
+            透過 LINE 或電子郵件與您聯繫。<br><br>
+            <strong>請勿重複送出表單。</strong>
+          </div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">若有疑問請聯繫 HEIWEI 官方帳號</p>
+          <a href="${LINE_AT_URL}" target="_blank"
+             style="display:inline-block;background:#06C755;color:#fff;
+                    font-size:15px;font-weight:700;padding:14px 36px;
+                    border-radius:10px;text-decoration:none;letter-spacing:0.5px;">
+            聯繫 LINE 官方帳號
+          </a>
+        </div>
+      `;
     } else {
       throw new Error('server error');
     }
