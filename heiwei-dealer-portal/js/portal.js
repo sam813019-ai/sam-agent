@@ -69,7 +69,7 @@ document.getElementById('apply-form')?.addEventListener('submit', async (e) => {
             透過 LINE 或電子郵件與您聯繫。<br><br>
             <strong>請勿重複送出表單。</strong>
           </div>
-          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">若有疑問請聯繫 HEIWEI 官方帳號</p>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">請加入官方帳號後，回傳您的<strong style="color:var(--dark);">姓名</strong>給官方帳號</p>
           <a href="${LINE_AT_URL}" target="_blank"
              style="display:inline-block;background:#06C755;color:#fff;
                     font-size:15px;font-weight:700;padding:14px 36px;
