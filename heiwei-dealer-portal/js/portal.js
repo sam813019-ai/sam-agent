@@ -74,14 +74,8 @@ document.getElementById('apply-form')?.addEventListener('submit', async (e) => {
 // ══════════════════════════════════════════
 
 function initPortal() {
-  const displayName = window.DEALER.store || window.DEALER.name || '夥伴';
+  const displayName = window.DEALER.displayName || window.DEALER.name || '夥伴';
   document.getElementById('portal-name').textContent = displayName;
-
-  const lineEl = document.getElementById('portal-line-name');
-  if (lineEl && window.DEALER.displayName) {
-    lineEl.textContent = 'LINE：' + window.DEALER.displayName;
-  }
-
   loadAnnouncements(2, 'ann-summary');
 }
 
