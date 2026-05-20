@@ -117,6 +117,7 @@ function showSection(name) {
     if (name === 'auth-form')     renderAuthForm();
     if (name === 'materials')     renderMaterials();
     if (name === 'order')         renderOrder();
+    if (name === 'orders')        renderOrders();
   }
 }
 
@@ -627,4 +628,77 @@ function renderOrder() {
   `;
 
   initOrderForm();
+}
+
+// ══════════════════════════════════════════
+//  我的訂單
+// ══════════════════════════════════════════
+
+const ORDER_STATUS_STYLE = {
+  '待確認': 'background:#FFF3CD;color:#856404;',
+  '備貨中': 'background:#CCE5FF;color:#004085;',
+  '已出貨': 'background:#D4EDDA;color:#155724;',
+  '出貨中': 'background:#D4EDDA;color:#155724;',
+  '已送達': 'background:#D1ECF1;color:#0C5460;',
+  '已取消': 'background:#F8D7DA;color:#721C24;'
+};
+
+function orderStatusStyle(status) {
+  return ORDER_STATUS_STYLE[status] || 'background:#E2E3E5;color:#383D41;';
+}
+
+async function renderOrders() {
+  const el = document.getElementById('section-orders');
+  el.innerHTML = `
+    <div class="section">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <button class="back-btn" onclick="showPortalHome()">←</button>
+        <div class="section-label" style="margin:0;">我的訂單</div>
+      </div>
+      <div id="orders-list"><p style="font-size:13px;color:var(--text-muted);">載入中...</p></div>
+    </div>
+  `;
+
+  try {
+    const lineUserId = window.DEALER?.lineUserId || '';
+    const res  = await fetch(`${GAS_URL}?action=myOrders&lineUserId=${encodeURIComponent(lineUserId)}`);
+    const json = await res.json();
+    const list = document.getElementById('orders-list');
+
+    if (!json.ok || json.data.length === 0) {
+      list.innerHTML = `
+        <div style="text-align:center;padding:40px 0;">
+          <div style="font-size:40px;margin-bottom:12px;">📭</div>
+          <p style="font-size:13px;color:var(--text-muted);">目前沒有訂單記錄</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = json.data.map(o => `
+      <div style="background:var(--white);border:1px solid var(--border);
+                  border-radius:var(--radius);padding:16px;margin-bottom:12px;
+                  box-shadow:var(--shadow);">
+        <!-- 日期 + 狀態 -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-size:11px;color:var(--text-muted);">${o.date}</span>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;${orderStatusStyle(o.status)}">${o.status}</span>
+        </div>
+        <!-- 訂單資料 -->
+        <div style="font-size:13px;color:var(--dark);font-weight:600;margin-bottom:6px;">${o.plan}</div>
+        <div style="display:flex;gap:16px;font-size:12px;color:var(--text-body);margin-bottom:${o.shippingMethod || o.trackingNumber ? '12px' : '0'};">
+          <span>數量：${o.quantity} 件</span>
+          <span>總金額：<strong style="color:var(--gold);">$${Number(o.total).toLocaleString()}</strong></span>
+        </div>
+        ${o.shippingMethod || o.trackingNumber ? `
+        <!-- 物流資訊 -->
+        <div style="background:var(--bg-soft);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--text-body);line-height:2;">
+          ${o.shippingMethod ? `<div>🚚 貨運方式：<strong>${o.shippingMethod}</strong></div>` : ''}
+          ${o.trackingNumber ? `<div>📦 貨運編號：<strong style="font-family:monospace;letter-spacing:1px;">${o.trackingNumber}</strong></div>` : ''}
+        </div>` : ''}
+      </div>
+    `).join('');
+  } catch {
+    document.getElementById('orders-list').innerHTML =
+      '<p style="font-size:13px;color:var(--text-muted);">載入失敗，請稍後再試</p>';
+  }
 }

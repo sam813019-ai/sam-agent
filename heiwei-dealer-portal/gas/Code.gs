@@ -16,6 +16,7 @@ function doGet(e) {
 
   if (action === 'verify')        return verifyToken(token, lineUserId);
   if (action === 'announcements') return getAnnouncements();
+  if (action === 'myOrders')      return getMyOrders(lineUserId);
 
   return jsonResponse({ ok: false, error: 'unknown action' });
 }
@@ -197,6 +198,38 @@ function handleOrder(data) {
 
   pushLineMessage(msg);
   return jsonResponse({ ok: true });
+}
+
+// ── 我的訂單查詢 ──────────────────────────────────────────
+// 訂購單欄位：A=時間, B=LINE UID, C=姓名, D=電話, E=Email, F=地址,
+//            G=方案, H=單價, I=數量, J=總金額, K=匯款後五碼,
+//            L=發票類型, M=發票抬頭, N=統編, O=狀態, P=貨運方式, Q=貨運編號
+
+function getMyOrders(lineUserId) {
+  if (!lineUserId) return jsonResponse({ ok: true, data: [] });
+
+  const ss    = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName('訂購單');
+  if (!sheet)  return jsonResponse({ ok: true, data: [] });
+
+  const data   = sheet.getDataRange().getValues();
+  const orders = [];
+
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][1]) !== lineUserId) continue;
+    orders.push({
+      date:           Utilities.formatDate(new Date(data[i][0]), 'Asia/Taipei', 'yyyy.MM.dd HH:mm'),
+      plan:           data[i][6]  || '',
+      quantity:       data[i][8]  || '',
+      total:          data[i][9]  || '',
+      status:         data[i][14] || '待確認',
+      shippingMethod: data[i][15] || '',
+      trackingNumber: data[i][16] || ''
+    });
+  }
+
+  orders.reverse();
+  return jsonResponse({ ok: true, data: orders });
 }
 
 // ── LINE Webhook 接收 → 記錄 userId ─────────────────────
