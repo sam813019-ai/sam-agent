@@ -1,5 +1,10 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  ],
+  "functions": {
+    "api/auth-cert.js": {
+      "includeFiles": "{*.pdf,api/fonts/**}"
+    }
+  }
 }

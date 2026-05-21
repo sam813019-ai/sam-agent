@@ -5,7 +5,13 @@
 
 const SHEET_ID = '1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0';
 const LINE_TOKEN = '07NJGWmyAXf+mYMQORdi6HlHRP45PKCPoTu18ihcXnwUI8TzLxOzoUIkAExqGHFMahLfGeNstCvAySBe9qQezi5iJBe8/aAJD64pJGWNchVus3bykOpoiu1zOetf9r3lAmck5S9nlAEgCs4BGtRzsgdB04t89/1O/w1cDnyilFU=';
-const OWNER_LINE_USER_ID = 'U6d6118a4671462ee6e19344a04699ce8';
+const OWNER_LINE_USER_ID  = 'U6d6118a4671462ee6e19344a04699ce8';
+const ORDER_NOTIFY_UIDS   = [
+  'U6d6118a4671462ee6e19344a04699ce8',
+  'U910fd3c9d3c89b32b8500847af71bda9',
+  'U044ea9d2ea8db947484139d2103db2b6',
+  'U4e99f9b2a97086c73c57d24119fbef55'
+];
 
 // ── 路由 ──────────────────────────────────────────────────
 
@@ -14,9 +20,10 @@ function doGet(e) {
   const token      = e.parameter.token;
   const lineUserId = e.parameter.lineUserId || '';
 
-  if (action === 'verify')        return verifyToken(token, lineUserId);
-  if (action === 'announcements') return getAnnouncements();
-  if (action === 'myOrders')      return getMyOrders(lineUserId);
+  if (action === 'verify')            return verifyToken(token, lineUserId);
+  if (action === 'announcements')     return getAnnouncements();
+  if (action === 'myOrders')          return getMyOrders(lineUserId);
+  if (action === 'getAuthFormStatus') return getAuthFormStatus(token);
 
   return jsonResponse({ ok: false, error: 'unknown action' });
 }
@@ -41,7 +48,7 @@ function doOptions(e) {
 }
 
 // ── Token 驗證（含 LINE User ID 比對）────────────────────
-// Token 白名單欄位：A=token, B=name, C=store, D=phone, E=lineId, F=date, G=status, H=lineUserId
+// Token 白名單欄位：A=token, B=name, C=store, D=phone, E=lineId, F=date, G=status, H=lineUserId, I=contract_no
 
 function verifyToken(token, lineUserId) {
   if (!token) return jsonResponse({ ok: false, error: 'no token' });
@@ -57,10 +64,14 @@ function verifyToken(token, lineUserId) {
         return jsonResponse({ ok: false, error: 'user mismatch' });
       }
       return jsonResponse({
-        ok:    true,
-        name:  data[i][1],
-        store: data[i][2],
-        phone: data[i][3]
+        ok:          true,
+        name:        data[i][1],
+        store:       data[i][2],
+        phone:       data[i][3],
+        contract_no: data[i][8] || '',
+        date:        data[i][5]
+          ? Utilities.formatDate(new Date(data[i][5]), 'Asia/Taipei', 'yyyy-MM-dd')
+          : ''
       });
     }
   }
@@ -127,6 +138,10 @@ function handleApply(data) {
 
 // ── 授權書申請處理 ────────────────────────────────────────
 
+// 授權書申請欄位：
+// A=時間, B=token, C=store, D=owner, E=taxId, F=address, G=phone,
+// H=LINE_UID, I=狀態, J=contract_no, K=核准日期
+
 function handleAuthForm(data) {
   const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('授權書申請');
   sheet.appendRow([
@@ -134,9 +149,10 @@ function handleAuthForm(data) {
     data.token,
     data.store,
     data.owner,
-    data.taxId   || '',
+    data.taxId    || '',
     data.address,
     data.phone,
+    data.line_uid || '',
     '待確認'
   ]);
 
@@ -196,8 +212,38 @@ function handleOrder(data) {
     `匯款後五碼：${data.transfer_code}`
   ].join('\n');
 
-  pushLineMessage(msg);
+  multicastLineMessage(ORDER_NOTIFY_UIDS, msg);
   return jsonResponse({ ok: true });
+}
+
+// ── 授權書申請狀態查詢 ────────────────────────────────────
+
+function getAuthFormStatus(token) {
+  if (!token) return jsonResponse({ ok: false, error: 'no token' });
+
+  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('授權書申請');
+  const data  = sheet.getDataRange().getValues();
+
+  let found = null;
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][1]) === token) found = data[i]; // 取最後一筆
+  }
+
+  if (!found) return jsonResponse({ ok: true, status: '未申請' });
+
+  // 相容舊結構（status 在 H=7）與新結構（status 在 I=8）
+  const status = found[8] || found[7] || '待確認';
+
+  return jsonResponse({
+    ok:            true,
+    status:        status,
+    store:         found[2] || '',
+    owner:         found[3] || '',
+    contract_no:   found[9] || '',
+    approved_date: found[10]
+      ? Utilities.formatDate(new Date(found[10]), 'Asia/Taipei', 'yyyy-MM-dd')
+      : ''
+  });
 }
 
 // ── 我的訂單查詢 ──────────────────────────────────────────
@@ -259,6 +305,24 @@ function pushLineMessage(text) {
   const url     = 'https://api.line.me/v2/bot/message/push';
   const payload = {
     to:       OWNER_LINE_USER_ID,
+    messages: [{ type: 'text', text: text }]
+  };
+  UrlFetchApp.fetch(url, {
+    method:             'post',
+    headers: {
+      'Authorization':  'Bearer ' + LINE_TOKEN,
+      'Content-Type':   'application/json'
+    },
+    payload:            JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+}
+
+function multicastLineMessage(uids, text) {
+  if (!uids || uids.length === 0) return;
+  const url     = 'https://api.line.me/v2/bot/message/multicast';
+  const payload = {
+    to:       uids,
     messages: [{ type: 'text', text: text }]
   };
   UrlFetchApp.fetch(url, {

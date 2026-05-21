@@ -61,20 +61,22 @@
           <div class="card-title">基本資料</div>
 
           <div class="form-group">
-            <label>代理姓名 / 公司全銜 <span style="color:var(--error)">*</span></label>
+            <label>代理姓名 or 公司全名 <span style="color:var(--error)">*</span></label>
             <input type="text" name="company_name" placeholder="例：何謂美精品美容有限公司 / 陳○○" required>
           </div>
 
           <div class="form-group">
-            <label>身份證字號 / 統一編號 <span style="color:var(--error)">*</span>
+            <label>身份證字號 or 統一編號 <span style="color:var(--error)">*</span>
               <span class="form-hint">個人填身份證字號，公司填統一編號</span>
             </label>
             <input type="text" name="id_number" placeholder="例：A123456789 / 12345678" required>
           </div>
 
           <div class="form-group">
-            <label>負責人姓名 <span style="color:var(--error)">*</span></label>
-            <input type="text" name="owner_name" placeholder="請填寫負責人真實姓名" required>
+            <label>負責人姓名
+              <span class="form-hint">公司行號才需要填寫</span>
+            </label>
+            <input type="text" name="owner_name" placeholder="請填寫負責人真實姓名">
           </div>
         </div>
 
@@ -189,7 +191,7 @@
       <div style="font-size:52px;">🔒</div>
       <h2 style="font-size:20px;font-weight:700;">連結無效或已過期</h2>
       <p style="font-size:13px;color:var(--text-muted);line-height:1.8;">此連結不存在、已被停用，<br>或您的 LINE 帳號與此連結不符。<br>如需協助，請聯絡 HEIWEI 官方 LINE@。</p>
-      <a href="https://line.me/R/ti/p/@000hmeaj" target="_blank" class="btn btn-dark" style="width:auto;padding:12px 32px;">
+      <a href="https://lin.ee/YTDklGv6" target="_blank" class="btn btn-dark" style="width:auto;padding:12px 32px;">
         聯絡 LINE@
       </a>
     </div>
@@ -226,7 +228,7 @@
         <div class="feature-card" onclick="showSection('auth-form')">
           <div class="fc-icon">🖊️</div>
           <div class="fc-title">授權書申請</div>
-          <div class="fc-sub">填表送出等待確認</div>
+          <div class="fc-sub">填表送出等待審核</div>
         </div>
         <div class="feature-card" onclick="showSection('materials')">
           <div class="fc-icon">🖼️</div>
@@ -243,6 +245,11 @@
           <div class="fc-title">我的訂單</div>
           <div class="fc-sub">查看訂單狀態與物流</div>
         </div>
+        <div class="feature-card" onclick="showSection('auth-cert')">
+          <div class="fc-icon">📑</div>
+          <div class="fc-title">授權書下載</div>
+          <div class="fc-sub">下載授權書 PDF</div>
+        </div>
         <div class="feature-card full" onclick="openLine()">
           <div class="fc-icon">💬</div>
           <div class="fc-title">聯絡 HEIWEI</div>
@@ -255,6 +262,7 @@
     <div id="section-announcements" class="hidden"></div>
     <div id="section-contracts"     class="hidden"></div>
     <div id="section-auth-form"     class="hidden"></div>
+    <div id="section-auth-cert"     class="hidden"></div>
     <div id="section-materials"     class="hidden"></div>
     <div id="section-order"         class="hidden"></div>
     <div id="section-orders"        class="hidden"></div>

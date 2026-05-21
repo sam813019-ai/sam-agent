@@ -42,12 +42,14 @@ async function init() {
     if (json.ok) {
       window.DEALER = {
         token,
-        name:        json.name,
-        store:       json.store,
-        phone:       json.phone,
-        lineUserId:  lineProfile ? lineProfile.userId        : '',
-        displayName: lineProfile ? lineProfile.displayName   : '',
-        pictureUrl:  lineProfile ? lineProfile.pictureUrl    : ''
+        name:         json.name,
+        store:        json.store,
+        phone:        json.phone,
+        contractNo:   json.contract_no  || '',
+        approvalDate: json.date         || '',
+        lineUserId:   lineProfile ? lineProfile.userId        : '',
+        displayName:  lineProfile ? lineProfile.displayName   : '',
+        pictureUrl:   lineProfile ? lineProfile.pictureUrl    : ''
       };
       initPortal();
       showView('portal');

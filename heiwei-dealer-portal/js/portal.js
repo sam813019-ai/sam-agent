@@ -1,9 +1,9 @@
 // ── HEIWEI 經銷商平台 — 入口互動邏輯 ────────────────────────
 // GAS_URL 已在 auth.js 定義
-const LINE_AT_URL      = 'https://line.me/R/ti/p/@000hmeaj';
+const LINE_AT_URL      = 'https://lin.ee/YTDklGv6';
 const DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/1W-6LSn9Re1ETIF9W5kGh4ObcnGTNasgD?usp=drive_link';
 const CONTRACT_PDF_URL = './爆白售價契約書2026.docx.pdf';
-const AUTH_TEMPLATE_URL= './爆白售價契約書2026.docx.pdf';
+const AUTH_TEMPLATE_URL= './何謂美_爆白經銷證書.pdf';
 
 // ══════════════════════════════════════════
 //  申請表（公開層）
@@ -115,6 +115,7 @@ function showSection(name) {
     if (name === 'announcements') renderAnnouncements();
     if (name === 'contracts')     renderContracts();
     if (name === 'auth-form')     renderAuthForm();
+    if (name === 'auth-cert')     renderAuthCert();
     if (name === 'materials')     renderMaterials();
     if (name === 'order')         renderOrder();
     if (name === 'orders')        renderOrders();
@@ -130,6 +131,102 @@ function showPortalHome() {
 }
 
 function openLine() { window.open(LINE_AT_URL, '_blank'); }
+
+// ══════════════════════════════════════════
+//  授權書下載（查狀態 → 顯示對應畫面）
+// ══════════════════════════════════════════
+
+async function renderAuthCert() {
+  const el = document.getElementById('section-auth-cert');
+  el.innerHTML = `
+    <div class="section">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <button class="back-btn" onclick="showPortalHome()">←</button>
+        <div class="section-label" style="margin:0;">授權書下載</div>
+      </div>
+      <div id="auth-cert-body"><p style="font-size:13px;color:var(--text-muted);">查詢中...</p></div>
+    </div>
+  `;
+
+  try {
+    const token = window.DEALER?.token || '';
+    const res   = await fetch(`${GAS_URL}?action=getAuthFormStatus&token=${encodeURIComponent(token)}`);
+    const json  = await res.json();
+    const body  = document.getElementById('auth-cert-body');
+
+    if (!json.ok || json.status === '未申請') {
+      body.innerHTML = `
+        <div style="text-align:center;padding:40px 0;">
+          <div style="font-size:44px;margin-bottom:14px;">📝</div>
+          <p style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:8px;">尚未申請授權書</p>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:24px;">
+            請先填寫授權書申請表，<br>審核通過後即可在此下載。
+          </p>
+          <div style="text-align:center;">
+            <button class="btn btn-dark" onclick="showSection('auth-form')"
+                    style="display:inline-block;width:auto;padding:12px 32px;">
+              填寫授權書申請
+            </button>
+          </div>
+        </div>`;
+    } else if (json.status === '待確認') {
+      body.innerHTML = `
+        <div style="text-align:center;padding:40px 0;">
+          <div style="font-size:44px;margin-bottom:14px;">⏳</div>
+          <p style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:8px;">申請審核中</p>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.7;">
+            我們正在審核您的授權書申請，<br>通過後即可在此下載，請耐心等待。
+          </p>
+        </div>`;
+    } else if (json.status === '核准') {
+      const certName = json.store || json.owner || window.DEALER?.name || '';
+      const certUrl  = `/api/auth-cert?name=${encodeURIComponent(certName)}&contract_no=${encodeURIComponent(json.contract_no || '')}&start_date=${encodeURIComponent(json.approved_date || '')}`;
+      body.innerHTML = `
+        <div style="text-align:center;padding:40px 0;">
+          <div style="width:68px;height:68px;background:var(--success);border-radius:50%;
+                      display:flex;align-items:center;justify-content:center;
+                      margin:0 auto 16px;font-size:34px;color:#fff;">✓</div>
+          <p style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:10px;">授權書已核准</p>
+          <div style="background:var(--bg-soft);border-radius:var(--radius);
+                      padding:12px 16px;margin-bottom:24px;font-size:12px;
+                      color:var(--text-body);line-height:2;text-align:left;">
+            <div>📋 合約字號：<strong>${json.contract_no || '-'}</strong></div>
+            <div>📅 核准日期：<strong>${json.approved_date || '-'}</strong></div>
+            <div>🏪 授權對象：<strong>${certName}</strong></div>
+          </div>
+          <div style="text-align:center;">
+            <a href="${certUrl}" target="_blank" class="btn btn-dark"
+               style="display:inline-block;width:auto;padding:12px 32px;text-decoration:none;">
+              下載授權書 PDF
+            </a>
+          </div>
+        </div>`;
+    }
+  } catch {
+    document.getElementById('auth-cert-body').innerHTML =
+      '<p style="font-size:13px;color:var(--text-muted);">查詢失敗，請稍後再試</p>';
+  }
+}
+
+function openAuthTemplate() {
+  const name       = window.DEALER?.name         || '';
+  const contractNo = window.DEALER?.contractNo   || '';
+  const startDate  = window.DEALER?.approvalDate || '';
+
+  // 如果沒有合約號（舊帳號未更新 GAS），直接下載原始 PDF
+  if (!contractNo) {
+    window.open(AUTH_TEMPLATE_URL, '_blank');
+    return;
+  }
+
+  const url = `/api/auth-cert?name=${encodeURIComponent(name)}&contract_no=${encodeURIComponent(contractNo)}&start_date=${encodeURIComponent(startDate)}`;
+  const a   = document.createElement('a');
+  a.href    = url;
+  a.target  = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
 
 // ══════════════════════════════════════════
 //  公告
@@ -207,24 +304,14 @@ function renderContracts() {
       </div>
 
       <div class="section-label">文件下載</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <a href="${CONTRACT_PDF_URL}" target="_blank" class="card" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
-          <div style="font-size:28px;">📄</div>
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:700;">合作合約書</div>
-            <div style="font-size:11px;color:var(--text-muted);">PDF 下載</div>
-          </div>
-          <div style="font-size:20px;color:var(--text-muted);">↓</div>
-        </a>
-        <a href="${AUTH_TEMPLATE_URL}" target="_blank" class="card" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
-          <div style="font-size:28px;">🖊️</div>
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:700;">授權書範本</div>
-            <div style="font-size:11px;color:var(--text-muted);">PDF 下載（供參考）</div>
-          </div>
-          <div style="font-size:20px;color:var(--text-muted);">↓</div>
-        </a>
-      </div>
+      <a href="${CONTRACT_PDF_URL}" target="_blank" class="card" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
+        <div style="font-size:28px;">📄</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;">合作合約書</div>
+          <div style="font-size:11px;color:var(--text-muted);">PDF 下載</div>
+        </div>
+        <div style="font-size:20px;color:var(--text-muted);">↓</div>
+      </a>
     </div>
   `;
 }
@@ -280,13 +367,14 @@ function renderAuthForm() {
     btn.disabled    = true;
 
     const data = {
-      action:  'auth-form',
-      token:   window.DEALER.token,
-      store:   form.store.value.trim(),
-      owner:   form.owner.value.trim(),
-      taxId:   form.taxId.value.trim(),
-      address: form.address.value.trim(),
-      phone:   form.phone.value.trim()
+      action:   'auth-form',
+      token:    window.DEALER.token,
+      store:    form.store.value.trim(),
+      owner:    form.owner.value.trim(),
+      taxId:    form.taxId.value.trim(),
+      address:  form.address.value.trim(),
+      phone:    form.phone.value.trim(),
+      line_uid: window.DEALER?.lineUserId || ''
     };
 
     try {
@@ -442,9 +530,11 @@ function initOrderForm() {
               確認收款後將盡快安排出貨，<br>並透過 LINE 通知出貨進度。<br><br>
               <strong>請勿重複送出表單。</strong>
             </p>
-            <button class="btn btn-outline" onclick="showPortalHome()" style="width:auto;padding:12px 32px;">
-              回到首頁
-            </button>
+            <div style="text-align:center;">
+              <button class="btn btn-outline" onclick="showPortalHome()" style="display:inline-block;width:auto;padding:12px 32px;">
+                回到首頁
+              </button>
+            </div>
           </div>
         `;
       } else { throw new Error(); }
@@ -636,10 +726,8 @@ function renderOrder() {
 
 const ORDER_STATUS_STYLE = {
   '待確認': 'background:#FFF3CD;color:#856404;',
-  '備貨中': 'background:#CCE5FF;color:#004085;',
+  '已付款': 'background:#CCE5FF;color:#004085;',
   '已出貨': 'background:#D4EDDA;color:#155724;',
-  '出貨中': 'background:#D4EDDA;color:#155724;',
-  '已送達': 'background:#D1ECF1;color:#0C5460;',
   '已取消': 'background:#F8D7DA;color:#721C24;'
 };
 
