@@ -1,10 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { mockCreate } = vi.hoisted(() => ({ mockCreate: vi.fn() }));
+const { mockCreate, mockSendMessage } = vi.hoisted(() => ({
+  mockCreate: vi.fn(),
+  mockSendMessage: vi.fn(),
+}));
 
 vi.mock('@anthropic-ai/sdk', () => ({
   default: vi.fn().mockImplementation(function() {
     return { messages: { create: mockCreate } };
+  }),
+}));
+
+vi.mock('@google/generative-ai', () => ({
+  GoogleGenerativeAI: vi.fn().mockImplementation(function() {
+    return {
+      getGenerativeModel: vi.fn().mockReturnValue({
+        startChat: vi.fn().mockReturnValue({ sendMessage: mockSendMessage }),
+      }),
+    };
   }),
 }));
 
@@ -54,5 +67,17 @@ describe('chat', () => {
       }),
       expect.objectContaining({ timeout: 8000 }),
     );
+  });
+
+  it('Claude 529 時自動 fallback 到 Gemini', async () => {
+    process.env.GEMINI_API_KEY = 'test-gemini-key';
+    const err = Object.assign(new Error('overloaded'), { status: 529 });
+    mockCreate.mockRejectedValue(err);
+    mockSendMessage.mockResolvedValue({ response: { text: () => 'Gemini 回覆' } });
+
+    const result = await chat('你好', [], mockKnowledge, mockKeywords);
+
+    expect(result.reply).toBe('Gemini 回覆');
+    expect(mockSendMessage).toHaveBeenCalled();
   });
 });

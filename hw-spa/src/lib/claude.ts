@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const HANDOFF = '[HANDOFF]';
@@ -24,6 +25,31 @@ ${keywords.join('、')}
 
 export type ChatResult = { reply: string; shouldHandoff: boolean };
 
+async function chatWithGemini(
+  userMessage: string,
+  history: Array<{ role: 'user' | 'assistant'; content: string }>,
+  knowledge: string,
+  handoffKeywords: string[],
+): Promise<ChatResult> {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.0-flash',
+    systemInstruction: systemPrompt(knowledge, handoffKeywords),
+  });
+  const geminiChat = model.startChat({
+    history: history.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    })),
+  });
+  const result = await geminiChat.sendMessage(userMessage);
+  const raw = result.response.text();
+  return {
+    reply: raw.replace(HANDOFF, '').trim(),
+    shouldHandoff: raw.includes(HANDOFF),
+  };
+}
+
 export async function chat(
   userMessage: string,
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
@@ -36,7 +62,8 @@ export async function chat(
   ];
   const system = systemPrompt(knowledge, handoffKeywords);
 
-  let lastError: unknown;
+  // 先試 Claude Haiku，最多 retry 1 次
+  let claudeError: unknown;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const response = await anthropic.messages.create(
@@ -49,14 +76,20 @@ export async function chat(
         shouldHandoff: raw.includes(HANDOFF),
       };
     } catch (err: unknown) {
-      lastError = err;
+      claudeError = err;
       const status = (err as { status?: number })?.status;
       if (status === 529 && attempt < 1) {
         await new Promise(r => setTimeout(r, 500));
         continue;
       }
-      throw err;
+      break;
     }
   }
-  throw lastError;
+
+  // Claude 失敗 → fallback 到 Gemini Flash（免費 tier）
+  if (process.env.GEMINI_API_KEY) {
+    return chatWithGemini(userMessage, history, knowledge, handoffKeywords);
+  }
+
+  throw claudeError;
 }
