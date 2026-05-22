@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { appendReview } from '@/lib/sheets'
+import { getOrderDetails, submitProductReview } from '@/lib/shopline'
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,7 +14,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: '星評須為 1–5' }, { status: 400 })
     }
 
+    // 1. 儲存到 Google Sheets
     await appendReview(lineUid, orderNumber, stars, comment || '')
+
+    // 2. 同步寫入 Shopline 評價（失敗不影響主流程）
+    getOrderDetails(orderNumber).then(async details => {
+      if (!details || details.productIds.length === 0) return
+      await Promise.all(
+        details.productIds.map(productId =>
+          submitProductReview({
+            productId,
+            orderId: details.orderId,
+            score: stars,
+            comment: comment || '',
+            userName: details.customerName,
+          })
+        )
+      )
+    }).catch(e => console.error('Shopline 評價同步失敗:', e))
+
     return NextResponse.json({ ok: true })
   } catch (err) {
     console.error('submit error:', err)
