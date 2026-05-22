@@ -2,11 +2,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-const SEGMENT_COLORS = [
+const FALLBACK_COLORS = [
   '#FF6B9D', '#FFB347', '#87CEEB', '#98FB98',
   '#DDA0DD', '#F0E68C', '#20B2AA', '#FF8C69',
 ]
-const SEGMENT_COUNT = 8
+
+interface Prize { index: number; name: string; probability: number; color: string }
 
 function easeOutQuint(t: number): number {
   return 1 - Math.pow(1 - t, 5)
@@ -14,13 +15,14 @@ function easeOutQuint(t: number): number {
 
 function drawWheel(
   ctx: CanvasRenderingContext2D,
-  prizes: { name: string }[],
+  prizes: Prize[],
   angle: number,
   size: number
 ) {
   const cx = size / 2, cy = size / 2
   const radius = size / 2 - 10
-  const segAngle = (Math.PI * 2) / SEGMENT_COUNT
+  const count = prizes.length
+  const segAngle = (Math.PI * 2) / count
 
   ctx.clearRect(0, 0, size, size)
 
@@ -32,7 +34,7 @@ function drawWheel(
     ctx.moveTo(cx, cy)
     ctx.arc(cx, cy, radius, start, end)
     ctx.closePath()
-    ctx.fillStyle = SEGMENT_COLORS[i % SEGMENT_COLORS.length]
+    ctx.fillStyle = prize.color || FALLBACK_COLORS[i % FALLBACK_COLORS.length]
     ctx.fill()
     ctx.strokeStyle = '#fff'
     ctx.lineWidth = 2
@@ -60,28 +62,39 @@ function drawWheel(
   ctx.stroke()
 }
 
-const DEFAULT_PRIZES = [
-  '正裝乙件', '精華液組', '面膜×3', '小樣組',
-  '85折券', '9折券', '生日禮', '積分×200',
-].map(name => ({ name }))
-
 export default function SpinPage() {
   const router = useRouter()
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [prizes, setPrizes] = useState<Prize[]>([])
+  const [loading, setLoading] = useState(true)
   const [spinning, setSpinning] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
   const angleRef = useRef(-Math.PI / 2)
+  const prizesRef = useRef<Prize[]>([])
 
   useEffect(() => {
+    fetch('/api/review/prizes')
+      .then(r => r.json())
+      .then(data => {
+        const list: Prize[] = data.prizes || []
+        setPrizes(list)
+        prizesRef.current = list
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
+  useEffect(() => {
+    if (prizes.length === 0) return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
-    drawWheel(ctx, DEFAULT_PRIZES, angleRef.current, canvas.width)
-  }, [])
+    drawWheel(ctx, prizes, angleRef.current, canvas.width)
+  }, [prizes])
 
   async function handleSpin() {
-    if (spinning || done) return
+    if (spinning || done || prizes.length === 0) return
     setSpinning(true)
     setError('')
 
@@ -105,8 +118,9 @@ export default function SpinPage() {
     const { prizeIndex, prizeName } = data
     sessionStorage.setItem('prizeName', prizeName)
 
-    const segAngle = (Math.PI * 2) / SEGMENT_COUNT
-    // 讓目標扇形的中心轉到頂部（指針位置 = -π/2）
+    const currentPrizes = prizesRef.current
+    const count = currentPrizes.length
+    const segAngle = (Math.PI * 2) / count
     const targetCenter = prizeIndex * segAngle + segAngle / 2
     const finalAngle = angleRef.current + Math.PI * 2 * 6 - targetCenter - (angleRef.current % (Math.PI * 2))
 
@@ -123,7 +137,7 @@ export default function SpinPage() {
       const eased = easeOutQuint(progress)
       const currentAngle = startAngle + (finalAngle - startAngle) * eased
       angleRef.current = currentAngle
-      drawWheel(ctx, DEFAULT_PRIZES, currentAngle, size)
+      drawWheel(ctx, currentPrizes, currentAngle, size)
 
       if (progress < 1) {
         requestAnimationFrame(animate)
@@ -145,19 +159,25 @@ export default function SpinPage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4 z-10 text-3xl drop-shadow">
           ▼
         </div>
-        <canvas
-          ref={canvasRef}
-          width={300}
-          height={300}
-          className="rounded-full shadow-xl"
-        />
+        {loading ? (
+          <div className="w-[300px] h-[300px] rounded-full bg-pink-100 flex items-center justify-center shadow-xl">
+            <span className="text-pink-400 text-sm">載入中...</span>
+          </div>
+        ) : (
+          <canvas
+            ref={canvasRef}
+            width={300}
+            height={300}
+            className="rounded-full shadow-xl"
+          />
+        )}
       </div>
 
       {error && <p className="text-red-500 text-sm mt-4 text-center">{error}</p>}
 
       <button
         onClick={handleSpin}
-        disabled={spinning || done}
+        disabled={spinning || done || loading}
         className="mt-8 px-10 py-4 bg-pink-500 hover:bg-pink-600 disabled:bg-pink-200 text-white font-bold text-lg rounded-full shadow-lg transition-all active:scale-95"
       >
         {spinning ? '轉動中...' : done ? '已抽獎' : 'GO 🎯'}
