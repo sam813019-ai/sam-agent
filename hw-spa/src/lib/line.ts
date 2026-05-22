@@ -15,6 +15,38 @@ export async function replyMessage(replyToken: string, text: string): Promise<vo
   });
 }
 
+export async function replyWithHandoffOption(replyToken: string, text: string): Promise<void> {
+  await client.replyMessage({
+    replyToken,
+    messages: [
+      {
+        type: 'text',
+        text,
+        quickReply: {
+          items: [
+            {
+              type: 'action',
+              action: {
+                type: 'message',
+                label: '請專人協助',
+                text: '__HANDOFF_REQUEST__',
+              },
+            },
+            {
+              type: 'action',
+              action: {
+                type: 'message',
+                label: '不用，謝謝',
+                text: '__HANDOFF_DECLINE__',
+              },
+            },
+          ],
+        },
+      },
+    ],
+  });
+}
+
 export async function pushToAdmin(summary: string): Promise<void> {
   const adminId = process.env.ADMIN_LINE_USER_ID;
   if (!adminId) return;

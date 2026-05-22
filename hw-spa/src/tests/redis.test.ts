@@ -16,7 +16,7 @@ vi.mock('@upstash/redis', () => ({
   },
 }));
 
-import { getHistory, appendMessages, clearHistory, type Message } from '@/lib/redis';
+import { getHistory, appendMessages, clearHistory, setHandoff, releaseHandoff, isHandoff, type Message } from '@/lib/redis';
 
 describe('getHistory', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -60,5 +60,30 @@ describe('clearHistory', () => {
   it('刪除指定 userId 的 key', async () => {
     await clearHistory('user-123');
     expect(mockDel).toHaveBeenCalledWith('chat:user-123');
+  });
+});
+
+describe('handoff 狀態管理', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it('setHandoff 寫入 handoff key，TTL 4 小時', async () => {
+    await setHandoff('user-123');
+    expect(mockSet).toHaveBeenCalledWith('handoff:user-123', '1', { ex: 14400 });
+  });
+
+  it('isHandoff 有值時回傳 true', async () => {
+    mockGet.mockResolvedValue('1');
+    expect(await isHandoff('user-123')).toBe(true);
+    expect(mockGet).toHaveBeenCalledWith('handoff:user-123');
+  });
+
+  it('isHandoff 無值時回傳 false', async () => {
+    mockGet.mockResolvedValue(null);
+    expect(await isHandoff('user-123')).toBe(false);
+  });
+
+  it('releaseHandoff 刪除 handoff key', async () => {
+    await releaseHandoff('user-123');
+    expect(mockDel).toHaveBeenCalledWith('handoff:user-123');
   });
 });

@@ -1,6 +1,6 @@
 import { after } from 'next/server';
-import { verifySignature, replyMessage, pushToAdmin } from '@/lib/line';
-import { getHistory, appendMessages } from '@/lib/redis';
+import { verifySignature, replyMessage, replyWithHandoffOption, pushToAdmin } from '@/lib/line';
+import { getHistory, appendMessages, isHandoff, setHandoff } from '@/lib/redis';
 import { getKnowledgeBase, formatKnowledgeForPrompt, getHandoffKeywords } from '@/lib/sheets';
 import { chat } from '@/lib/claude';
 import type { webhook } from '@line/bot-sdk';
@@ -31,6 +31,30 @@ export async function POST(req: Request) {
       if (!replyToken) continue;
 
       try {
+        // 人工接管中 → AI 靜音，不回覆
+        if (await isHandoff(userId)) continue;
+
+        // 客人主動點「請專人協助」按鈕
+        if (userText === '__HANDOFF_REQUEST__') {
+          const history = await getHistory(userId);
+          const summary = history
+            .slice(-6)
+            .map(m => `${m.role === 'user' ? '顧客' : '小薇'}：${m.content}`)
+            .join('\n');
+          await Promise.all([
+            replyMessage(replyToken, '好的！我們的專人會盡快回覆您，請稍候 😊'),
+            setHandoff(userId),
+            pushToAdmin(`🙋 顧客主動請求專人協助\n\n${summary}`),
+          ]);
+          continue;
+        }
+
+        // 客人點「不用，謝謝」
+        if (userText === '__HANDOFF_DECLINE__') {
+          await replyMessage(replyToken, '好的！有任何問題隨時告訴我 😊');
+          continue;
+        }
+
         const [history, kb] = await Promise.all([
           getHistory(userId),
           getKnowledgeBase(),
@@ -44,7 +68,7 @@ export async function POST(req: Request) {
         );
 
         await Promise.all([
-          replyMessage(replyToken, reply),
+          replyWithHandoffOption(replyToken, reply),
           appendMessages(userId, [
             { role: 'user', content: userText },
             { role: 'assistant', content: reply },
@@ -61,7 +85,10 @@ export async function POST(req: Request) {
             .slice(-6)
             .map(m => `${m.role === 'user' ? '顧客' : '小薇'}：${m.content}`)
             .join('\n');
-          await pushToAdmin(summary);
+          await Promise.all([
+            pushToAdmin(summary),
+            setHandoff(userId),
+          ]);
         }
       } catch (err) {
         console.error('[webhook] Error:', err);

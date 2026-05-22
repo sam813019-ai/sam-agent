@@ -15,7 +15,7 @@ vi.mock('@line/bot-sdk', () => ({
   validateSignature: mockValidate,
 }));
 
-import { verifySignature, replyMessage, pushToAdmin } from '@/lib/line';
+import { verifySignature, replyMessage, replyWithHandoffOption, pushToAdmin } from '@/lib/line';
 
 describe('verifySignature', () => {
   it('委派給 validateSignature 並回傳結果', () => {
@@ -34,6 +34,27 @@ describe('replyMessage', () => {
     expect(mockReply).toHaveBeenCalledWith({
       replyToken: 'reply-token-123',
       messages: [{ type: 'text', text: '您好！' }],
+    });
+  });
+});
+
+describe('replyWithHandoffOption', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it('回覆訊息附帶兩個 Quick Reply 按鈕', async () => {
+    await replyWithHandoffOption('token-abc', '您好，這是回覆');
+    expect(mockReply).toHaveBeenCalledWith({
+      replyToken: 'token-abc',
+      messages: [expect.objectContaining({
+        type: 'text',
+        text: '您好，這是回覆',
+        quickReply: expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({ action: expect.objectContaining({ label: '請專人協助' }) }),
+            expect.objectContaining({ action: expect.objectContaining({ label: '不用，謝謝' }) }),
+          ]),
+        }),
+      })],
     });
   });
 });
