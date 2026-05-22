@@ -30,19 +30,35 @@ export async function chat(
   knowledge: string,
   handoffKeywords: string[],
 ): Promise<ChatResult> {
-  const response = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 512,
-    system: systemPrompt(knowledge, handoffKeywords),
-    messages: [
-      ...history.map(m => ({ role: m.role, content: m.content })),
-      { role: 'user', content: userMessage },
-    ],
-  });
+  const messages = [
+    ...history.map(m => ({ role: m.role, content: m.content })),
+    { role: 'user' as const, content: userMessage },
+  ];
+  const system = systemPrompt(knowledge, handoffKeywords);
 
-  const raw = response.content[0].type === 'text' ? response.content[0].text : '';
-  return {
-    reply: raw.replace(HANDOFF, '').trim(),
-    shouldHandoff: raw.includes(HANDOFF),
-  };
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const response = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system,
+        messages,
+      });
+      const raw = response.content[0].type === 'text' ? response.content[0].text : '';
+      return {
+        reply: raw.replace(HANDOFF, '').trim(),
+        shouldHandoff: raw.includes(HANDOFF),
+      };
+    } catch (err: unknown) {
+      lastError = err;
+      const status = (err as { status?: number })?.status;
+      if (status === 529 && attempt < 2) {
+        await new Promise(r => setTimeout(r, (attempt + 1) * 1500));
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastError;
 }

@@ -92,6 +92,7 @@ export async function POST(req: Request) {
         }
       } catch (err) {
         console.error('[webhook] Error:', err);
+        try { await replyMessage(replyToken, '抱歉，目前系統忙碌中，請稍後再傳訊息，我們會盡快回覆您 🙏'); } catch {}
       }
     }
   });
