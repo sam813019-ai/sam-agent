@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { getPrizes, markAsPlayed, appendPrizeRecord } from '@/lib/sheets'
 import { selectPrize } from '@/lib/lottery'
 import { pushPrizeNotification } from '@/lib/line-messaging'
@@ -23,9 +23,11 @@ export async function POST(req: NextRequest) {
       appendPrizeRecord(lineUid, orderNumber, prize.name),
     ])
 
-    // LINE 推播失敗不影響結果
-    pushPrizeNotification(lineUid, prize.name).catch(e =>
-      console.error('LINE 推播失敗:', e)
+    // LINE 推播失敗不影響結果（after 確保函式不提早被 Vercel 終止）
+    after(
+      pushPrizeNotification(lineUid, prize.name).catch(e =>
+        console.error('LINE 推播失敗:', e)
+      )
     )
 
     return NextResponse.json({ prizeIndex: prize.index, prizeName: prize.name })

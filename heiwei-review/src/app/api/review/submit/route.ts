@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { appendReview } from '@/lib/sheets'
 import { getOrderDetails, submitProductReview } from '@/lib/shopline'
 
@@ -17,21 +17,27 @@ export async function POST(req: NextRequest) {
     // 1. 儲存到 Google Sheets
     await appendReview(lineUid, orderNumber, stars, comment || '')
 
-    // 2. 同步寫入 Shopline 評價（失敗不影響主流程）
-    getOrderDetails(orderNumber).then(async details => {
-      if (!details || details.productIds.length === 0) return
-      await Promise.all(
-        details.productIds.map(productId =>
-          submitProductReview({
-            productId,
-            orderId: details.orderId,
-            score: stars,
-            comment: comment || '',
-            userName: details.customerName,
-          })
+    // 2. 同步寫入 Shopline 評價（after 確保函式不提早被 Vercel 終止）
+    after(
+      getOrderDetails(orderNumber).then(async details => {
+        if (!details || details.productIds.length === 0) {
+          console.log('Shopline 訂單無商品，跳過評價同步:', orderNumber)
+          return
+        }
+        await Promise.all(
+          details.productIds.map(productId =>
+            submitProductReview({
+              productId,
+              orderId: details.orderId,
+              score: stars,
+              comment: comment || '',
+              userName: details.customerName,
+            })
+          )
         )
-      )
-    }).catch(e => console.error('Shopline 評價同步失敗:', e))
+        console.log(`Shopline 評價已同步: ${details.productIds.length} 件商品`)
+      }).catch(e => console.error('Shopline 評價同步失敗:', e))
+    )
 
     return NextResponse.json({ ok: true })
   } catch (err) {
