@@ -50,8 +50,8 @@ describe('replyWithHandoffOption', () => {
         text: '您好，這是回覆',
         quickReply: expect.objectContaining({
           items: expect.arrayContaining([
-            expect.objectContaining({ action: expect.objectContaining({ label: '請專人協助' }) }),
-            expect.objectContaining({ action: expect.objectContaining({ label: '不用，謝謝' }) }),
+            expect.objectContaining({ action: expect.objectContaining({ label: '請專人協助', text: '請專人協助' }) }),
+            expect.objectContaining({ action: expect.objectContaining({ label: '不用，謝謝', text: '不用，謝謝' }) }),
           ]),
         }),
       })],

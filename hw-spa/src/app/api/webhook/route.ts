@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         if (await isHandoff(userId)) continue;
 
         // 客人主動點「請專人協助」按鈕
-        if (userText === '__HANDOFF_REQUEST__') {
+        if (userText === '請專人協助') {
           const history = await getHistory(userId);
           const summary = history
             .slice(-6)
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
         }
 
         // 客人點「不用，謝謝」
-        if (userText === '__HANDOFF_DECLINE__') {
+        if (userText === '不用，謝謝') {
           await replyMessage(replyToken, '好的！有任何問題隨時告訴我 😊');
           continue;
         }

@@ -29,7 +29,7 @@ export async function replyWithHandoffOption(replyToken: string, text: string): 
               action: {
                 type: 'message',
                 label: '請專人協助',
-                text: '__HANDOFF_REQUEST__',
+                text: '請專人協助',
               },
             },
             {
@@ -37,7 +37,7 @@ export async function replyWithHandoffOption(replyToken: string, text: string): 
               action: {
                 type: 'message',
                 label: '不用，謝謝',
-                text: '__HANDOFF_DECLINE__',
+                text: '不用，謝謝',
               },
             },
           ],
