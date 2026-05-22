@@ -1,6 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { mockGetValues } = vi.hoisted(() => ({ mockGetValues: vi.fn() }));
+const { mockGetValues, mockRedisGet, mockRedisSet } = vi.hoisted(() => ({
+  mockGetValues: vi.fn(),
+  mockRedisGet: vi.fn(),
+  mockRedisSet: vi.fn(),
+}));
+
+vi.mock('@upstash/redis', () => ({
+  Redis: {
+    fromEnv: vi.fn().mockReturnValue({
+      get: mockRedisGet,
+      set: mockRedisSet,
+    }),
+  },
+}));
 
 vi.mock('googleapis', () => ({
   google: {
@@ -19,6 +32,8 @@ describe('getKnowledgeBase', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     clearCache();
+    mockRedisGet.mockResolvedValue(null); // 預設 Redis cache miss
+    mockRedisSet.mockResolvedValue('OK');
     process.env.GOOGLE_SHEET_ID = 'test-sheet-id';
     process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL = 'test@test.iam.gserviceaccount.com';
     process.env.GOOGLE_PRIVATE_KEY = 'test-key';
@@ -46,6 +61,27 @@ describe('getKnowledgeBase', () => {
     expect(kb.services).toHaveLength(0);
     expect(kb.faqs).toHaveLength(0);
     expect(kb.handoffKeywords).toHaveLength(0);
+  });
+
+  it('Redis cache hit 時不打 Google Sheets API', async () => {
+    const cached = { services: [{ name: '測試', duration: '', price: '', skinType: '', description: '', notes: '' }], faqs: [], handoffKeywords: [] };
+    mockRedisGet.mockResolvedValue(cached);
+
+    const kb = await getKnowledgeBase();
+
+    expect(kb.services[0].name).toBe('測試');
+    expect(mockGetValues).not.toHaveBeenCalled();
+  });
+
+  it('Google Sheets 取回後寫入 Redis', async () => {
+    mockGetValues
+      .mockResolvedValueOnce({ data: { values: [['深層清潔', '90分鐘', 'NT$2800', '油肌', '去除老廢角質', '敏感期告知']] } })
+      .mockResolvedValueOnce({ data: { values: [] } })
+      .mockResolvedValueOnce({ data: { values: [] } });
+
+    await getKnowledgeBase();
+
+    expect(mockRedisSet).toHaveBeenCalledWith('kb:cache', expect.any(Object), { ex: 1800 });
   });
 });
 

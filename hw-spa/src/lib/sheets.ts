@@ -1,6 +1,8 @@
 import { google } from 'googleapis';
+import { Redis } from '@upstash/redis';
 
-const CACHE_TTL = 5 * 60 * 1000;
+const MEM_TTL = 5 * 60 * 1000;   // in-memory: 5 min (同一 instance 熱快取)
+const REDIS_TTL = 30 * 60;        // Redis: 30 min，跨 cold start 存活
 
 export type ServiceItem = {
   name: string; duration: string; price: string;
@@ -14,8 +16,11 @@ export type KnowledgeBase = {
   handoffKeywords: HandoffKeyword[];
 };
 
-let _cache: { data: KnowledgeBase; ts: number } | null = null;
-export function clearCache() { _cache = null; }
+const redis = Redis.fromEnv();
+const KB_KEY = 'kb:cache';
+
+let _mem: { data: KnowledgeBase; ts: number } | null = null;
+export function clearCache() { _mem = null; }
 
 function auth() {
   return new google.auth.GoogleAuth({
@@ -28,8 +33,17 @@ function auth() {
 }
 
 export async function getKnowledgeBase(): Promise<KnowledgeBase> {
-  if (_cache && Date.now() - _cache.ts < CACHE_TTL) return _cache.data;
+  // L1: in-memory（同一 Vercel instance 內不打網路）
+  if (_mem && Date.now() - _mem.ts < MEM_TTL) return _mem.data;
 
+  // L2: Redis（跨 cold start，避免每次都打 Google Sheets API）
+  const cached = await redis.get<KnowledgeBase>(KB_KEY);
+  if (cached) {
+    _mem = { data: cached, ts: Date.now() };
+    return cached;
+  }
+
+  // L3: Google Sheets（真正的 source of truth）
   const sheets = google.sheets({ version: 'v4', auth: auth() });
   const id = process.env.GOOGLE_SHEET_ID!;
 
@@ -54,7 +68,8 @@ export async function getKnowledgeBase(): Promise<KnowledgeBase> {
     })),
   };
 
-  _cache = { data, ts: Date.now() };
+  _mem = { data, ts: Date.now() };
+  await redis.set(KB_KEY, data, { ex: REDIS_TTL });
   return data;
 }
 
