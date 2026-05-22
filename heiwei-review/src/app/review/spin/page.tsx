@@ -122,7 +122,8 @@ export default function SpinPage() {
     const count = currentPrizes.length
     const segAngle = (Math.PI * 2) / count
     const targetCenter = prizeIndex * segAngle + segAngle / 2
-    const finalAngle = angleRef.current + Math.PI * 2 * 6 - targetCenter - (angleRef.current % (Math.PI * 2))
+    // 指針在 12 點鐘（-π/2），需補正讓目標扇形中心對齊指針
+    const finalAngle = angleRef.current + Math.PI * 2 * 6 - targetCenter - (angleRef.current % (Math.PI * 2)) - Math.PI / 2
 
     const canvas = canvasRef.current!
     const ctx = canvas.getContext('2d')!
