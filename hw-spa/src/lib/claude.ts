@@ -37,14 +37,12 @@ export async function chat(
   const system = systemPrompt(knowledge, handoffKeywords);
 
   let lastError: unknown;
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const response = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
-        system,
-        messages,
-      });
+      const response = await anthropic.messages.create(
+        { model: 'claude-haiku-4-5-20251001', max_tokens: 512, system, messages },
+        { timeout: 8000 },
+      );
       const raw = response.content[0].type === 'text' ? response.content[0].text : '';
       return {
         reply: raw.replace(HANDOFF, '').trim(),
@@ -53,8 +51,8 @@ export async function chat(
     } catch (err: unknown) {
       lastError = err;
       const status = (err as { status?: number })?.status;
-      if (status === 529 && attempt < 2) {
-        await new Promise(r => setTimeout(r, (attempt + 1) * 1500));
+      if (status === 529 && attempt < 1) {
+        await new Promise(r => setTimeout(r, 500));
         continue;
       }
       throw err;
