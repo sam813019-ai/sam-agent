@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sam 工作內容 WBS</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ─── Reset & Base ─── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:#ECEEF2;min-height:100vh;color:#1E293B}
+
+/* ─── Dot Grid Canvas ─── */
+.canvas{
+  background-color:#F0F2F6;
+  background-image:radial-gradient(circle,#C8CEDD 1.2px,transparent 1.2px);
+  background-size:28px 28px;
+  padding:32px 40px 80px;
+  min-height:100vh;
+}
+
+/* ─── Top Bar ─── */
+.topbar{
+  background:#fff;
+  border-bottom:1px solid #E2E8F0;
+  padding:0 40px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  position:sticky;top:0;z-index:300;
+  box-shadow:0 1px 8px rgba(0,0,0,.06);
+}
+.topbar-logo{
+  font-family:'Poppins',sans-serif;font-size:15px;font-weight:800;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-0.3px;
+}
+.topbar-title{font-size:13px;color:#64748B;font-weight:500}
+.topbar-sep{width:1px;height:20px;background:#E2E8F0}
+.topbar-right{margin-left:auto;display:flex;gap:8px}
+.tbtn{
+  padding:5px 14px;border-radius:20px;border:1px solid #E2E8F0;
+  background:#fff;font-size:12px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;
+  color:#475569;transition:all .15s;font-weight:500;
+}
+.tbtn:hover{background:#F1F5F9;border-color:#CBD5E1}
+.tbtn.primary{background:#6366F1;color:#fff;border-color:#6366F1}
+.tbtn.primary:hover{background:#4F46E5}
+.stat-chips{display:flex;gap:6px}
+.chip{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;background:#EEF2FF;color:#4F46E5}
+
+/* ─── WBS Frame (Section) ─── */
+.frame{
+  border-radius:20px;
+  margin-bottom:32px;
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  border:2px solid var(--fc);
+}
+.frame-header{
+  background:var(--fc);
+  padding:14px 24px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;user-select:none;
+}
+.frame-badge{
+  background:rgba(255,255,255,.25);
+  color:#fff;font-size:12px;font-weight:700;
+  padding:3px 10px;border-radius:20px;white-space:nowrap;letter-spacing:.03em;
+}
+.frame-name{font-size:16px;font-weight:700;color:#fff}
+.frame-count{margin-left:auto;font-size:12px;color:rgba(255,255,255,.75);font-weight:500}
+.frame-arrow{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:11px;transition:transform .3s;
+}
+.frame.collapsed .frame-arrow{transform:rotate(-90deg)}
+.frame-body{background:rgba(255,255,255,.92);padding:20px 24px 24px}
+.frame.collapsed .frame-body{display:none}
+
+/* ─── Work Item Card ─── */
+.wi-card{
+  background:#fff;
+  border-radius:14px;
+  margin-bottom:18px;
+  box-shadow:0 1px 6px rgba(0,0,0,.07);
+  border:1.5px solid #E8ECF2;
+  overflow:hidden;
+  transition:box-shadow .2s;
+}
+.wi-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.wi-card:last-child{margin-bottom:0}
+.wi-card-header{
+  padding:12px 18px;
+  display:flex;align-items:center;gap:10px;
+  border-left:4px solid var(--fc);
+  cursor:pointer;background:#FAFBFC;
+  transition:background .15s;
+}
+.wi-card-header:hover{background:#F1F5F9}
+.wi-num{
+  font-size:11px;font-weight:700;color:var(--fc);
+  background:var(--fl);padding:2px 8px;border-radius:20px;white-space:nowrap;
+}
+.wi-name{font-size:14px;font-weight:600;color:#1E293B;flex:1}
+.wi-flow-label{font-size:11px;color:#94A3B8;font-weight:500}
+.wi-toggle{color:#94A3B8;font-size:11px;transition:transform .25s;margin-left:4px}
+.wi-card-header.open .wi-toggle{transform:rotate(180deg)}
+
+/* ─── Step Flow ─── */
+.wi-body{padding:18px 18px 20px;background:#fff;display:none}
+.wi-body.show{display:block}
+.flow-meta{
+  font-size:11px;color:var(--fc);font-weight:600;
+  background:var(--fl);padding:5px 12px;border-radius:6px;
+  display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;letter-spacing:.02em;
+}
+.step-flow{
+  display:flex;align-items:flex-start;gap:0;
+  overflow-x:auto;padding-bottom:6px;
+}
+.step-flow::-webkit-scrollbar{height:4px}
+.step-flow::-webkit-scrollbar-track{background:#F1F5F9;border-radius:2px}
+.step-flow::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:2px}
+
+/* Arrow between steps */
+.sf-arrow{
+  display:flex;align-items:center;padding-top:14px;flex-shrink:0;
+  color:#CBD5E1;font-size:18px;margin:0 2px;
+}
+
+/* ─── Step Card ─── */
+.step-card{
+  background:var(--fl);
+  border:1.5px solid var(--fb,#E2E8F0);
+  border-radius:12px;
+  min-width:170px;max-width:200px;
+  flex-shrink:0;
+  overflow:hidden;
+  transition:all .2s;cursor:pointer;
+}
+.step-card:hover{border-color:var(--fc);box-shadow:0 3px 10px rgba(0,0,0,.1);transform:translateY(-1px)}
+.step-card-top{
+  background:var(--fc);padding:8px 12px;
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
+}
+.step-card-num{
+  width:20px;height:20px;border-radius:50%;
+  background:rgba(255,255,255,.25);color:#fff;
+  font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step-card-name{font-size:12px;font-weight:600;color:#fff;line-height:1.3;flex:1}
+.step-card-time{
+  font-size:10px;font-weight:600;color:#fff;
+  background:rgba(255,255,255,.2);
+  padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0;
+}
+.step-card-subs{padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.sub-item{
+  display:flex;align-items:flex-start;gap:5px;
+  font-size:11px;color:#475569;line-height:1.4;
+}
+.sub-dot{
+  width:4px;height:4px;border-radius:50%;
+  background:var(--fc);margin-top:5px;flex-shrink:0;opacity:.7;
+}
+
+/* ─── Status note ─── */
+.status-note{
+  margin-top:14px;padding:8px 12px;
+  background:#F8FAFC;border-left:3px solid var(--fc);
+  border-radius:0 8px 8px 0;
+  font-size:11px;color:#64748B;line-height:1.6;
+}
+.status-note b{color:var(--fc)}
+
+/* ─── Color themes ─── */
+.t1{--fc:#6366F1;--fl:#EEF2FF;--fb:#C7D2FE}
+.t2{--fc:#8B5CF6;--fl:#F5F3FF;--fb:#DDD6FE}
+.t3{--fc:#F59E0B;--fl:#FFFBEB;--fb:#FDE68A}
+.t4{--fc:#10B981;--fl:#ECFDF5;--fb:#A7F3D0}
+
+/* ─── Legend strip ─── */
+.legend{
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding:10px 14px;
+  background:rgba(255,255,255,.8);
+  border-radius:12px;border:1px solid #E2E8F0;
+  margin-bottom:24px;
+  backdrop-filter:blur(8px);
+}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#475569;font-weight:500}
+.leg-dot{width:10px;height:10px;border-radius:3px}
+
+/* ─── Responsive ─── */
+@media(max-width:768px){
+  .canvas{padding:16px 12px 60px}
+  .topbar{padding:0 16px}
+  .frame-body{padding:12px}
+  .step-card{min-width:145px}
+}
+
+/* ─── Print ─── */
+@media print{
+  .topbar{display:none}
+  .canvas{background:#fff;padding:12px}
+  .frame-body,.wi-body{display:block!important}
+  .frame{box-shadow:none;border:1px solid #ddd}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="topbar">
+  <span class="topbar-logo">WBS Board</span>
+  <span class="topbar-sep"></span>
+  <span class="topbar-title">Sam 工作內容分解結構</span>
+  <div class="stat-chips">
+    <span class="chip">4 大類別</span>
+    <span class="chip">11 工作項目</span>
+    <span class="chip">37 步驟</span>
+  </div>
+  <div class="topbar-right">
+    <button class="tbtn primary" onclick="expandAll()">全部展開</button>
+    <button class="tbtn" onclick="collapseAll()">收合</button>
+  </div>
+</div>
+
+<div class="canvas">
+
+<!-- ── Legend ── -->
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#6366F1"></div>電商平台營運</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#8B5CF6"></div>網紅團購管理</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#F59E0B"></div>代理制度管理</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>產品開發設計</div>
+  <div class="leg-item" style="margin-left:auto;color:#94A3B8">⏱ 卡片上方顯示預估工時</div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     一、電商平台營運與活動行銷
+══════════════════════════════════ -->
+<div class="frame t1" id="f1">
+  <div class="frame-header" onclick="toggleFrame('f1')">
+    <span class="frame-badge">一</span>
+    <span class="frame-name">電商平台營運與活動行銷</span>
+    <span class="frame-count">4 項工作 · 13 步驟</span>
+    <span class="frame-arrow">▼</span>
+  </div>
+  <div class="frame-body">
+
+    <!-- 1.1 -->
+    <div class="wi-card t1">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">1.1</span>
+        <span class="wi-name">網站維護與細節優化</span>
+        <span class="wi-flow-label">每日巡檢 → 問題識別 → 執行修正 → 品牌更新</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">每日巡檢</span>
+              <span class="step-card-time">30分</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>確認首頁載入速度</div>
+              <div class="sub-item"><span class="sub-dot"></span>逐一檢查頁面連結有效性</div>
+              <div class="sub-item"><span class="sub-dot"></span>驗證購物車→結帳→付款流程</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認商品圖片、Banner 顯示</div>
+              <div class="sub-item"><span class="sub-dot"></span>行動版 RWD 跑版檢查</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">問題識別與分類</span>
+              <span class="step-card-time">30分+</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>記錄斷鍊、跑版、錯誤訊息</div>
+              <div class="sub-item"><span class="sub-dot"></span>依嚴重程度分類（緊急/一般）</div>
+              <div class="sub-item"><span class="sub-dot"></span>評估修正優先順序與預估工時</div>
+              <div class="sub-item"><span class="sub-dot"></span>建立問題追蹤紀錄</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">執行修正與測試</span>
+              <span class="step-card-time">30分+</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>後台修正斷鍊/圖片/文字錯誤</div>
+              <div class="sub-item"><span class="sub-dot"></span>CSS/版型問題回報或自行修正</div>
+              <div class="sub-item"><span class="sub-dot"></span>修正後重新測試各裝置</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認修正成功關閉紀錄</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">品牌資訊更新</span>
+              <span class="step-card-time">30分+</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>更新首頁條圖（輪播 Banner）</div>
+              <div class="sub-item"><span class="sub-dot"></span>新增 / 修正實體據點資訊</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認品牌 Logo、色系一致性</div>
+              <div class="sub-item"><span class="sub-dot"></span>更新 About / 品牌故事文案</div>
+            </div>
+          </div>
+        </div>
+        <div class="status-note">⏳ <b>等待中：</b>條圖待陳小葳提供調圖（已等待半年），確認後即可執行更新</div>
+      </div>
+    </div>
+
+    <!-- 1.2 -->
+    <div class="wi-card t1">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">1.2</span>
+        <span class="wi-name">產品上下架與活動設定</span>
+        <span class="wi-flow-label">活動策劃 → 優惠邏輯 → 測試流程 → 正式上線</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">活動策劃</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>確認活動目標</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定活動 KPI</div>
+              <div class="sub-item"><span class="sub-dot"></span>選定活動主打商品與組合</div>
+              <div class="sub-item"><span class="sub-dot"></span>設計優惠機制（滿額贈/加價購）</div>
+              <div class="sub-item"><span class="sub-dot"></span>撰寫商品文案與視覺設計方向</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">後台優惠邏輯設定</span>
+              <span class="step-card-time">2天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>後台建立活動規則（條件/觸發）</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定折扣門檻與贈品 SKU</div>
+              <div class="sub-item"><span class="sub-dot"></span>建立專屬優惠碼（KOL/活動/新客）</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定活動有效期間（起/迄日時）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認庫存數量與贈品充足</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">測試下單流程</span>
+              <span class="step-card-time">30分</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>測試帳號模擬消費者購物路徑</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認達門檻自動觸發折扣/贈品</div>
+              <div class="sub-item"><span class="sub-dot"></span>測試信用卡、超商、LINE Pay</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認訂單確認通知正確</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">正式上線與監控</span>
+              <span class="step-card-time">30分</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>確認活動頁面視覺顯示正確</div>
+              <div class="sub-item"><span class="sub-dot"></span>上線後監控訂單狀況</div>
+              <div class="sub-item"><span class="sub-dot"></span>即時處理異常或客訴問題</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.3 -->
+    <div class="wi-card t1">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">1.3</span>
+        <span class="wi-name">行銷 / 活動檔期規劃</span>
+        <span class="wi-flow-label">提報主題 → 設定折扣 → 安排時程</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">提報活動主題</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>調研競品年度活動策略</div>
+              <div class="sub-item"><span class="sub-dot"></span>分析過往各檔期銷售數據</div>
+              <div class="sub-item"><span class="sub-dot"></span>提出年主題構想（含視覺方向）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認核心主打檔期（週年慶/雙11/聖誕）</div>
+              <div class="sub-item"><span class="sub-dot"></span>與團隊對齊活動方向與資源</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">設定折扣門檻</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>計算各商品毛利空間與損益點</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定活動最低折扣底線</div>
+              <div class="sub-item"><span class="sub-dot"></span>規劃會員等級專屬優惠</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認組合包利潤符合預期</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.4 -->
+    <div class="wi-card t1">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">1.4</span>
+        <span class="wi-name">素材與視覺規劃</span>
+        <span class="wi-flow-label">發包美編 → 出圖確認 → 視覺校對 → 網站替換</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">發包美編</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>確認設計規格（尺寸/比例/格式）</div>
+              <div class="sub-item"><span class="sub-dot"></span>撰寫美編 Brief（品牌色/主題/文案）</div>
+              <div class="sub-item"><span class="sub-dot"></span>選定設計師或發包外包</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定交件期限並確認費用</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">出圖與校對</span>
+              <span class="step-card-time">7天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>接收設計初稿並初步審閱</div>
+              <div class="sub-item"><span class="sub-dot"></span>視覺風格校對（品牌色/字型）</div>
+              <div class="sub-item"><span class="sub-dot"></span>文字內容校對（無錯字/日期）</div>
+              <div class="sub-item"><span class="sub-dot"></span>整理修改意見回饋設計師</div>
+              <div class="sub-item"><span class="sub-dot"></span>最終版本確認並存檔</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t1">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">網站素材替換</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>後台上傳新 Banner / 圖片素材</div>
+              <div class="sub-item"><span class="sub-dot"></span>替換首頁輪播、活動頁視覺</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認電腦版/平板/手機版效果</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定素材上下架日期（自動切換）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /frame-body -->
+</div><!-- /frame 1 -->
+
+
+<!-- ══════════════════════════════════
+     二、網紅團購專案管理
+══════════════════════════════════ -->
+<div class="frame t2" id="f2">
+  <div class="frame-header" onclick="toggleFrame('f2')">
+    <span class="frame-badge">二</span>
+    <span class="frame-name">網紅團購專案管理（KOL / KOC）</span>
+    <span class="frame-count">2 項工作 · 8 步驟</span>
+    <span class="frame-arrow">▼</span>
+  </div>
+  <div class="frame-body">
+
+    <!-- 2.1 -->
+    <div class="wi-card t2">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">2.1</span>
+        <span class="wi-name">開團接洽與檔期規劃</span>
+        <span class="wi-flow-label">開發名單 → 寄樣 → 洽談合作 → 確認合約</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">開發候選名單</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>IG / YouTube / TikTok 搜尋匹配 KOL</div>
+              <div class="sub-item"><span class="sub-dot"></span>評估粉絲數（1萬+）、互動率（ER>3%）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認內容風格與品牌契合度</div>
+              <div class="sub-item"><span class="sub-dot"></span>建立候選名單（聯絡資訊/粉絲數/報價）</div>
+              <div class="sub-item"><span class="sub-dot"></span>優先篩選有開團經驗的網紅</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">寄樣作業</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>準備試用品組合包（品牌說明）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認寄送地址與收件時間</div>
+              <div class="sub-item"><span class="sub-dot"></span>寄出並記錄追蹤號碼</div>
+              <div class="sub-item"><span class="sub-dot"></span>追蹤確認收到並了解使用感受</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">洽談合作條件</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>商談開團日期與時長（7～14天）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認合作模式（純分潤/固定費+分潤）</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定分潤比例（通常 20%～30%）</div>
+              <div class="sub-item"><span class="sub-dot"></span>擬定網紅專屬組合與優惠碼</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認發文篇數、形式（限動/貼文/直播）</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">確認合約與開團準備</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>簽訂合作合約（授權範圍/結算條款）</div>
+              <div class="sub-item"><span class="sub-dot"></span>後台設定專屬優惠碼與折扣</div>
+              <div class="sub-item"><span class="sub-dot"></span>準備開團素材（圖文/影片素材包）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認庫存充足可支撐開團量</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.2 -->
+    <div class="wi-card t2">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">2.2</span>
+        <span class="wi-name">緊急狀況處理與結算報告</span>
+        <span class="wi-flow-label">即時監控 → 緊急應變 → 導出報表 → 績效結案</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">即時通訊監控</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>每日監控訂單成長曲線</div>
+              <div class="sub-item"><span class="sub-dot"></span>即時回覆消費者詢問</div>
+              <div class="sub-item"><span class="sub-dot"></span>監控庫存水位，預防斷貨</div>
+              <div class="sub-item"><span class="sub-dot"></span>追蹤網紅發文狀況與互動數據</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">緊急狀況應變</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>缺貨：通知網紅暫停並說明補貨時程</div>
+              <div class="sub-item"><span class="sub-dot"></span>物流延誤：主動聯繫並提供補償方案</div>
+              <div class="sub-item"><span class="sub-dot"></span>退換貨：依規範快速處理並記錄原因</div>
+              <div class="sub-item"><span class="sub-dot"></span>追蹤工廠製作交期確保如期出貨</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">導出訂單報表</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>後台下載開團期間全部訂單</div>
+              <div class="sub-item"><span class="sub-dot"></span>篩選該網紅優惠碼訂單</div>
+              <div class="sub-item"><span class="sub-dot"></span>核對訂單金額、退貨扣除</div>
+              <div class="sub-item"><span class="sub-dot"></span>計算分潤基礎（稅前/稅後/退換）</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t2">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">績效分析與結案</span>
+              <span class="step-card-time">2天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>計算 GMV、平均客單價、轉換率</div>
+              <div class="sub-item"><span class="sub-dot"></span>計算最終分潤金額並核對付款</div>
+              <div class="sub-item"><span class="sub-dot"></span>評估 ROI（廣告費/分潤 vs 業績）</div>
+              <div class="sub-item"><span class="sub-dot"></span>撰寫結案報告（數據+改善建議）</div>
+              <div class="sub-item"><span class="sub-dot"></span>更新 KOL 資料庫評分</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /frame 2 -->
+
+
+<!-- ══════════════════════════════════
+     三、代理制度開發與管理
+══════════════════════════════════ -->
+<div class="frame t3" id="f3">
+  <div class="frame-header" onclick="toggleFrame('f3')">
+    <span class="frame-badge">三</span>
+    <span class="frame-name">代理制度開發與管理</span>
+    <span class="frame-count">2 項工作 · 7 步驟</span>
+    <span class="frame-arrow">▼</span>
+  </div>
+  <div class="frame-body">
+
+    <!-- 3.1 -->
+    <div class="wi-card t3">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">3.1</span>
+        <span class="wi-name">制度規劃與規範制定</span>
+        <span class="wi-flow-label">評估市場 → 代理合約 → 控價守則 → 發布執行</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t3">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">評估市場行情</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>調研競品代理架構與分潤模式</div>
+              <div class="sub-item"><span class="sub-dot"></span>分析目標市場通路（實體/線上/社群）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認品牌定位與代理商形象要求</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定代理商目標客群輪廓</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t3">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">制定代理合約</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>草擬授權範圍（地區/通路/商品）</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定合約期限與續約條件</div>
+              <div class="sub-item"><span class="sub-dot"></span>訂定最低進貨量與付款條件</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認退換貨條件（瑕疵品處理）</div>
+              <div class="sub-item"><span class="sub-dot"></span>法務確認合約文件合規性</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t3">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">控價守則制定</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>設定最低零售價格（MAP 政策）</div>
+              <div class="sub-item"><span class="sub-dot"></span>規範線上 / 線下通路定價一致性</div>
+              <div class="sub-item"><span class="sub-dot"></span>設立違規控價警告/終止合約機制</div>
+              <div class="sub-item"><span class="sub-dot"></span>定期巡查市場價格並記錄異常</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t3">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">發布與執行</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>製作代理商招募說明書</div>
+              <div class="sub-item"><span class="sub-dot"></span>建立代理商申請表單與審核流程</div>
+              <div class="sub-item"><span class="sub-dot"></span>新代理商簽約 → 授權書發放</div>
+              <div class="sub-item"><span class="sub-dot"></span>建立代理商聯絡 / 訂貨管理平台</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.2 -->
+    <div class="wi-card t3">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">3.2</span>
+        <span class="wi-name">階級計算與分潤設定</span>
+        <span class="wi-flow-label">Excel 毛利試算 → 階級設計 → 定期檢討</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t3">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">Excel 毛利試算</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>建立各商品成本結構試算表</div>
+              <div class="sub-item"><span class="sub-dot"></span>模擬不同進貨折扣下的品牌毛利</div>
+              <div class="sub-item"><span class="sub-dot"></span>計算代理商在各折扣下的利潤空間</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認最低可接受毛利底線</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t3">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">階級制度設計</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>設定代理層級（一般/銀牌/金牌/白金）</div>
+              <div class="sub-item"><span class="sub-dot"></span>對應各級進貨折扣與最低訂單量</div>
+              <div class="sub-item"><span class="sub-dot"></span>制定保護機制（緩衝期規則）</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t3">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">定期檢討調整</span>
+              <span class="step-card-time">1天/季</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>每季檢視代理商業績達成率</div>
+              <div class="sub-item"><span class="sub-dot"></span>因應原料成本變動調整進貨價</div>
+              <div class="sub-item"><span class="sub-dot"></span>收集代理商意見並優化制度</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /frame 3 -->
+
+
+<!-- ══════════════════════════════════
+     四、產品開發、設計與行政規範
+══════════════════════════════════ -->
+<div class="frame t4" id="f4">
+  <div class="frame-header" onclick="toggleFrame('f4')">
+    <span class="frame-badge">四</span>
+    <span class="frame-name">產品開發、設計與行政規範</span>
+    <span class="frame-count">3 項工作 · 12 步驟</span>
+    <span class="frame-arrow">▼</span>
+  </div>
+  <div class="frame-body">
+
+    <!-- 4.1 -->
+    <div class="wi-card t4">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">4.1</span>
+        <span class="wi-name">新產品設計與規劃</span>
+        <span class="wi-flow-label">市場調研 → 樣品測試 → 成本分析 → 確認開發</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">市場調研</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>分析 2025/26 護膚市場趨勢</div>
+              <div class="sub-item"><span class="sub-dot"></span>研究競品功能、定價與包裝</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認目標客群需求與痛點</div>
+              <div class="sub-item"><span class="sub-dot"></span>評估市場空缺與差異化機會</div>
+              <div class="sub-item"><span class="sub-dot"></span>輸出市場調研報告供決策參考</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">樣品測試</span>
+              <span class="step-card-time">依工廠</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>與工廠/供應商溝通配方規格</div>
+              <div class="sub-item"><span class="sub-dot"></span>申請第一批樣品（配方樣/包材樣）</div>
+              <div class="sub-item"><span class="sub-dot"></span>內部試用測試膚感、效果、穩定性</div>
+              <div class="sub-item"><span class="sub-dot"></span>外部小規模測試（信任用戶回饋）</div>
+              <div class="sub-item"><span class="sub-dot"></span>整理測試意見提交工廠修改</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">成本分析</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>計算原料+包材+製造費成本</div>
+              <div class="sub-item"><span class="sub-dot"></span>加入物流、行銷、人力攤銷</div>
+              <div class="sub-item"><span class="sub-dot"></span>模擬不同零售定價下的毛利率</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認定價符合品牌定位與市場</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">確認開發與量產準備</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>通過內部開發審核（品質/毛利/時程）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認首批生產數量與安全庫存</div>
+              <div class="sub-item"><span class="sub-dot"></span>簽訂工廠生產合約並確認交期</div>
+              <div class="sub-item"><span class="sub-dot"></span>啟動包材設計同步進行</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.2 -->
+    <div class="wi-card t4">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">4.2</span>
+        <span class="wi-name">視覺與包材製作</span>
+        <span class="wi-flow-label">設計稿確認 → 廠商詢價 → 打樣校色 → 大貨生產</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">設計稿確認</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>撰寫包裝設計 Brief（品牌色/質感/規格）</div>
+              <div class="sub-item"><span class="sub-dot"></span>與美編/設計師討論風格方向</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認設計初稿（正/背/側面展開圖）</div>
+              <div class="sub-item"><span class="sub-dot"></span>核對法規要求（成分表/期限/條碼位置）</div>
+              <div class="sub-item"><span class="sub-dot"></span>最終設計稿確認並輸出刀模檔</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">廠商詢價</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>聯繫包材供應商詢價</div>
+              <div class="sub-item"><span class="sub-dot"></span>比較材質（紙板克數/特殊工藝）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認印刷工藝（燙金/UV光油/霧面膜）</div>
+              <div class="sub-item"><span class="sub-dot"></span>比較報價、MOQ、交期後選定廠商</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">打樣校色</span>
+              <span class="step-card-time">7～14天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>送廠製作打樣（5～10 個）</div>
+              <div class="sub-item"><span class="sub-dot"></span>收到打樣後進行顏色比對（vs 設計稿）</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認材質觸感、印刷精度與結構強度</div>
+              <div class="sub-item"><span class="sub-dot"></span>提出修改意見 → 再次打樣確認</div>
+              <div class="sub-item"><span class="sub-dot"></span>最終簽核打樣並授權量產</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">大貨生產與入庫</span>
+              <span class="step-card-time">依交期</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>依銷售預測下訂生產數量</div>
+              <div class="sub-item"><span class="sub-dot"></span>追蹤生產進度與交期</div>
+              <div class="sub-item"><span class="sub-dot"></span>收貨時抽驗品質（色差/損壞率）</div>
+              <div class="sub-item"><span class="sub-dot"></span>點收入庫並更新進銷存系統</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.3 -->
+    <div class="wi-card t4">
+      <div class="wi-card-header open" onclick="toggleWi(this)">
+        <span class="wi-num">4.3</span>
+        <span class="wi-name">條碼、進銷存、電子發票系統申請 ✓</span>
+        <span class="wi-flow-label">準備公文 → 線上申請 → 系統串接 → 測試上線</span>
+        <span class="wi-toggle">▼</span>
+      </div>
+      <div class="wi-body show">
+        <div class="flow-meta">▶ 執行流程</div>
+        <div class="step-flow">
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">1</span>
+              <span class="step-card-name">準備公文資料</span>
+              <span class="step-card-time">1天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>備妥公司登記謄本（3個月內）</div>
+              <div class="sub-item"><span class="sub-dot"></span>整理申請商品清單（品名/規格/包裝）</div>
+              <div class="sub-item"><span class="sub-dot"></span>準備負責人身份證正反面影本</div>
+              <div class="sub-item"><span class="sub-dot"></span>填寫各機構申請表格</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">2</span>
+              <span class="step-card-name">GS1 條碼申請</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>至 GS1 Taiwan 官網申請廠商識別碼</div>
+              <div class="sub-item"><span class="sub-dot"></span>為每個 SKU 分配 EAN-13 條碼號碼</div>
+              <div class="sub-item"><span class="sub-dot"></span>下載條碼圖檔並提供給設計師</div>
+              <div class="sub-item"><span class="sub-dot"></span>確認條碼印製規格符合掃描標準</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">3</span>
+              <span class="step-card-name">電子發票申請</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>向財政部電子發票整合服務平台申請</div>
+              <div class="sub-item"><span class="sub-dot"></span>選擇加值服務商（如綠界、歐付寶）</div>
+              <div class="sub-item"><span class="sub-dot"></span>完成測試環境開立與驗證</div>
+              <div class="sub-item"><span class="sub-dot"></span>串接至電商後台（自動開立B2C發票）</div>
+            </div>
+          </div>
+          <div class="sf-arrow">→</div>
+          <div class="step-card t4">
+            <div class="step-card-top">
+              <span class="step-card-num">4</span>
+              <span class="step-card-name">進銷存系統串接</span>
+              <span class="step-card-time">3天</span>
+            </div>
+            <div class="step-card-subs">
+              <div class="sub-item"><span class="sub-dot"></span>選定進銷存平台（a1 系統）</div>
+              <div class="sub-item"><span class="sub-dot"></span>建立商品主檔（SKU/單位/安全庫存）</div>
+              <div class="sub-item"><span class="sub-dot"></span>串接電商訂單自動扣庫存</div>
+              <div class="sub-item"><span class="sub-dot"></span>設定低庫存預警通知</div>
+              <div class="sub-item"><span class="sub-dot"></span>協助 a1 系統問題排查與維護</div>
+            </div>
+          </div>
+        </div>
+        <div class="status-note">✅ <b>已完成：</b>條碼與電子發票均已申請上線；持續維護 a1 進銷存系統</div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /frame 4 -->
+
+</div><!-- /canvas -->
+
+<script>
+function toggleFrame(id){
+  const f=document.getElementById(id);
+  f.classList.toggle('collapsed');
+}
+function toggleWi(hdr){
+  const body=hdr.nextElementSibling;
+  body.classList.toggle('show');
+  hdr.classList.toggle('open');
+}
+function expandAll(){
+  document.querySelectorAll('.frame').forEach(f=>f.classList.remove('collapsed'));
+  document.querySelectorAll('.wi-body').forEach(b=>b.classList.add('show'));
+  document.querySelectorAll('.wi-card-header').forEach(h=>h.classList.add('open'));
+}
+function collapseAll(){
+  document.querySelectorAll('.frame').forEach(f=>f.classList.add('collapsed'));
+  document.querySelectorAll('.wi-body').forEach(b=>b.classList.remove('show'));
+  document.querySelectorAll('.wi-card-header').forEach(h=>h.classList.remove('open'));
+}
+</script>
+</body>
+</html>

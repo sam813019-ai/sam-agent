@@ -1,0 +1,1065 @@
+<style>
+/* ════════════════════════════════════════════════════════════════
+   HEIWEI × CC · The Glow Edit · v3 — "Editorial Zine Pop"
+   一份 8 天限定的團購雜誌 · 帶手寫註記 · 帶生命感的 UIUX
+   ════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Caveat:wght@400;600;700&family=Noto+Serif+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+.hw3 {
+    /* 色票 —— 暖奶油紙 × 濃縮咖啡 × HEIWEI 金 × 活珊瑚 */
+    --paper:    #f5ead3;
+    --paper-2:  #ece0c4;
+    --paper-3:  #faf3e2;
+    --ink:      #1c1410;
+    --ink-soft: #3b2b22;
+    --gold:     #c9a24d;
+    --gold-lt:  #e0c178;
+    --coral:    #ff7a48;
+    --coral-dp: #e55a2a;
+    --peach:    #ffc9a8;
+    --rose:     #e58a85;
+    --indigo:   #1f2d5a;
+    --mute:     #8a7862;
+
+    /* 字級 */
+    --ff-display: 'Fraunces', 'Noto Serif TC', serif;
+    --ff-serif:   'Noto Serif TC', 'Fraunces', serif;
+    --ff-hand:    'Caveat', 'Fraunces', cursive;
+    --ff-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+    font-family: var(--ff-serif);
+    color: var(--ink);
+    background: var(--paper);
+    margin: 0; padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    line-height: 1.55;
+}
+.hw3 *, .hw3 *::before, .hw3 *::after { box-sizing: border-box; }
+
+/* ── 紙張質地：顆粒 + 淡網點 ── */
+.hw3::before {
+    content: ""; position: absolute; inset: 0;
+    pointer-events: none; z-index: 0; opacity: .35;
+    background-image:
+        radial-gradient(circle at 20% 10%, rgba(201,162,77,.12) 0, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(255,122,72,.08) 0, transparent 45%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .11  0 0 0 0 .08  0 0 0 0 .06  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.35'/></svg>");
+}
+.hw3 > * { position: relative; z-index: 1; }
+
+/* ════════ Keyframes ════════ */
+@keyframes hw-float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes hw-wiggle   { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+@keyframes hw-spin     { to { transform: rotate(360deg); } }
+@keyframes hw-marquee  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@keyframes hw-pulse    { 0%,100%{box-shadow:0 0 0 0 rgba(255,122,72,.6)} 50%{box-shadow:0 0 0 14px rgba(255,122,72,0)} }
+@keyframes hw-shimmer  { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+@keyframes hw-shift    { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+@keyframes hw-drop     { 0%{transform:translateY(-24px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+@keyframes hw-rise     { from{transform:translateY(28px);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes hw-blink    { 0%,92%,100%{opacity:1} 94%,98%{opacity:.1} }
+@keyframes hw-draw     { from{stroke-dashoffset:400} to{stroke-dashoffset:0} }
+@keyframes hw-dot      { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4)} }
+
+/* ════════ 頂部捲動進度條 ════════ */
+.hw3-progress {
+    position: sticky; top: 0; left: 0;
+    height: 3px; z-index: 999;
+    background: linear-gradient(90deg, var(--coral), var(--gold), var(--coral));
+    background-size: 200% 100%;
+    animation: hw-shift 5s ease infinite;
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .08s linear;
+}
+
+/* ════════ HERO · Editorial Cover ════════ */
+.hw3-hero {
+    position: relative;
+    padding: 74px clamp(20px,5vw,56px) 96px;
+    background:
+        radial-gradient(1100px 620px at 88% 8%, rgba(255,201,168,.18), transparent 60%),
+        radial-gradient(820px 500px at 6% 95%, rgba(229,138,133,.14), transparent 65%),
+        linear-gradient(180deg, #120c08 0%, #1c1410 55%, #251810 100%);
+    color: #f7eacb;
+    overflow: hidden;
+    isolation: isolate;
+}
+/* 金色星點 */
+.hw3-hero::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(2px 2px at 18% 24%, #e9c775 50%, transparent 51%),
+        radial-gradient(1.6px 1.6px at 72% 58%, #ffb896 50%, transparent 51%),
+        radial-gradient(2.2px 2.2px at 46% 82%, #fff2b8 50%, transparent 51%),
+        radial-gradient(1.4px 1.4px at 88% 22%, #e9c775 50%, transparent 51%),
+        radial-gradient(1.8px 1.8px at 12% 72%, #ffd89a 50%, transparent 51%);
+    animation: hw-float 7s ease-in-out infinite;
+    opacity: .7;
+}
+.hw3-hero-wrap { max-width: 1120px; margin: 0 auto; position: relative; z-index: 2; }
+
+/* 頂部標籤列 */
+.hw3-topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--ff-mono);
+    font-size: 10.5px; letter-spacing: 3.5px; text-transform: uppercase;
+    color: #d4bf94;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(233,199,117,.28);
+}
+.hw3-live {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #ffdfb0;
+}
+.hw3-live .d {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--coral);
+    animation: hw-pulse 1.4s ease-out infinite;
+}
+.hw3-topbar .hw3-meta { display: flex; gap: 20px; }
+
+/* 手寫標註 "curated by CC" */
+.hw3-curated {
+    margin-top: 52px;
+    display: flex; align-items: baseline; gap: 14px;
+    font-family: var(--ff-hand);
+    font-size: 32px; color: #e9c775;
+    line-height: 1; letter-spacing: .5px;
+    animation: hw-drop .8s cubic-bezier(.2,.8,.2,1) both;
+}
+.hw3-curated .arrow {
+    display: inline-block;
+    width: 62px; height: 20px;
+}
+.hw3-curated .arrow svg { width: 100%; height: 100%; }
+.hw3-curated .arrow path {
+    fill: none; stroke: #e9c775; stroke-width: 1.5; stroke-linecap: round;
+    stroke-dasharray: 400; animation: hw-draw 1.4s .6s ease forwards;
+}
+
+/* 大標 */
+.hw3-title {
+    font-family: var(--ff-display);
+    font-size: clamp(56px, 10vw, 128px);
+    font-weight: 400;
+    font-optical-sizing: auto;
+    letter-spacing: -.04em;
+    line-height: .88;
+    margin: 18px 0 0;
+    animation: hw-rise 1s .15s cubic-bezier(.2,.8,.2,1) both;
+}
+.hw3-title .row { display: block; }
+.hw3-title .glow {
+    font-style: italic; font-weight: 500;
+    background: linear-gradient(100deg, #ffdfa6 0%, #ffaf7a 35%, #e9c775 70%, #ffdfa6 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: hw-shift 6s ease-in-out infinite;
+    position: relative;
+}
+.hw3-title .edit-dot { color: var(--coral); }
+
+/* CC 圈圈手繪記號 */
+.hw3-circle {
+    position: absolute; inset: -14px -22px;
+    pointer-events: none;
+}
+.hw3-circle svg { width: 100%; height: 100%; overflow: visible; }
+.hw3-circle path {
+    fill: none; stroke: var(--coral); stroke-width: 2.2;
+    stroke-linecap: round; opacity: .9;
+    stroke-dasharray: 600; stroke-dashoffset: 600;
+    animation: hw-draw 1.6s 1.2s ease forwards;
+}
+
+/* 副文+日期 */
+.hw3-hero-meta {
+    margin-top: 44px;
+    display: grid; grid-template-columns: 1fr auto; gap: 30px;
+    align-items: end; flex-wrap: wrap;
+    animation: hw-rise 1s .3s cubic-bezier(.2,.8,.2,1) both;
+}
+.hw3-hero-lead {
+    max-width: 500px;
+    font-family: var(--ff-serif); font-size: 15px; line-height: 1.9;
+    color: #e9dcb9; letter-spacing: .6px;
+}
+.hw3-hero-lead b { color: #ffdfa6; font-weight: 500; letter-spacing: 2px; }
+.hw3-hero-date { text-align: right; }
+.hw3-hero-date .lbl {
+    font-family: var(--ff-mono); font-size: 10px; letter-spacing: 3.5px;
+    color: #a89371; text-transform: uppercase;
+}
+.hw3-hero-date .d {
+    font-family: var(--ff-display); font-weight: 400; font-style: italic;
+    font-size: clamp(32px, 4.4vw, 48px);
+    background: linear-gradient(120deg, #fff, #e9c775);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    letter-spacing: -.01em; margin-top: 6px;
+}
+.hw3-hero-date .d .arr { font-style: normal; color: var(--coral); margin: 0 4px; }
+
+/* 倒數計時 */
+.hw3-count {
+    margin-top: 36px;
+    display: inline-flex; gap: 10px; flex-wrap: wrap;
+    padding: 14px; border-radius: 18px;
+    background: rgba(233,199,117,.07);
+    border: 1px solid rgba(233,199,117,.2);
+    backdrop-filter: blur(6px);
+    animation: hw-rise 1s .45s cubic-bezier(.2,.8,.2,1) both;
+}
+.hw3-count .lbl-pre {
+    align-self: center; padding: 0 10px;
+    font-family: var(--ff-mono); font-size: 10px; letter-spacing: 3px;
+    color: #d4bf94; text-transform: uppercase; opacity: .75;
+    border-right: 1px dashed rgba(233,199,117,.25);
+}
+.hw3-count .chip {
+    min-width: 64px; padding: 8px 14px; text-align: center;
+    border-radius: 12px; background: rgba(255,248,234,.05);
+    transition: transform .25s ease, background .25s ease;
+}
+.hw3-count .chip:hover { transform: translateY(-3px); background: rgba(233,199,117,.14); }
+.hw3-count .chip .n {
+    font-family: var(--ff-display); font-variant-numeric: tabular-nums;
+    font-size: 28px; font-weight: 700; line-height: 1;
+    color: #ffdfa6; letter-spacing: -.02em;
+}
+.hw3-count .chip .u {
+    display: block; margin-top: 4px;
+    font-family: var(--ff-mono); font-size: 9px; letter-spacing: 3px;
+    color: #a89371; text-transform: uppercase;
+}
+.hw3-count .chip .colon {
+    display: inline-block; color: var(--coral);
+    animation: hw-blink 1s steps(2) infinite;
+}
+
+/* 免運貼紙 — 傾斜印章風 */
+.hw3-ship {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 36px; padding: 14px 22px;
+    background: linear-gradient(135deg, var(--coral) 0%, #ffb385 100%);
+    color: #1c1410; font-family: var(--ff-mono);
+    font-size: 11.5px; letter-spacing: 3.5px; font-weight: 700;
+    border-radius: 999px;
+    box-shadow: 0 10px 28px -6px rgba(255,122,72,.55), inset 0 0 0 3px #f7eacb;
+    transform: rotate(-2deg);
+    animation: hw-float 3.4s ease-in-out infinite;
+    cursor: default;
+    transition: transform .3s cubic-bezier(.2,.8,.3,1.4);
+}
+.hw3-ship:hover { transform: rotate(-1deg) scale(1.06); }
+.hw3-ship .ico { animation: hw-wiggle 2s ease-in-out infinite; display: inline-block; font-family: serif; }
+
+/* 現貨章 */
+.hw3-stock-stamp {
+    position: absolute; top: 86px; right: clamp(20px, 4vw, 44px);
+    width: 132px; height: 132px; border-radius: 50%;
+    background: transparent;
+    display: grid; place-items: center;
+    transform: rotate(8deg);
+    animation: hw-float 4.4s ease-in-out infinite;
+    z-index: 3;
+}
+.hw3-stock-stamp svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hw3-stock-stamp .center {
+    font-family: var(--ff-display); font-style: italic;
+    font-size: 14px; font-weight: 700;
+    color: var(--gold); text-align: center; line-height: 1.2;
+    letter-spacing: .3px;
+}
+.hw3-stock-stamp .center small {
+    display: block; margin-top: 3px;
+    font-family: var(--ff-mono); font-size: 9px;
+    letter-spacing: 2px; font-style: normal; opacity: .7;
+}
+.hw3-stock-stamp .ring { animation: hw-spin 22s linear infinite; transform-origin: center; }
+@media (max-width: 720px) { .hw3-stock-stamp { top: 18px; right: 18px; width: 96px; height: 96px; } }
+
+/* ════════ Marquee 跑馬燈 ════════ */
+.hw3-marq {
+    background: #1c1410;
+    color: #e9c775;
+    padding: 16px 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(233,199,117,.18);
+    border-bottom: 1px solid rgba(233,199,117,.18);
+    position: relative;
+}
+.hw3-marq::before, .hw3-marq::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+    pointer-events: none;
+}
+.hw3-marq::before { left: 0; background: linear-gradient(90deg, #1c1410, transparent); }
+.hw3-marq::after  { right: 0; background: linear-gradient(-90deg, #1c1410, transparent); }
+.hw3-marq-track {
+    display: flex; gap: 44px; width: max-content; white-space: nowrap;
+    animation: hw-marquee 32s linear infinite;
+    font-family: var(--ff-mono);
+    font-size: 12px; letter-spacing: 5px; font-weight: 700;
+    text-transform: uppercase;
+}
+.hw3-marq:hover .hw3-marq-track { animation-play-state: paused; }
+.hw3-marq-track .star { color: var(--coral); font-family: serif; font-style: italic; }
+.hw3-marq-track .hw3-marq-item {
+    display: inline-flex; align-items: center; gap: 18px;
+}
+
+/* ════════ Section 共用 ════════ */
+.hw3-sec { max-width: 1120px; margin: 0 auto; padding: clamp(60px,8vw,100px) clamp(20px,5vw,44px) 20px; }
+.hw3-sec-head { text-align: center; margin-bottom: 56px; position: relative; }
+.hw3-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 7px 18px;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    background: #fff5e2;
+    font-family: var(--ff-mono);
+    font-size: 11px; letter-spacing: 4.5px; font-weight: 700;
+    text-transform: uppercase; color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: rotate(-1deg);
+}
+.hw3-eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--coral);
+    animation: hw-dot 1.6s ease-in-out infinite;
+}
+.hw3-sec-head h2 {
+    font-family: var(--ff-display);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 400; margin: 22px 0 10px;
+    letter-spacing: -.035em; line-height: 1;
+}
+.hw3-sec-head h2 em {
+    font-style: italic; font-weight: 500;
+    background: linear-gradient(120deg, var(--coral) 0%, var(--gold) 50%, var(--coral) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: hw-shift 5s ease infinite;
+    position: relative; display: inline-block;
+}
+.hw3-sec-head .sub {
+    font-family: var(--ff-mono); font-size: 11.5px;
+    letter-spacing: 3.5px; color: var(--mute);
+    text-transform: uppercase; margin-top: 6px;
+}
+.hw3-sec-head .deco {
+    width: 48px; height: 2px; margin: 20px auto 0;
+    background: linear-gradient(90deg, var(--coral), var(--gold));
+}
+
+/* ════════ 三項承諾 ════════ */
+.hw3-promise {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px; max-width: 1120px; margin: 0 auto;
+    padding: 0 clamp(20px,5vw,44px);
+}
+.hw3-promise .card {
+    position: relative; padding: 36px 28px 32px;
+    background: #fffaec;
+    border: 1.5px solid var(--ink);
+    border-radius: 22px;
+    box-shadow: 6px 6px 0 var(--ink);
+    transition: transform .35s cubic-bezier(.2,.9,.3,1.3), box-shadow .35s, background .35s;
+    overflow: hidden;
+    cursor: pointer;
+    will-change: transform;
+}
+.hw3-promise .card::before {
+    content: ""; position: absolute; inset: -60%;
+    background: conic-gradient(from 0deg, transparent 75%, rgba(255,122,72,.14) 88%, transparent 100%);
+    animation: hw-spin 12s linear infinite;
+    opacity: 0; transition: opacity .4s ease;
+}
+.hw3-promise .card:hover { transform: translate(-4px,-6px); box-shadow: 12px 12px 0 var(--coral); }
+.hw3-promise .card:hover::before { opacity: 1; }
+.hw3-promise .card:nth-child(2) { background: #fceedc; transform: rotate(.6deg); }
+.hw3-promise .card:nth-child(2):hover { transform: translate(-4px,-6px) rotate(0); }
+.hw3-promise .card:nth-child(3) { transform: rotate(-.4deg); }
+.hw3-promise .card:nth-child(3):hover { transform: translate(-4px,-6px) rotate(0); }
+.hw3-promise .inner { position: relative; z-index: 1; }
+.hw3-promise .idx {
+    font-family: var(--ff-display); font-style: italic;
+    font-size: 68px; font-weight: 300; line-height: .9;
+    background: linear-gradient(135deg, var(--coral), var(--gold) 80%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    letter-spacing: -.04em;
+}
+.hw3-promise .label {
+    font-family: var(--ff-mono); font-size: 12px; font-weight: 700;
+    letter-spacing: 3.5px; margin-top: 12px;
+    color: var(--ink); text-transform: uppercase;
+}
+.hw3-promise .body {
+    font-family: var(--ff-serif); font-size: 14px; line-height: 1.85;
+    color: var(--ink-soft); margin-top: 12px;
+}
+.hw3-promise .body b { color: var(--ink); }
+.hw3-promise .tab {
+    position: absolute; top: 18px; right: 18px;
+    font-family: var(--ff-hand); font-size: 22px;
+    color: var(--coral); transform: rotate(-6deg);
+    opacity: .85;
+}
+
+/* ════════ GIFT GUIDE ════════ */
+.hw3-gift { max-width: 1120px; margin: 0 auto; padding: 0 clamp(20px,5vw,44px); }
+
+/* 解鎖進度條 */
+.hw3-meter {
+    margin: 10px 0 46px;
+    padding: 20px 22px;
+    background: #fffaec;
+    border: 1.5px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 5px 5px 0 var(--gold);
+}
+.hw3-meter-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px;
+    font-family: var(--ff-mono); font-size: 11px; letter-spacing: 3px;
+    color: var(--ink); text-transform: uppercase;
+}
+.hw3-meter-top b { color: var(--coral); font-weight: 700; }
+.hw3-meter .bar {
+    position: relative; height: 10px; border-radius: 999px;
+    background: rgba(28,20,16,.08);
+    overflow: visible;
+}
+.hw3-meter .fill {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 66%;
+    background: linear-gradient(90deg, var(--coral), #ffb385, var(--gold));
+    background-size: 200% 100%;
+    animation: hw-shift 4s ease infinite;
+    border-radius: 999px;
+    box-shadow: 0 0 12px rgba(255,122,72,.45);
+}
+.hw3-meter .ticks {
+    position: relative; margin-top: 10px; height: 20px;
+    font-family: var(--ff-mono); font-size: 10px; letter-spacing: 2px;
+    color: var(--ink-soft);
+}
+.hw3-meter .ticks span {
+    position: absolute; top: 0; transform: translateX(-50%);
+    white-space: nowrap;
+}
+.hw3-meter .ticks b { color: var(--ink); font-weight: 700; }
+.hw3-meter .ticks .active { color: var(--coral); }
+.hw3-meter .ticks .active::before {
+    content: "▲"; display: block; font-size: 9px;
+    margin: -14px auto 2px; color: var(--coral);
+}
+
+/* 三階梯 */
+.hw3-tier {
+    display: grid;
+    grid-template-columns: 210px 1fr auto;
+    gap: clamp(18px, 3vw, 36px);
+    align-items: center;
+    padding: 30px 28px;
+    background: #fffaec;
+    border: 1.5px solid var(--ink);
+    border-radius: 22px;
+    margin-top: 16px;
+    cursor: pointer;
+    position: relative; overflow: hidden;
+    transition: transform .4s cubic-bezier(.2,.9,.3,1.3), box-shadow .4s;
+}
+.hw3-tier:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 22px 40px -18px rgba(255,122,72,.55);
+}
+.hw3-tier::before {
+    content: ""; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 4px;
+    background: var(--coral);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform .4s ease;
+}
+.hw3-tier:hover::before { transform: scaleY(1); }
+.hw3-tier .lvl {
+    font-family: var(--ff-mono); font-size: 10.5px;
+    font-weight: 700; letter-spacing: 3.5px;
+    color: var(--coral); text-transform: uppercase;
+}
+.hw3-tier .amt {
+    font-family: var(--ff-display); font-weight: 300;
+    font-size: clamp(40px, 5vw, 52px);
+    line-height: 1; margin-top: 8px;
+    letter-spacing: -.03em;
+}
+.hw3-tier .amt .cur {
+    font-family: var(--ff-mono); font-size: 14px; font-weight: 700;
+    vertical-align: super; margin-right: 4px; letter-spacing: 1px;
+}
+.hw3-tier .amt b { font-weight: 700; }
+.hw3-tier .title {
+    font-family: var(--ff-display); font-size: 26px; font-weight: 500;
+    line-height: 1.2; letter-spacing: -.01em;
+}
+.hw3-tier .desc {
+    font-family: var(--ff-serif); font-size: 13.5px;
+    line-height: 1.8; color: var(--ink-soft);
+    margin-top: 10px; letter-spacing: .5px;
+}
+.hw3-tier .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 14px; padding: 6px 14px;
+    border: 1.5px dashed var(--coral); border-radius: 999px;
+    background: #fff2e6;
+    font-family: var(--ff-mono); font-size: 10.5px; font-weight: 700;
+    letter-spacing: 2.5px; color: var(--coral);
+    text-transform: uppercase;
+}
+.hw3-tier .ico {
+    font-size: 52px; line-height: 1;
+    background: linear-gradient(135deg, var(--coral), var(--gold));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    transition: transform .45s cubic-bezier(.2,.9,.3,1.3);
+}
+.hw3-tier:hover .ico { transform: rotate(18deg) scale(1.12); }
+
+/* TOP 階梯反白 */
+.hw3-tier.top {
+    background: linear-gradient(135deg, #1c1410 0%, #2a1e15 100%);
+    color: #f7eacb;
+    border-color: var(--gold);
+    box-shadow: 0 10px 28px -10px rgba(28,20,16,.4);
+}
+.hw3-tier.top::before { background: var(--gold); }
+.hw3-tier.top .lvl { color: var(--gold-lt); }
+.hw3-tier.top .desc { color: #d4bf94; }
+.hw3-tier.top .tag {
+    background: transparent; color: var(--gold-lt);
+    border-color: var(--gold-lt);
+}
+.hw3-tier.top .ico {
+    background: linear-gradient(135deg, var(--gold-lt), var(--coral));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hw3-tier.top:hover { box-shadow: 0 24px 50px -10px rgba(233,199,117,.45); }
+
+/* 不累贈備註 */
+.hw3-note {
+    margin: 28px 0 0; text-align: center;
+    font-family: var(--ff-mono); font-size: 10.5px;
+    color: var(--mute); letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+/* ════════ Curator Note · CC 手寫小紙條 ════════ */
+.hw3-note-card {
+    max-width: 640px; margin: 60px auto 0;
+    padding: 28px 30px 24px;
+    background: #fffaec;
+    border: 1.5px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 5px 5px 0 var(--coral);
+    transform: rotate(-1deg);
+    position: relative;
+}
+.hw3-note-card::before {
+    content: ""; position: absolute;
+    top: -12px; left: 50%; transform: translateX(-50%) rotate(8deg);
+    width: 60px; height: 22px;
+    background: rgba(201,162,77,.5);
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgba(28,20,16,.08);
+}
+.hw3-note-card .by {
+    font-family: var(--ff-mono); font-size: 10px;
+    letter-spacing: 3.5px; color: var(--mute);
+    text-transform: uppercase;
+}
+.hw3-note-card .quote {
+    font-family: var(--ff-hand);
+    font-size: 26px; line-height: 1.45;
+    color: var(--ink); margin-top: 8px;
+}
+.hw3-note-card .quote mark {
+    background: linear-gradient(180deg, transparent 60%, var(--peach) 60%);
+    padding: 0 3px;
+}
+.hw3-note-card .sig {
+    margin-top: 10px;
+    font-family: var(--ff-hand);
+    font-size: 34px; color: var(--coral);
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+.hw3-note-card .sig::after {
+    content: " ✧"; color: var(--gold);
+}
+
+/* ════════ CTA ════════ */
+.hw3-cta { max-width: 1120px; margin: 56px auto 0; padding: 0 clamp(20px,5vw,44px); text-align: center; }
+.hw3-cta-btn {
+    position: relative; display: inline-flex; align-items: center; gap: 14px;
+    padding: 22px 48px;
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: #fff8ea;
+    background: linear-gradient(135deg, var(--coral) 0%, #ff9860 40%, var(--gold) 100%);
+    background-size: 200% 100%;
+    border: none; cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 14px 34px -8px rgba(255,122,72,.55), inset 0 0 0 2px rgba(255,255,255,.15);
+    overflow: hidden;
+    transition: transform .3s cubic-bezier(.2,.9,.3,1.3), box-shadow .3s, background-position .6s;
+    will-change: transform;
+}
+.hw3-cta-btn::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,.5) 50%, transparent 62%);
+    background-size: 300% 100%;
+    animation: hw-shimmer 2.6s linear infinite;
+    pointer-events: none;
+}
+.hw3-cta-btn > * { position: relative; z-index: 1; }
+.hw3-cta-btn:hover { background-position: 100% 0; box-shadow: 0 18px 40px -6px rgba(255,122,72,.65); }
+.hw3-cta-btn .arrow { display: inline-block; transition: transform .3s ease; }
+.hw3-cta-btn:hover .arrow { transform: translateX(8px) rotate(-8deg); }
+.hw3-cta .note {
+    margin-top: 14px;
+    font-family: var(--ff-mono); font-size: 11px;
+    letter-spacing: 3px; color: var(--mute);
+    text-transform: uppercase;
+}
+.hw3-cta .note .live {
+    display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--coral); margin-right: 8px; vertical-align: middle;
+    animation: hw-pulse 1.6s infinite;
+}
+
+/* ════════ Chapter Divider ════════ */
+.hw3-div { max-width: 1120px; margin: 110px auto 0; padding: 0 clamp(20px,5vw,44px); }
+.hw3-div-in {
+    display: flex; align-items: center; gap: 20px;
+}
+.hw3-div-in .ln {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ink) 50%, transparent);
+}
+.hw3-div-in .tx {
+    padding: 9px 20px;
+    background: #fff5e2;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 5px; color: var(--ink);
+    text-transform: uppercase;
+    box-shadow: 3px 3px 0 var(--gold);
+    transform: rotate(-1deg);
+}
+
+/* ════════ Footer Whisper ════════ */
+.hw3-foot {
+    text-align: center;
+    padding: 50px 24px 80px;
+    font-family: var(--ff-mono);
+    font-size: 10.5px; letter-spacing: 4px;
+    color: var(--mute); text-transform: uppercase;
+}
+.hw3-foot .heart {
+    color: var(--coral); display: inline-block;
+    animation: hw-wiggle 1.4s ease-in-out infinite;
+}
+.hw3-foot .sep { margin: 0 10px; color: var(--gold); }
+
+/* ════════ 響應式 ════════ */
+@media (max-width: 720px) {
+    .hw3-topbar { font-size: 9.5px; letter-spacing: 2.5px; }
+    .hw3-hero-meta { grid-template-columns: 1fr; }
+    .hw3-hero-date { text-align: left; }
+    .hw3-tier { grid-template-columns: 1fr; }
+    .hw3-tier .ico { justify-self: start; font-size: 42px; }
+    .hw3-count .lbl-pre { display: none; }
+}
+</style>
+
+<div class="hw3">
+
+    <!-- 捲動進度條 -->
+    <div class="hw3-progress" id="hw3Progress"></div>
+
+    <!-- ═══════════════════════ HERO ═══════════════════════ -->
+    <section class="hw3-hero">
+
+        <!-- 現貨印章 -->
+        <div class="hw3-stock-stamp">
+            <svg viewBox="0 0 132 132" class="ring">
+                <defs>
+                    <path id="hw3-ring-path" d="M 66,66 m -52,0 a 52,52 0 1,1 104,0 a 52,52 0 1,1 -104,0" />
+                </defs>
+                <circle cx="66" cy="66" r="60" fill="none" stroke="#c9a24d" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>
+                <circle cx="66" cy="66" r="48" fill="none" stroke="#c9a24d" stroke-width=".8" opacity=".5"/>
+                <text fill="#e0c178" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="3" font-weight="700">
+                    <textPath href="#hw3-ring-path" startOffset="0%">HEIWEI · CC · EST. 2026 · GLOW EDIT · VOL 04 ·</textPath>
+                </text>
+            </svg>
+            <div class="center">
+                尚有<br>少量現貨
+                <small>IN STOCK</small>
+            </div>
+        </div>
+
+        <div class="hw3-hero-wrap">
+
+            <!-- 頂部標籤列 -->
+            <div class="hw3-topbar">
+                <span class="hw3-live"><span class="d"></span>LIVE · HEIWEI JOURNAL VOL. 04</span>
+                <div class="hw3-meta">
+                    <span>ISSUE 2026 / 04</span>
+                    <span>PRIVATE EDITION</span>
+                </div>
+            </div>
+
+            <!-- CC 手寫 curated -->
+            <div class="hw3-curated">
+                <span>hosted by CC</span>
+                <span class="arrow">
+                    <svg viewBox="0 0 62 20" preserveAspectRatio="none">
+                        <path d="M 2,10 Q 20,2 40,10 T 60,10 M 54,4 L 60,10 L 54,16"/>
+                    </svg>
+                </span>
+            </div>
+
+            <!-- 大標 -->
+            <h1 class="hw3-title">
+                <span class="row">The</span>
+                <span class="row" style="display:inline-block; position:relative;">
+                    <span class="glow">Glow</span>
+                    <span class="hw3-circle">
+                        <svg viewBox="0 0 260 120" preserveAspectRatio="none">
+                            <path d="M 10,70 C 20,20 100,5 200,15 C 250,25 260,80 220,100 C 140,120 30,110 15,60 Z"/>
+                        </svg>
+                    </span>
+                </span>
+                <span class="row">Edit<span class="edit-dot">.</span></span>
+            </h1>
+
+            <!-- 副文+日期 -->
+            <div class="hw3-hero-meta">
+                <div class="hw3-hero-lead">
+                    <b>✦ EIGHT DAYS ONLY</b><br>
+                    八天的慢選．八種肌膚的溫柔提案。<br>
+                    由 <em style="font-style:italic;color:#ffdfa6;">CC 親自挑選</em>，HEIWEI 獨家釋出，<br>
+                    尚有少量現貨 — 請把握這一季的自己。
+                </div>
+                <div class="hw3-hero-date">
+                    <div class="lbl">OPEN DATES</div>
+                    <div class="d">04.24 <span class="arr">→</span> 05.01</div>
+                    <div class="lbl" style="margin-top:4px;">2026 · 8 DAYS ONLY</div>
+                </div>
+            </div>
+
+            <!-- 倒數計時 -->
+            <div class="hw3-count" id="hw3Count">
+                <span class="lbl-pre">Opens&nbsp;in</span>
+                <div class="chip"><span class="n" id="cd-d">--</span><span class="u">Days</span></div>
+                <div class="chip"><span class="n" id="cd-h">--</span><span class="u">Hrs</span></div>
+                <div class="chip"><span class="n" id="cd-m">--</span><span class="u">Min</span></div>
+                <div class="chip"><span class="n" id="cd-s">--</span><span class="u">Sec</span></div>
+            </div>
+
+            <!-- 免運貼紙 -->
+            <div class="hw3-ship">
+                <span class="ico">✦</span>
+                <span>FREE SHIPPING OVER NT$ 2,000</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ Marquee ═══════════════════════ -->
+    <div class="hw3-marq">
+        <div class="hw3-marq-track">
+            <span class="hw3-marq-item"><span class="star">✦</span> LIMITED 8 DAYS </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> FIRST 100 ORDERS · GET A GIFT </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> SHIPPING STARTS 04.27 </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> HEIWEI × CC </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> 尚有少量現貨 </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> FREE GIFT OVER NT$ 3,000 </span>
+            <!-- duplicate for seamless loop -->
+            <span class="hw3-marq-item"><span class="star">✦</span> LIMITED 8 DAYS </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> FIRST 100 ORDERS · GET A GIFT </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> SHIPPING STARTS 04.27 </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> HEIWEI × CC </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> 尚有少量現貨 </span>
+            <span class="hw3-marq-item"><span class="star">✦</span> FREE GIFT OVER NT$ 3,000 </span>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ 三項承諾 ═══════════════════════ -->
+    <div class="hw3-sec" style="padding-top: clamp(60px,8vw,90px);">
+        <div class="hw3-sec-head">
+            <span class="hw3-eyebrow"><span class="dot"></span>Our Promise</span>
+            <h2>給你的 <em>三個承諾</em></h2>
+            <div class="sub">一次買齊 · 專屬禮遇 · 即刻出貨</div>
+            <div class="deco"></div>
+        </div>
+    </div>
+
+    <div class="hw3-promise" data-reveal>
+        <div class="card">
+            <div class="tab">for you.</div>
+            <div class="inner">
+                <div class="idx">01</div>
+                <div class="label">First 100 · Gift</div>
+                <div class="body">下單禮：前 100 名贈送<br><b>魚子亮白保濕化妝水 15ml</b></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="tab">on 04.27.</div>
+            <div class="inner">
+                <div class="idx">02</div>
+                <div class="label">Fast Shipment</div>
+                <div class="body">統一出貨日：<b>04/27（一）</b><br>依訂單順序陸續安排</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="tab">@heiwei.</div>
+            <div class="inner">
+                <div class="idx">03</div>
+                <div class="label">Line Concierge</div>
+                <div class="body">Line 客服：<b>@heiwei</b><br>服務時間 10:00 – 17:30</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ Gift Guide ═══════════════════════ -->
+    <div class="hw3-sec">
+        <div class="hw3-sec-head">
+            <span class="hw3-eyebrow"><span class="dot"></span>— Chapter Ⅰ —</span>
+            <h2>The <em>Gift</em> Guide</h2>
+            <div class="sub">滿額解鎖 · 三段尊榮好禮</div>
+            <div class="deco"></div>
+        </div>
+    </div>
+
+    <div class="hw3-gift">
+
+        <!-- 解鎖進度 -->
+        <div class="hw3-meter">
+            <div class="hw3-meter-top">
+                <span>Unlock Progress</span>
+                <span>You're near <b>Tier 02</b> ◑</span>
+            </div>
+            <div class="bar"><div class="fill"></div></div>
+            <div class="ticks">
+                <span style="left:0%;">$0</span>
+                <span style="left:33%;"><b>$3,000</b></span>
+                <span style="left:66%;" class="active"><b>$5,000</b></span>
+                <span style="left:100%;"><b>$6,000</b></span>
+            </div>
+        </div>
+
+        <!-- Tier 01 -->
+        <div class="hw3-tier" data-reveal>
+            <div>
+                <div class="lvl">Tier 01</div>
+                <div class="amt"><span class="cur">NT$</span><b>3,000</b></div>
+            </div>
+            <div>
+                <div class="title">妝前智能 5GF 柔敏膠囊</div>
+                <div class="desc">共 10 顆　│　妝前打底．細緻毛孔．水光肌鑰匙</div>
+                <span class="tag">◦ Value NT$ 700</span>
+            </div>
+            <div class="ico">◐</div>
+        </div>
+
+        <!-- Tier 02 -->
+        <div class="hw3-tier" data-reveal>
+            <div>
+                <div class="lvl">Tier 02</div>
+                <div class="amt"><span class="cur">NT$</span><b>5,000</b></div>
+            </div>
+            <div>
+                <div class="title">魚子亮白保濕化妝水</div>
+                <div class="desc">150ml 正貨　│　明星級保濕．提亮肌底．日常最佳序章</div>
+                <span class="tag">◦ Value NT$ 1,680</span>
+            </div>
+            <div class="ico">◑</div>
+        </div>
+
+        <!-- Tier 03 · TOP -->
+        <div class="hw3-tier top" data-reveal>
+            <div>
+                <div class="lvl">Tier 03 · Top</div>
+                <div class="amt"><span class="cur">NT$</span><b>6,000</b></div>
+            </div>
+            <div>
+                <div class="title">D2 精緻寶貝美容儀 ✦</div>
+                <div class="desc">居家沙龍級　│　緊緻輪廓．導入精華．讓保養事半功倍</div>
+                <span class="tag">◦ Value NT$ 1,980</span>
+            </div>
+            <div class="ico">●</div>
+        </div>
+
+        <p class="hw3-note">
+            ※ Gifts Are Non-Cumulative · 贈品採不累贈，以單筆訂單最終金額擇最高門檻贈送
+        </p>
+
+        <!-- CC 手寫小紙條 -->
+        <div class="hw3-note-card">
+            <div class="by">— A Note From CC</div>
+            <div class="quote">
+                這一版 Glow Edit，是我自己日常會重複回購的幾件。
+                如果只能選一樣 — <mark>先從化妝水開始</mark>，再堆上去。
+            </div>
+            <div class="sig">— CC</div>
+        </div>
+
+        <!-- CTA -->
+        <div class="hw3-cta">
+            <a href="#" class="hw3-cta-btn" id="hw3Cta">
+                <span>立刻加入團購</span>
+                <span class="arrow">→</span>
+            </a>
+            <div class="note"><span class="live"></span>Open Now · 04.24 → 05.01 · Limited Edition</div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ Chapter Ⅱ ═══════════════════════ -->
+    <div class="hw3-div">
+        <div class="hw3-div-in">
+            <div class="ln"></div>
+            <div class="tx">— Chapter Ⅱ —</div>
+            <div class="ln"></div>
+        </div>
+    </div>
+
+    <div class="hw3-sec" style="padding-bottom: 0;">
+        <div class="hw3-sec-head">
+            <span class="hw3-eyebrow"><span class="dot"></span>Curated</span>
+            <h2>The <em>Bundles</em></h2>
+            <div class="sub">精選組合 · 一次擁有全套保養節奏</div>
+            <div class="deco"></div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ Chapter Ⅲ ═══════════════════════ -->
+    <div class="hw3-div">
+        <div class="hw3-div-in">
+            <div class="ln"></div>
+            <div class="tx">— Chapter Ⅲ —</div>
+            <div class="ln"></div>
+        </div>
+    </div>
+
+    <div class="hw3-sec" style="padding-bottom: 20px;">
+        <div class="hw3-sec-head">
+            <span class="hw3-eyebrow"><span class="dot"></span>Best Sellers</span>
+            <h2>The <em>Icons</em></h2>
+            <div class="sub">經典明星單品 · 團購限定入手價</div>
+            <div class="deco"></div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ Footer ═══════════════════════ -->
+    <div class="hw3-foot">
+        HEIWEI × CC <span class="heart">✦</span> Made with Care in Taiwan
+        <span class="sep">·</span>
+        Vol. 04 / 2026
+    </div>
+
+</div>
+
+<script>
+(function(){
+    // ── 1. 頂部捲動進度條 ──────────────────────────────────
+    var bar = document.getElementById('hw3Progress');
+    var ticking = false;
+    function updateProgress(){
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        var p = max > 0 ? Math.min(1, (h.scrollTop || document.body.scrollTop) / max) : 0;
+        if (bar) bar.style.transform = 'scaleX(' + p + ')';
+        ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+        if (!ticking) { requestAnimationFrame(updateProgress); ticking = true; }
+    }, { passive: true });
+
+    // ── 2. 倒數計時 (04/24 00:00 → 05/01 23:59 · 台灣時區) ──
+    var openAt  = new Date('2026-04-24T00:00:00+08:00').getTime();
+    var closeAt = new Date('2026-05-01T23:59:59+08:00').getTime();
+    function pad(n){ return (n < 10 ? '0' : '') + n; }
+    function tick(){
+        var now = Date.now();
+        var isOpen = now >= openAt && now <= closeAt;
+        var target = now < openAt ? openAt : closeAt;
+        var diff = Math.max(0, target - now);
+        var d = Math.floor(diff / 86400000);
+        var h = Math.floor(diff % 86400000 / 3600000);
+        var m = Math.floor(diff % 3600000 / 60000);
+        var s = Math.floor(diff % 60000 / 1000);
+        var el;
+        if ((el=document.getElementById('cd-d'))) el.textContent = pad(d);
+        if ((el=document.getElementById('cd-h'))) el.textContent = pad(h);
+        if ((el=document.getElementById('cd-m'))) el.textContent = pad(m);
+        if ((el=document.getElementById('cd-s'))) el.textContent = pad(s);
+        // 切換 "Opens in" / "Closes in"
+        var pre = document.querySelector('.hw3-count .lbl-pre');
+        if (pre) pre.textContent = isOpen ? 'Closes in' : (now > closeAt ? 'Closed' : 'Opens in');
+    }
+    tick(); setInterval(tick, 1000);
+
+    // ── 3. 捲動進場 · 錯開延遲 ──────────────────────────────
+    if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+                if (e.isIntersecting){
+                    e.target.style.animation = 'hw-rise .9s cubic-bezier(.2,.8,.2,1) both';
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: .12 });
+        document.querySelectorAll('[data-reveal] > *, .hw3-note-card, .hw3-meter').forEach(function(el, i){
+            el.style.opacity = '0';
+            el.style.animationDelay = (i * 90) + 'ms';
+            io.observe(el);
+        });
+    }
+
+    // ── 4. CTA 磁吸效果 ─────────────────────────────────────
+    var cta = document.getElementById('hw3Cta');
+    if (cta) {
+        var raf = null;
+        cta.addEventListener('mousemove', function(e){
+            var r = cta.getBoundingClientRect();
+            var x = (e.clientX - r.left - r.width/2) * .18;
+            var y = (e.clientY - r.top - r.height/2) * .18;
+            if (raf) cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(function(){
+                cta.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(1.03)';
+            });
+        });
+        cta.addEventListener('mouseleave', function(){
+            cta.style.transform = '';
+        });
+    }
+
+    // ── 5. 卡片 3D 傾斜（細膩 · 不過頭）──────────────────────
+    document.querySelectorAll('.hw3-promise .card, .hw3-tier').forEach(function(card){
+        card.addEventListener('mousemove', function(e){
+            var r = card.getBoundingClientRect();
+            var cx = (e.clientX - r.left) / r.width - .5;
+            var cy = (e.clientY - r.top) / r.height - .5;
+            card.style.transform = 'perspective(900px) rotateX(' + (-cy * 4) + 'deg) rotateY(' + (cx * 4) + 'deg) translateY(-4px)';
+        });
+        card.addEventListener('mouseleave', function(){
+            card.style.transform = '';
+        });
+    });
+})();
+</script>

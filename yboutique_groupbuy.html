@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yboutique × HEIWEI 開團資訊</title>
+<style>
+  :root {
+    --c-primary:    #c9a98a;
+    --c-primary-dk: #b08d7a;
+    --c-accent:     #d4704a;
+    --c-bg:         #fdf9f6;
+    --c-card:       #fff;
+    --c-border:     #ede5dc;
+    --c-text:       #2d2d2d;
+    --c-muted:      #aaa;
+    --r-card: 16px;
+    --r-sm:   12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; min-width: 0; }
+  body {
+    font-family: 'Helvetica Neue', Arial, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--c-bg); color: var(--c-text); font-size: 15px; line-height: 1.7;
+    overflow-x: hidden;
+  }
+  .container { max-width: 780px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  /* ── Header ── */
+  .header { text-align: center; padding: 36px 0 28px; border-bottom: 2px solid #e8ddd5; margin-bottom: 32px; }
+  .logo-line { font-size: 11px; letter-spacing: 4px; color: var(--c-primary-dk); text-transform: uppercase; margin-bottom: 10px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; letter-spacing: 1px; margin-bottom: 6px; }
+  .date-badge { display: inline-block; background: var(--c-primary); color: #fff; font-size: 13px; padding: 6px 22px; border-radius: 30px; letter-spacing: 1px; margin-top: 12px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 32px; }
+  .section-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--c-primary-dk); text-transform: uppercase; margin-bottom: 16px; margin-top: 28px; }
+  .section-title:first-child { margin-top: 0; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--c-primary); border-radius: 2px; }
+
+  /* ── Product cards ── */
+  .product-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--r-card); overflow: hidden; margin-bottom: 16px; }
+  .product-header { background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-dk) 100%); padding: 16px 20px; color: #fff; }
+  .product-name { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; }
+  .original-price { font-size: 12px; opacity: 0.85; text-decoration: line-through; margin-top: 3px; }
+  .price-table { width: 100%; border-collapse: collapse; }
+  .price-table th { background: #fdf0e8; color: var(--c-primary-dk); font-size: 12px; letter-spacing: 1px; padding: 10px 14px; text-align: center; font-weight: 600; }
+  .price-table td { padding: 12px 14px; text-align: center; font-size: 14px; border-top: 1px solid #f0e8e0; }
+  .price-table tr:hover td { background: var(--c-bg); }
+  .qty { font-weight: 600; color: #555; }
+  .price { font-weight: 700; color: var(--c-primary); font-size: 16px; }
+  .unit { font-size: 11px; color: var(--c-muted); }
+  .best-deal { background: #fff5ee !important; }
+  .best-deal .price { color: var(--c-accent) !important; }
+  .badge { display: inline-block; background: #fff; color: var(--c-primary); font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 700; }
+
+  /* ── Gift & free shipping ── */
+  .gift-banner { background: linear-gradient(135deg, #fdf0e8 0%, #fae8d8 100%); border: 2px solid #e8c9aa; border-radius: var(--r-card); padding: 22px 24px; display: flex; align-items: center; gap: 20px; }
+  .gift-emoji { font-size: 40px; flex-shrink: 0; }
+  .gift-title { font-size: 17px; font-weight: 700; color: #a0694a; margin-bottom: 6px; }
+  .gift-desc { font-size: 13px; color: #7a5a3a; line-height: 1.6; }
+  .gift-tag { display: inline-block; background: var(--c-primary); color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 10px; margin-left: 6px; }
+  .gift-limit { font-size: 11px; color: #a88060; margin-top: 6px; }
+  .free-ship-banner { background: var(--c-card); border: 1.5px solid var(--c-primary); border-radius: var(--r-sm); padding: 14px 20px; margin-top: 14px; display: flex; align-items: center; gap: 12px; }
+  .free-ship-icon { font-size: 22px; flex-shrink: 0; }
+  .free-ship-text { font-size: 14px; font-weight: 700; color: #a0694a; }
+  .free-ship-sub { font-size: 12px; color: var(--c-primary-dk); margin-top: 2px; }
+
+  /* ── Payment ── */
+  .pay-block { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--r-sm); padding: 18px 20px; margin-bottom: 20px; }
+  .pay-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5ede5; font-size: 13px; }
+  .pay-item:last-child { border-bottom: none; }
+  .pay-icon { font-size: 18px; width: 26px; flex-shrink: 0; text-align: center; margin-top: 1px; }
+  .pay-name { font-weight: 600; }
+  .pay-note { font-size: 11px; color: var(--c-muted); margin-top: 3px; }
+
+  /* ── Shipping table ── */
+  .ship-table { width: 100%; border-collapse: collapse; background: var(--c-card); border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--c-border); margin-bottom: 20px; }
+  .ship-table th { background: #fdf0e8; color: var(--c-primary-dk); font-size: 12px; padding: 10px 14px; text-align: left; font-weight: 600; letter-spacing: 1px; }
+  .ship-table td { padding: 12px 14px; font-size: 13px; border-top: 1px solid #f0e8e0; vertical-align: top; line-height: 1.8; }
+  .ship-table td:first-child { font-weight: 600; white-space: nowrap; }
+  .free-ship { color: var(--c-primary); font-weight: 600; }
+
+  /* ── Delivery ── */
+  .delivery-block { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--r-sm); padding: 18px 20px; margin-bottom: 20px; }
+  .delivery-row { display: flex; gap: 12px; padding: 7px 0; font-size: 13px; border-bottom: 1px dashed #f0e8e0; }
+  .delivery-row:last-child { border-bottom: none; }
+  .delivery-label { color: var(--c-primary-dk); font-weight: 600; min-width: 80px; flex-shrink: 0; }
+
+  /* ── Service ── */
+  .service-block { background: var(--c-card); border: 1px solid var(--c-border); border-radius: var(--r-sm); padding: 20px 22px; font-size: 13px; }
+  .service-row { display: flex; gap: 14px; padding: 9px 0; align-items: flex-start; border-bottom: 1px solid #f5ede5; }
+  .service-row:last-child { border-bottom: none; }
+  .service-icon { font-size: 16px; width: 24px; flex-shrink: 0; text-align: center; margin-top: 1px; }
+  .service-label { color: var(--c-primary-dk); font-weight: 600; min-width: 72px; flex-shrink: 0; }
+
+  /* ── Notice ── */
+  .notice { background: #fffbf6; border-left: 3px solid var(--c-primary); border-radius: 0 10px 10px 0; padding: 16px 20px; font-size: 13px; color: #7a6a5a; line-height: 2; }
+  .notice strong { color: var(--c-primary-dk); }
+  .notice-item { display: flex; gap: 8px; align-items: flex-start; }
+  .notice-item::before { content: '•'; color: var(--c-primary); font-size: 16px; line-height: 1.6; flex-shrink: 0; }
+
+  /* ── Footer ── */
+  .footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--c-border); font-size: 11px; color: #c0a898; letter-spacing: 2px; }
+
+  /* ── 手機版響應式 ── */
+  @media (max-width: 540px) {
+    .container { padding: 16px 12px 40px; }
+
+    /* Header */
+    .header { padding: 24px 0 20px; margin-bottom: 24px; }
+    .header h1 { font-size: 21px; }
+    .date-badge { font-size: 12px; padding: 5px 16px; }
+
+    /* Section title */
+    .section-title { font-size: 12px; letter-spacing: 1px; gap: 8px; margin-top: 22px; }
+
+    /* Product table */
+    .price-table th,
+    .price-table td { padding: 9px 8px; font-size: 13px; }
+    .price-table .price { font-size: 14px; }
+    .badge { font-size: 9px; padding: 1px 6px; margin-left: 4px; }
+
+    /* Gift banner */
+    .gift-banner { flex-direction: column; align-items: flex-start; gap: 12px; padding: 18px 16px; }
+    .gift-emoji { font-size: 32px; }
+    .gift-title { font-size: 15px; }
+
+    /* Pay block */
+    .pay-block { padding: 14px 14px; }
+    .pay-item { gap: 10px; padding: 9px 0; }
+
+    /* Shipping table — 水平捲動，避免 4 欄擠爆 */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--r-sm); border: 1px solid var(--c-border); }
+    .table-scroll .ship-table { min-width: 400px; border: none; border-radius: 0; margin-bottom: 0; }
+
+    /* Delivery */
+    .delivery-label { min-width: 64px; font-size: 12px; }
+    .delivery-row { font-size: 13px; gap: 8px; }
+
+    /* Service */
+    .service-label { min-width: 60px; font-size: 12px; }
+    .yb-service-row { gap: 10px; }
+
+    /* Notice — 修正 bullet 與文字對齊，防止長字串溢出 */
+    .notice { padding: 14px 14px; }
+    .notice-item {
+      gap: 6px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .notice-item::before {
+      font-size: 13px;   /* 與內文同尺寸，行高對齊 */
+      line-height: 2;
+      margin-top: 0;
+    }
+
+    /* Footer */
+    .footer { font-size: 10px; letter-spacing: 1px; margin-top: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div class="logo-line">Yboutique × HEIWEI 何謂美</div>
+    <h1>品牌聯名開團</h1>
+    <div class="date-badge">團購時間 2026 / 5 / 1 — 5 / 10</div>
+  </header>
+
+  <!-- 團購品項 -->
+  <section class="section">
+    <div class="section-title">團購品項</div>
+
+    <div class="product-card">
+      <div class="product-header">
+        <div class="product-name">爆白防曬噴霧 2.0</div>
+        <div class="original-price">定價 $840</div>
+      </div>
+      <table class="price-table">
+        <thead>
+          <tr><th>數量</th><th>團購價</th><th>平均單價</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="qty">1 入</td><td class="price">$520</td><td class="unit">$520 / 瓶</td></tr>
+          <tr><td class="qty">2 入</td><td class="price">$999</td><td class="unit">$500 / 瓶</td></tr>
+          <tr><td class="qty">3 入</td><td class="price">$1,455</td><td class="unit">$485 / 瓶</td></tr>
+          <tr class="best-deal"><td class="qty">5 入 <span class="badge">超值</span></td><td class="price">$2,400</td><td class="unit">$480 / 瓶</td></tr>
+          <tr class="best-deal"><td class="qty">10 入 <span class="badge">最划算</span></td><td class="price">$4,500</td><td class="unit">$450 / 瓶</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="product-card">
+      <div class="product-header">
+        <div class="product-name">B 群保濕噴霧</div>
+        <div class="original-price">定價 $1,190</div>
+      </div>
+      <table class="price-table">
+        <thead>
+          <tr><th>數量</th><th>團購價</th><th>平均單價</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="qty">1 入</td><td class="price">$899</td><td class="unit">$899 / 瓶</td></tr>
+          <tr><td class="qty">2 入</td><td class="price">$1,740</td><td class="unit">$870 / 瓶</td></tr>
+          <tr class="best-deal"><td class="qty">3 入 <span class="badge">最划算</span></td><td class="price">$2,550</td><td class="unit">$850 / 瓶</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 下單禮 & 免運 -->
+  <section class="section">
+    <div class="section-title">下單禮 &amp; 免運</div>
+
+    <div class="gift-banner">
+      <div class="gift-emoji">🎁</div>
+      <div>
+        <div class="gift-title">單筆消費滿 $999 即贈</div>
+        <div class="gift-desc">
+          魚子亮白化妝水 15ML
+          <span class="gift-tag">原價 $240</span>
+        </div>
+        <div class="gift-limit">數量有限 500 份，先搶先贏，贈完為止</div>
+      </div>
+    </div>
+
+    <div class="free-ship-banner">
+      <div class="free-ship-icon">🚚</div>
+      <div>
+        <div class="free-ship-text">單筆消費滿 $999 免運費</div>
+        <div class="free-ship-sub">台灣本島 &amp; 離島均適用，以單筆訂單金額計算</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 付款方式 / 運費說明 / 出貨時程 -->
+  <section class="section">
+    <div class="section-title">付款方式</div>
+    <div class="pay-block">
+      <div class="pay-item">
+        <div class="pay-icon">💳</div>
+        <div>
+          <div class="pay-name">信用卡</div>
+          <div class="pay-note">完成訂單後 15 分鐘內完成付款，逾時系統自動取消</div>
+        </div>
+      </div>
+      <div class="pay-item">
+        <div class="pay-icon">🏪</div>
+        <div>
+          <div class="pay-name">超商取貨付款</div>
+          <div class="pay-note">取貨時於門市付款</div>
+        </div>
+      </div>
+      <div class="pay-item">
+        <div class="pay-icon">📦</div>
+        <div>
+          <div class="pay-name">超商貨到付款</div>
+          <div class="pay-note">送達時付款</div>
+        </div>
+      </div>
+      <div class="pay-item">
+        <div class="pay-icon">📱</div>
+        <div>
+          <div class="pay-name">LINE Pay</div>
+          <div class="pay-note">完成訂單後 15 分鐘內完成付款，逾時系統自動取消</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">運費說明</div>
+    <div class="table-scroll">
+    <table class="ship-table">
+      <thead>
+        <tr><th>地區</th><th>寄件方式</th><th>運費</th><th>免運門檻</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>台灣本島</td>
+          <td>順豐宅配<br>7-11 超商</td>
+          <td>$95<br>$65</td>
+          <td><span class="free-ship">滿 $999 免運</span></td>
+        </tr>
+        <tr>
+          <td>台灣離島</td>
+          <td>郵局宅配<br>7-11 超商</td>
+          <td>$95<br>$65</td>
+          <td><span class="free-ship">滿 $999 免運</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="section-title">出貨時程</div>
+    <div class="delivery-block">
+      <div class="delivery-row">
+        <div class="delivery-label">現貨出貨</div>
+        <div>下單後約 <strong>1～3 個工作天</strong>安排出貨（不含例假日）</div>
+      </div>
+      <div class="delivery-row">
+        <div class="delivery-label">最晚出貨</div>
+        <div>115 年 5 月 13 日前全數出貨完畢</div>
+      </div>
+      <div class="delivery-row">
+        <div class="delivery-label">海外地區</div>
+        <div>本團<strong>不開放</strong>海外訂單</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 客服資訊 -->
+  <section class="section">
+    <div class="section-title">客服資訊</div>
+    <div class="service-block">
+      <div class="service-row">
+        <div class="service-icon">💬</div>
+        <div class="service-label">官方 LINE</div>
+        <div>@heiwei</div>
+      </div>
+      <div class="service-row">
+        <div class="service-icon">📞</div>
+        <div class="service-label">客服電話</div>
+        <div>07-343-0072</div>
+      </div>
+      <div class="service-row">
+        <div class="service-icon">✉️</div>
+        <div class="service-label">電子信箱</div>
+        <div>heiweimei@gmail.com</div>
+      </div>
+      <div class="service-row">
+        <div class="service-icon">📍</div>
+        <div class="service-label">公司地址</div>
+        <div>高雄市左營區文敬路 59 號 2 樓</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 注意事項 -->
+  <section class="section">
+    <div class="section-title">注意事項</div>
+    <div class="notice">
+      <div class="notice-item">本活動商品為 <strong>現貨販售</strong>，下單即確認出貨安排。</div>
+      <div class="notice-item">付款逾時（信用卡／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</div>
+      <div class="notice-item">免運優惠以 <strong>單筆訂單金額 $999 以上</strong>為計算基準。</div>
+      <div class="notice-item">下單禮（魚子亮白化妝水）數量有限，贈完為止，恕不折換現金。</div>
+      <div class="notice-item">如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    HEIWEI 何謂美 × Yboutique &nbsp;｜&nbsp; 2026 品牌聯名開團
+  </footer>
+
+</div>
+</body>
+</html>

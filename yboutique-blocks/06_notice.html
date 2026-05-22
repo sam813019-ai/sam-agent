@@ -1,0 +1,29 @@
+<style>
+  .yb-wrap { font-family: 'Noto Sans TC', 'Helvetica Neue', Arial, sans-serif; max-width: 780px; margin: 0 auto; padding: 0 16px; color: var(--c-text, #2d2d2d); overflow-x: hidden; }
+  .yb-section-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--c-primary-dk, #b08d7a); text-transform: uppercase; margin-bottom: 16px; }
+  .yb-section-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--c-primary, #c9a98a); border-radius: 2px; }
+  .yb-notice { background: #fffbf6; border-left: 3px solid var(--c-primary, #c9a98a); border-radius: 0 10px 10px 0; padding: 16px 20px; font-size: 13px; color: #7a6a5a; line-height: 2; }
+  .yb-notice strong { color: var(--c-primary-dk, #b08d7a); }
+  .yb-notice-item { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: break-word; word-break: break-word; min-width: 0; }
+  .yb-notice-item::before { content: '•'; color: var(--c-primary, #c9a98a); font-size: 13px; line-height: 2; flex-shrink: 0; }
+  .yb-notice-text { flex: 1; min-width: 0; }
+
+  @media (max-width: 540px) {
+    .yb-section-title { font-size: 12px; letter-spacing: 1px; }
+    .yb-notice { padding: 14px; font-size: 13px; line-height: 1.9; }
+    .yb-notice-item { gap: 6px; }
+  }
+</style>
+
+<div class="yb-wrap">
+  <div style="padding: 28px 0 8px;">
+    <div class="yb-section-title">注意事項</div>
+    <div class="yb-notice">
+      <div class="yb-notice-item"><span class="yb-notice-text">本活動商品為 <strong>現貨販售</strong>，下單即確認出貨安排。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">付款逾時（信用卡／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">免運優惠以 <strong>單筆訂單金額 $999 以上</strong>為計算基準。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">下單禮（魚子亮白化妝水）數量有限，贈完為止，恕不折換現金。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</span></div>
+    </div>
+  </div>
+</div>

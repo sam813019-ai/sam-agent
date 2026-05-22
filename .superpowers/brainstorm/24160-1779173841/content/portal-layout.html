@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>經銷商入口 — 佈局選項</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, "PingFang TC", sans-serif; background: #F5F3EF; color: #1A1A1A; padding: 24px; }
+
+h1 { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #888; margin-bottom: 6px; }
+h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.sub { font-size: 13px; color: #666; margin-bottom: 28px; }
+
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.option {
+  border: 2px solid #DDD8CF;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.option:hover { border-color: #C4A45A; }
+.option.selected { border-color: #C4A45A; box-shadow: 0 0 0 3px rgba(196,164,90,0.15); }
+.option-label {
+  padding: 10px 16px;
+  background: #fff;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #EEE;
+  display: flex; align-items: center; gap: 8px;
+}
+.letter {
+  width: 22px; height: 22px;
+  background: #C4A45A; color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+}
+
+/* Shared warm style */
+.phone {
+  background: #FDFCFA;
+  font-size: 11px;
+}
+
+/* Nav */
+.nav {
+  background: #fff;
+  padding: 12px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #EDE9E3;
+}
+.nav-logo { font-size: 10px; letter-spacing: 3px; font-weight: 700; color: #1A1A1A; }
+.nav-logo span { color: #C4A45A; }
+.nav-right { font-size: 9px; color: #aaa; }
+
+/* ── Layout A: Tab 切換 ── */
+.tabs {
+  display: flex;
+  background: #fff;
+  border-bottom: 1px solid #EDE9E3;
+  overflow-x: auto;
+}
+.tab {
+  padding: 8px 12px;
+  font-size: 10px;
+  color: #aaa;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.tab.active { color: #C4A45A; border-bottom-color: #C4A45A; font-weight: 600; }
+
+.tab-content { padding: 16px; }
+.announcement {
+  background: #fff;
+  border: 1px solid #EDE9E3;
+  border-left: 3px solid #C4A45A;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 0 4px 4px 0;
+}
+.ann-date { font-size: 9px; color: #C4A45A; margin-bottom: 3px; letter-spacing: 1px; }
+.ann-title { font-size: 12px; font-weight: 600; color: #1A1A1A; margin-bottom: 2px; }
+.ann-body { font-size: 10px; color: #888; line-height: 1.5; }
+
+.doc-item {
+  background: #fff;
+  border: 1px solid #EDE9E3;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 10px;
+}
+.doc-icon { font-size: 18px; }
+.doc-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.doc-sub { font-size: 10px; color: #aaa; }
+.doc-btn {
+  margin-left: auto;
+  background: #1A1A1A;
+  color: #fff;
+  font-size: 9px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+}
+
+/* ── Layout B: 卡片式首頁 ── */
+.portal-hero {
+  background: #1A1A1A;
+  padding: 16px;
+  text-align: center;
+}
+.portal-hero .greeting { font-size: 9px; letter-spacing: 2px; color: #888; margin-bottom: 4px; text-transform: uppercase; }
+.portal-hero .name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.portal-hero .status { font-size: 9px; color: #C4A45A; letter-spacing: 1px; }
+
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 14px; }
+.card {
+  background: #fff;
+  border: 1px solid #EDE9E3;
+  border-radius: 6px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.card .icon { font-size: 22px; margin-bottom: 6px; }
+.card .card-title { font-size: 11px; font-weight: 700; color: #1A1A1A; margin-bottom: 2px; }
+.card .card-sub { font-size: 9px; color: #aaa; line-height: 1.4; }
+.card.highlight { background: #1A1A1A; border-color: #1A1A1A; }
+.card.highlight .card-title { color: #C4A45A; }
+.card.highlight .card-sub { color: #555; }
+
+.b-announcement {
+  margin: 0 14px 14px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #EDE9E3;
+  overflow: hidden;
+}
+.b-ann-header {
+  background: #F5F3EF;
+  padding: 8px 12px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-bottom: 1px solid #EDE9E3;
+}
+.b-ann-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid #F5F3EF;
+  display: flex; align-items: center; gap: 8px;
+}
+.b-ann-dot { width: 6px; height: 6px; background: #C4A45A; border-radius: 50%; flex-shrink: 0; }
+.b-ann-text { font-size: 11px; color: #444; flex: 1; }
+.b-ann-date { font-size: 9px; color: #bbb; }
+
+.option-footer {
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #EEE;
+}
+.option-footer p { font-size: 12px; color: #555; line-height: 1.6; }
+.tag { display: inline-block; font-size: 10px; background: #F5F3EF; color: #888; padding: 2px 8px; border-radius: 20px; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<h1>HEIWEI 何謂美 — 經銷商入口</h1>
+<h2>私密入口的頁面佈局</h2>
+<p class="sub">選一個主畫面結構，公告、合約、素材庫等內容都放在裡面</p>
+
+<div class="options">
+
+  <!-- Layout A: Tab 式 -->
+  <div class="option" onclick="this.classList.toggle('selected')">
+    <div class="option-label">
+      <div class="letter">A</div>
+      Tab 切換式
+    </div>
+    <div class="phone">
+      <div class="nav">
+        <div class="nav-logo">HEIWEI <span>·</span> 何謂美</div>
+        <div class="nav-right">授權夥伴</div>
+      </div>
+      <div class="tabs">
+        <div class="tab active">📣 公告</div>
+        <div class="tab">📄 制度合約</div>
+        <div class="tab">🖊️ 授權書</div>
+        <div class="tab">🖼️ 素材庫</div>
+        <div class="tab">📦 訂購</div>
+        <div class="tab">💬 聯絡</div>
+      </div>
+      <div class="tab-content">
+        <div class="announcement">
+          <div class="ann-date">2026.05.19</div>
+          <div class="ann-title">母親節活動素材已上架</div>
+          <div class="ann-body">最新母親節商品圖、Banner 已更新至素材庫，請點選「素材庫」頁籤下載使用</div>
+        </div>
+        <div class="announcement">
+          <div class="ann-date">2026.05.10</div>
+          <div class="ann-title">Q2 折扣結構更新</div>
+          <div class="ann-body">6月起調整進貨折扣，詳情請查閱制度合約頁面</div>
+        </div>
+        <div class="announcement">
+          <div class="ann-date">2026.04.28</div>
+          <div class="ann-title">新品上市：玻尿酸精華露</div>
+          <div class="ann-body">限量首批開放預訂，歡迎透過訂購頁面提前預約</div>
+        </div>
+      </div>
+    </div>
+    <div class="option-footer">
+      <p>
+        <span class="tag">橫向 Tab</span>
+        <span class="tag">單頁不跳轉</span>
+        適合內容很多時，每個分類都清楚。滑動 tab 切換，不用離開頁面。
+      </p>
+    </div>
+  </div>
+
+  <!-- Layout B: 卡片首頁 -->
+  <div class="option" onclick="this.classList.toggle('selected')">
+    <div class="option-label">
+      <div class="letter">B</div>
+      卡片首頁式
+    </div>
+    <div class="phone">
+      <div class="nav">
+        <div class="nav-logo">HEIWEI <span>·</span> 何謂美</div>
+        <div class="nav-right">授權夥伴</div>
+      </div>
+      <div class="portal-hero">
+        <div class="greeting">Welcome Back</div>
+        <div class="name">陳小美 經銷商</div>
+        <div class="status">✓ 授權合作中</div>
+      </div>
+
+      <div class="b-announcement">
+        <div class="b-ann-header">最新公告</div>
+        <div class="b-ann-item">
+          <div class="b-ann-dot"></div>
+          <div class="b-ann-text">母親節活動素材已上架</div>
+          <div class="b-ann-date">05/19</div>
+        </div>
+        <div class="b-ann-item">
+          <div class="b-ann-dot"></div>
+          <div class="b-ann-text">Q2 折扣結構更新公告</div>
+          <div class="b-ann-date">05/10</div>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="icon">📄</div>
+          <div class="card-title">制度 & 合約</div>
+          <div class="card-sub">折扣、規範、PDF 下載</div>
+        </div>
+        <div class="card">
+          <div class="icon">🖊️</div>
+          <div class="card-title">授權書申請</div>
+          <div class="card-sub">填表送出等待確認</div>
+        </div>
+        <div class="card highlight">
+          <div class="icon">🖼️</div>
+          <div class="card-title">素材庫</div>
+          <div class="card-sub">商品圖、Logo、Banner</div>
+        </div>
+        <div class="card">
+          <div class="icon">📦</div>
+          <div class="card-title">訂購出貨</div>
+          <div class="card-sub">填寫訂購表單</div>
+        </div>
+        <div class="card" style="grid-column: span 2;">
+          <div class="icon">💬</div>
+          <div class="card-title">聯絡 HEIWEI</div>
+          <div class="card-sub">開啟官方 LINE@ 直接對話</div>
+        </div>
+      </div>
+    </div>
+    <div class="option-footer">
+      <p>
+        <span class="tag">卡片導覽</span>
+        <span class="tag">歡迎畫面</span>
+        清楚看到所有功能入口，點卡片跳到對應區塊，首頁有公告摘要。更有「登入後的儀表板」感。
+      </p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

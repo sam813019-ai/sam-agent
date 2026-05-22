@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>振太機械 · 產品查看器 Demo</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+  }
+}
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d0d0d;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  /* ── 產品卡片容器 ── */
+  .product-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: min(960px, 100%);
+    min-height: 560px;
+    background: #141414;
+    border: 1px solid #222;
+    overflow: hidden;
+  }
+
+  /* 背景大字 */
+  .bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(60px, 10vw, 120px);
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+
+  /* ── 左欄：3D 查看器 ── */
+  .viewer-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    border-right: 1px solid #222;
+  }
+
+  #three-canvas {
+    width: 100% !important;
+    height: 380px !important;
+    cursor: grab;
+    border-radius: 4px;
+  }
+  #three-canvas:active { cursor: grabbing; }
+
+  .viewer-hint {
+    margin-top: 12px;
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Loading overlay */
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #141414;
+    z-index: 10;
+    transition: opacity 0.4s;
+  }
+  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #222;
+    border-top-color: #F4DB00;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-txt {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ── 右欄：產品資訊 ── */
+  .info-col {
+    padding: 40px 40px 40px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .series-tag {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: #F4DB00;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .product-name-zh {
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .product-name-en {
+    font-size: clamp(10px, 1.2vw, 13px);
+    font-weight: 400;
+    color: #666;
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* 規格表 */
+  .specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 32px;
+    border-top: 1px solid #222;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #1e1e1e;
+    font-size: 13px;
+  }
+
+  .spec-row .label {
+    color: #666;
+    letter-spacing: 0.05em;
+  }
+
+  .spec-row .value {
+    color: #ddd;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .spec-row .value.highlight {
+    color: #F4DB00;
+  }
+
+  /* 詢價按鈕 */
+  .inquiry-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #F4DB00;
+    color: #0A0908;
+    border: none;
+    padding: 14px 28px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+  .inquiry-btn:hover { background: #ffe94d; transform: translateX(2px); }
+
+  .model-badge {
+    margin-bottom: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .model-badge .code {
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 0.2em;
+    font-family: monospace;
+  }
+  .model-badge .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #E53128;
+  }
+
+  /* ── 縮圖列 ── */
+  .thumb-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .thumb {
+    width: 48px;
+    height: 48px;
+    border: 1px solid #222;
+    background: #1a1a1a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: #444;
+    letter-spacing: 0.1em;
+    transition: border-color 0.2s;
+  }
+  .thumb.active { border-color: #F4DB00; color: #F4DB00; }
+  .thumb:hover { border-color: #555; }
+
+  /* ── 紅色裝飾條 ── */
+  .accent-bar {
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: #E53128;
+  }
+
+  /* RWD */
+  @media (max-width: 680px) {
+    .product-card { grid-template-columns: 1fr; }
+    .viewer-col { border-right: none; border-bottom: 1px solid #222; padding: 24px; }
+    #three-canvas { height: 280px !important; }
+    .info-col { padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="product-card">
+  <div class="accent-bar"></div>
+  <div class="bg-text">JENN TAI</div>
+
+  <!-- 左欄：3D 查看器 -->
+  <div class="viewer-col">
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+      <div class="loading-txt">載入模型中</div>
+    </div>
+    <canvas id="three-canvas"></canvas>
+    <div class="viewer-hint">← 拖曳旋轉 · 滾輪縮放 →</div>
+    <div class="thumb-row">
+      <div class="thumb active">3D</div>
+      <div class="thumb">側視</div>
+      <div class="thumb">正視</div>
+      <div class="thumb">俯視</div>
+    </div>
+  </div>
+
+  <!-- 右欄：產品資訊 -->
+  <div class="info-col">
+    <div class="series-tag">補料系列 · Replenishing Series</div>
+    <h1 class="product-name-zh">升降式自動定量上料機</h1>
+    <h2 class="product-name-en">AUTOMATIC ELEVATOR CONVEYOR</h2>
+
+    <div class="model-badge">
+      <span class="dot"></span>
+      <span class="code">MODEL · JT-EL-300</span>
+      <span class="dot"></span>
+      <span class="code">S/N 2026</span>
+    </div>
+
+    <div class="specs">
+      <div class="spec-row">
+        <span class="label">承載量</span>
+        <span class="value highlight">50 – 500 kg</span>
+      </div>
+      <div class="spec-row">
+        <span class="label">提升高度</span>
+        <span class="value">500 – 3,000 mm</span>
+      </div>
+      <div class="spec-row">
+        <span class="label">傳動方式</span>
+        <span class="value">無段變速馬達</span>
+      </div>
+      <div class="spec-row">
+        <span class="label">控制系統</span>
+        <span class="value">JT-CTRL-V3 智慧型</span>
+      </div>
+      <div class="spec-row">
+        <span class="label">認證</span>
+        <span class="value">CE · ISO 9001:2015</span>
+      </div>
+      <div class="spec-row">
+        <span class="label">交貨期</span>
+        <span class="value">標準 4 – 6 週</span>
+      </div>
+    </div>
+
+    <button class="inquiry-btn">詢問報價 INQUIRY →</button>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const canvas = document.getElementById('three-canvas');
+const overlay = document.getElementById('loadingOverlay');
+
+// ── Renderer ──
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+
+// ── Scene ──
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x141414);
+scene.fog = new THREE.FogExp2(0x141414, 0.018);
+
+// ── Camera ──
+const camera = new THREE.PerspectiveCamera(40, 1, 0.01, 100);
+camera.position.set(2.5, 1.5, 3.5);
+
+// ── Lights ──
+const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambient);
+
+const keyLight = new THREE.DirectionalLight(0xfff5e0, 2.0);
+keyLight.position.set(4, 6, 4);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.setScalar(1024);
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0xd0e8ff, 0.6);
+fillLight.position.set(-4, 2, -2);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0xF4DB00, 0.4);
+rimLight.position.set(0, -2, -4);
+scene.add(rimLight);
+
+// Ground shadow plane
+const groundGeo = new THREE.PlaneGeometry(20, 20);
+const groundMat = new THREE.ShadowMaterial({ opacity: 0.25 });
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -1.5;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// ── Controls ──
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.minDistance = 0.5;
+controls.maxDistance = 12;
+controls.maxPolarAngle = Math.PI * 0.85;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.6;
+
+// Stop auto-rotate on user interaction
+canvas.addEventListener('pointerdown', () => { controls.autoRotate = false; });
+
+// ── GLB Loader ──
+const loader = new GLTFLoader();
+loader.load(
+  '測試用.glb',
+  (gltf) => {
+    const model = gltf.scene;
+
+    // Center & scale model
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 2.5 / maxDim;
+    model.scale.setScalar(scale);
+    model.position.sub(center.multiplyScalar(scale));
+
+    // Enable shadows on all meshes
+    model.traverse(child => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        if (child.material) {
+          child.material.envMapIntensity = 1.2;
+        }
+      }
+    });
+
+    scene.add(model);
+
+    // Adjust camera to fit
+    const newBox = new THREE.Box3().setFromObject(model);
+    const newCenter = newBox.getCenter(new THREE.Vector3());
+    controls.target.copy(newCenter);
+    camera.position.set(
+      newCenter.x + maxDim * scale * 1.8,
+      newCenter.y + maxDim * scale * 0.8,
+      newCenter.z + maxDim * scale * 2.2
+    );
+    camera.lookAt(newCenter);
+
+    overlay.classList.add('hidden');
+  },
+  (xhr) => {
+    const pct = Math.round(xhr.loaded / xhr.total * 100);
+    document.querySelector('.loading-txt').textContent = `載入中 ${pct}%`;
+  },
+  (err) => {
+    console.error('GLB 載入失敗', err);
+    document.querySelector('.loading-txt').textContent = '模型載入失敗';
+  }
+);
+
+// ── Resize ──
+function resize() {
+  const w = canvas.parentElement.clientWidth - 64;
+  const h = 380;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ── Animate ──
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+</body>
+</html>

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KINGSWAY | Cuisine & Live Music</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #0c0c0c;
+      --gold: #b29555;
+      --gold-light: #f4cf92;
+      --gold-dark: #987943;
+      --gold-gradient: linear-gradient(135deg, #987943, #b29555, #f4cf92, #b29555, #987943);
+      --bg-dark: #0c0c0c;
+      --bg-section: #111111;
+      --bg-card: #1a1a1a;
+      --text-light: #e8e0d4;
+      --text-muted: #9a9084;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+    /* ===== NAVIGATION ===== */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 50px;
+      background: rgba(12, 12, 12, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(178, 149, 85, 0.15);
+      transition: all 0.4s ease;
+    }
+    .navbar.scrolled {
+      padding: 12px 50px;
+      background: rgba(12, 12, 12, 0.97);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-logo span {
+      display: block;
+      font-size: 0.55rem;
+      letter-spacing: 5px;
+      font-weight: 400;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .lang-toggle {
+      display: flex; gap: 0;
+      border: 1px solid var(--gold-dark);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-left: 12px;
+    }
+    .lang-toggle button {
+      background: none; border: none; color: var(--text-muted);
+      padding: 5px 12px; font-size: 0.75rem; cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+    .lang-toggle button.active {
+      background: var(--gold-dark);
+      color: var(--black);
+    }
+
+    /* Mobile menu */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px;
+    }
+    .menu-toggle span {
+      width: 24px; height: 1.5px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 30%, rgba(178,149,85,0.08) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(12,12,12,0.3) 0%, rgba(12,12,12,0.8) 70%, var(--bg-dark) 100%);
+      z-index: 1;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><rect fill="%230c0c0c" width="1440" height="900"/><circle cx="720" cy="350" r="300" fill="none" stroke="%23b29555" stroke-width="0.3" opacity="0.15"/><circle cx="720" cy="350" r="200" fill="none" stroke="%23b29555" stroke-width="0.2" opacity="0.1"/></svg>') center/cover no-repeat;
+      opacity: 0.6;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      animation: fadeInUp 1.2s ease;
+    }
+    .hero-crown {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 24px;
+      border: 1px solid rgba(178,149,85,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(178,149,85,0.05);
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700;
+      letter-spacing: 12px;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    .hero .subtitle {
+      font-size: 0.9rem;
+      letter-spacing: 8px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+    .hero .tagline {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      letter-spacing: 4px;
+      margin-bottom: 48px;
+      opacity: 0.8;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 14px 48px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.85rem;
+      letter-spacing: 4px;
+      transition: all 0.4s;
+    }
+    .hero-cta:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .scroll-indicator {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.7rem; letter-spacing: 3px;
+      animation: bounce 2s infinite;
+    }
+    .scroll-indicator .line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      padding: 100px 8%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .section-alt { background: var(--bg-section); max-width: none; }
+    .section-alt > .section-inner { max-width: 1400px; margin: 0 auto; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-header .label {
+      font-size: 0.75rem;
+      letter-spacing: 6px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 600;
+      letter-spacing: 6px;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+    .section-header .divider {
+      width: 60px; height: 1px;
+      background: var(--gold-gradient);
+      margin: 0 auto 16px;
+    }
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    /* ===== BRAND STORY ===== */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .story-image {
+      aspect-ratio: 3/4;
+      background: var(--bg-card);
+      border: 1px solid rgba(178,149,85,0.15);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .story-image::before {
+      content: '';
+      position: absolute; inset: 12px;
+      border: 1px solid rgba(178,149,85,0.1);
+    }
+    .story-image .placeholder {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+    .story-text h3 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.5rem;
+      color: var(--gold-light);
+      margin-bottom: 24px;
+      letter-spacing: 3px;
+    }
+    .story-text p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 2;
+      margin-bottom: 20px;
+    }
+    .story-text .highlight {
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .story-values {
+      display: flex; gap: 32px;
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(178,149,85,0.15);
+    }
+    .story-values .value {
+      flex: 1;
+    }
+    .story-values .value h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .story-values .value p {
+      font-size: 0.8rem;
+      margin: 0;
+    }
+
+    /* ===== ENVIRONMENT ===== */
+    .env-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .env-card {
+      aspect-ratio: 4/3;
+      background: var(--bg-card);
+      border: 1px solid rgba(178,149,85,0.1);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s;
+      cursor: pointer;
+    }
+    .env-card:first-child {
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+    .env-card:hover {
+      border-color: rgba(178,149,85,0.4);
+      transform: translateY(-4px);
+    }
+    .env-card .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(12,12,12,0.8), transparent);
+      display: flex; align-items: flex-end;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .env-card:hover .overlay { opacity: 1; }
+    .env-card .overlay span {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+    }
+    .env-card .placeholder {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+    .env-card .placeholder .icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      opacity: 0.4;
+    }
+
+    /* ===== MENU ===== */
+    .menu-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 48px;
+    }
+    .menu-tabs button {
+      background: none;
+      border: 1px solid rgba(178,149,85,0.3);
+      color: var(--text-muted);
+      padding: 10px 32px;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif;
+      transition: all 0.3s;
+    }
+    .menu-tabs button.active,
+    .menu-tabs button:hover {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 48px;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(178,149,85,0.08);
+    }
+    .menu-item .name {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      letter-spacing: 1px;
+    }
+    .menu-item .name small {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .menu-item .dots {
+      flex: 1;
+      border-bottom: 1px dotted rgba(178,149,85,0.2);
+      margin: 0 12px;
+      min-width: 20px;
+    }
+    .menu-item .price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    /* ===== PERFORMANCE ===== */
+    .perf-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .perf-table th {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(178,149,85,0.3);
+      text-align: left;
+    }
+    .perf-table td {
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(178,149,85,0.08);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .perf-table td:first-child { color: var(--gold-light); font-weight: 500; }
+    .perf-table .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      background: rgba(178,149,85,0.12);
+      border: 1px solid rgba(178,149,85,0.2);
+      border-radius: 3px;
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 28px; }
+    .contact-item {
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .contact-item .icon-box {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(178,149,85,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-item h4 {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .contact-item p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .contact-map {
+      aspect-ratio: 16/10;
+      background: var(--bg-card);
+      border: 1px solid rgba(178,149,85,0.15);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-map .placeholder {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+
+    /* Social links */
+    .social-links {
+      display: flex; gap: 12px;
+      margin-top: 16px;
+    }
+    .social-links a {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(178,149,85,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .social-links a:hover {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+
+    /* ===== RESERVATION BANNER ===== */
+    .reservation-banner {
+      text-align: center;
+      padding: 80px 8%;
+      background:
+        linear-gradient(rgba(12,12,12,0.85), rgba(12,12,12,0.85)),
+        var(--bg-card);
+      border-top: 1px solid rgba(178,149,85,0.1);
+      border-bottom: 1px solid rgba(178,149,85,0.1);
+    }
+    .reservation-banner h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      letter-spacing: 6px;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+    .reservation-banner p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+      letter-spacing: 1px;
+    }
+    .reservation-banner .btn-reserve {
+      display: inline-block;
+      padding: 16px 56px;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      transition: all 0.3s;
+      font-family: 'Noto Sans TC', sans-serif;
+      border: none;
+      cursor: pointer;
+    }
+    .reservation-banner .btn-reserve:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(178,149,85,0.2);
+    }
+    .reservation-banner .reserve-note {
+      margin-top: 16px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 48px 8%;
+      text-align: center;
+      border-top: 1px solid rgba(178,149,85,0.1);
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      letter-spacing: 6px;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+    .footer p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 992px) {
+      .navbar { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: rgba(12,12,12,0.98);
+        padding: 24px;
+        gap: 20px;
+        border-bottom: 1px solid rgba(178,149,85,0.15);
+      }
+      .menu-toggle { display: flex; }
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .story-image { aspect-ratio: 16/9; }
+      .env-grid { grid-template-columns: 1fr 1fr; }
+      .env-card:first-child { grid-row: auto; aspect-ratio: 4/3; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .section { padding: 72px 6%; }
+    }
+    @media (max-width: 600px) {
+      .env-grid { grid-template-columns: 1fr; }
+      .story-values { flex-direction: column; gap: 20px; }
+      .menu-tabs { flex-wrap: wrap; }
+      .menu-tabs button { padding: 8px 20px; font-size: 0.8rem; }
+      .hero h1 { letter-spacing: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      KINGSWAY
+      <span>CUISINE & LIVE MUSIC</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#story" data-zh="品牌故事" data-en="Our Story">品牌故事</a>
+      <a href="#environment" data-zh="環境介紹" data-en="Venue">環境介紹</a>
+      <a href="#menu" data-zh="菜單酒單" data-en="Menu">菜單酒單</a>
+      <a href="#performance" data-zh="駐唱表演" data-en="Live Music">駐唱表演</a>
+      <a href="#contact" data-zh="聯絡我們" data-en="Contact">聯絡我們</a>
+      <a href="#reserve" class="hero-cta" style="padding:8px 24px; font-size:0.8rem;" data-zh="立即訂位" data-en="Reserve">立即訂位</a>
+      <div class="lang-toggle">
+        <button class="active" onclick="switchLang('zh')">中</button>
+        <button onclick="switchLang('en')">EN</button>
+      </div>
+    </div>
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-logo">KS</div>
+      <h1>KINGSWAY</h1>
+      <div class="subtitle">CUISINE & LIVE MUSIC</div>
+      <div class="tagline" data-zh="低調中散發奢華的光芒" data-en="Luxury Whispered in Elegance">低調中散發奢華的光芒</div>
+      <a href="#reserve" class="hero-cta" data-zh="立即訂位" data-en="RESERVE NOW">立即訂位</a>
+    </div>
+    <div class="scroll-indicator">
+      <div class="line"></div>
+      SCROLL
+    </div>
+  </section>
+
+  <!-- ===== BRAND STORY ===== -->
+  <section class="section" id="story">
+    <div class="section-header fade-in">
+      <div class="label">OUR STORY</div>
+      <h2 data-zh="品牌故事" data-en="Brand Story">品牌故事</h2>
+      <div class="divider"></div>
+      <p data-zh="以王者奢華的概念，打造無與倫比的饗宴體驗" data-en="A royal concept, crafting an unparalleled dining experience">以王者奢華的概念，打造無與倫比的饗宴體驗</p>
+    </div>
+    <div class="story-grid fade-in">
+      <div class="story-image">
+        <div class="placeholder">
+          <div style="font-size:3rem; margin-bottom:12px; opacity:0.3;">&#9830;</div>
+          BRAND IMAGE<br>品牌形象照
+        </div>
+      </div>
+      <div class="story-text">
+        <h3 data-zh="王者奢華，社交之道" data-en="Royal Luxury, The Art of Social">王者奢華，社交之道</h3>
+        <p data-zh="以「王者奢華」的概念去做延伸，黑色背景象徵著神秘與力量，而金色則代表著高貴與榮耀，這兩種顏色的搭配使得整體設計在低調中散發出奢華的光芒。" data-en="Extending the concept of 'Royal Luxury,' the black background symbolizes mystery and power, while gold represents nobility and glory. This combination radiates luxury in understated elegance.">以「王者奢華」的概念去做延伸，黑色背景象徵著神秘與力量，而金色則代表著高貴與榮耀，這兩種顏色的搭配使得整體設計在低調中散發出奢華的光芒。</p>
+        <p data-zh="LOGO 中的「KS」字樣不僅是品牌的縮寫，更是 KINGSWAY 的核心精神體現。在這裡，每位顧客都是王者，每一個夜晚都值得被銘記。" data-en="The 'KS' in our logo is not just an abbreviation — it embodies the core spirit of KINGSWAY. Here, every guest is royalty, and every night is worth remembering.">LOGO 中的「KS」字樣不僅是品牌的縮寫，更是 KINGSWAY 的核心精神體現。在這裡，每位顧客都是王者，每一個夜晚都值得被銘記。</p>
+        <div class="story-values">
+          <div class="value">
+            <h4>K</h4>
+            <p data-zh="Kingship — 君主之道，象徵著尊貴與領導" data-en="Kingship — Dignity and leadership in every detail">Kingship — 君主之道，象徵著尊貴與領導</p>
+          </div>
+          <div class="value">
+            <h4>S</h4>
+            <p data-zh="Social — 社交，讓人們在這裡相聚、交流，分享生活的點滴" data-en="Social — A gathering place to connect, share, and celebrate life">Social — 社交，讓人們在這裡相聚、交流，分享生活的點滴</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ENVIRONMENT ===== -->
+  <section class="section-alt" id="environment">
+    <div class="section-inner" style="padding: 100px 8%;">
+      <div class="section-header fade-in">
+        <div class="label">VENUE</div>
+        <h2 data-zh="環境介紹" data-en="Our Venue">環境介紹</h2>
+        <div class="divider"></div>
+        <p data-zh="沉浸於黑金交織的奢華空間" data-en="Immerse yourself in a luxurious space of black and gold">沉浸於黑金交織的奢華空間</p>
+      </div>
+      <div class="env-grid fade-in">
+        <div class="env-card">
+          <div class="placeholder"><div class="icon">&#127863;</div>BAR AREA<br>吧檯區</div>
+          <div class="overlay"><span data-zh="精緻吧檯 — 調酒師的舞台" data-en="Elegant Bar — The Mixologist's Stage">精緻吧檯 — 調酒師的舞台</span></div>
+        </div>
+        <div class="env-card">
+          <div class="placeholder"><div class="icon">&#127926;</div>LIVE STAGE<br>表演舞台</div>
+          <div class="overlay"><span data-zh="現場演出 — 音樂與美食的交會" data-en="Live Stage — Where Music Meets Cuisine">現場演出 — 音樂與美食的交會</span></div>
+        </div>
+        <div class="env-card">
+          <div class="placeholder"><div class="icon">&#9733;</div>VIP ROOM<br>VIP 包廂</div>
+          <div class="overlay"><span data-zh="尊榮包廂 — 私密的王者空間" data-en="VIP Room — Your Private Royal Space">尊榮包廂 — 私密的王者空間</span></div>
+        </div>
+        <div class="env-card">
+          <div class="placeholder"><div class="icon">&#127860;</div>DINING<br>用餐區</div>
+          <div class="overlay"><span data-zh="舒適座席 — 盡享視覺與味覺饗宴" data-en="Dining Area — A Feast for All Senses">舒適座席 — 盡享視覺與味覺饗宴</span></div>
+        </div>
+        <div class="env-card">
+          <div class="placeholder"><div class="icon">&#128715;</div>LOUNGE<br>休憩區</div>
+          <div class="overlay"><span data-zh="慵懶角落 — 細品夜晚的美好" data-en="Lounge — Savoring the Night's Beauty">慵懶角落 — 細品夜晚的美好</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MENU ===== -->
+  <section class="section" id="menu">
+    <div class="section-header fade-in">
+      <div class="label">MENU</div>
+      <h2 data-zh="菜單 & 酒單" data-en="Food & Drinks">菜單 & 酒單</h2>
+      <div class="divider"></div>
+      <p data-zh="嚴選食材，匠心調製" data-en="Premium ingredients, masterfully crafted">嚴選食材，匠心調製</p>
+    </div>
+    <div class="menu-tabs fade-in">
+      <button class="active" onclick="switchTab('cuisine')" data-zh="精選料理" data-en="Cuisine">精選料理</button>
+      <button onclick="switchTab('cocktail')" data-zh="經典調酒" data-en="Cocktails">經典調酒</button>
+      <button onclick="switchTab('wine')" data-zh="紅白酒" data-en="Wine">紅白酒</button>
+      <button onclick="switchTab('whisky')" data-zh="威士忌" data-en="Whisky">威士忌</button>
+    </div>
+
+    <div class="menu-panel active" id="panel-cuisine">
+      <div class="menu-grid fade-in">
+        <div class="menu-item">
+          <div class="name" data-zh="松露野菇燉飯" data-en="Truffle Wild Mushroom Risotto">松露野菇燉飯<small data-zh="義大利米 / 黑松露 / 綜合菇" data-en="Arborio Rice / Black Truffle / Mixed Mushrooms">義大利米 / 黑松露 / 綜合菇</small></div>
+          <div class="dots"></div><div class="price">$480</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="炙燒和牛握壽司" data-en="Seared Wagyu Nigiri">炙燒和牛握壽司<small data-zh="A5 和牛 / 醋飯 / 蔥花" data-en="A5 Wagyu / Sushi Rice / Scallion">A5 和牛 / 醋飯 / 蔥花</small></div>
+          <div class="dots"></div><div class="price">$580</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="香煎鴨胸佐莓果醬" data-en="Pan-seared Duck Breast with Berry Sauce">香煎鴨胸佐莓果醬<small data-zh="法式鴨胸 / 季節莓果 / 時蔬" data-en="French Duck / Seasonal Berries / Vegetables">法式鴨胸 / 季節莓果 / 時蔬</small></div>
+          <div class="dots"></div><div class="price">$520</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="龍蝦奶油義大利麵" data-en="Lobster Cream Pasta">龍蝦奶油義大利麵<small data-zh="波士頓龍蝦 / 鮮奶油 / 蒜片" data-en="Boston Lobster / Cream / Garlic Chips">波士頓龍蝦 / 鮮奶油 / 蒜片</small></div>
+          <div class="dots"></div><div class="price">$680</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="西班牙蒜香蝦" data-en="Gambas al Ajillo">西班牙蒜香蝦<small data-zh="白蝦 / 橄欖油 / 辣椒" data-en="Shrimp / Olive Oil / Chili">白蝦 / 橄欖油 / 辣椒</small></div>
+          <div class="dots"></div><div class="price">$380</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="凱薩沙拉" data-en="Caesar Salad">凱薩沙拉<small data-zh="蘿蔓 / 帕瑪森 / 培根" data-en="Romaine / Parmesan / Bacon">蘿蔓 / 帕瑪森 / 培根</small></div>
+          <div class="dots"></div><div class="price">$280</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="panel-cocktail">
+      <div class="menu-grid fade-in">
+        <div class="menu-item">
+          <div class="name" data-zh="國王之路 King's Road" data-en="King's Road">國王之路 King's Road<small data-zh="琴酒 / 接骨木 / 金箔 / 氣泡" data-en="Gin / Elderflower / Gold Leaf / Sparkling">琴酒 / 接骨木 / 金箔 / 氣泡</small></div>
+          <div class="dots"></div><div class="price">$420</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="黑夜玫瑰 Midnight Rose" data-en="Midnight Rose">黑夜玫瑰 Midnight Rose<small data-zh="伏特加 / 玫瑰利口 / 蝶豆花" data-en="Vodka / Rose Liqueur / Butterfly Pea">伏特加 / 玫瑰利口 / 蝶豆花</small></div>
+          <div class="dots"></div><div class="price">$380</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="皇家 Old Fashioned" data-en="Royal Old Fashioned">皇家 Old Fashioned<small data-zh="波本 / 安格仕苦精 / 橙皮" data-en="Bourbon / Angostura Bitters / Orange Peel">波本 / 安格仕苦精 / 橙皮</small></div>
+          <div class="dots"></div><div class="price">$400</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="金色年代 Golden Era" data-en="Golden Era">金色年代 Golden Era<small data-zh="蘭姆酒 / 百香果 / 椰奶 / 肉桂" data-en="Rum / Passion Fruit / Coconut / Cinnamon">蘭姆酒 / 百香果 / 椰奶 / 肉桂</small></div>
+          <div class="dots"></div><div class="price">$380</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="經典 Mojito" data-en="Classic Mojito">經典 Mojito<small data-zh="白蘭姆 / 薄荷 / 萊姆 / 蘇打" data-en="White Rum / Mint / Lime / Soda">白蘭姆 / 薄荷 / 萊姆 / 蘇打</small></div>
+          <div class="dots"></div><div class="price">$320</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="Espresso Martini" data-en="Espresso Martini">Espresso Martini<small data-zh="伏特加 / 濃縮咖啡 / 咖啡利口" data-en="Vodka / Espresso / Coffee Liqueur">伏特加 / 濃縮咖啡 / 咖啡利口</small></div>
+          <div class="dots"></div><div class="price">$380</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="panel-wine">
+      <div class="menu-grid fade-in">
+        <div class="menu-item">
+          <div class="name" data-zh="Chateau Margaux 2018" data-en="Chateau Margaux 2018">Chateau Margaux 2018<small data-zh="法國波爾多 / 赤霞珠" data-en="Bordeaux, France / Cabernet Sauvignon">法國波爾多 / 赤霞珠</small></div>
+          <div class="dots"></div><div class="price">$8,800</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="Cloudy Bay Sauvignon Blanc" data-en="Cloudy Bay Sauvignon Blanc">Cloudy Bay Sauvignon Blanc<small data-zh="紐西蘭 / 白蘇維濃" data-en="New Zealand / Sauvignon Blanc">紐西蘭 / 白蘇維濃</small></div>
+          <div class="dots"></div><div class="price">$2,200</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="Opus One 2019" data-en="Opus One 2019">Opus One 2019<small data-zh="美國納帕谷 / 混釀" data-en="Napa Valley, USA / Blend">美國納帕谷 / 混釀</small></div>
+          <div class="dots"></div><div class="price">$12,000</div>
+        </div>
+        <div class="menu-item">
+          <div class="name" data-zh="Antinori Tignanello 2020" data-en="Antinori Tignanello 2020">Antinori Tignanello 2020<small data-zh="義大利托斯卡尼 / 桑嬌維塞" data-en="Tuscany, Italy / Sangiovese">義大利托斯卡尼 / 桑嬌維塞</small></div>
+          <div class="dots"></div><div class="price">$4,800</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="panel-whisky">
+      <div class="menu-grid fade-in">
+        <div class="menu-item">
+          <div class="name">Macallan 18 Years<small data-zh="雪莉桶 / 蘇格蘭高地" data-en="Sherry Oak / Scottish Highlands">雪莉桶 / 蘇格蘭高地</small></div>
+          <div class="dots"></div><div class="price">$680</div>
+        </div>
+        <div class="menu-item">
+          <div class="name">Yamazaki 12 Years<small data-zh="日本山崎 / 單一麥芽" data-en="Yamazaki, Japan / Single Malt">日本山崎 / 單一麥芽</small></div>
+          <div class="dots"></div><div class="price">$580</div>
+        </div>
+        <div class="menu-item">
+          <div class="name">Glenfiddich 21 Years<small data-zh="蘭姆桶 / 蘇格蘭斯佩塞" data-en="Rum Cask / Speyside, Scotland">蘭姆桶 / 蘇格蘭斯佩塞</small></div>
+          <div class="dots"></div><div class="price">$720</div>
+        </div>
+        <div class="menu-item">
+          <div class="name">Kavalan Solist<small data-zh="噶瑪蘭經典 / 雪莉桶" data-en="Kavalan Classic / Sherry Cask">噶瑪蘭經典 / 雪莉桶</small></div>
+          <div class="dots"></div><div class="price">$520</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PERFORMANCE ===== -->
+  <section class="section-alt" id="performance">
+    <div class="section-inner" style="padding: 100px 8%;">
+      <div class="section-header fade-in">
+        <div class="label">LIVE MUSIC</div>
+        <h2 data-zh="駐唱表演" data-en="Live Performances">駐唱表演</h2>
+        <div class="divider"></div>
+        <p data-zh="每週精彩現場演出，為您的夜晚增添靈魂" data-en="Weekly live shows adding soul to your evening">每週精彩現場演出，為您的夜晚增添靈魂</p>
+      </div>
+      <div class="fade-in" style="overflow-x:auto;">
+        <table class="perf-table">
+          <thead>
+            <tr>
+              <th data-zh="日期" data-en="Date">日期</th>
+              <th data-zh="時段" data-en="Time">時段</th>
+              <th data-zh="演出者" data-en="Artist">演出者</th>
+              <th data-zh="類型" data-en="Genre">類型</th>
+              <th data-zh="備註" data-en="Note">備註</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>FRI 04/18</td>
+              <td>21:00 - 23:00</td>
+              <td>Amber Liu</td>
+              <td><span class="tag">Jazz</span></td>
+              <td data-zh="爵士之夜" data-en="Jazz Night">爵士之夜</td>
+            </tr>
+            <tr>
+              <td>SAT 04/19</td>
+              <td>21:00 - 23:30</td>
+              <td>The Velvet Echoes</td>
+              <td><span class="tag">R&B / Soul</span></td>
+              <td data-zh="靈魂夜語" data-en="Soul Sessions">靈魂夜語</td>
+            </tr>
+            <tr>
+              <td>FRI 04/25</td>
+              <td>21:00 - 23:00</td>
+              <td>Kevin Chen</td>
+              <td><span class="tag">Acoustic</span></td>
+              <td data-zh="不插電之夜" data-en="Unplugged Night">不插電之夜</td>
+            </tr>
+            <tr>
+              <td>SAT 04/26</td>
+              <td>21:00 - 00:00</td>
+              <td>DJ ROYAL</td>
+              <td><span class="tag">Lounge / Deep House</span></td>
+              <td data-zh="王者派對" data-en="Royal Party">王者派對</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESERVATION ===== -->
+  <section class="reservation-banner" id="reserve">
+    <h3 data-zh="立即訂位" data-en="Make a Reservation">立即訂位</h3>
+    <p data-zh="透過 inline 線上訂位系統，即刻預約您的王者之夜" data-en="Reserve your royal evening through our online booking system">透過 inline 線上訂位系統，即刻預約您的王者之夜</p>
+    <button class="btn-reserve" onclick="alert('此為展示頁面，實際將串接 inline 訂位系統')" data-zh="線上訂位" data-en="BOOK NOW">線上訂位</button>
+    <div class="reserve-note" data-zh="* 串接 inline 訂位系統 | 支援即時候位與包廂預約" data-en="* Powered by inline reservation | Real-time waitlist & VIP room booking">* 串接 inline 訂位系統 | 支援即時候位與包廂預約</div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="section" id="contact">
+    <div class="section-header fade-in">
+      <div class="label">CONTACT</div>
+      <h2 data-zh="聯絡我們" data-en="Get in Touch">聯絡我們</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="contact-grid fade-in">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="icon-box">&#128205;</div>
+          <div>
+            <h4 data-zh="地址" data-en="Address">地址</h4>
+            <p data-zh="高雄市前鎮區XXXXXXX路XX號" data-en="No. XX, XXXXXXX Rd., Qianzhen Dist., Kaohsiung">高雄市前鎮區XXXXXXX路XX號</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="icon-box">&#128222;</div>
+          <div>
+            <h4 data-zh="電話" data-en="Phone">電話</h4>
+            <p>07-XXX-XXXX</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="icon-box">&#128340;</div>
+          <div>
+            <h4 data-zh="營業時間" data-en="Hours">營業時間</h4>
+            <p data-zh="週二至週日 18:00 - 02:00 ｜ 週一公休" data-en="Tue - Sun 18:00 - 02:00 ｜ Closed on Monday">週二至週日 18:00 - 02:00 ｜ 週一公休</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="icon-box">&#9993;</div>
+          <div>
+            <h4>Email</h4>
+            <p>info@kingsway.com.tw</p>
+          </div>
+        </div>
+        <div>
+          <h4 style="font-size:0.8rem; letter-spacing:2px; color:var(--gold); margin-bottom:12px;" data-zh="追蹤我們" data-en="Follow Us">追蹤我們</h4>
+          <div class="social-links">
+            <a href="#" title="Facebook">f</a>
+            <a href="#" title="Instagram">IG</a>
+            <a href="#" title="LINE">L</a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-map">
+        <div class="placeholder">
+          <div style="font-size:2.5rem; margin-bottom:10px; opacity:0.3;">&#128506;</div>
+          GOOGLE MAP<br>地圖嵌入區
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-logo">KINGSWAY</div>
+    <p>&copy; 2026 KINGSWAY Cuisine & Live Music. All rights reserved.</p>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+    });
+
+    // Menu tabs
+    function switchTab(tab) {
+      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.menu-tabs button').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + tab).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Language toggle
+    let currentLang = 'zh';
+    function switchLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.lang-toggle button:${lang === 'zh' ? 'first' : 'last'}-child`).classList.add('active');
+      document.querySelectorAll('[data-zh]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + lang);
+      });
+      document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+    }
+
+    // Scroll fade-in animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

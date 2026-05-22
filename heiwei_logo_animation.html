@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>HEIWEI Logo Animation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050505;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── 背景放射光 ── */
+  .radial-bg {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center,
+      rgba(180, 150, 90, 0.06) 0%,
+      transparent 70%);
+    animation: bgPulse 4s ease-in-out 2.8s infinite;
+    opacity: 0;
+  }
+  @keyframes bgPulse {
+    0%   { opacity: 0;   transform: scale(0.9); }
+    40%  { opacity: 1;   transform: scale(1.05); }
+    100% { opacity: 0.6; transform: scale(1); }
+  }
+
+  /* ── 圓環 ── */
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(190, 158, 90, 0.5);
+    animation: ringExpand 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  .ring-1 { width: 350px; height: 350px; animation-delay: 0.3s; }
+  .ring-2 { width: 420px; height: 420px; animation-delay: 0.5s; border-color: rgba(190, 158, 90, 0.25); }
+  .ring-3 { width: 500px; height: 500px; animation-delay: 0.7s; border-color: rgba(190, 158, 90, 0.1); }
+
+  @keyframes ringExpand {
+    0%   { transform: scale(0.2); opacity: 0; }
+    30%  { opacity: 1; }
+    100% { transform: scale(1); opacity: 0.5; }
+  }
+
+  /* ── Logo 主體 ── */
+  .logo-wrap {
+    position: relative;
+    z-index: 10;
+    animation: logoReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+    opacity: 0;
+  }
+  @keyframes logoReveal {
+    0%   { opacity: 0; transform: scale(0.72) translateY(12px); filter: blur(8px); }
+    60%  { opacity: 1; filter: blur(0); }
+    80%  { transform: scale(1.03) translateY(-2px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  }
+
+  .logo-img {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    display: block;
+    /* 灰底白圖轉成黑底金銀色 */
+    filter: invert(1) sepia(0.25) saturate(1.8) brightness(1.15);
+  }
+
+  /* ── 光澤掃過 (shimmer) ── */
+  .shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 25%,
+      rgba(255, 230, 160, 0.55) 48%,
+      rgba(255, 245, 200, 0.7) 50%,
+      rgba(255, 230, 160, 0.55) 52%,
+      transparent 75%
+    );
+    background-size: 300% 100%;
+    background-position: 200% 0;
+    mix-blend-mode: screen;
+    border-radius: 50% 50% 8% 8%;
+    animation: shimmerSweep 1.2s ease-in-out 2.4s forwards;
+    opacity: 0;
+  }
+  @keyframes shimmerSweep {
+    0%   { background-position: 200% 0; opacity: 0; }
+    10%  { opacity: 1; }
+    100% { background-position: -100% 0; opacity: 0; }
+  }
+
+  /* ── 星點光 ── */
+  .star-burst {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    animation: starPop 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+  .star-burst::before,
+  .star-burst::after {
+    content: '';
+    position: absolute;
+    background: rgba(230, 200, 120, 0.9);
+    border-radius: 2px;
+  }
+  .star-burst::before { width: 2px; height: 100%; left: 50%; transform: translateX(-50%); }
+  .star-burst::after  { width: 100%; height: 2px; top: 50%; transform: translateY(-50%); }
+
+  @keyframes starPop {
+    0%   { opacity: 0; transform: translateX(-50%) scale(0) rotate(0deg); }
+    50%  { opacity: 1; transform: translateX(-50%) scale(2.5) rotate(45deg); }
+    100% { opacity: 0; transform: translateX(-50%) scale(4) rotate(90deg); }
+  }
+
+  /* ── 底部品牌標語 ── */
+  .brand-line-wrap {
+    position: absolute;
+    bottom: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: brandAppear 1.2s ease-out 2.8s forwards;
+    opacity: 0;
+  }
+  @keyframes brandAppear {
+    0%   { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .brand-divider {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(190, 158, 90, 0.7), transparent);
+    animation: dividerExpand 0.9s ease-out 3s forwards;
+  }
+  @keyframes dividerExpand {
+    to { width: 160px; }
+  }
+  .brand-sub {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 12px;
+    letter-spacing: 0.45em;
+    color: rgba(190, 158, 90, 0.6);
+    text-indent: 0.45em;
+    animation: subAppear 1s ease-out 3.2s forwards;
+    opacity: 0;
+  }
+  @keyframes subAppear {
+    to { opacity: 1; }
+  }
+
+  /* ── 浮動光粒子 ── */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200, 170, 100, 0.8), transparent);
+    pointer-events: none;
+    animation: particleRise linear infinite;
+    opacity: 0;
+  }
+  @keyframes particleRise {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    15%  { opacity: 0.8; }
+    85%  { opacity: 0.6; }
+    100% { transform: translateY(var(--rise)) translateX(var(--drift)); opacity: 0; }
+  }
+
+  /* ── 重播提示 ── */
+  .replay-hint {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    font-family: 'Georgia', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(190, 158, 90, 0.4);
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  .replay-hint:hover { color: rgba(190, 158, 90, 0.9); }
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene">
+  <div class="radial-bg"></div>
+
+  <div class="ring ring-1"></div>
+  <div class="ring ring-2"></div>
+  <div class="ring ring-3"></div>
+
+  <div class="star-burst"></div>
+
+  <div class="logo-wrap" id="logoWrap">
+    <img class="logo-img" src="HEIWEI Logo.jpg" alt="HEIWEI">
+    <div class="shimmer"></div>
+  </div>
+
+  <div class="brand-line-wrap">
+    <div class="brand-divider"></div>
+    <div class="brand-sub">何 謂 美</div>
+  </div>
+</div>
+
+<div class="replay-hint" onclick="replay()">↺ 重播</div>
+
+<script>
+  const scene = document.getElementById('scene');
+
+  // 生成浮動光粒子
+  function spawnParticles() {
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 1.5 + Math.random() * 3;
+      p.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${15 + Math.random() * 70}%;
+        top: ${30 + Math.random() * 55}%;
+        --rise: ${-80 - Math.random() * 160}px;
+        --drift: ${(Math.random() - 0.5) * 70}px;
+        animation-duration: ${3.5 + Math.random() * 5}s;
+        animation-delay: ${1.5 + Math.random() * 6}s;
+      `;
+      scene.appendChild(p);
+    }
+  }
+
+  spawnParticles();
+
+  function replay() {
+    // 重置動畫：移除舊粒子並重載頁面
+    location.reload();
+  }
+</script>
+</body>
+</html>

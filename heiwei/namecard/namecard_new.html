@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLYINGCASE VISUALS — 名片設計稿</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f7f5f2;
+    --mid: #6b6b6b;
+    --rule: #d0ccc7;
+    /* 90mm × 54mm at 3× screen */
+    --w: 1080px;
+    --h: 648px;
+  }
+
+  body {
+    background: #e8e4df;
+    font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 60px 40px;
+  }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header {
+    text-align: center;
+    letter-spacing: 0.25em;
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .print-btn {
+    margin-top: 14px;
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 10px 32px;
+    letter-spacing: 0.2em;
+    font-size: 11px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: #333; }
+
+  /* ─── CARD WRAPPER ─── */
+  .card-set {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: #999;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    width: var(--w);
+    height: var(--h);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.12);
+  }
+
+  /* ══════════════════════════════
+     FRONT (正面)
+  ══════════════════════════════ */
+  .front {
+    background: var(--paper);
+    display: flex;
+  }
+
+  /* Left white panel — 60% */
+  .front-left {
+    flex: 0 0 60%;
+    padding: 52px 56px 46px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  /* Faint watermark hexagon in bg */
+  .front-left::before {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -80px;
+    width: 360px;
+    height: 360px;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='50,6 89,28 89,72 50,94 11,72 11,28' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+    opacity: 0.04;
+    pointer-events: none;
+  }
+
+  .front-company {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8.5px;
+    letter-spacing: 0.28em;
+    color: var(--mid);
+    text-transform: uppercase;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .front-name-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 10px;
+  }
+
+  .front-name-zh {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--ink);
+    letter-spacing: 0.12em;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .front-name-en {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.38em;
+    color: var(--ink);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .front-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9.5px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--mid);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    width: fit-content;
+    padding-right: 20px;
+  }
+
+  /* Contact info */
+  .front-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .contact-icon {
+    flex-shrink: 0;
+    width: 13px;
+    height: 13px;
+    opacity: 0.55;
+  }
+
+  .contact-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .contact-text.zh {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+
+  /* Right black panel — 40% */
+  .front-right {
+    flex: 0 0 40%;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle halftone-ish texture */
+  .front-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
+
+  .front-right::after {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 320px;
+    height: 320px;
+    border: 60px solid rgba(255,255,255,0.025);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .logo-wrap {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .logo-svg {
+    width: 108px;
+    height: 108px;
+  }
+
+  .logo-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 7px;
+    letter-spacing: 0.35em;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* ══════════════════════════════
+     BACK (背面)
+  ══════════════════════════════ */
+  .back {
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 52px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Large ghosted hex watermark bg */
+  .back::before {
+    content: '';
+    position: absolute;
+    right: -140px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 480px;
+    height: 480px;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='50,6 89,28 89,72 50,94 11,72 11,28' fill='none' stroke='%23fff' stroke-width='1'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+    opacity: 0.04;
+    pointer-events: none;
+  }
+
+  .back-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .back-company-zh {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.35em;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .back-company-en {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: -16px;
+  }
+
+  .back-rule {
+    width: 48px;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .back-services {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 8px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    letter-spacing: 0.08em;
+    line-height: 2;
+    max-width: 820px;
+  }
+
+  .back-services span.sep {
+    color: rgba(255,255,255,0.18);
+    margin: 0 4px;
+    font-weight: 300;
+  }
+
+  /* ─── PRINT STYLES ─── */
+  @media print {
+    @page {
+      size: 90mm 54mm;
+      margin: 0;
+    }
+
+    body {
+      background: white;
+      padding: 0;
+      gap: 0;
+      min-height: auto;
+    }
+
+    .page-header { display: none; }
+    .card-label  { display: none; }
+    .print-btn   { display: none; }
+    .card-set    { gap: 0; }
+
+    .card {
+      width: 90mm;
+      height: 54mm;
+      box-shadow: none;
+      page-break-after: always;
+    }
+
+    /* Reset px-based sizes to mm for print */
+    .front-left       { padding: 13mm 14mm 11.5mm 15mm; }
+    .front-company    { font-size: 2.1px; }
+    .front-name-zh    { font-size: 10.5px; }
+    .front-name-en    { font-size: 4.5px; }
+    .front-title      { font-size: 2.4px; margin-top: 3.5mm; padding-top: 3.5mm; }
+    .contact-text     { font-size: 2.3px; }
+    .contact-text.zh  { font-size: 2.3px; }
+    .logo-svg         { width: 27mm; height: 27mm; }
+    .logo-tagline     { font-size: 1.8px; }
+
+    .back             { padding: 13mm 16mm; }
+    .back-company-zh  { font-size: 3.75px; }
+    .back-company-en  { font-size: 2.5px; }
+    .back-services    { font-size: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  FLYINGCASE VISUALS CO., LTD. &nbsp;/&nbsp; 名片設計稿 &nbsp;/&nbsp; 90 × 54 mm
+  <br>
+  <button class="print-btn" onclick="window.print()">列印名片</button>
+</div>
+
+<div class="card-set">
+
+  <!-- ════ FRONT 正面 ════ -->
+  <div>
+    <div class="card-label">正面 &nbsp;FRONT</div>
+    <div class="card front">
+
+      <div class="front-left">
+        <!-- Company name top -->
+        <div class="front-company">Flyingcase Visuals Co., Ltd.</div>
+
+        <!-- Name block center -->
+        <div class="front-name-block">
+          <div class="front-name-zh">陳以蔵</div>
+          <div class="front-name-en">Patricia</div>
+          <div class="front-title">/ &nbsp;Marketing Executive</div>
+        </div>
+
+        <!-- Contact bottom -->
+        <div class="front-contact">
+          <!-- Phone -->
+          <div class="contact-row">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 012 1.18 2 2 0 013.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0121.28 14l.64 2.92z"/>
+            </svg>
+            <span class="contact-text">07 — 3436111</span>
+          </div>
+          <!-- Email -->
+          <div class="contact-row">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span class="contact-text">FLYINGCASE59@GMAIL.COM</span>
+          </div>
+          <!-- Address -->
+          <div class="contact-row">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span class="contact-text zh">813 高雄市左營區文敬路 59 號</span>
+          </div>
+        </div>
+      </div><!-- /front-left -->
+
+      <div class="front-right">
+        <div class="logo-wrap">
+          <!-- LOGO: Black-bg hex with geometric inner shapes, inverted for dark panel -->
+          <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer square removed (panel is already black) -->
+            <!-- Hexagon outline -->
+            <polygon points="50,7 87,28.5 87,71.5 50,93 13,71.5 13,28.5"
+              fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.5"/>
+            <!-- Upper angular element: pointed diamond/arrow shape -->
+            <polygon points="50,20 64,44 50,38 36,44"
+              fill="white" opacity="0.92"/>
+            <!-- Thin centre horizontal bar -->
+            <rect x="36" y="51" width="28" height="1.5" fill="white" opacity="0.4"/>
+            <!-- Lower: two circles side by side -->
+            <circle cx="37.5" cy="66" r="9" fill="white" opacity="0.88"/>
+            <circle cx="62.5" cy="66" r="9" fill="white" opacity="0.88"/>
+            <!-- Small overlap detail between circles -->
+            <circle cx="37.5" cy="66" r="4" fill="rgba(0,0,0,0.35)"/>
+            <circle cx="62.5" cy="66" r="4" fill="rgba(0,0,0,0.35)"/>
+          </svg>
+          <div class="logo-tagline">Visual Production</div>
+        </div>
+      </div><!-- /front-right -->
+
+    </div><!-- /card front -->
+  </div>
+
+  <!-- ════ BACK 背面 ════ -->
+  <div>
+    <div class="card-label">背面 &nbsp;BACK</div>
+    <div class="card back">
+      <div class="back-inner">
+
+        <div class="back-company-zh">木 箱 起 飛 影 像 有 限 公 司</div>
+        <div class="back-company-en">Flyingcase &nbsp;Visuals &nbsp;Co., Ltd.</div>
+
+        <div class="back-rule"></div>
+
+        <div class="back-services">
+          商業廣告與品牌影片製作<span class="sep">/</span>3D 建模及動畫與模擬製作<span class="sep">/</span>VFX 合成及特效與後期調光<br>
+          產品結構動畫與拆解說明<span class="sep">/</span>音樂錄影帶與藝人影像製作<span class="sep">/</span>企業與品牌形象影片<br>
+          政府宣導與公共議題影像<span class="sep">/</span>微電影與故事型影片製作<span class="sep">/</span>影像技術顧問與製作支援<br>
+          視覺特效合成與動態視覺設計<span class="sep">/</span>整合式影像專案管理
+        </div>
+
+      </div>
+    </div><!-- /card back -->
+  </div>
+
+</div><!-- /card-set -->
+
+</body>
+</html>

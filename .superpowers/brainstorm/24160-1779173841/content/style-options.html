@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>視覺風格選擇</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, "PingFang TC", sans-serif; background: #F5F3EF; color: #1A1A1A; padding: 24px; }
+
+h1 { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #888; margin-bottom: 6px; }
+h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.sub { font-size: 13px; color: #666; margin-bottom: 28px; }
+
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.option {
+  border: 2px solid #DDD8CF;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.option:hover { border-color: #C4A45A; }
+.option.selected { border-color: #C4A45A; }
+
+.option-label {
+  padding: 10px 16px;
+  background: #fff;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #EEE;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.letter {
+  width: 22px; height: 22px;
+  background: #C4A45A;
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+}
+
+/* ── Style A: Dark Luxury ── */
+.preview-a {
+  background: #0F0F0F;
+  padding: 0;
+  min-height: 400px;
+}
+.a-nav {
+  background: #0F0F0F;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2A2A2A;
+}
+.a-logo { color: #C4A45A; font-size: 11px; letter-spacing: 4px; font-weight: 700; }
+.a-hero {
+  padding: 40px 20px 32px;
+  text-align: center;
+  border-bottom: 1px solid #1E1E1E;
+}
+.a-tag { font-size: 9px; letter-spacing: 4px; color: #C4A45A; margin-bottom: 12px; text-transform: uppercase; }
+.a-title { font-size: 22px; font-weight: 300; color: #fff; letter-spacing: 2px; margin-bottom: 8px; line-height: 1.4; }
+.a-sub { font-size: 11px; color: #666; line-height: 1.6; }
+.a-form { padding: 20px; }
+.a-field { margin-bottom: 12px; }
+.a-field label { font-size: 9px; letter-spacing: 2px; color: #555; display: block; margin-bottom: 4px; text-transform: uppercase; }
+.a-field input {
+  width: 100%;
+  background: #1A1A1A;
+  border: 1px solid #2A2A2A;
+  color: #fff;
+  padding: 8px 10px;
+  font-size: 12px;
+  outline: none;
+  border-radius: 2px;
+}
+.a-btn {
+  width: 100%;
+  background: #C4A45A;
+  color: #0F0F0F;
+  border: none;
+  padding: 12px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 4px;
+  border-radius: 2px;
+}
+.a-desc { font-size: 10px; color: #444; text-align: center; margin-top: 10px; line-height: 1.5; }
+
+/* ── Style B: Warm Minimal ── */
+.preview-b {
+  background: #FDFCFA;
+  min-height: 400px;
+  padding: 0;
+}
+.b-nav {
+  background: #fff;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #EDE9E3;
+}
+.b-logo { color: #1A1A1A; font-size: 11px; letter-spacing: 4px; font-weight: 700; }
+.b-logo span { color: #C4A45A; }
+.b-hero {
+  padding: 32px 20px 24px;
+  border-bottom: 1px solid #EDE9E3;
+}
+.b-tag { font-size: 9px; letter-spacing: 3px; color: #C4A45A; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; }
+.b-title { font-size: 20px; font-weight: 700; color: #1A1A1A; margin-bottom: 6px; line-height: 1.4; }
+.b-sub { font-size: 11px; color: #888; line-height: 1.6; }
+.b-form { padding: 20px; background: #FDFCFA; }
+.b-field { margin-bottom: 12px; }
+.b-field label { font-size: 11px; color: #555; display: block; margin-bottom: 4px; font-weight: 500; }
+.b-field input {
+  width: 100%;
+  background: #fff;
+  border: 1.5px solid #DDD8CF;
+  color: #1A1A1A;
+  padding: 9px 12px;
+  font-size: 12px;
+  outline: none;
+  border-radius: 4px;
+}
+.b-btn {
+  width: 100%;
+  background: #1A1A1A;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+.b-desc { font-size: 10px; color: #aaa; text-align: center; margin-top: 10px; line-height: 1.5; }
+
+.option-footer {
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #EEE;
+}
+.option-footer p { font-size: 12px; color: #555; line-height: 1.6; }
+.tag { display: inline-block; font-size: 10px; background: #F5F3EF; color: #888; padding: 2px 8px; border-radius: 20px; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<h1>HEIWEI 何謂美 — 視覺風格</h1>
+<h2>申請頁 & 入口的整體設計感</h2>
+<p class="sub">選一個方向，後續所有頁面都以此為基礎</p>
+
+<div class="options">
+
+  <!-- Option A -->
+  <div class="option" onclick="this.classList.toggle('selected')">
+    <div class="option-label">
+      <div class="letter">A</div>
+      深色奢華 Dark Luxury
+    </div>
+    <div class="preview-a">
+      <div class="a-nav">
+        <div class="a-logo">HEIWEI · 何謂美</div>
+        <div style="font-size:10px;color:#444;">經銷夥伴專區</div>
+      </div>
+      <div class="a-hero">
+        <div class="a-tag">Authorized Dealer</div>
+        <div class="a-title">成為 HEIWEI<br>授權經銷夥伴</div>
+        <div class="a-sub">填寫申請資料，我們將在 3 個工作天內與您聯繫</div>
+      </div>
+      <div class="a-form">
+        <div class="a-field"><label>姓名 / 店名</label><input placeholder="陳小美 / 美麗日記店"></div>
+        <div class="a-field"><label>聯絡電話</label><input placeholder="0912-345-678"></div>
+        <div class="a-field"><label>Line ID</label><input placeholder="@heiwei"></div>
+        <button class="a-btn">送出申請</button>
+        <div class="a-desc">申請送出後，我們將透過 LINE 與您聯繫審核結果</div>
+      </div>
+    </div>
+    <div class="option-footer">
+      <p>
+        <span class="tag">深色背景</span>
+        <span class="tag">金色細節</span>
+        <span class="tag">高端質感</span>
+        適合強調品牌奢華感，與護膚品牌調性一致，視覺衝擊強
+      </p>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="option" onclick="this.classList.toggle('selected')">
+    <div class="option-label">
+      <div class="letter">B</div>
+      暖白簡約 Warm Minimal
+    </div>
+    <div class="preview-b">
+      <div class="b-nav">
+        <div class="b-logo">HEIWEI <span>·</span> 何謂美</div>
+        <div style="font-size:10px;color:#aaa;">經銷夥伴專區</div>
+      </div>
+      <div class="b-hero">
+        <div class="b-tag">Authorized Dealer</div>
+        <div class="b-title">成為 HEIWEI<br>授權經銷夥伴</div>
+        <div class="b-sub">填寫申請資料，我們將在 3 個工作天內與您聯繫</div>
+      </div>
+      <div class="b-form">
+        <div class="b-field"><label>姓名 / 店名</label><input placeholder="陳小美 / 美麗日記店"></div>
+        <div class="b-field"><label>聯絡電話</label><input placeholder="0912-345-678"></div>
+        <div class="b-field"><label>Line ID</label><input placeholder="@heiwei"></div>
+        <button class="b-btn">送出申請</button>
+        <div class="b-desc">申請送出後，我們將透過 LINE 與您聯繫審核結果</div>
+      </div>
+    </div>
+    <div class="option-footer">
+      <p>
+        <span class="tag">米白背景</span>
+        <span class="tag">乾淨清爽</span>
+        <span class="tag">易閱讀</span>
+        閱讀體驗較佳，在手機上填表感覺更輕鬆，現代感強
+      </p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

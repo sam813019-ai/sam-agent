@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>HEIWEI 母親節 LINE Banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── 固定尺寸：LINE 橫幅 1280×640 ── */
+  html, body {
+    width: 1280px;
+    height: 640px;
+    overflow: hidden;
+    background: #f0ebe4;
+  }
+
+  .layout {
+    display: flex;
+    width: 1280px;
+    height: 640px;
+    position: relative;
+  }
+
+  /* ══════════════════════════
+     左側：奶油米白背景
+  ══════════════════════════ */
+  .left {
+    flex: 0 0 700px;
+    background: linear-gradient(140deg, #FAF7F2 0%, #F2EDE5 100%);
+    padding: 52px 64px 48px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* 左側角落裝飾 */
+  .left::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 120px; height: 3px;
+    background: #1a2744;
+  }
+  .left::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 120px;
+    background: #1a2744;
+  }
+
+  /* ── Logo 區 ── */
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: fadeUp 0.7s ease-out 0.1s both;
+  }
+  .logo-img {
+    width: 44px; height: 44px;
+    object-fit: contain;
+    /* 灰底 → 深藍 */
+    filter: brightness(0) saturate(100%) invert(12%) sepia(60%) saturate(600%) hue-rotate(195deg);
+  }
+  .logo-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .logo-en {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    letter-spacing: 0.35em;
+    color: #1a2744;
+    line-height: 1;
+  }
+  .logo-zh {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: #8a9bb0;
+  }
+
+  /* ── 主標題 ── */
+  .headline-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    animation: fadeUp 0.7s ease-out 0.25s both;
+  }
+  .eyebrow {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.25em;
+    color: #7a9e94;
+  }
+  .main-title {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 42px;
+    font-weight: 500;
+    color: #1a2744;
+    line-height: 1.25;
+    letter-spacing: 0.06em;
+  }
+  .main-title span {
+    color: #7a9e94;
+  }
+  .sub-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 0.2em;
+    color: #aab4c0;
+    margin-top: 2px;
+  }
+
+  /* ── 倒數計時 ── */
+  .countdown-area {
+    animation: fadeUp 0.7s ease-out 0.4s both;
+  }
+  .countdown-label {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: #aab4c0;
+    margin-bottom: 12px;
+  }
+  .countdown {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .time-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .time-box {
+    width: 88px;
+    height: 80px;
+    background: #fff;
+    border: 1.5px solid #dde4ec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 2px 12px rgba(26, 39, 68, 0.06);
+  }
+  .time-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: #7a9e94;
+  }
+  .time-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 600;
+    color: #1a2744;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    transition: opacity 0.2s;
+  }
+  .time-num.flash { animation: numFlash 0.25s ease; }
+  @keyframes numFlash {
+    0%  { opacity: 1; transform: scaleY(1); }
+    40% { opacity: 0; transform: scaleY(0.3); }
+    100%{ opacity: 1; transform: scaleY(1); }
+  }
+  .time-label {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: #8a9bb0;
+  }
+  .colon {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: #c5d4cc;
+    padding-bottom: 22px;
+    animation: colonBlink 1s ease-in-out infinite;
+  }
+  @keyframes colonBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.15; }
+  }
+
+  /* ── 底部 CTA ── */
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    animation: fadeUp 0.7s ease-out 0.55s both;
+  }
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: #1a2744;
+    color: #fff;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    text-decoration: none;
+    text-indent: 0.35em;
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .cta-btn:hover { background: #263a5e; }
+  .cta-arrow { font-size: 12px; letter-spacing: 0; text-indent: 0; opacity: 0.7; }
+  .deadline-txt {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: #aab4c0;
+    letter-spacing: 0.15em;
+    line-height: 1.8;
+  }
+
+  /* 活動已結束 */
+  .ended-msg {
+    display: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 18px;
+    color: #7a9e94;
+    letter-spacing: 0.2em;
+  }
+
+  /* ══════════════════════════
+     右側：鼠尾草綠面板
+  ══════════════════════════ */
+  .right {
+    flex: 1;
+    background: linear-gradient(160deg, #B8CFC8 0%, #95B5AD 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  /* 大圓 */
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+  }
+  .dc1 { width: 400px; height: 400px; top: -80px; right: -100px; }
+  .dc2 { width: 240px; height: 240px; bottom: -60px; left: 20px; background: rgba(255,255,255,0.08); }
+  .dc3 { width: 130px; height: 130px; top: 60px; left: 60px; background: rgba(255,255,255,0.1); }
+
+  /* 細線圓 */
+  .ring-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .rc1 { width: 320px; height: 320px; top: -20px; right: -60px; }
+  .rc2 { width: 180px; height: 180px; bottom: 30px; left: 40px; }
+
+  /* 花朵裝飾 */
+  .flower-deco {
+    position: absolute;
+    font-size: 70px;
+    opacity: 0.18;
+    line-height: 1;
+    user-select: none;
+    animation: floatFlower ease-in-out infinite;
+  }
+  .fd1 { top: 30px;  right: 40px;  animation-duration: 5s; animation-delay: 0s; }
+  .fd2 { bottom: 40px; right: 80px; animation-duration: 6s; animation-delay: 1s; font-size: 50px; opacity: 0.14; }
+  .fd3 { top: 50%;  left: 30px;  animation-duration: 7s; animation-delay: 2s; font-size: 40px; opacity: 0.12; }
+  @keyframes floatFlower {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(8deg); }
+  }
+
+  /* 右側中央文案 */
+  .right-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: #fff;
+  }
+  .right-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1;
+    opacity: 0.92;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.1);
+  }
+  .right-year {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;
+    opacity: 0.65;
+    margin-top: 10px;
+  }
+  .right-divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(255,255,255,0.5);
+    margin: 16px auto;
+  }
+  .right-sub {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    text-indent: 0.4em;
+    opacity: 0.8;
+  }
+
+  /* 小浮動光點 */
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    animation: dotFloat ease-in-out infinite;
+  }
+  @keyframes dotFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+    50% { transform: translateY(-18px) scale(1.2); opacity: 1; }
+  }
+
+  /* 共用入場動畫 */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── 左側 ── -->
+  <div class="left">
+    <!-- Logo -->
+    <div class="logo-row">
+      <img class="logo-img" src="HEIWEI Logo.jpg" alt="HEIWEI">
+      <div class="logo-brand">
+        <span class="logo-en">HEIWEI</span>
+        <span class="logo-zh">何謂美</span>
+      </div>
+    </div>
+
+    <!-- 標題 -->
+    <div class="headline-area">
+      <p class="eyebrow">Mother's Day Special Offer</p>
+      <h1 class="main-title">母親節<span>限定</span>優惠</h1>
+      <p class="sub-title">為最重要的她，獻上最溫柔的禮物</p>
+    </div>
+
+    <!-- 倒數 -->
+    <div class="countdown-area">
+      <p class="countdown-label">優惠倒數計時</p>
+      <div class="countdown" id="countdown">
+        <div class="time-unit">
+          <div class="time-box"><span class="time-num" id="days">07</span></div>
+          <span class="time-label">天</span>
+        </div>
+        <div class="colon">:</div>
+        <div class="time-unit">
+          <div class="time-box"><span class="time-num" id="hours">00</span></div>
+          <span class="time-label">時</span>
+        </div>
+        <div class="colon">:</div>
+        <div class="time-unit">
+          <div class="time-box"><span class="time-num" id="minutes">00</span></div>
+          <span class="time-label">分</span>
+        </div>
+        <div class="colon">:</div>
+        <div class="time-unit">
+          <div class="time-box"><span class="time-num" id="seconds">00</span></div>
+          <span class="time-label">秒</span>
+        </div>
+      </div>
+      <p class="ended-msg" id="endedMsg">感謝您的支持，活動已圓滿結束 ♡</p>
+    </div>
+
+    <!-- CTA -->
+    <div class="bottom-row">
+      <a class="cta-btn" href="https://www.heiweibeauty.com/" target="_blank">
+        立即選購 <span class="cta-arrow">→</span>
+      </a>
+      <div class="deadline-txt">
+        活動截止<br>
+        2026年 5月13日 23:59
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 右側 ── -->
+  <div class="right">
+    <div class="deco-circle dc1"></div>
+    <div class="deco-circle dc2"></div>
+    <div class="deco-circle dc3"></div>
+    <div class="ring-circle rc1"></div>
+    <div class="ring-circle rc2"></div>
+
+    <span class="flower-deco fd1">🌸</span>
+    <span class="flower-deco fd2">🌹</span>
+    <span class="flower-deco fd3">🌷</span>
+
+    <div class="right-content">
+      <div class="right-big">Mother's<br>Day</div>
+      <div class="right-divider"></div>
+      <div class="right-sub">媽媽節快樂</div>
+      <div class="right-year">2 0 2 6</div>
+    </div>
+
+    <!-- 浮動光點 -->
+    <div id="dotsContainer"></div>
+  </div>
+</div>
+
+<script>
+  /* ── 倒數邏輯 ── */
+  const TARGET = new Date('2026-05-13T23:59:59+08:00').getTime();
+  const els = {
+    days:    document.getElementById('days'),
+    hours:   document.getElementById('hours'),
+    minutes: document.getElementById('minutes'),
+    seconds: document.getElementById('seconds'),
+  };
+  const endedMsg  = document.getElementById('endedMsg');
+  const countdownEl = document.getElementById('countdown');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function setNum(el, val) {
+    const s = pad(val);
+    if (el.textContent !== s) {
+      el.classList.remove('flash');
+      void el.offsetWidth;
+      el.classList.add('flash');
+      el.textContent = s;
+    }
+  }
+
+  function tick() {
+    const diff = TARGET - Date.now();
+    if (diff <= 0) {
+      countdownEl.style.display = 'none';
+      endedMsg.style.display = 'block';
+      return;
+    }
+    setNum(els.days,    Math.floor(diff / 86400000));
+    setNum(els.hours,   Math.floor((diff % 86400000) / 3600000));
+    setNum(els.minutes, Math.floor((diff % 3600000) / 60000));
+    setNum(els.seconds, Math.floor((diff % 60000) / 1000));
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ── 浮動光點 ── */
+  const dotsC = document.getElementById('dotsContainer');
+  for (let i = 0; i < 12; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    const sz = 3 + Math.random() * 6;
+    d.style.cssText = `
+      width:${sz}px; height:${sz}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      animation-duration:${3+Math.random()*4}s;
+      animation-delay:${Math.random()*4}s;
+    `;
+    dotsC.appendChild(d);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEIWEI 母親節限定優惠</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+TC:wght@300;400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold:    #c9a96e;
+    --gold-lt: #e8d5a3;
+    --rose:    #c97a8a;
+    --rose-lt: #f0c0cc;
+    --cream:   #fdf6ef;
+    --dark:    #1a0e10;
+  }
+
+  body {
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Playfair Display', 'Noto Serif TC', serif;
+  }
+
+  /* ── 背景漸層 ── */
+  .bg-gradient {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(160, 60, 80, 0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 20% 100%,  rgba(100, 30, 50, 0.2)  0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%,  rgba(180, 120, 50, 0.12) 0%, transparent 60%);
+    z-index: 0;
+  }
+
+  /* ── 花瓣 ── */
+  .petals-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .petal {
+    position: absolute;
+    border-radius: 50% 0 50% 0;
+    opacity: 0;
+    animation: petalFall linear infinite;
+  }
+  @keyframes petalFall {
+    0%   { transform: translateY(-40px) rotate(0deg) scale(0.6); opacity: 0; }
+    8%   { opacity: 0.7; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(var(--spin)) scale(1) translateX(var(--drift)); opacity: 0; }
+  }
+
+  /* ── 主容器 ── */
+  .container {
+    position: relative;
+    z-index: 10;
+    width: min(680px, 92vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 48px 40px 44px;
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    background: linear-gradient(160deg,
+      rgba(30, 14, 18, 0.92) 0%,
+      rgba(20, 8, 12, 0.96) 100%);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      0 0 60px rgba(201, 169, 110, 0.08),
+      inset 0 1px 0 rgba(201, 169, 110, 0.15);
+    animation: containerIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+  @keyframes containerIn {
+    0%   { opacity: 0; transform: translateY(30px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* 四角裝飾 */
+  .container::before,
+  .container::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: rgba(201, 169, 110, 0.45);
+    border-style: solid;
+  }
+  .container::before {
+    top: -1px; left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+  .container::after {
+    bottom: -1px; right: -1px;
+    border-width: 0 1px 1px 0;
+  }
+  .corner-tr, .corner-bl {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: rgba(201, 169, 110, 0.45);
+    border-style: solid;
+  }
+  .corner-tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+  .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
+
+  /* ── HEIWEI Logo ── */
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease-out 0.4s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .logo-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    filter: invert(1) sepia(0.3) saturate(1.6) brightness(1.1);
+  }
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-indent: 0.35em;
+  }
+
+  /* ── 分隔線 ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.4), rgba(201, 120, 138, 0.4), transparent);
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease-out 0.6s both;
+  }
+
+  /* ── 主標題 ── */
+  .main-title {
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 400;
+    color: var(--cream);
+    letter-spacing: 0.12em;
+    text-align: center;
+    line-height: 1.4;
+    animation: fadeUp 0.8s ease-out 0.7s both;
+  }
+  .main-title em {
+    font-style: italic;
+    color: var(--rose-lt);
+  }
+  .sub-title {
+    margin-top: 8px;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: rgba(201, 169, 110, 0.65);
+    text-indent: 0.4em;
+    text-align: center;
+    animation: fadeUp 0.8s ease-out 0.85s both;
+  }
+
+  /* ── 花朵裝飾 ── */
+  .flower-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 24px 0 20px;
+    animation: fadeUp 0.8s ease-out 0.95s both;
+  }
+  .flower { font-size: 18px; }
+  .flower-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 120, 138, 0.35), transparent);
+    min-width: 60px;
+  }
+
+  /* ── 倒數區塊 ── */
+  .countdown {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(12px, 3vw, 28px);
+    margin: 8px 0 28px;
+    animation: fadeUp 0.8s ease-out 1.05s both;
+  }
+
+  .time-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .time-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(70px, 14vw, 110px);
+    height: clamp(70px, 14vw, 110px);
+    background: linear-gradient(160deg,
+      rgba(35, 18, 22, 0.95) 0%,
+      rgba(25, 10, 14, 0.98) 100%);
+    border: 1px solid rgba(201, 169, 110, 0.25);
+    box-shadow:
+      0 4px 24px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(201, 169, 110, 0.1);
+    overflow: hidden;
+  }
+  /* 光澤線 */
+  .time-box::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.5), transparent);
+  }
+
+  .time-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 46px);
+    font-weight: 700;
+    color: var(--gold-lt);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(201, 169, 110, 0.5);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+  .time-num.flip {
+    animation: numFlip 0.3s ease;
+  }
+  @keyframes numFlip {
+    0%  { transform: scaleY(1); }
+    40% { transform: scaleY(0); opacity: 0; }
+    41% { transform: scaleY(0); }
+    100%{ transform: scaleY(1); opacity: 1; }
+  }
+
+  .time-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(201, 169, 110, 0.55);
+    text-indent: 0.3em;
+  }
+
+  /* 冒號 */
+  .colon {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    color: rgba(201, 120, 138, 0.7);
+    margin-top: clamp(14px, 3vw, 22px);
+    animation: colonBlink 1s ease-in-out infinite;
+  }
+  @keyframes colonBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* ── 截止日期 ── */
+  .deadline {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: rgba(240, 192, 204, 0.55);
+    text-align: center;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease-out 1.15s both;
+  }
+
+  /* ── CTA 按鈕 ── */
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 48px;
+    border: 1px solid rgba(201, 169, 110, 0.5);
+    color: var(--gold-lt);
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: 0.4em;
+    text-indent: 0.4em;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s, border-color 0.4s;
+    animation: fadeUp 0.8s ease-out 1.25s both;
+    background: transparent;
+    margin-bottom: 6px;
+  }
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(201, 169, 110, 0), rgba(201, 169, 110, 0.12), rgba(201, 169, 110, 0));
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  .cta-btn:hover::before { transform: translateX(100%); }
+  .cta-btn:hover { color: #fff; border-color: rgba(201, 169, 110, 0.85); }
+
+  /* ── 結束訊息 ── */
+  .ended-msg {
+    display: none;
+    text-align: center;
+    color: rgba(201, 169, 110, 0.7);
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    padding: 20px 0;
+  }
+
+  /* ── 浮動花瓣（內嵌） ── */
+  .scene-petals { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="scene-petals" id="petalContainer"></div>
+
+<div class="container">
+  <div class="corner-tr"></div>
+  <div class="corner-bl"></div>
+
+  <!-- Logo -->
+  <div class="logo-area">
+    <img class="logo-img" src="HEIWEI Logo.jpg" alt="HEIWEI">
+    <span class="logo-text">HEIWEI</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 標題 -->
+  <h1 class="main-title"><em>母親節</em> 限定優惠</h1>
+  <p class="sub-title">MOTHER'S DAY SPECIAL OFFER</p>
+
+  <!-- 裝飾 -->
+  <div class="flower-row">
+    <div class="flower-line"></div>
+    <span class="flower">🌸</span>
+    <span class="flower">🌹</span>
+    <span class="flower">🌸</span>
+    <div class="flower-line"></div>
+  </div>
+
+  <!-- 倒數計時 -->
+  <div class="countdown" id="countdown">
+    <div class="time-unit">
+      <div class="time-box"><span class="time-num" id="days">00</span></div>
+      <span class="time-label">天</span>
+    </div>
+    <div class="colon">:</div>
+    <div class="time-unit">
+      <div class="time-box"><span class="time-num" id="hours">00</span></div>
+      <span class="time-label">時</span>
+    </div>
+    <div class="colon">:</div>
+    <div class="time-unit">
+      <div class="time-box"><span class="time-num" id="minutes">00</span></div>
+      <span class="time-label">分</span>
+    </div>
+    <div class="colon">:</div>
+    <div class="time-unit">
+      <div class="time-box"><span class="time-num" id="seconds">00</span></div>
+      <span class="time-label">秒</span>
+    </div>
+  </div>
+
+  <p class="ended-msg" id="endedMsg">優惠活動已結束，感謝您的支持 ♡</p>
+
+  <p class="deadline">活動截止　2026 年 5 月 13 日 23:59</p>
+
+  <button class="cta-btn">立即選購</button>
+</div>
+
+<script>
+  // ── 倒數邏輯 ──
+  // 台灣時間 UTC+8，目標：2026-05-13 23:59:59
+  const TARGET = new Date('2026-05-13T23:59:59+08:00').getTime();
+
+  const elDays    = document.getElementById('days');
+  const elHours   = document.getElementById('hours');
+  const elMinutes = document.getElementById('minutes');
+  const elSeconds = document.getElementById('seconds');
+  const elEnded   = document.getElementById('endedMsg');
+  const elCountdown = document.getElementById('countdown');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function flipNum(el, newVal) {
+    const padded = pad(newVal);
+    if (el.textContent !== padded) {
+      el.classList.remove('flip');
+      void el.offsetWidth; // reflow
+      el.classList.add('flip');
+      el.textContent = padded;
+    }
+  }
+
+  function tick() {
+    const now  = Date.now();
+    const diff = TARGET - now;
+
+    if (diff <= 0) {
+      elCountdown.style.display = 'none';
+      elEnded.style.display = 'block';
+      return;
+    }
+
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    flipNum(elDays,    d);
+    flipNum(elHours,   h);
+    flipNum(elMinutes, m);
+    flipNum(elSeconds, s);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  // ── 花瓣生成 ──
+  const container = document.getElementById('petalContainer');
+  const COLORS = [
+    'rgba(240, 160, 175, 0.75)',
+    'rgba(220, 140, 155, 0.65)',
+    'rgba(255, 200, 210, 0.7)',
+    'rgba(201, 169, 110, 0.5)',
+    'rgba(255, 220, 230, 0.6)',
+  ];
+
+  function createPetal() {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const size = 6 + Math.random() * 14;
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const duration = 6 + Math.random() * 10;
+    const delay = Math.random() * 12;
+    const spin  = (Math.random() - 0.5) * 720;
+    const drift = (Math.random() - 0.5) * 200;
+    const aspect = 0.5 + Math.random() * 0.8;
+
+    p.style.cssText = `
+      width: ${size}px;
+      height: ${size * aspect}px;
+      background: ${color};
+      left: ${Math.random() * 110 - 5}%;
+      top: -20px;
+      --spin: ${spin}deg;
+      --drift: ${drift}px;
+      animation-duration: ${duration}s;
+      animation-delay: ${delay}s;
+      border-radius: ${40 + Math.random() * 20}% ${Math.random() * 20}% ${40 + Math.random() * 20}% ${Math.random() * 20}%;
+      transform-origin: center;
+    `;
+    container.appendChild(p);
+
+    // 動畫結束後移除，重新生成
+    setTimeout(() => {
+      p.remove();
+      createPetal();
+    }, (duration + delay) * 1000);
+  }
+
+  // 初始生成 30 片
+  for (let i = 0; i < 30; i++) createPetal();
+</script>
+</body>
+</html>

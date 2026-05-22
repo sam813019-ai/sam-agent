@@ -1,0 +1,5 @@
+{"type":"server-started","port":52886,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:52886","screen_dir":"/Users/mac/Downloads/sam-agent/.superpowers/brainstorm/24160-1779173841/content","state_dir":"/Users/mac/Downloads/sam-agent/.superpowers/brainstorm/24160-1779173841/state"}
+{"type":"screen-added","file":"/Users/mac/Downloads/sam-agent/.superpowers/brainstorm/24160-1779173841/content/overall-layout.html"}
+{"type":"screen-added","file":"/Users/mac/Downloads/sam-agent/.superpowers/brainstorm/24160-1779173841/content/style-options.html"}
+{"type":"screen-added","file":"/Users/mac/Downloads/sam-agent/.superpowers/brainstorm/24160-1779173841/content/portal-layout.html"}
+{"type":"server-stopped","reason":"idle timeout"}

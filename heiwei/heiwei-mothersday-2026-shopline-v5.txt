@@ -1,0 +1,1110 @@
+<!-- ========================================================== -->
+<!-- HEIWEI 母親節 2026 | Shopline 可直接貼上版本                -->
+<!-- 使用方式：複製以下全部內容，貼入 Shopline「自訂 HTML 區塊」 -->
+<!-- ========================================================== -->
+
+<!-- 全域基礎樣式（scoped 於 .heiwei-md-page，不影響 Shopline 其他頁面） -->
+<style>
+  .heiwei-md-page * { box-sizing: border-box; }
+  .heiwei-md-page {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-family: "Microsoft JhengHei", "PingFang TC", "Heiti TC", "Apple LiGothic Medium", sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+  .heiwei-md-page a { color: inherit; }
+  .heiwei-md-page img { max-width: 100%; display: block; }
+
+  /* Scroll reveal 基礎 */
+  .heiwei-md-page [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+    will-change: opacity, transform;
+  }
+  .heiwei-md-page [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .heiwei-md-page [data-reveal-delay="1"].is-visible { transition-delay: 0.12s; }
+  .heiwei-md-page [data-reveal-delay="2"].is-visible { transition-delay: 0.24s; }
+  .heiwei-md-page [data-reveal-delay="3"].is-visible { transition-delay: 0.36s; }
+  .heiwei-md-page [data-reveal-delay="4"].is-visible { transition-delay: 0.48s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .heiwei-md-page [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+
+<div class="heiwei-md-page">
+
+
+<!-- ========== 頂部倒數橫條 ========== -->
+<div class="countdown-bar" id="countdownBar">
+  <div class="countdown-inner">
+    <span class="cd-label">MOTHER'S DAY 2026 ·</span>
+    <span class="cd-timer" id="cdTimer">距 5/10 母親節 倒數中</span>
+    <span class="cd-note">· 全站免運</span>
+  </div>
+</div>
+
+<style>
+  .countdown-bar {
+    background: #1a1a1a;
+    color: #f5f5f5;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    font-weight: 300;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    overflow: hidden;
+  }
+  .countdown-inner {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .cd-label { color: #d4a574; font-weight: 400; }
+  .cd-note { color: #aaa; font-size: 12px; }
+  .cd-timer { font-variant-numeric: tabular-nums; }
+  @media (max-width: 480px) {
+    .countdown-bar { font-size: 11px; letter-spacing: 0.1em; padding: 8px 10px; }
+    .cd-note { display: none; }
+  }
+</style>
+
+<style>
+  .hero-intro {
+    padding: 90px 20px 70px;
+    background: #ffffff;
+    text-align: center;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  .hero-inner { max-width: 800px; margin: 0 auto; }
+  .hero-eyebrow {
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: #888;
+    font-weight: 300;
+    margin: 0 0 28px;
+  }
+  .hero-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: #1a1a1a;
+    line-height: 1.7;
+    letter-spacing: 0.08em;
+    margin: 0 0 24px;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: #666;
+    letter-spacing: 0.15em;
+    line-height: 1.8;
+    margin: 0;
+  }
+  .hero-scroll-hint {
+    margin-top: 60px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: #bbb;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: #ccc;
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background: #1a1a1a;
+    animation: hwScrollLine 2.2s ease-in-out infinite;
+  }
+  @keyframes hwScrollLine {
+    0%   { top: -100%; }
+    60%  { top: 100%; }
+    100% { top: 100%; }
+  }
+  @media (max-width: 768px) {
+    .hero-intro { padding: 60px 20px 50px; }
+    .hero-title { font-size: 22px; line-height: 1.9; }
+    .hero-sub { font-size: 13px; }
+    .hero-scroll-hint { margin-top: 40px; }
+  }
+</style>
+
+
+<!-- ========== BN1：全能經典禮盒 ========== -->
+<div class="shopline-split-banner bn-v1">
+  <div class="banner-item section-left">
+    <img src="https://img.shoplineapp.com/media/image_clips/69e617e98a1b1e25d7550892/original.jpg?1776687080=&owner_id=648be21890a1b5008d602f77" alt="全能經典禮盒">
+    <div class="banner-content-inner">
+      <a href="https://www.heiweibeauty.com/products/mdfullclass" class="cta-button">全能經典禮盒 ></a>
+    </div>
+  </div>
+  <div class="banner-item section-right">
+    <img src="https://img.shoplineapp.com/media/image_clips/69df3cfaa45d0e57785955a2/original.jpg?1776237817=&owner_id=648be21890a1b5008d602f77" alt="母親節禮盒視覺">
+  </div>
+</div>
+
+<style>
+  .shopline-split-banner {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    background-color: #fff;
+  }
+  .banner-item { flex: 1; min-width: 50%; position: relative; line-height: 0; overflow: hidden; }
+  .banner-item img {
+    width: 100%; height: auto; object-fit: cover;
+    transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .banner-item:hover img { transform: scale(1.04); }
+  .banner-content-inner {
+    position: absolute; bottom: 0; left: 0;
+    padding: 6% 5%; width: 100%;
+    line-height: normal; z-index: 10;
+  }
+  .cta-button {
+    display: inline-block;
+    padding: 12px 50px;
+    background-color: #000000;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+    letter-spacing: 3px;
+    transition: all 0.3s ease;
+    border: 1px solid #000000;
+    cursor: pointer;
+    white-space: nowrap;
+    transform: translateX(20px);
+  }
+  .cta-button:hover {
+    background-color: #333;
+    transform: translateX(20px) translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+  @media (max-width: 768px) {
+    .banner-item { flex: 0 0 100%; min-width: 100%; }
+    .banner-content-inner { padding: 10% 8%; }
+    .cta-button {
+      padding: 10px 35px;
+      font-size: 1.05rem;
+      transform: translateX(0);
+    }
+    .cta-button:hover { transform: translateY(-2px); }
+  }
+</style>
+
+
+<!-- ========== 內文1 ========== -->
+<section class="texture-section ts-v1" data-reveal>
+  <div class="max-width-container">
+    <div class="c-text-wrapper">
+      <div class="c-text">
+        <p>
+          那天<span class="underline-soft">鏡子面前</span>聽到女兒這麼說，差點沒忍住。
+           </p>
+          <span class="indent-line">差點忘了，</span>
+          <span class="indent-line">一直以來我們總是<span class="underline-soft">望著媽媽</span>的一舉一動......</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .texture-section {
+    padding: 70px 20px;
+    background-color: #ffffff;
+    color: #4A4A4A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .max-width-container {
+    max-width: 800px; width: 100%;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 300px;
+  }
+  .c-text-wrapper {
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    width: fit-content;
+  }
+  .c-text {
+    font-family: "Microsoft JhengHei Light", "Microsoft JhengHei", "Heiti TC", sans-serif;
+    font-size: 16px; font-weight: 300;
+    line-height: 1.9; letter-spacing: 0.12em;
+    text-align: left;
+  }
+  .c-text p { margin-bottom: 2.2em; width: 100%; }
+  .indent-line { display: block; margin-top: 0.6em; }
+  .underline-soft {
+    border-bottom: 1px solid #4A4A4A;
+    padding-bottom: 4px;
+    display: inline-block;
+    line-height: 1;
+  }
+  @media (max-width: 768px) {
+    .c-text { font-size: 15px; line-height: 2.0; }
+  }
+</style>
+
+
+<!-- ========== 商品區共用樣式 ========== -->
+<style>
+  .product-grid-container {
+    display: flex; flex-wrap: wrap;
+    gap: 20px; justify-content: center;
+    padding: 15px;
+    background-color: #ffffff;
+    margin-bottom: 50px;
+  }
+  .product-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    flex: 0 0 calc(33.33% - 20px);
+    min-width: 250px; max-width: 320px;
+    padding: 15px;
+    display: flex; flex-direction: column;
+    position: relative;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+  }
+  .product-card:not(.video-card-style):hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 51, 0.08);
+    border-color: #c9c9c9;
+  }
+  .product-image-wrapper img {
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .product-card:hover .product-image-wrapper img { transform: scale(1.06); }
+  .video-card-style {
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: hidden !important;
+  }
+  .video-aspect-ratio {
+    width: 100%; position: relative;
+    padding-top: 177.77%;
+    overflow: hidden; border-radius: 4px;
+    flex-grow: 1;
+  }
+  .video-aspect-ratio iframe {
+    position: absolute; top: 50%; left: 50%;
+    width: 102% !important; height: 110% !important;
+    transform: translate(-50%, -50%) scale(1.05);
+    border: none;
+  }
+  @media (max-width: 767px) {
+    .product-grid-container { gap: 10px; padding: 10px; margin-bottom: 30px; }
+    .product-card { flex: 0 0 calc(50% - 10px); min-width: 0; max-width: none; padding: 10px; }
+    .video-card-style { flex: 0 0 100% !important; order: -1; margin-bottom: 10px; }
+    .video-aspect-ratio { border-radius: 0; }
+  }
+  .product-image-wrapper {
+    width: 100%; position: relative; padding-top: 100%;
+    overflow: hidden; margin-bottom: 15px; display: block;
+  }
+  .product-image-wrapper img {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  a.product-name {
+    font-size: 16px; font-weight: 300;
+    margin-bottom: 8px;
+    text-decoration: underline;
+    color: #000 !important;
+    display: block; line-height: 1.4;
+    min-height: 2.8em;
+    text-underline-offset: 4px;
+  }
+  .price-wrapper { margin-bottom: 15px; }
+  .original-price { font-size: 12px; color: #999; text-decoration: line-through; display: block; margin-bottom: 2px; }
+  .product-price { font-size: 16px; color: #333; font-weight: 300; display: block; }
+  .buy-button {
+    background-color: #000033;
+    color: #fff !important; text-align: center;
+    padding: 12px; text-decoration: none;
+    font-size: 14px; font-weight: 300;
+    letter-spacing: 1px; margin-bottom: 15px;
+    display: block; border: 1px solid #000033;
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .buy-button::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -120%;
+    width: 60%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    transition: left 0.7s ease;
+  }
+  .buy-button:hover { background-color: #fff; color: #000 !important; border: 1px solid #000; }
+  .buy-button:hover::before { left: 140%; }
+  .product-description { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 15px; flex-grow: 1; font-weight: 300; }
+  .product-details { border-top: 1px solid #f0f0f0; padding-top: 10px; }
+  .product-details summary {
+    font-size: 13px; font-weight: 300; cursor: pointer;
+    list-style: none; color: #333;
+    display: inline-block; text-decoration: underline;
+    text-underline-offset: 6px; outline: none;
+  }
+  .product-details summary::-webkit-details-marker { display: none; }
+  .product-details summary::after { content: '\00a0\00a0+'; font-size: 14px; }
+  .product-details[open] summary::after { content: '\00a0\00a0-'; }
+  .details-content { padding: 8px 0; font-size: 12px; color: #888; line-height: 1.5; font-weight: 300; }
+  .soft-underline { text-decoration: underline; text-underline-offset: 3px; }
+</style>
+
+
+<!-- ========== 商品1：入門禮遇 ========== -->
+<div class="product-grid-container">
+
+  <div class="product-card video-card-style">
+    <div class="video-aspect-ratio">
+      <iframe
+        src="https://player.vimeo.com/video/1185389065?badge=0&autopause=0&autoplay=1&loop=1&muted=1&background=1"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture"
+        title="品牌影片"></iframe>
+    </div>
+  </div>
+  
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/md2step" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ccdc1aa923447cc2b401c5/original.png?1775033365" alt="懶人兩步組">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/md2step" class="product-name">懶人兩步組</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 2,100</span>
+      <span class="product-price">NT$ 1,749</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/md2step" class="buy-button">立即購買</a>
+    <div class="product-description">給忙碌媽媽的第一份保養學分：認真『清潔毛孔』<br><br>『補足營養』</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 洗面乳 100ml<br>• 活氧B群保濕噴霧 100ml</div>
+    </details>
+  </div>
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/mdsoswater" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ccdc1a9e476ebc1e4dc6b9/original.png?1775033366" alt="補水急救組">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/mdsoswater" class="product-name">補水急救組</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 3,200</span>
+      <span class="product-price">NT$ 2,649</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/mdsoswater" class="buy-button">立即購買</a>
+    <div class="product-description">滴滴營養滴滴精華，補水補足不長粉刺。</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 活氧B群保濕噴霧 100ml<br>• 高端精華水安瓶 50ml</div>
+    </details>
+  </div>
+
+</div>
+
+
+<!-- ========== BN2：重啟白光禮盒 ========== -->
+<div class="shopline-split-banner bn-v2">
+  <div class="banner-item section-left">
+    <img src="https://img.shoplineapp.com/media/image_clips/69df3cfb53ed9cbfd69e35cb/original.jpg?1776237818=&owner_id=648be21890a1b5008d602f77" alt="重啟白光禮盒">
+    <div class="banner-content-inner">
+      <a href="https://www.heiweibeauty.com/products/mdrewithe" class="cta-button cta-v2">重啟白光禮盒 ></a>
+    </div>
+  </div>
+  <div class="banner-item section-right">
+    <img src="https://img.shoplineapp.com/media/image_clips/69df3cfaf92f61bda55d7c86/original.jpg?1776237817=&owner_id=648be21890a1b5008d602f77" alt="白光禮盒視覺">
+  </div>
+</div>
+
+<style>
+  .cta-v2 {
+    font-size: 1.08rem !important;
+    transform: none !important;
+  }
+  .cta-v2:hover { transform: translateY(-2px) !important; }
+</style>
+
+
+<!-- ========== 內文2 ========== -->
+<section class="texture-section" data-reveal>
+  <div class="max-width-container">
+    <div class="c-text-wrapper">
+      <div class="c-text">
+        <p>想到女兒<br>
+        </p>
+        <p>就想到懷孕生的那兩年期間<br>
+          <span class="indent-line">常常把自己搞得很狼狽</span>
+        </p>
+        <p>總是覺得自己變得好醜好醜，<br>
+          <span class="indent-line">好像什麼事都每況愈下，</span>
+        </p>
+                <p>發炎不安定的狀態......<br>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 商品2：中階禮遇 ========== -->
+<div class="product-grid-container">
+
+  <div class="product-card video-card-style">
+    <div class="video-aspect-ratio">
+      <iframe
+        src="https://player.vimeo.com/video/1185389080?badge=0&autopause=0&autoplay=1&loop=1&muted=1&background=1"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture"
+        title="品牌影片"></iframe>
+    </div>
+  </div>
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/md10s" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ccdc2121affe9fbcd7f086/original.png?1775033373" alt="十秒保養組">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/md10s" class="product-name">十秒保養組</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 4,100</span>
+      <span class="product-price">NT$ 3,360</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/md10s" class="buy-button">立即購買</a>
+    <div class="product-description">媽媽的 10 秒保養，<span class="soft-underline">精華液+乳霜</span>，維持美也可以很省時又簡單！</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 高端精華水安瓶 50ml<br>• 亮顏保濕蜜蜜霜 50ml</div>
+    </details>
+  </div>
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/mdmask20" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69e5dcad8ca9124e2e429ba0/original.png?1776671913=&owner_id=648be21890a1b5008d602f77" alt="密集修護組">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/mdmask20" class="product-name">密集修護組</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 4,200</span>
+      <span class="product-price">NT$ 3,360</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/mdmask20" class="buy-button">立即購買</a>
+    <div class="product-description">水光肌養成班～<span class="soft-underline">連續敷臉20天</span>，細緻持久光澤無限。</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 光透波5D養膚面膜 20片</div>
+    </details>
+  </div>
+
+</div>
+
+
+<!-- ========== 囤貨專區標題 ========== -->
+<div class="bulk-save-container">
+  <div class="bulk-save-content">
+    <p class="bulk-save-title">母親節囤貨專區</p>
+    <p class="bulk-save-subtitle">年度最優惠的價格，陪媽媽長時間保持最好的狀態。</p>
+  </div>
+</div>
+
+<style>
+  .bulk-save-container {
+    display: flex; justify-content: center; align-items: center;
+    background-color: #ffffff;
+    padding: 40px 10px 20px;
+    text-align: center;
+  }
+  .bulk-save-content { display: inline-block; text-align: center; }
+  .bulk-save-title {
+    font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+    color: #1a1a1a; font-size: 25px; font-weight: 400;
+    line-height: 1.3; letter-spacing: 1px;
+    margin: 0;
+  }
+  .bulk-save-subtitle {
+    font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+    color: #888; font-size: 15px; font-weight: 300;
+    line-height: 1.6; letter-spacing: 1.2px;
+    margin-top: 8px;
+  }
+  @media screen and (max-width: 767px) {
+    .bulk-save-container { display: block; text-align: left; padding: 20px 20px 10px; }
+    .bulk-save-content { display: block; text-align: left; width: 100%; }
+    .bulk-save-subtitle { letter-spacing: 0.5px; }
+  }
+</style>
+
+
+<!-- ========== 囤貨專區商品（5 欄）========== -->
+<style>
+  .bulk-grid .product-card {
+    flex: 0 0 calc(20% - 20px);
+    min-width: 200px;
+    max-width: 300px;
+  }
+  @media (max-width: 1100px) {
+    .bulk-grid .product-card { flex: 0 0 calc(33.33% - 20px); }
+  }
+  @media (max-width: 767px) {
+    .bulk-grid .product-card { flex: 0 0 calc(50% - 10px); min-width: 0; max-width: none; padding: 10px; }
+    .bulk-grid a.product-name { font-size: 14px; min-height: 3em; }
+    .bulk-grid .product-price { font-size: 14px; }
+    .bulk-grid .buy-button { font-size: 12px; padding: 10px 5px; }
+  }
+</style>
+
+<div class="product-grid-container bulk-grid">
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/mdtoner" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ddf2806c4bac149028254e/original.png?1776153212=&owner_id=648be21890a1b5008d602f77" alt="魚子亮白保濕化妝水 x 2">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/mdtoner" class="product-name">魚子亮白保濕化妝水 x 2</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 5,460</span>
+      <span class="product-price">NT$ 3,998</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/mdtoner" class="buy-button">立即購買</a>
+    <div class="product-description"><span class="soft-underline">帶走堆積的老廢角質</span>，讓玻尿酸慢慢被肌膚吸收，回到剛剛好的含水狀態。<br><br>也可以當作日常化妝水，或在<span class="soft-underline">&nbsp;&nbsp;&nbsp;需要時，濕敷使用。</span></div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 魚子亮白保濕化妝水 300ml x 2</div>
+    </details>
+  </div>
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/mdcleanser" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ccdc2199f3078102775eb1/original.png?1775033373=&owner_id=648be21890a1b5008d602f77" alt="潔淨舒壓洗面乳 x 3">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/mdcleanser" class="product-name">潔淨舒壓洗面乳 x 3</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 3,240</span>
+      <span class="product-price">NT$ 2,380</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/mdcleanser" class="buy-button">立即購買</a>
+    <div class="product-description">尤其適合在<span class="soft-underline">&nbsp;&nbsp;&nbsp;肌膚感覺脆弱</span>的日子。</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 潔淨舒壓洗面乳 100ml x 3</div>
+    </details>
+  </div>
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/mdbwater" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ccdc1a816c65456ac43058/original.png?1775033365=&owner_id=648be21890a1b5008d602f77" alt="活氧B群保濕噴霧 x 5">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/mdbwater" class="product-name">活氧B群保濕噴霧 x 5</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 4,100</span>
+      <span class="product-price">NT$ 3,360</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/mdbwater" class="buy-button">立即購買</a>
+    <div class="product-description">添加多重維他命B，穩定肌膚同時達到舒緩、補水，定妝的好夥伴。</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 活氧B群保濕噴霧 100ml x 5</div>
+    </details>
+  </div>
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/mdclearmask" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ccdc1aa9269a785409624f/original.png?1775033366=&owner_id=648be21890a1b5008d602f77" alt="白膜淨去角質泥膜 x 3">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/mdclearmask" class="product-name">白膜淨去角質泥膜 x 3</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 6,150</span>
+      <span class="product-price">NT$ 4,183</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/mdclearmask" class="buy-button">立即購買</a>
+    <div class="product-description">溫和地把老廢角質通通帶走，敷完之後，肌膚不乾澀、粗糙顆粒感都不見了。</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 白膜淨去角質泥膜 50ml x 3</div>
+    </details>
+  </div>
+
+  <div class="product-card" data-reveal>
+    <a href="https://www.heiweibeauty.com/products/md5gf" class="product-image-wrapper">
+      <img src="https://img.shoplineapp.com/media/image_clips/69ccdc21471e0ae3e7433cce/original.png?1775033373=&owner_id=648be21890a1b5008d602f77" alt="妝前智能5GF柔敏膠囊 x 5">
+    </a>
+    <a href="https://www.heiweibeauty.com/products/md5gf" class="product-name">妝前智能5GF柔敏膠囊 x 5</a>
+    <div class="price-wrapper">
+      <span class="original-price">NT$ 5,800</span>
+      <span class="product-price">NT$ 4,250</span>
+    </div>
+    <a href="https://www.heiweibeauty.com/products/md5gf" class="buy-button">立即購買</a>
+    <div class="product-description">2026 新寵兒「油保養」<span class="soft-underline">智能科技把油變得不油</span>，肌膚變得透亮細緻。</div>
+    <details class="product-details">
+      <summary>內容物與容量</summary>
+      <div class="details-content">• 妝前智能5GF柔敏膠囊 (15顆/盒) x 5</div>
+    </details>
+  </div>
+
+</div>
+
+
+<!--趕場媽媽-->
+<div class="sl-wrap-custom" data-reveal>
+  <div class="mobile-divider"></div>
+
+  <!-- 右側：文字敘事 -->
+  <div class="sl-text-box">
+    <div class="sl-text-content">
+      <h2>趕場媽媽</h2>
+      <p>晚上小孩吃什麼？
+      <br>有沒有要看醫生？
+      <br>大家知道我愛喝酒熬夜！
+      <br>回到家 6 點 - 9 點陪小孩，
+      <br>孩子睡了才有自己的時間。
+      <br>哪有時間一瓶一瓶擦？
+      <br>
+      <br>Heiwei 明星三姊妹，
+      <br>分給姐妹，一人一組，趕場也沒問題。</p>
+    </div>
+  </div>
+
+  <!-- 左側：365 保養組商品卡 -->
+  <div class="sl-product-box">
+    <div class="product-card-single">
+      <a href="https://www.heiweibeauty.com/products/md365" class="product-image-wrapper rm-image">
+        <img src="https://img.shoplineapp.com/media/image_clips/69d8b60d97b3a7687bf494fa/original.png?1775810057" alt="365 保養組">
+      </a>
+      <a href="https://www.heiweibeauty.com/products/md365" class="rm-product-name">365 保養組</a>
+      <div class="rm-price-wrapper">
+        <span class="rm-original-price">NT$ 32,240</span>
+        <span class="rm-product-price">NT$ 21,199</span>
+      </div>
+      <a href="https://www.heiweibeauty.com/products/md365" class="rm-buy-button">立即購買</a>
+      <div class="rm-product-description">一組搞定全年保養</div>
+      <details class="rm-product-details">
+        <summary>內容物與容量</summary>
+        <div class="rm-details-content">
+          • 潔淨舒壓洗面乳 100ml x 5<br>
+          • 高端精華水安瓶 50ml x 5<br>
+          • 亮顏保濕蜜蜜霜 50ml x 5<br>
+          • 魚子亮白保濕化妝水 300ml<br>
+          • 白膜淨去角質泥膜 50ml<br>
+          • 妝前智能5GF柔敏膠囊 (15顆/盒)
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* --- 趕場媽媽 split layout：左商品 右敘事 --- */
+  .sl-wrap-custom {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex-direction: row-reverse !important;
+    width: 100% !important;
+    background-color: #ffffff;
+    margin: 20px 0;
+    overflow: hidden;
+    font-family: "Microsoft JhengHei Light", "Microsoft JhengHei", "Heiti TC", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+  .mobile-divider { display: none; }
+  .sl-text-box, .sl-product-box {
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 文字區塊 */
+  .sl-text-box {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 60px 40px !important;
+  }
+  .sl-text-content {
+    max-width: 400px;
+    width: fit-content;
+    text-align: left;
+  }
+  .sl-text-content h2 {
+    font-size: 32px !important;
+    color: #1a1a1a !important;
+    margin-bottom: 25px !important;
+    font-weight: 400 !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0.15em;
+  }
+  .sl-text-content p {
+    color: #4A4A4A !important;
+    font-weight: 300 !important;
+    margin-bottom: 30px !important;
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  /* 商品區塊 */
+  .sl-product-box {
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+  }
+  .product-card-single {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    width: 100%;
+    max-width: 320px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    text-align: left;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+  }
+  .product-card-single:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 51, 0.08);
+    border-color: #c9c9c9;
+  }
+  .rm-image {
+    width: 100%;
+    position: relative;
+    padding-top: 100%;
+    overflow: hidden;
+    margin-bottom: 15px;
+    display: block;
+  }
+  .rm-image img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .product-card-single:hover .rm-image img { transform: scale(1.06); }
+
+  .rm-product-name {
+    font-size: 16px; font-weight: 300;
+    margin-bottom: 8px;
+    text-decoration: underline;
+    color: #000 !important;
+    display: block; line-height: 1.4;
+    min-height: 2.8em;
+    text-underline-offset: 4px;
+  }
+  .rm-price-wrapper { margin-bottom: 15px; }
+  .rm-original-price {
+    font-size: 12px; color: #999;
+    text-decoration: line-through;
+    display: block;
+  }
+  .rm-product-price {
+    font-size: 16px; color: #333;
+    font-weight: 300;
+  }
+  .rm-buy-button {
+    background-color: #000033;
+    color: #fff !important;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    display: block;
+    border: 1px solid #000033;
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .rm-buy-button::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -120%;
+    width: 60%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    transition: left 0.7s ease;
+  }
+  .rm-buy-button:hover {
+    background-color: #fff;
+    color: #000 !important;
+    border: 1px solid #000;
+  }
+  .rm-buy-button:hover::before { left: 140%; }
+  .rm-product-description {
+    font-size: 13px; color: #666;
+    font-weight: 300; line-height: 1.5;
+    margin-bottom: 15px;
+  }
+  .rm-product-details { border-top: 1px solid #f0f0f0; padding-top: 10px; }
+  .rm-product-details summary {
+    font-size: 13px; font-weight: 300; cursor: pointer;
+    list-style: none; color: #333;
+    display: inline-block; text-decoration: underline;
+    text-underline-offset: 6px; outline: none;
+  }
+  .rm-product-details summary::-webkit-details-marker { display: none; }
+  .rm-product-details summary::after { content: '\00a0\00a0+'; font-size: 14px; }
+  .rm-product-details[open] summary::after { content: '\00a0\00a0-'; }
+  .rm-details-content {
+    padding: 8px 0;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* 響應式 */
+  @media (min-width: 768px) {
+    .sl-product-box {
+      justify-content: flex-end !important;
+      padding-right: 50px !important;
+    }
+    .sl-text-box {
+      justify-content: center !important;
+      padding-left: 50px !important;
+    }
+  }
+  @media (max-width: 767px) {
+    .sl-wrap-custom {
+      flex-direction: column !important;
+      padding-top: 20px;
+    }
+    .mobile-divider {
+      display: block !important;
+      width: 1.3px !important;
+      height: 60px !important;
+      background-color: #e0e0e0 !important;
+      margin: 0 auto 20px auto !important;
+    }
+    .sl-text-box, .sl-product-box {
+      flex: 0 0 100% !important;
+      width: 100% !important;
+    }
+    .sl-text-box {
+      text-align: left !important;
+      padding: 40px 30px !important;
+      justify-content: center !important;
+    }
+    .sl-text-content { max-width: 100%; }
+    .sl-text-content h2 { font-size: 24px !important; }
+    .sl-text-content p { font-size: 15px !important; }
+  }
+</style>
+
+
+<!-- ========== BN3：明星三姐妹組合（CTA 在右圖）========== -->
+<div class="shopline-split-banner bn-v3" data-reveal>
+  <div class="banner-item section-left">
+    <img src="https://img.shoplineapp.com/media/image_clips/69df3cfb6fc687a6917a31d4/original.jpg?1776237818=&owner_id=648be21890a1b5008d602f77" alt="明星三姐妹組合 左">
+  </div>
+  <div class="banner-item section-right">
+    <img src="https://img.shoplineapp.com/media/image_clips/69df3cfa06473ecc529dfe57/original.jpg?1776237817=&owner_id=648be21890a1b5008d602f77" alt="明星三姐妹組合 右">
+    <div class="banner-content-inner bn-v3-inner">
+      <a href="https://www.heiweibeauty.com/products/md3sister" class="cta-button cta-v3">明星三姐妹組合 ></a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .bn-v3-inner { padding: 6% 5%; }
+  .cta-v3 {
+    font-size: 1.08rem !important;
+    transform: none !important;
+  }
+  .cta-v3:hover { transform: translateY(-2px) !important; }
+  @media (max-width: 768px) {
+    .cta-v3 { font-size: 0.95rem !important; }
+  }
+</style>
+
+<style>
+  .closing-section {
+    padding: 90px 20px 110px;
+    background: #fafafa;
+    text-align: center;
+  }
+  .closing-inner { max-width: 700px; margin: 0 auto; }
+  .closing-text {
+    font-size: 17px;
+    color: #3a3a3a;
+    line-height: 2.2;
+    letter-spacing: 0.12em;
+    font-weight: 300;
+    margin: 0 0 40px;
+  }
+  .closing-sign {
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: #999;
+    margin: 0;
+  }
+  @media (max-width: 768px) {
+    .closing-section { padding: 60px 20px 80px; }
+    .closing-text { font-size: 15px; line-height: 2.0; }
+  }
+</style>
+
+
+<!-- ========== 浮動購物 CTA（手機 + 電腦）========== -->
+<a href="你的商品連結網址" class="floating-cta" id="floatingCta" aria-label="母親節禮盒選購">
+  <span class="fc-icon">♡</span>
+  <span class="fc-text">挑選母親節禮盒</span>
+</a>
+
+<style>
+  .floating-cta {
+    position: fixed;
+    right: 24px;
+    bottom: 28px;
+    background: #000033;
+    color: #fff !important;
+    padding: 14px 22px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 2px;
+    box-shadow: 0 10px 24px rgba(0,0,51,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 40;
+    opacity: 0;
+    transform: translateY(24px);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s ease;
+  }
+  .floating-cta.is-shown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .floating-cta:hover { background: #1a1a5c; }
+  .fc-icon {
+    font-size: 16px;
+    color: #d4a574;
+    animation: hwHeartPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes hwHeartPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.2); }
+  }
+  @media (max-width: 480px) {
+    .floating-cta {
+      right: 16px;
+      bottom: 16px;
+      padding: 12px 18px;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fc-icon { animation: none; }
+  }
+</style>
+
+</div>
+<!-- /.heiwei-md-page -->
+
+
+<!-- ========== 互動 JS ========== -->
+<script>
+(function () {
+  var root = document.querySelector('.heiwei-md-page');
+  if (!root) return;
+
+  // 1) Scroll reveal
+  var items = root.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  // 2) 母親節倒數 — 台灣母親節 2026/5/10
+  var target = new Date('2026-05-10T00:00:00+08:00').getTime();
+  var timerEl = document.getElementById('cdTimer');
+  function tick() {
+    if (!timerEl) return;
+    var diff = target - Date.now();
+    if (diff <= 0) { timerEl.textContent = '母親節快樂 ♡'; return; }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    timerEl.textContent = '距 5/10 母親節 · ' + d + '天 ' +
+      String(h).padStart(2, '0') + ':' +
+      String(m).padStart(2, '0') + ':' +
+      String(s).padStart(2, '0');
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // 3) 浮動 CTA —— 滾過 hero 才出現
+  var fcta = document.getElementById('floatingCta');
+  var hero = root.querySelector('.hero-intro');
+  function toggleFcta() {
+    if (!fcta || !hero) return;
+    var heroRect = hero.getBoundingClientRect();
+    var heroBottomInPage = window.scrollY + heroRect.bottom;
+    if (window.scrollY > heroBottomInPage - window.innerHeight * 0.5) {
+      fcta.classList.add('is-shown');
+    } else {
+      fcta.classList.remove('is-shown');
+    }
+  }
+  toggleFcta();
+  window.addEventListener('scroll', toggleFcta, { passive: true });
+
+  // 4) Banner 輕視差（僅桌機）
+  if (window.matchMedia('(min-width: 769px) and (prefers-reduced-motion: no-preference)').matches) {
+    var bannerItems = root.querySelectorAll('.shopline-split-banner .banner-item');
+    window.addEventListener('scroll', function () {
+      bannerItems.forEach(function (item) {
+        var rect = item.getBoundingClientRect();
+        var vh = window.innerHeight;
+        if (rect.bottom > 0 && rect.top < vh) {
+          var progress = (vh - rect.top) / (vh + rect.height);
+          var shift = (progress - 0.5) * 12;
+          item.style.transform = 'translateY(' + shift.toFixed(1) + 'px)';
+        }
+      });
+    }, { passive: true });
+  }
+})();
+</script>

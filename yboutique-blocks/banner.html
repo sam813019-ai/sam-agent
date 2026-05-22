@@ -1,0 +1,268 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;700&display=swap');
+
+  .yb-banner-outer {
+    font-family: 'Noto Sans TC', 'Helvetica Neue', Arial, sans-serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* ── 基底：手機直排（Mobile-first）── */
+  .yb-banner {
+    position: relative;
+    background: linear-gradient(135deg, #fdf6ee 0%, #f5e8d8 40%, #fce8e0 72%, #f6dbd2 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 26px 20px 0 22px;
+  }
+
+  /* 背景裝飾圓 */
+  .yb-bn-deco {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .yb-bn-deco--1 {
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(201,169,138,0.22) 0%, transparent 70%);
+    right: -60px; top: -80px;
+  }
+  .yb-bn-deco--2 {
+    width: 130px; height: 130px;
+    background: radial-gradient(circle, rgba(212,112,74,0.12) 0%, transparent 70%);
+    right: 100px; bottom: -40px;
+  }
+  .yb-bn-deco--3 {
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(201,169,138,0.15) 0%, transparent 70%);
+    left: -16px; top: -16px;
+  }
+
+  /* 文案區（上半） */
+  .yb-bn-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  .yb-bn-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;   /* 手機縮小 letter-spacing 防溢出 */
+    color: #b08d7a;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .yb-bn-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .yb-bn-subtitle {
+    font-size: 12px;
+    color: #9a7060;
+    line-height: 1.9;
+    margin-bottom: 14px;
+  }
+  .yb-bn-subtitle span {
+    display: inline-block;
+    background: rgba(201,169,138,0.18);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-weight: 600;
+    color: #b08d7a;
+    font-size: 10px;
+    margin-left: 4px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .yb-bn-perks {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .yb-bn-perk {
+    display: inline-block;
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(176,141,122,0.35);
+    color: #b08d7a;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .yb-bn-date {
+    display: inline-block;
+    background: #c9a98a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 20px;
+    border-radius: 30px;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+
+  /* 商品圖區（下半，貼底） */
+  .yb-bn-products {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+    padding-bottom: 20px;
+  }
+
+  .yb-bn-product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .yb-bn-product img {
+    display: block;
+    object-fit: contain;
+    max-width: 100%;
+  }
+
+  /* 手機：商品圖尺寸 */
+  .yb-bn-product--baobai img {
+    height: 155px;
+    width: auto;
+    transform: rotate(-5deg) translate(-4px, 2px);
+    filter: drop-shadow(0 8px 16px rgba(210,130,130,0.28));
+  }
+  .yb-bn-product--bqun img {
+    height: 125px;
+    width: auto;
+    transform: rotate(4deg) translate(4px, 0);
+    filter: drop-shadow(0 8px 16px rgba(100,140,200,0.22));
+  }
+
+  .yb-bn-product-name {
+    font-size: 9px;
+    color: #b08d7a;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    opacity: 0.85;
+  }
+
+  /* ── 平板／桌機：橫排 ── */
+  @media (min-width: 560px) {
+    .yb-banner {
+      flex-direction: row;
+      align-items: center;
+      padding: 32px 0 32px 36px;
+      min-height: 270px;
+    }
+
+    .yb-bn-content {
+      flex: 1;
+      width: auto;
+      padding-right: 12px;
+    }
+
+    .yb-bn-label {
+      letter-spacing: 3px;
+    }
+
+    .yb-bn-title {
+      font-size: 28px;
+    }
+
+    .yb-bn-products {
+      justify-content: flex-end;
+      align-items: flex-end;
+      width: auto;
+      flex-shrink: 0;
+      padding-right: 56px;
+      margin-bottom: 0;
+      gap: 18px;
+    }
+
+    .yb-bn-product {
+      flex: none;
+      max-width: none;
+    }
+
+    .yb-bn-product--baobai img {
+      height: 215px;
+      transform: rotate(-6deg) translate(-6px, 4px);
+    }
+    .yb-bn-product--bqun img {
+      height: 170px;
+      transform: rotate(5deg) translate(6px, 0);
+    }
+
+    .yb-bn-date {
+      margin-bottom: 0;
+    }
+
+    .yb-bn-deco--1 { width: 320px; height: 320px; right: -80px; top: -100px; }
+    .yb-bn-deco--2 { width: 160px; height: 160px; right: 160px; bottom: -50px; }
+  }
+</style>
+
+<div class="yb-banner-outer">
+  <div class="yb-banner">
+
+    <!-- 背景裝飾 -->
+    <div class="yb-bn-deco yb-bn-deco--1"></div>
+    <div class="yb-bn-deco yb-bn-deco--2"></div>
+    <div class="yb-bn-deco yb-bn-deco--3"></div>
+
+    <!-- 文案 -->
+    <div class="yb-bn-content">
+      <div class="yb-bn-label">Yboutique × HEIWEI 何謂美</div>
+      <div class="yb-bn-title">品牌聯名<br>限時開團</div>
+      <div class="yb-bn-subtitle">
+        爆白防曬噴霧 2.0 <span>SPF40 美白防曬</span><br>
+        活氧B群保濕噴霧 <span>深層補水亮白</span>
+      </div>
+      <div class="yb-bn-perks">
+        <span class="yb-bn-perk">滿 $999 免運</span>
+        <span class="yb-bn-perk">贈魚子化妝水</span>
+        <span class="yb-bn-perk">回購率 100%</span>
+      </div>
+      <div class="yb-bn-date">5 / 1 — 5 / 10</div>
+    </div>
+
+    <!-- 去背商品照 -->
+    <div class="yb-bn-products">
+      <div class="yb-bn-product yb-bn-product--baobai">
+        <img src="./爆白防曬隔離噴霧商品介紹/爆白2.0視覺去背.png" alt="爆白防曬噴霧 2.0">
+        <div class="yb-bn-product-name">爆白防曬噴霧 2.0</div>
+      </div>
+      <div class="yb-bn-product yb-bn-product--bqun">
+        <img src="./B群保濕噴霧商品介紹/噴噴水去背.png" alt="活氧B群保濕噴霧">
+        <div class="yb-bn-product-name">活氧B群保濕噴霧</div>
+      </div>
+    </div>
+
+  </div>
+</div>

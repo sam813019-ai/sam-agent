@@ -1,0 +1,8 @@
+{
+  "name": "Sam WBS Builder",
+  "id": "sam-wbs-builder-001",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma", "figjam"],
+  "documentAccess": "dynamic-page"
+}
