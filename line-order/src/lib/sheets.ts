@@ -342,7 +342,8 @@ export interface AddProductPayload {
   costPrice: number;
   price: number;
   stock: number;
-  imageUrl?: string;
+  imageUrls?: string[];  // 多圖，逗號串接存 Sheet
+  imageUrl?: string;     // 舊欄位相容保留
   description?: string;
   writeToInventory: boolean;
   writeToProducts: boolean;
@@ -354,6 +355,10 @@ export async function addInventoryProduct(
 ): Promise<{ written: string[] }> {
   const sheets = getClient();
   const written: string[] = [];
+
+  // 多圖合併（優先用 imageUrls，fallback 到舊的 imageUrl）
+  const rawImages = payload.imageUrls?.filter(Boolean) ?? (payload.imageUrl ? [payload.imageUrl] : []);
+  const imagesCell = rawImages.join(",");
 
   if (payload.writeToInventory) {
     await sheets.spreadsheets.values.append({
@@ -368,7 +373,7 @@ export async function addInventoryProduct(
           payload.costPrice,
           payload.price,
           payload.stock,
-          payload.imageUrl || "",
+          imagesCell,
         ]],
       },
     });
@@ -377,7 +382,9 @@ export async function addInventoryProduct(
 
   if (payload.writeToProducts) {
     const id = `P${Date.now()}`;
-    const image = payload.imageUrl ? normalizeImageUrl(payload.imageUrl) : "";
+    const image = rawImages.length > 0
+      ? rawImages.map(normalizeImageUrl).join(",")
+      : "";
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
       range: `${PRODUCTS_TAB}!A:J`,

@@ -48,14 +48,18 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
-// ─── 圖片上傳元件 ────────────────────────────────────────────────────────────
+// ─── 單張圖片上傳槽 ──────────────────────────────────────────────────────────
 
-function ImageUpload({
+function ImageSlot({
   imageUrl,
-  setImageUrl,
+  onUrlChange,
+  onDelete,
+  index,
 }: {
   imageUrl: string;
-  setImageUrl: (url: string) => void;
+  onUrlChange: (url: string) => void;
+  onDelete: () => void;
+  index: number;
 }) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState('');
@@ -66,80 +70,85 @@ function ImageUpload({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploadError('');
-
-    // 本地預覽
     const reader = new FileReader();
     reader.onload = (ev) => setPreview(ev.target?.result as string);
     reader.readAsDataURL(file);
-
-    // 上傳到 Google Drive
     setUploading(true);
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch('/api/admin/upload-image', {
-        method: 'POST',
-        body: formData,
-      });
+      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData });
       const data = await res.json();
-      if (res.ok) {
-        setImageUrl(data.url);
-      } else {
-        setUploadError(data.error || '上傳失敗');
-        setPreview('');
-      }
-    } catch {
-      setUploadError('網路錯誤，請重試');
-      setPreview('');
-    }
+      if (res.ok) { onUrlChange(data.url); } else { setUploadError(data.error || '上傳失敗'); setPreview(''); }
+    } catch { setUploadError('網路錯誤，請重試'); setPreview(''); }
     setUploading(false);
-    // 清掉 input 值，允許重複選同一檔案
     if (inputRef.current) inputRef.current.value = '';
   };
 
   return (
-    <div className="space-y-2">
-      {/* 拍照 / 相簿按鈕 */}
-      <label
-        className={`flex items-center justify-center gap-2 w-full py-2.5 border-2 border-dashed rounded-lg cursor-pointer text-sm transition-colors ${
-          uploading
-            ? 'border-gray-200 text-gray-400 pointer-events-none'
-            : 'border-gray-300 text-gray-500 hover:border-blue-400 hover:text-blue-600'
-        }`}
-      >
-        <span>{uploading ? '上傳中...' : '📷  選擇圖片 / 拍照'}</span>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFile}
-          className="hidden"
-        />
+    <div className="border rounded-lg p-2 space-y-2 bg-gray-50 relative">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-gray-400">圖片 {index + 1}</span>
+        <button type="button" onClick={onDelete} className="text-xs text-red-400 hover:text-red-600 px-1">✕ 刪除</button>
+      </div>
+      <label className={`flex items-center justify-center gap-2 w-full py-2 border-2 border-dashed rounded-lg cursor-pointer text-sm transition-colors ${uploading ? 'border-gray-200 text-gray-400 pointer-events-none' : 'border-gray-300 text-gray-500 hover:border-blue-400 hover:text-blue-600'}`}>
+        <span>{uploading ? '上傳中...' : '📷 選擇圖片 / 拍照'}</span>
+        <input ref={inputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
       </label>
-
-      {/* 預覽 */}
       {preview && (
-        <div className="flex items-center gap-3">
-          <img src={preview} alt="預覽" className="w-16 h-16 object-cover rounded-lg border" />
-          <span className="text-xs text-green-600">已上傳到 Google Drive</span>
+        <div className="flex items-center gap-2">
+          <img src={preview} alt="預覽" className="w-14 h-14 object-cover rounded border" />
+          <span className="text-xs text-green-600">已上傳 ✓</span>
         </div>
       )}
-
-      {/* 上傳錯誤 */}
-      {uploadError && (
-        <p className="text-xs text-red-600">{uploadError}</p>
-      )}
-
-      {/* 備用：直接貼 URL */}
+      {uploadError && <p className="text-xs text-red-600">{uploadError}</p>}
       <input
         value={imageUrl}
-        onChange={(e) => {
-          setImageUrl(e.target.value);
-          if (!e.target.value) setPreview('');
-        }}
+        onChange={(e) => { onUrlChange(e.target.value); if (!e.target.value) setPreview(''); }}
         className={inputCls}
-        placeholder="或直接貼 Google Drive / 圖片連結"
+        placeholder="或直接貼圖片連結"
       />
+    </div>
+  );
+}
+
+// ─── 多圖上傳元件 ─────────────────────────────────────────────────────────────
+
+function MultiImageUpload({
+  imageUrls,
+  setImageUrls,
+}: {
+  imageUrls: string[];
+  setImageUrls: (urls: string[]) => void;
+}) {
+  const update = (i: number, url: string) => {
+    const next = [...imageUrls];
+    next[i] = url;
+    setImageUrls(next);
+  };
+  const remove = (i: number) => setImageUrls(imageUrls.filter((_, idx) => idx !== i));
+  const add = () => setImageUrls([...imageUrls, '']);
+
+  return (
+    <div className="space-y-2">
+      {imageUrls.map((url, i) => (
+        <ImageSlot
+          key={i}
+          index={i}
+          imageUrl={url}
+          onUrlChange={(u) => update(i, u)}
+          onDelete={() => remove(i)}
+        />
+      ))}
+      {imageUrls.length < 5 && (
+        <button
+          type="button"
+          onClick={add}
+          className="w-full py-2 border border-dashed border-blue-300 rounded-lg text-sm text-blue-500 hover:bg-blue-50 transition-colors"
+        >
+          ＋ 新增圖片（最多 5 張）
+        </button>
+      )}
     </div>
   );
 }
@@ -154,7 +163,7 @@ function ProductForm({
   onError: (m: string) => void;
 }) {
   const [loading, setLoading] = useState(false);
-  const [resetKey, setResetKey] = useState(0);
+  const [imageUrls, setImageUrls] = useState<string[]>(['']);
   const [form, setForm] = useState({
     code: '',
     name: '',
@@ -162,7 +171,6 @@ function ProductForm({
     costPrice: '',
     price: '',
     stock: '',
-    imageUrl: '',
     description: '',
     writeToInventory: true,
     writeToProducts: true,
@@ -174,9 +182,9 @@ function ProductForm({
   const reset = () => {
     setForm({
       code: '', name: '', spec: '', costPrice: '', price: '', stock: '',
-      imageUrl: '', description: '', writeToInventory: true, writeToProducts: true,
+      description: '', writeToInventory: true, writeToProducts: true,
     });
-    setResetKey((k) => k + 1); // 強制 ImageUpload 重新掛載，清除預覽
+    setImageUrls(['']);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -195,6 +203,7 @@ function ProductForm({
           costPrice: Number(form.costPrice) || 0,
           price: Number(form.price),
           stock: Number(form.stock),
+          imageUrls: imageUrls.filter(Boolean),
         }),
       });
       const data = await res.json();
@@ -241,11 +250,7 @@ function ProductForm({
             className={inputCls} placeholder="10" />
         </Row>
         <Row label="圖片">
-          <ImageUpload
-            key={resetKey}
-            imageUrl={form.imageUrl}
-            setImageUrl={(url) => set('imageUrl', url)}
-          />
+          <MultiImageUpload imageUrls={imageUrls} setImageUrls={setImageUrls} />
         </Row>
         <Row label="備註">
           <input value={form.description} onChange={(e) => set('description', e.target.value)}
