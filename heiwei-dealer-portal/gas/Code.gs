@@ -172,15 +172,15 @@ function handleAuthForm(data) {
 
 // ── 訂購單處理 ────────────────────────────────────────────
 // 訂購單欄位：A=時間, B=LINE UID, C=姓名, D=電話, E=Email, F=地址,
-//            G=方案, H=單價, I=數量, J=總金額, K=匯款後五碼,
-//            L=發票類型, M=發票抬頭, N=統編, O=狀態
+//            G=商品, H=方案, I=單價, J=數量, K=總金額, L=匯款後五碼,
+//            M=發票類型, N=發票抬頭, O=統編, P=狀態
 
 function handleOrder(data) {
   const ss = SpreadsheetApp.openById(SHEET_ID);
   let sheet = ss.getSheetByName('訂購單');
   if (!sheet) {
     sheet = ss.insertSheet('訂購單');
-    sheet.appendRow(['時間','LINE UID','姓名','電話','Email','地址','方案','單價','數量','總金額','匯款後五碼','發票類型','發票抬頭','統編','狀態']);
+    sheet.appendRow(['時間','LINE UID','姓名','電話','Email','地址','商品','方案','單價','數量','總金額','匯款後五碼','發票類型','發票抬頭','統編','狀態']);
   }
 
   sheet.appendRow([
@@ -190,6 +190,7 @@ function handleOrder(data) {
     data.phone          || '',
     data.email          || '',
     data.address        || '',
+    data.product_name   || '',
     data.plan_label     || '',
     data.unit_price     || '',
     data.quantity       || '',
@@ -206,6 +207,7 @@ function handleOrder(data) {
     '',
     `姓名：${data.buyer_name}`,
     `電話：${data.phone}`,
+    `商品：${data.product_name || '未填'}`,
     `方案：${data.plan_label}（$${data.unit_price}/件）`,
     `數量：${data.quantity} 件`,
     `總金額：$${data.total_amount}`,
@@ -248,8 +250,8 @@ function getAuthFormStatus(token) {
 
 // ── 我的訂單查詢 ──────────────────────────────────────────
 // 訂購單欄位：A=時間, B=LINE UID, C=姓名, D=電話, E=Email, F=地址,
-//            G=方案, H=單價, I=數量, J=總金額, K=匯款後五碼,
-//            L=發票類型, M=發票抬頭, N=統編, O=狀態, P=貨運方式, Q=貨運編號
+//            G=商品, H=方案, I=單價, J=數量, K=總金額, L=匯款後五碼,
+//            M=發票類型, N=發票抬頭, O=統編, P=狀態, Q=貨運方式, R=貨運編號
 
 function getMyOrders(lineUserId) {
   if (!lineUserId) return jsonResponse({ ok: true, data: [] });
@@ -265,12 +267,14 @@ function getMyOrders(lineUserId) {
     if (String(data[i][1]) !== lineUserId) continue;
     orders.push({
       date:           Utilities.formatDate(new Date(data[i][0]), 'Asia/Taipei', 'yyyy.MM.dd HH:mm'),
-      plan:           data[i][6]  || '',
-      quantity:       data[i][8]  || '',
-      total:          data[i][9]  || '',
-      status:         data[i][14] || '待確認',
-      shippingMethod: data[i][15] || '',
-      trackingNumber: data[i][16] || ''
+      // 插入商品欄之前的舊訂單此欄為空，一律視為爆白防曬隔離噴霧
+      product:        data[i][6]  || '爆白防曬隔離噴霧',
+      plan:           data[i][7]  || '',
+      quantity:       data[i][9]  || '',
+      total:          data[i][10] || '',
+      status:         data[i][15] || '待確認',
+      shippingMethod: data[i][16] || '',
+      trackingNumber: data[i][17] || ''
     });
   }
 

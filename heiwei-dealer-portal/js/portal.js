@@ -428,24 +428,54 @@ function renderMaterials() {
 //  訂購出貨 — 完整訂購表單
 // ══════════════════════════════════════════
 
+// 商品與階梯定價（新增品項只需改這份資料）
+const ORDER_PRODUCTS = [
+  {
+    id:   'spray',
+    name: '爆白防曬隔離噴霧',
+    tiers: [
+      { price: 350, min: 30,  name: '入門方案', label: '入門方案（30件以上）' },
+      { price: 300, min: 100, name: '進階方案', label: '進階方案（100件以上）' },
+      { price: 270, min: 500, name: '批量方案', label: '批量方案（500件以上）' }
+    ]
+  },
+  {
+    id:   'stick',
+    name: '爆白防曬棒',
+    tiers: [
+      { price: 450, min: 30,  name: '入門方案', label: '入門方案（30件以上）' },
+      { price: 390, min: 100, name: '進階方案', label: '進階方案（100件以上）' },
+      { price: 350, min: 500, name: '批量方案', label: '批量方案（500件以上）' }
+    ]
+  }
+];
+
+function findProduct(id) {
+  return ORDER_PRODUCTS.find(p => p.id === id) || null;
+}
+
 // 金額自動計算
 function orderRecalc() {
+  const prodInput  = document.querySelector('#order-product-grid input:checked');
   const planInput  = document.querySelector('#order-plan-grid input:checked');
   const qty        = parseInt(document.getElementById('order-qty')?.value || '0', 10);
   const calcEmpty  = document.getElementById('order-calc-empty');
   const calcDetail = document.getElementById('order-calc-detail');
   if (!calcEmpty || !calcDetail) return;
 
-  if (!planInput || !qty || qty <= 0) {
+  if (!prodInput || !planInput || !qty || qty <= 0) {
     calcEmpty.style.display  = 'block';
     calcDetail.style.display = 'none';
     return;
   }
 
+  const product   = findProduct(prodInput.value);
   const unitPrice = parseInt(planInput.value, 10);
   const planLabel = planInput.dataset.label;
   const total     = unitPrice * qty;
 
+  document.getElementById('order-calc-product').textContent = product ? product.name : '—';
+  document.getElementById('order-product-hidden').value      = product ? product.name : '';
   document.getElementById('order-calc-plan').textContent  = planLabel;
   document.getElementById('order-calc-unit').textContent  = '$' + unitPrice.toLocaleString();
   document.getElementById('order-calc-qty').textContent   = qty.toLocaleString() + ' 件';
@@ -458,10 +488,33 @@ function orderRecalc() {
   calcDetail.style.display = 'block';
 }
 
-// 初始化訂購表單的事件監聽
-function initOrderForm() {
-  // 方案選擇
-  document.querySelectorAll('#order-plan-grid input').forEach(radio => {
+// 依選定商品重繪方案卡片
+function renderOrderPlans(productId) {
+  const grid    = document.getElementById('order-plan-grid');
+  const product = findProduct(productId);
+  if (!grid) return;
+
+  if (!product) {
+    grid.innerHTML = `
+      <div style="text-align:center;font-size:12px;color:var(--text-muted);padding:10px 0;">
+        請先選擇商品
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = product.tiers.map((t, i) => `
+    <label class="plan-item">
+      <input type="radio" name="order_plan" value="${t.price}"
+             data-min="${t.min}" data-label="${t.label}" required>
+      <div class="plan-info">
+        <div class="plan-name">${t.name}</div>
+        <div class="plan-desc">最低訂購 ${t.min} 件</div>
+      </div>
+      <div class="plan-price">$${t.price} <span>/ 件</span></div>
+    </label>
+  `).join('');
+
+  grid.querySelectorAll('input').forEach(radio => {
     radio.addEventListener('change', function() {
       const min = parseInt(this.dataset.min, 10);
       document.getElementById('order-qty-hint').textContent = '最低訂購 ' + min + ' 件';
@@ -469,6 +522,37 @@ function initOrderForm() {
       orderRecalc();
     });
   });
+}
+
+// 切換商品時清空方案與數量，避免殘留上一個商品的單價
+function resetOrderSelection() {
+  const qtyInput = document.getElementById('order-qty');
+  if (qtyInput) {
+    qtyInput.value = '';
+    qtyInput.min   = 1;
+  }
+  const hint = document.getElementById('order-qty-hint');
+  if (hint) hint.textContent = '請先選擇上方方案';
+
+  ['order-total-hidden', 'order-unit-hidden', 'order-label-hidden', 'order-product-hidden'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
+// 初始化訂購表單的事件監聽
+function initOrderForm() {
+  // 商品選擇 → 重繪方案、清空既有選擇
+  document.querySelectorAll('#order-product-grid input').forEach(radio => {
+    radio.addEventListener('change', function() {
+      resetOrderSelection();
+      renderOrderPlans(this.value);
+      orderRecalc();
+    });
+  });
+
+  // 尚未選商品時，方案區顯示提示
+  renderOrderPlans(null);
 
   // 數量輸入
   document.getElementById('order-qty')?.addEventListener('input', orderRecalc);
@@ -484,6 +568,13 @@ function initOrderForm() {
   // 送出
   document.getElementById('order-form')?.addEventListener('submit', async function(e) {
     e.preventDefault();
+
+    // 商品必選
+    const prodInput = document.querySelector('#order-product-grid input:checked');
+    if (!prodInput) {
+      alert('請先選擇訂購商品');
+      return;
+    }
 
     // 違約協議必勾
     if (!document.getElementById('order-agreement').checked) {
@@ -506,6 +597,7 @@ function initOrderForm() {
       phone:          fd.get('order_phone'),
       email:          fd.get('order_email'),
       address:        fd.get('order_address'),
+      product_name:   document.getElementById('order-product-hidden')?.value || '',
       plan_label:     document.getElementById('order-label-hidden')?.value || '',
       unit_price:     document.getElementById('order-unit-hidden')?.value  || '',
       quantity:       fd.get('order_qty'),
@@ -588,35 +680,32 @@ function renderOrder() {
           </div>
         </div>
 
+        <!-- 商品選擇 -->
+        <div class="form-card">
+          <div class="card-title">商品選擇</div>
+          <div class="plan-grid" id="order-product-grid">
+            ${ORDER_PRODUCTS.map(p => {
+              const lowest = Math.min(...p.tiers.map(t => t.price));
+              return `
+            <label class="plan-item">
+              <input type="radio" name="order_product" value="${p.id}" required>
+              <div class="plan-info">
+                <div class="plan-name">${p.name}</div>
+                <div class="plan-desc">選擇後顯示階梯價</div>
+              </div>
+              <div class="plan-price">$${lowest} <span>起 / 件</span></div>
+            </label>`;
+            }).join('')}
+          </div>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:10px;line-height:1.6;">
+            一張訂單限訂購一種商品，如需訂購兩種商品請分開送出。
+          </p>
+        </div>
+
         <!-- 方案選擇 -->
         <div class="form-card">
           <div class="card-title">方案選擇</div>
-          <div class="plan-grid" id="order-plan-grid">
-            <label class="plan-item">
-              <input type="radio" name="order_plan" value="350" data-min="30" data-label="入門方案（30件以上）" required>
-              <div class="plan-info">
-                <div class="plan-name">入門方案</div>
-                <div class="plan-desc">最低訂購 30 件</div>
-              </div>
-              <div class="plan-price">$350 <span>/ 件</span></div>
-            </label>
-            <label class="plan-item">
-              <input type="radio" name="order_plan" value="300" data-min="100" data-label="進階方案（100件以上）">
-              <div class="plan-info">
-                <div class="plan-name">進階方案</div>
-                <div class="plan-desc">最低訂購 100 件</div>
-              </div>
-              <div class="plan-price">$300 <span>/ 件</span></div>
-            </label>
-            <label class="plan-item">
-              <input type="radio" name="order_plan" value="270" data-min="500" data-label="批量方案（500件以上）">
-              <div class="plan-info">
-                <div class="plan-name">批量方案</div>
-                <div class="plan-desc">最低訂購 500 件</div>
-              </div>
-              <div class="plan-price">$270 <span>/ 件</span></div>
-            </label>
-          </div>
+          <div class="plan-grid" id="order-plan-grid"></div>
         </div>
 
         <!-- 訂購數量 + 計算 -->
@@ -633,6 +722,7 @@ function renderOrder() {
               選擇方案並填寫數量後，自動顯示匯款金額
             </div>
             <div id="order-calc-detail" style="display:none;">
+              <div class="calc-row"><span>訂購商品</span><span id="order-calc-product">—</span></div>
               <div class="calc-row"><span>選擇方案</span><span id="order-calc-plan">—</span></div>
               <div class="calc-row"><span>每件單價</span><span id="order-calc-unit">—</span></div>
               <div class="calc-row"><span>訂購數量</span><span id="order-calc-qty">—</span></div>
@@ -645,6 +735,7 @@ function renderOrder() {
           <input type="hidden" id="order-total-hidden">
           <input type="hidden" id="order-unit-hidden">
           <input type="hidden" id="order-label-hidden">
+          <input type="hidden" id="order-product-hidden">
         </div>
 
         <!-- 匯款資訊 -->
@@ -772,7 +863,8 @@ async function renderOrders() {
           <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;${orderStatusStyle(o.status)}">${o.status}</span>
         </div>
         <!-- 訂單資料 -->
-        <div style="font-size:13px;color:var(--dark);font-weight:600;margin-bottom:6px;">${o.plan}</div>
+        <div style="font-size:14px;color:var(--dark);font-weight:700;margin-bottom:2px;">${o.product || '爆白防曬隔離噴霧'}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">${o.plan}</div>
         <div style="display:flex;gap:16px;font-size:12px;color:var(--text-body);margin-bottom:${o.shippingMethod || o.trackingNumber ? '12px' : '0'};">
           <span>數量：${o.quantity} 件</span>
           <span>總金額：<strong style="color:var(--gold);">$${Number(o.total).toLocaleString()}</strong></span>
