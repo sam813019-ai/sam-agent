@@ -6,3 +6,4 @@
 # 大型素材檔（>50MB 會被 GitHub 擋下，請放 Google Drive）
 振太網站/**/*.zip
 *.glb.zip
+振太網站*.zip
