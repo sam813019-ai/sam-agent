@@ -815,10 +815,12 @@ function renderOrder() {
 //  我的訂單
 // ══════════════════════════════════════════
 
+// 依訂單流程排序：待確認 → 已付款 → 已出貨 → 已配送（完成）／已取消
 const ORDER_STATUS_STYLE = {
   '待確認': 'background:#FFF3CD;color:#856404;',
   '已付款': 'background:#CCE5FF;color:#004085;',
   '已出貨': 'background:#D4EDDA;color:#155724;',
+  '已配送': 'background:#155724;color:#FFFFFF;',
   '已取消': 'background:#F8D7DA;color:#721C24;'
 };
 
