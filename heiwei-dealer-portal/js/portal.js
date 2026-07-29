@@ -684,18 +684,14 @@ function renderOrder() {
         <div class="form-card">
           <div class="card-title">商品選擇</div>
           <div class="plan-grid" id="order-product-grid">
-            ${ORDER_PRODUCTS.map(p => {
-              const lowest = Math.min(...p.tiers.map(t => t.price));
-              return `
+            ${ORDER_PRODUCTS.map(p => `
             <label class="plan-item">
               <input type="radio" name="order_product" value="${p.id}" required>
               <div class="plan-info">
                 <div class="plan-name">${p.name}</div>
                 <div class="plan-desc">選擇後顯示階梯價</div>
               </div>
-              <div class="plan-price">$${lowest} <span>起 / 件</span></div>
-            </label>`;
-            }).join('')}
+            </label>`).join('')}
           </div>
           <p style="font-size:11px;color:var(--text-muted);margin-top:10px;line-height:1.6;">
             一張訂單限訂購一種商品，如需訂購兩種商品請分開送出。
