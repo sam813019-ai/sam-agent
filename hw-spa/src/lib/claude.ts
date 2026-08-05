@@ -25,6 +25,23 @@ ${keywords.join('、')}
 
 export type ChatResult = { reply: string; shouldHandoff: boolean };
 
+/** 主力與備援 AI 都失敗時拋出，讓 webhook 能與一般錯誤區分處理 */
+export class AiUnavailableError extends Error {
+  name = 'AiUnavailableError';
+  constructor(
+    public claudeError: unknown,
+    public geminiError: unknown,
+  ) {
+    super(`AI 全數失敗｜Claude: ${describeError(claudeError)}｜Gemini: ${describeError(geminiError)}`);
+  }
+}
+
+function describeError(err: unknown): string {
+  const e = err as { status?: number; message?: string };
+  const status = e?.status ? `${e.status} ` : '';
+  return `${status}${e?.message ?? String(err)}`;
+}
+
 async function chatWithGemini(
   userMessage: string,
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
@@ -86,10 +103,19 @@ export async function chat(
     }
   }
 
-  // Claude 失敗 → fallback 到 Gemini Flash（免費 tier）
+  // Claude 失敗一定要留下紀錄。先前這裡直接吞掉，導致「餘額不足」
+  // 被 Gemini 的 429 蓋住，整整 8 天沒人發現真正的原因。
+  console.error('[claude] 主力失敗，改用 Gemini：', describeError(claudeError));
+
+  // Claude 失敗 → fallback 到 Gemini Flash
   if (process.env.GEMINI_API_KEY) {
-    return chatWithGemini(userMessage, history, knowledge, handoffKeywords);
+    try {
+      return await chatWithGemini(userMessage, history, knowledge, handoffKeywords);
+    } catch (geminiError) {
+      console.error('[gemini] 備援也失敗：', describeError(geminiError));
+      throw new AiUnavailableError(claudeError, geminiError);
+    }
   }
 
-  throw claudeError;
+  throw new AiUnavailableError(claudeError, new Error('未設定 GEMINI_API_KEY'));
 }

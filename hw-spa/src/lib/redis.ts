@@ -35,3 +35,12 @@ export async function releaseHandoff(userId: string): Promise<void> {
 export async function isHandoff(userId: string): Promise<boolean> {
   return (await redis.get(HANDOFF_KEY(userId))) !== null;
 }
+
+/**
+ * 節流鎖：取得成功回傳 true，冷卻期間回傳 false。
+ * 用來避免 AI 故障時，每則客訊都推播一次管理員（先前一次故障累積 101 則）。
+ */
+export async function acquireAlertLock(name: string, ttlSeconds: number): Promise<boolean> {
+  const res = await redis.set(`alert:${name}`, '1', { ex: ttlSeconds, nx: true });
+  return res === 'OK';
+}

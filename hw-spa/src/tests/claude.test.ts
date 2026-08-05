@@ -80,4 +80,40 @@ describe('chat', () => {
     expect(result.reply).toBe('Gemini 回覆');
     expect(mockSendMessage).toHaveBeenCalled();
   });
+
+  it('Claude 失敗時必須把錯誤寫進 log（否則問題會靜默 8 天沒人發現）', async () => {
+    process.env.GEMINI_API_KEY = 'test-gemini-key';
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const err = Object.assign(new Error('credit balance too low'), { status: 400 });
+    mockCreate.mockRejectedValue(err);
+    mockSendMessage.mockResolvedValue({ response: { text: () => 'Gemini 回覆' } });
+
+    await chat('你好', [], mockKnowledge, mockKeywords);
+
+    expect(spy).toHaveBeenCalled();
+    const logged = spy.mock.calls.flat().map(String).join(' ');
+    expect(logged).toContain('400');
+    expect(logged).toContain('credit balance too low');
+    spy.mockRestore();
+  });
+
+  it('Claude 與 Gemini 都失敗時，拋出的錯誤要同時帶兩邊的原因', async () => {
+    process.env.GEMINI_API_KEY = 'test-gemini-key';
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    mockCreate.mockRejectedValue(Object.assign(new Error('credit balance too low'), { status: 400 }));
+    mockSendMessage.mockRejectedValue(Object.assign(new Error('quota exceeded'), { status: 429 }));
+
+    await expect(chat('你好', [], mockKnowledge, mockKeywords)).rejects.toMatchObject({
+      name: 'AiUnavailableError',
+    });
+
+    try {
+      await chat('你好', [], mockKnowledge, mockKeywords);
+    } catch (e) {
+      const msg = String((e as Error).message);
+      expect(msg).toContain('credit balance too low');
+      expect(msg).toContain('quota exceeded');
+    }
+    vi.restoreAllMocks();
+  });
 });

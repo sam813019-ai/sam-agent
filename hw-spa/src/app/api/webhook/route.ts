@@ -1,8 +1,8 @@
 import { after } from 'next/server';
-import { verifySignature, replyMessage, replyWithHandoffOption, pushToAdmin } from '@/lib/line';
-import { getHistory, appendMessages, isHandoff, setHandoff } from '@/lib/redis';
-import { getKnowledgeBase, formatKnowledgeForPrompt, getHandoffKeywords } from '@/lib/sheets';
-import { chat } from '@/lib/claude';
+import { verifySignature, replyMessage, replyWithHandoffOption, replyImage, pushToAdmin } from '@/lib/line';
+import { getHistory, appendMessages, isHandoff, setHandoff, acquireAlertLock } from '@/lib/redis';
+import { getKnowledgeBase, formatKnowledgeForPrompt, getHandoffKeywords, matchImageKeyword } from '@/lib/sheets';
+import { chat, AiUnavailableError } from '@/lib/claude';
 import type { webhook } from '@line/bot-sdk';
 type WebhookEvent = webhook.Event;
 
@@ -60,6 +60,13 @@ export async function POST(req: Request) {
           getKnowledgeBase(),
         ]);
 
+        // 關鍵字圖片回覆（優先於 AI）
+        const imageMatch = matchImageKeyword(kb, userText);
+        if (imageMatch) {
+          await replyImage(replyToken, imageMatch.imageUrl, imageMatch.caption || undefined, imageMatch.imageUrl2, imageMatch.imageUrl3);
+          continue;
+        }
+
         const { reply, shouldHandoff } = await chat(
           userText,
           history,
@@ -92,6 +99,28 @@ export async function POST(req: Request) {
         }
       } catch (err) {
         console.error('[webhook] Error:', err);
+
+        // AI 全數失敗（額度用盡、金鑰失效…）→ 轉人工，並通知管理員
+        if (err instanceof AiUnavailableError) {
+          try {
+            await Promise.all([
+              // 不要說「稍後再傳訊息」——故障可能持續數天，客人會空等
+              replyMessage(replyToken, '不好意思，這邊需要由專人為您服務，我們的人員會盡快與您聯繫 🙏'),
+              setHandoff(userId),
+            ]);
+          } catch {}
+
+          // 每小時最多通知一次，避免管理員被同一場故障洗版
+          try {
+            if (await acquireAlertLock('ai-unavailable', 3600)) {
+              await pushToAdmin(
+                `🚨 AI 客服全數失效，已自動轉人工\n\n${err.message}\n\n請確認 API 額度與金鑰。`,
+              );
+            }
+          } catch {}
+          continue;
+        }
+
         try { await replyMessage(replyToken, '抱歉，目前系統忙碌中，請稍後再傳訊息，我們會盡快回覆您 🙏'); } catch {}
       }
     }
