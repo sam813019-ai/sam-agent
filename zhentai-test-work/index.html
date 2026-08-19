@@ -971,22 +971,19 @@ body.jt-mnav-open{overflow:hidden}
 .about .about-col{background:#fff;border-radius:16px;padding:32px 30px;
   box-shadow:0 10px 30px -22px rgba(10,9,8,.5)}
 
-/* 4. 發展歷程：左右滿版單行 10 格（每個節點自帶虛線段與圓點）
-   .tl-track 貼齊視窗左右邊；窄螢幕欄寬不足時整條可橫向滑動，仍維持一行 */
-.about .timeline{margin-top:80px;
-  margin-left:calc(-50vw + 50%);margin-right:calc(-50vw + 50%);
-  overflow-x:auto}
+/* 4. 發展歷程：單行 10 格，左右對齊版心（與上方三欄卡片同寬，維持垂直節奏）
+   窄螢幕欄寬不足時整條可橫向滑動，仍維持一行 */
+.about .timeline{margin-top:80px;overflow-x:auto}
 .about .timeline::before{display:none}
-/* 標題重建 wrap 的寬度與內距，才不會跟著滿版跑到邊緣 */
-.tl-head{width:min(1440px,100%);margin:0 auto 34px;padding:0 var(--gutter)}
 .ab-card .ab-motto{font-family:var(--f-sans-tc);font-size:15px;line-height:1.85;
   color:rgba(242,237,225,.7);margin-top:18px}
 .ab-card .ab-motto em{font-style:normal;color:var(--yellow)}
 .tl-head{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.25em;
-  text-transform:uppercase;color:var(--red)}
-.about .tl-track{grid-template-columns:repeat(10,minmax(112px,1fr));gap:0 12px}
-.about .tl-node{padding:26px 8px 0;border-top:1px dashed rgba(10,9,8,.3)}
-.about .tl-node .yr{font-size:18px;margin-bottom:6px}
+  text-transform:uppercase;color:var(--red);margin-bottom:34px}
+.about .tl-track{grid-template-columns:repeat(10,minmax(96px,1fr));gap:0 14px}
+.about .tl-node{padding:26px 6px 0;border-top:1px dashed rgba(10,9,8,.3)}
+/* 圓點在欄位正中央，年份與說明一併置中才對齊（原本年份靠左、說明置中） */
+.about .tl-node .yr{font-size:18px;margin-bottom:6px;text-align:center}
 .about .tl-node .yr::before{position:absolute;top:-7px;left:50%;transform:translateX(-50%);
   margin:0;width:12px;height:12px}
 .about .tl-node p{font-size:11.5px;line-height:1.55}
