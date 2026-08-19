@@ -52,6 +52,42 @@ const CHECKS = [
       if (px > 68) throw new Error(`contact-title = ${px}px，應 ≤ 68`);
     },
   },
+  {
+    name: 'T3 聯絡標題三語皆無標點（首頁）',
+    page: 'index',
+    fn: async (page) => {
+      for (const lang of ['zh', 'en', 'vi']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(120);
+        const txt = await page.$eval('.contact-title', (el) => el.textContent);
+        const bad = txt.match(/[，。,.、；;]/g);
+        if (bad) throw new Error(`${lang} 仍有標點 ${bad.join('')}：${txt.trim()}`);
+      }
+      await page.evaluate(() => window.jtSetLang('zh'));
+    },
+  },
+  {
+    name: 'T3 聯絡標題三語皆無標點（聯絡頁）',
+    page: 'contact',
+    fn: async (page) => {
+      for (const lang of ['zh', 'en', 'vi']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(120);
+        const txt = await page.$eval('.contact-title', (el) => el.textContent);
+        const bad = txt.match(/[，。,.、；;]/g);
+        if (bad) throw new Error(`${lang} 仍有標點 ${bad.join('')}：${txt.trim()}`);
+      }
+      await page.evaluate(() => window.jtSetLang('zh'));
+    },
+  },
+  {
+    name: 'T3 聯絡標題黃字紅字 span 仍在（首頁）',
+    page: 'index',
+    fn: async (page) => {
+      const n = await page.$$eval('.contact-title .y, .contact-title .r', (els) => els.length);
+      if (n < 2) throw new Error(`.y/.r span 只剩 ${n} 個，i18n HTML 逸出可能壞了`);
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */
