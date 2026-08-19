@@ -145,6 +145,50 @@ const CHECKS = [
       if (n) throw new Error(`首頁仍有 ${n} 個標記元素`);
     },
   },
+  {
+    name: 'T5 modal 加大且文字加大加粗（產品頁）',
+    page: 'products',
+    fn: async (page) => {
+      await page.waitForSelector('.prod-card', { timeout: 10000 });
+      await page.click('.prod-card');
+      await page.waitForSelector('.jt-modal.open', { timeout: 8000 });
+      await page.waitForTimeout(500);
+
+      const inner = await page.$eval('.jt-modal-inner', (el) => el.getBoundingClientRect().width);
+      if (inner < 1250) throw new Error(`modal 寬 ${Math.round(inner)}px，應 ≥ 1250（1440 視窗）`);
+
+      const nameFs = await page.$eval('#jt-modal-name-zh', (el) => parseFloat(getComputedStyle(el).fontSize));
+      if (nameFs < 30) throw new Error(`產品名 ${nameFs}px，應 ≥ 30`);
+
+      const li = await page.$('.jt-desc-list li');
+      if (!li) throw new Error('找不到 .jt-desc-list li，無法驗說明字級');
+      const s = await li.evaluate((el) => {
+        const c = getComputedStyle(el);
+        return { fs: parseFloat(c.fontSize), fw: parseInt(c.fontWeight, 10) };
+      });
+      if (s.fs < 15.5) throw new Error(`說明字 ${s.fs}px，應 ≥ 15.5`);
+      if (s.fw < 500) throw new Error(`說明字重 ${s.fw}，應 ≥ 500`);
+
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(400);
+    },
+  },
+  {
+    name: 'T5 modal 加大且文字加大加粗（首頁）',
+    page: 'index',
+    fn: async (page) => {
+      await page.waitForSelector('.prod-card', { timeout: 10000 });
+      await page.click('.prod-card');
+      await page.waitForSelector('.jt-modal.open', { timeout: 8000 });
+      await page.waitForTimeout(500);
+      const inner = await page.$eval('.jt-modal-inner', (el) => el.getBoundingClientRect().width);
+      if (inner < 1250) throw new Error(`modal 寬 ${Math.round(inner)}px，應 ≥ 1250`);
+      const nameFs = await page.$eval('#jt-modal-name-zh', (el) => parseFloat(getComputedStyle(el).fontSize));
+      if (nameFs < 30) throw new Error(`產品名 ${nameFs}px，應 ≥ 30`);
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(400);
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */

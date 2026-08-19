@@ -736,12 +736,12 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 /* Info col */
 .jt-modal-info-col{padding:40px 40px 40px 44px;display:flex;flex-direction:column;justify-content:center;gap:0}
 .jt-modal-series-tag{font-size:10px;letter-spacing:.25em;color:#F4DB00;text-transform:uppercase;margin-bottom:14px}
-.jt-modal-name-zh{font-size:clamp(18px,2.2vw,26px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:6px;font-family:var(--f-sans-tc)}
-.jt-modal-name-en{font-size:11px;font-weight:400;color:#555;letter-spacing:.08em;margin-bottom:18px;line-height:1.5}
+.jt-modal-name-zh{font-size:clamp(22px,2.6vw,34px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:6px;font-family:var(--f-sans-tc)}
+.jt-modal-name-en{font-size:13px;font-weight:400;color:#555;letter-spacing:.08em;margin-bottom:18px;line-height:1.5}
 .jt-modal-badge{font-size:11px;color:#444;letter-spacing:.2em;font-family:monospace;margin-bottom:24px}
 .jt-modal-badge span{color:#E53128;margin:0 6px}
 .jt-spec-table{width:100%;border-top:1px solid #222;margin-bottom:28px}
-.jt-spec-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1e1e1e;font-size:13px}
+.jt-spec-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1e1e1e;font-size:15px}
 .jt-spec-label{color:#555}
 .jt-spec-value{color:#ccc;text-align:right}
 .jt-spec-value.hi{color:#F4DB00}
@@ -779,6 +779,14 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 .jt-no-model{color:#455565}
 .jt-no-model svg{stroke:#455565}
 @media(max-width:680px){.jt-modal-viewer-col{border-bottom-color:#2E3A48}}
+/* ─── 資料卡加大（與產品介紹頁一致）─── */
+.jt-modal-inner{width:min(1320px,96vw)}
+.jt-modal-card{min-height:640px}
+.jt-modal-info-col{padding:48px 48px 48px 52px}
+@media(max-width:680px){
+  .jt-modal-card{min-height:0}
+  .jt-modal-info-col{padding:28px 24px}
+}
 </style>
 
 <style id="jt-mnav-css">
