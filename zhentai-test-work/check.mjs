@@ -247,6 +247,89 @@ const CHECKS = [
       if (!latest.includes('[03]')) throw new Error(`latest 標籤為「${latest.trim()}」`);
     },
   },
+  {
+    name: 'T7 公司簡介新結構齊全',
+    page: 'index',
+    fn: async (page) => {
+      const need = ['.ab-hero', '.ab-card', '.ab-more', '.ab-bignum', '.ab-photos',
+                    '.ab-ph-1', '.ab-ph-2', '.ab-ph-3'];
+      for (const sel of need) {
+        const n = await page.$$eval(`#about ${sel}`, (els) => els.length);
+        if (!n) throw new Error(`缺少 ${sel}`);
+      }
+    },
+  },
+  {
+    name: 'T7 三張照片各自獨立 src（方便日後替換）',
+    page: 'index',
+    fn: async (page) => {
+      const srcs = await page.$$eval('#about .ab-photos img', (els) => els.map((e) => e.getAttribute('src')));
+      if (srcs.length !== 3) throw new Error(`照片數 ${srcs.length}，應為 3`);
+      if (srcs.some((s) => !s || s.startsWith('/'))) throw new Error(`必須為相對路徑：${srcs.join(', ')}`);
+    },
+  },
+  {
+    name: 'T7 深色視差覆寫已移除',
+    page: 'index',
+    fn: async (page) => {
+      const bg = await page.$eval('#about', (el) => getComputedStyle(el, '::before').backgroundImage);
+      if (bg && bg !== 'none') throw new Error(`#about::before 仍有背景圖 ${bg}`);
+      const pColor = await page.$eval('#about .about-col p', (el) => getComputedStyle(el).color);
+      if (pColor.includes('255, 255, 255')) throw new Error(`三欄文字仍是白字 ${pColor}`);
+    },
+  },
+  {
+    name: 'T7 時間軸保留且在數據區之後',
+    page: 'index',
+    fn: async (page) => {
+      const r = await page.evaluate(() => {
+        const kids = [...document.querySelector('#about .wrap').children];
+        const iStats = kids.findIndex((k) => k.classList.contains('stats'));
+        const iTl = kids.findIndex((k) => k.classList.contains('timeline'));
+        const nodes = document.querySelectorAll('#about .tl-node').length;
+        return { iStats, iTl, nodes };
+      });
+      if (r.iTl < 0) throw new Error('時間軸不見了');
+      if (r.nodes !== 6) throw new Error(`時間軸節點 ${r.nodes} 個，應為 6`);
+      if (r.iTl < r.iStats) throw new Error('時間軸應排在數據區之後');
+    },
+  },
+  {
+    name: 'T7 count-up 仍會跑（大數字與數據區）',
+    page: 'index',
+    fn: async (page) => {
+      // observer 門檻 threshold:.4，且 html{scroll-behavior:smooth} 會讓捲動有動畫，
+      // 固定等待會 flaky → 改成輪詢等值變化
+      const countedUp = async (sel) => {
+        await page.evaluate((s) => document.querySelector(s).scrollIntoView({ block: 'center' }), sel);
+        for (let i = 0; i < 40; i++) {
+          await page.waitForTimeout(250);
+          const vals = await page.$$eval(`${sel} .count`, (els) => els.map((e) => e.textContent.trim()));
+          if (vals.length && vals.every((v) => v !== '0')) return vals;
+        }
+        const last = await page.$$eval(`${sel} .count`, (els) => els.map((e) => e.textContent.trim()));
+        throw new Error(`${sel} 的 count-up 10 秒內沒跑完，值為 ${last.join(', ') || '(找不到 .count)'}`);
+      };
+
+      await countedUp('#about .ab-bignum');
+      await countedUp('#about .stats');
+    },
+  },
+  {
+    name: 'T7 更多鈕連到 contact.html 且三語有字',
+    page: 'index',
+    fn: async (page) => {
+      const href = await page.$eval('#about .ab-more', (el) => el.getAttribute('href'));
+      if (href !== 'contact.html') throw new Error(`href = ${href}`);
+      for (const lang of ['zh', 'en', 'vi']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(120);
+        const t = await page.$eval('#about .ab-more', (el) => el.innerText.trim());
+        if (!t) throw new Error(`${lang} 的更多鈕沒有文字`);
+      }
+      await page.evaluate(() => window.jtSetLang('zh'));
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */
