@@ -763,12 +763,16 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 .jt-no-model svg{stroke:#455565}
 @media(max-width:680px){.jt-modal-viewer-col{border-bottom-color:#2E3A48}}
 /* ─── 資料卡加大（與產品介紹頁一致）─── */
-.jt-modal-inner{width:min(1320px,96vw)}
-.jt-modal-card{min-height:640px}
-.jt-modal-info-col{padding:48px 48px 48px 52px}
+.jt-modal-inner{width:min(1600px,92vw)}
+.jt-modal-card{min-height:min(780px,80vh)}
+.jt-modal-info-col{padding:56px 56px 56px 60px}
+.jt-modal-viewer-col{padding:40px}
+#jt-modal-canvas{height:510px!important}
 @media(max-width:680px){
   .jt-modal-card{min-height:0}
   .jt-modal-info-col{padding:28px 24px}
+  .jt-modal-viewer-col{padding:24px}
+  #jt-modal-canvas{height:300px!important}
 }
 </style>
 
@@ -944,18 +948,19 @@ body.jt-mnav-open{overflow:hidden}
 .ab-bignum .n sup{font-size:.44em;margin-left:4px;font-weight:600;color:var(--red)}
 .ab-bignum .lbl{margin-top:12px;font-family:var(--f-sans-tc);font-size:15px;color:var(--concrete)}
 
-/* 2. 兩張交疊照片（直角，不做圓角） */
-.ab-photos{display:grid;grid-template-columns:1fr 1fr;align-items:start;margin-bottom:96px}
+/* 2. 兩張交疊照片（直角，不做圓角）— 右圖為主、在最上方且位置較高 */
+.ab-photos{display:grid;grid-template-columns:.85fr 1.15fr;align-items:start;margin-bottom:96px}
 /* 注意：.ab-photos figure 的權重高於 .ab-ph-N，個別規則必須同樣 scope 進 .ab-photos，
    否則這裡的 margin:0 會把下面的 margin-top 蓋掉 */
 .ab-photos figure{margin:0;overflow:hidden;background:var(--cream);border-radius:0}
 .ab-photos img{width:100%;height:100%;object-fit:cover;display:block}
-/* 左下：壓在色塊卡下緣，往右伸出一截與右圖交疊 */
-.ab-photos .ab-ph-1{grid-column:1;grid-row:1;aspect-ratio:4/3;margin-top:60px;
-  width:calc(100% + 90px);position:relative;z-index:2}
-/* 右側：拉高並向左退，與左圖交疊 */
-.ab-photos .ab-ph-2{grid-column:2;grid-row:1;aspect-ratio:1/1;margin-top:0;position:relative;z-index:1}
-.ab-photos .ab-ph-2 img{object-position:center 40%}
+/* 左下：較小、位置較低，被右圖壓住 */
+.ab-photos .ab-ph-1{grid-column:1;grid-row:1;aspect-ratio:4/3;margin-top:120px;
+  position:relative;z-index:1}
+.ab-photos .ab-ph-1 img{object-position:center 40%}
+/* 右側：主視覺，較大較寬、起點最高，向左伸出壓在左圖之上 */
+.ab-photos .ab-ph-2{grid-column:2;grid-row:1;aspect-ratio:16/10;margin-top:0;
+  width:calc(100% + 90px);margin-left:-90px;position:relative;z-index:2}
 
 /* 3. 三欄改卡片 */
 .about .about-cols{gap:24px;margin-bottom:0}
@@ -989,8 +994,11 @@ body.jt-mnav-open{overflow:hidden}
 @media(max-width:820px){
   .about{padding:80px 0 70px}
   .ab-photos{grid-template-columns:1fr;gap:14px;margin-bottom:64px}
-  .ab-photos .ab-ph-1,.ab-photos .ab-ph-2{grid-column:1;margin-top:0;width:100%;aspect-ratio:16/10}
-  .ab-photos .ab-ph-2{grid-row:2}
+  /* 手機單欄：主視覺（廠區）排在上面 */
+  .ab-photos .ab-ph-1,.ab-photos .ab-ph-2{grid-column:1;margin-top:0;margin-left:0;
+    width:100%;aspect-ratio:16/10}
+  .ab-photos .ab-ph-2{grid-row:1}
+  .ab-photos .ab-ph-1{grid-row:2}
   .about .about-cols{grid-template-columns:1fr}
   .about .tl-track{grid-template-columns:repeat(2,1fr);gap:32px 18px}
 }
@@ -1018,8 +1026,8 @@ body.jt-mnav-open{overflow:hidden}
 
     <!-- 2. 兩張交疊照片（各自獨立 src，日後可單張替換） -->
     <div class="ab-photos">
-      <figure class="ab-ph-1 reveal"><img src="media/about-factory.jpg" alt="振太機械廠區"></figure>
-      <figure class="ab-ph-2 reveal"><img src="media/hero-poster.jpg" alt="振太機械振動送料生產現場"></figure>
+      <figure class="ab-ph-1 reveal"><img src="media/hero-poster.jpg" alt="振太機械振動送料生產現場"></figure>
+      <figure class="ab-ph-2 reveal"><img src="media/about-factory.jpg" alt="振太機械廠區"></figure>
     </div>
 
     <div class="about-cols">
