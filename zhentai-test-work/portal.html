@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>振太機械企業股份有限公司｜入口首頁草稿</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#05080b;color:#f5f0e6;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Segoe UI",sans-serif;overflow:hidden}
+a{color:inherit;text-decoration:none}
+.portal{position:relative;width:100vw;height:100svh;min-height:640px;overflow:hidden}
+.portal video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.portal:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,8,11,.76),rgba(5,8,11,.42) 24%,rgba(5,8,11,.12) 42%,rgba(5,8,11,0) 62%);z-index:1;pointer-events:none;opacity:0;animation:leftShadeIn 8s ease 4.12s forwards}
+@keyframes leftShadeIn{to{opacity:1}}
+.top{position:absolute;z-index:3;top:30px;left:clamp(24px,5vw,76px);right:clamp(24px,5vw,76px);display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:14px;font-weight:900;letter-spacing:.08em}
+.brand img{width:46px;height:46px;object-fit:contain}
+.brand small{display:block;margin-top:5px;color:rgba(245,240,230,.62);font-size:11px;letter-spacing:.26em}
+.lang{display:flex;border:1px solid rgba(245,240,230,.45);background:rgba(8,12,16,.36);transform:scale(.7);transform-origin:top right}
+.lang button{border:0;background:transparent;color:rgba(245,240,230,.75);padding:12px 16px;font-weight:800;cursor:pointer}
+.lang button.active{background:#f4db00;color:#101419}
+.copy{position:relative;z-index:2;min-height:100%;display:flex;align-items:flex-start;padding:88px clamp(24px,5vw,92px) 76px}
+.inner{width:max-content;max-width:none;transform:scale(.6);transform-origin:left center}
+.eyebrow,h1,p,.actions .btn{opacity:0;transform:translateY(26px);filter:blur(10px)}
+.eyebrow{animation:layerIn .9s cubic-bezier(.16,1,.3,1) 2s forwards}
+h1{animation:layerIn 1.05s cubic-bezier(.16,1,.3,1) 2.55s forwards}
+p{animation:layerIn .95s cubic-bezier(.16,1,.3,1) 3.35s forwards}
+.actions .btn:first-child{animation:layerIn .88s cubic-bezier(.16,1,.3,1) 4.12s forwards}
+.actions .btn:last-child{animation:layerIn .88s cubic-bezier(.16,1,.3,1) 4.34s forwards}
+@keyframes layerIn{to{opacity:1;transform:translateY(0);filter:blur(0)}}
+.eyebrow{display:flex;align-items:center;gap:13px;color:#f4db00;font-size:13px;font-weight:800;letter-spacing:.28em;text-transform:uppercase}
+.eyebrow:before{content:"";width:44px;height:2px;background:#f4db00}
+h1{margin-top:34px;font-size:clamp(44px,7vw,112px);line-height:.98;font-weight:950;letter-spacing:0;white-space:nowrap}
+.en{display:block;margin-top:12px;color:#f4db00;font-size:clamp(22px,3vw,48px);letter-spacing:.08em;text-transform:uppercase}
+p{margin-top:28px;max-width:680px;color:rgba(245,240,230,.82);font-size:clamp(17px,1.55vw,26px);line-height:1.7}
+.actions{display:flex;flex-wrap:wrap;gap:18px;margin-top:210px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:18px;min-width:min(100%,330px);min-height:78px;padding:22px 38px;border:2px solid #f4db00;background:#f4db00;color:#101419;font-size:18px;font-weight:900;letter-spacing:.12em;transition:.2s}
+.btn.secondary{background:rgba(7,9,12,.24);color:#f4db00}
+.btn:hover{transform:translateY(-3px);background:#fff36a;color:#101419;border-color:#fff36a}
+.mark{position:absolute;z-index:2;left:clamp(24px,5vw,92px);bottom:30px;color:rgba(245,240,230,.48);font-size:9px;letter-spacing:.22em;text-transform:uppercase}
+@media(max-width:760px){body{overflow:auto}.portal{height:auto}.copy{min-height:100svh;padding-top:132px}.inner{width:200vw}.actions{display:grid;grid-template-columns:1fr}.btn{width:100%}.brand small{display:none}}
+</style>
+</head>
+<body>
+<main class="portal">
+  <video autoplay muted playsinline preload="auto">
+    <source src="media/入口網站影片 完成.mp4" type="video/mp4">
+  </video>
+  <header class="top">
+    <div class="brand">
+      <img src="LOGO.png" alt="JENN TAI">
+      <div>JENN TAI<small>MACHINE CO., LTD. · EST 1985</small></div>
+    </div>
+    <div class="lang">
+      <button class="active" data-lang="zh">中</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="vi">VI</button>
+    </div>
+  </header>
+  <section class="copy">
+    <div class="inner">
+      <div class="eyebrow" data-zh="JENN TAI MACHINE CO., LTD." data-en="JENN TAI MACHINE CO., LTD." data-vi="JENN TAI MACHINE CO., LTD.">JENN TAI MACHINE CO., LTD.</div>
+      <h1><span data-zh="振太機械企業股份有限公司" data-en="Jenn Tai Machine Co., Ltd." data-vi="Công ty Jenn Tai Machine">振太機械企業股份有限公司</span><span class="en">Precision Feeding Automation</span></h1>
+      <p data-zh="從自動化送料設備到數位展示入口，請選擇你要前往的振太體驗。" data-en="Choose your Jenn Tai destination, from automation equipment to the upcoming 3D digital exhibition." data-vi="Chọn điểm đến Jenn Tai: website thiết bị tự động hóa hoặc khu triển lãm 3D sắp ra mắt.">從自動化送料設備到數位展示入口，請選擇你要前往的振太體驗。</p>
+      <div class="actions">
+        <a class="btn secondary" href="360-pannellum-windows-360tour-index-html/360tour/index.html" data-zh="振太3D線上展覽館" data-en="Jenn Tai 3D Exhibition" data-vi="Triển lãm 3D Jenn Tai">振太3D線上展覽館 →</a>
+        <a class="btn" href="index.html#home" data-zh="振太機械企業官網" data-en="Jenn Tai Official Website" data-vi="Website chính thức Jenn Tai">振太機械企業官網 →</a>
+      </div>
+    </div>
+  </section>
+  <div class="mark">VIDEO INTRO · SELECT DESTINATION</div>
+</main>
+<script>
+const video=document.querySelector('video');
+video.loop=false;
+video.addEventListener('ended',()=>{video.currentTime=Math.max(0,video.duration-.05);video.pause();});
+video.play().catch(()=>{});
+function setLang(lang){
+  document.querySelectorAll('[data-zh]').forEach(el=>{
+    const v=el.getAttribute('data-'+lang)||el.getAttribute('data-zh');
+    if(el.tagName==='A') el.textContent=v+' →';
+    else el.textContent=v;
+  });
+  document.querySelectorAll('[data-lang]').forEach(btn=>btn.classList.toggle('active',btn.dataset.lang===lang));
+}
+document.querySelectorAll('[data-lang]').forEach(btn=>btn.onclick=()=>setLang(btn.dataset.lang));
+</script>
+</body>
+</html>
