@@ -88,6 +88,63 @@ const CHECKS = [
       if (n < 2) throw new Error(`.y/.r span 只剩 ${n} 個，i18n HTML 逸出可能壞了`);
     },
   },
+  {
+    name: 'T4 產品卡不含 mdl/foot/arr 標記（產品頁）',
+    page: 'products',
+    fn: async (page) => {
+      await page.waitForSelector('.prod-card', { timeout: 10000 });
+      const n = await page.$$eval('.prod-card .mdl, .prod-card .foot, .prod-card .arr, .prod-card .pc-top',
+        (els) => els.length);
+      if (n) throw new Error(`仍有 ${n} 個標記元素`);
+    },
+  },
+  {
+    name: 'T4 產品卡不含 VIEW/PHOTO/360 字樣（產品頁）',
+    page: 'products',
+    fn: async (page) => {
+      await page.waitForSelector('.prod-card', { timeout: 10000 });
+      const txt = await page.$eval('.prod-card', (el) => el.innerText.toUpperCase());
+      for (const kw of ['VIEW', 'PHOTO', '360', 'SET ×', '準備中']) {
+        if (txt.includes(kw)) throw new Error(`卡片仍出現「${kw}」：${txt.replace(/\n/g, ' / ')}`);
+      }
+    },
+  },
+  {
+    name: 'T4 產品卡仍保留編號與中英名（產品頁）',
+    page: 'products',
+    fn: async (page) => {
+      await page.waitForSelector('.prod-card', { timeout: 10000 });
+      const has = await page.$eval('.prod-card', (el) => ({
+        idx: !!el.querySelector('.idx-no'),
+        h5: !!el.querySelector('h5'),
+        en: !!el.querySelector('.en'),
+      }));
+      if (!has.idx || !has.h5 || !has.en) throw new Error(JSON.stringify(has));
+    },
+  },
+  {
+    name: 'T4 點卡片仍能開啟 modal（產品頁）',
+    page: 'products',
+    fn: async (page) => {
+      await page.waitForSelector('.prod-card', { timeout: 10000 });
+      await page.click('.prod-card');
+      await page.waitForSelector('.jt-modal.open', { timeout: 8000 });
+      const name = await page.$eval('#jt-modal-name-zh', (el) => el.textContent.trim());
+      if (!name) throw new Error('modal 開了但產品名是空的');
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(400);
+    },
+  },
+  {
+    name: 'T4 首頁產品卡同樣無標記',
+    page: 'index',
+    fn: async (page) => {
+      await page.waitForSelector('.prod-card', { timeout: 10000 });
+      const n = await page.$$eval('.prod-card .mdl, .prod-card .foot, .prod-card .arr, .prod-card .pc-top',
+        (els) => els.length);
+      if (n) throw new Error(`首頁仍有 ${n} 個標記元素`);
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */

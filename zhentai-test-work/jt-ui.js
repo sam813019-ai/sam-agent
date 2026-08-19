@@ -45,20 +45,15 @@ window.jtRenderProducts = function(seriesSlug) {
   if (!list.length) { grid.innerHTML = `<div class="jt-grid-loading">${window.T('no_in_series')}</div>`; return; }
   const total = list.length;
   grid.innerHTML = list.map((p, i) => {
-    const mode = jtMode(p);
-    const tag = mode === 'group' ? `${window.T('tag_set')} ×${p.items.length}` : mode === '360' ? window.T('tag_360') : mode === 'png' ? window.T('tag_photo') : window.T('tag_soon');
-    const foot = mode === 'group' ? window.T('view_set') : mode === '360' ? window.T('view_3d') : mode === 'png' ? window.T('view_photo') : window.T('coming');
     const pcImg = jtCardThumb(p);
     return `
     <div class="prod-card" onclick="jtOpenModal(${p._i})">
       ${pcImg}
       <div class="pc-grad"></div>
       <span class="idx-no">[${String(i+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}]</span>
-      <div class="pc-top"><div class="mdl">${tag}</div></div>
       <div class="pc-bot">
         <h5>${nm(p)}</h5>
         <div class="en">${window.LANG === 'en' ? '' : p.en}</div>
-        <div class="foot"><span>${foot}</span><span class="arr">→</span></div>
       </div>
     </div>`;
   }).join('');
