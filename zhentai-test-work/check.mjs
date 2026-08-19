@@ -189,6 +189,64 @@ const CHECKS = [
       await page.waitForTimeout(400);
     },
   },
+  {
+    name: 'T6 首頁 about 在 latest 之前',
+    page: 'index',
+    fn: async (page) => {
+      const order = await page.evaluate(() => {
+        const secs = [...document.querySelectorAll('section[id]')].map((s) => s.id);
+        return { about: secs.indexOf('about'), latest: secs.indexOf('latest'), secs };
+      });
+      if (order.about < 0 || order.latest < 0) throw new Error('找不到 #about 或 #latest');
+      if (order.about > order.latest) throw new Error(`順序錯誤：${order.secs.join(' → ')}`);
+    },
+  },
+  {
+    name: 'T6 首頁導覽第2項=公司簡介、第3項=最新產品',
+    page: 'index',
+    fn: async (page) => {
+      const items = await page.$$eval('nav ul li a', (as) =>
+        as.map((a) => ({ href: a.getAttribute('href'), num: a.querySelector('.num')?.textContent })));
+      if (items[1].href !== '#about' || items[1].num !== '02')
+        throw new Error(`第2項是 ${items[1].num} ${items[1].href}`);
+      if (items[2].href !== '#latest' || items[2].num !== '03')
+        throw new Error(`第3項是 ${items[2].num} ${items[2].href}`);
+    },
+  },
+  {
+    name: 'T6 產品頁導覽順序同步',
+    page: 'products',
+    fn: async (page) => {
+      const items = await page.$$eval('nav ul li a', (as) =>
+        as.map((a) => ({ href: a.getAttribute('href'), num: a.querySelector('.num')?.textContent })));
+      if (!items[1].href.endsWith('#about') || items[1].num !== '02')
+        throw new Error(`第2項是 ${items[1].num} ${items[1].href}`);
+      if (!items[2].href.endsWith('#latest') || items[2].num !== '03')
+        throw new Error(`第3項是 ${items[2].num} ${items[2].href}`);
+    },
+  },
+  {
+    name: 'T6 聯絡頁導覽順序同步',
+    page: 'contact',
+    fn: async (page) => {
+      const items = await page.$$eval('nav ul li a', (as) =>
+        as.map((a) => ({ href: a.getAttribute('href'), num: a.querySelector('.num')?.textContent })));
+      if (!items[1].href.endsWith('#about') || items[1].num !== '02')
+        throw new Error(`第2項是 ${items[1].num} ${items[1].href}`);
+      if (!items[2].href.endsWith('#latest') || items[2].num !== '03')
+        throw new Error(`第3項是 ${items[2].num} ${items[2].href}`);
+    },
+  },
+  {
+    name: 'T6 區塊小標籤編號對調',
+    page: 'index',
+    fn: async (page) => {
+      const about = await page.$eval('#about .sec-label', (el) => el.textContent);
+      const latest = await page.$eval('#latest .sec-label', (el) => el.textContent);
+      if (!about.includes('[02]')) throw new Error(`about 標籤為「${about.trim()}」`);
+      if (!latest.includes('[03]')) throw new Error(`latest 標籤為「${latest.trim()}」`);
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */
