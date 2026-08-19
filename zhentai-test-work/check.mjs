@@ -422,6 +422,68 @@ const CHECKS = [
       await page.waitForTimeout(150);
     },
   },
+  {
+    name: 'T10 三語切換全站無 JS 錯誤（首頁）',
+    page: 'index',
+    fn: async (page, errors) => {
+      const before = errors.length;
+      for (const lang of ['en', 'vi', 'zh']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(250);
+      }
+      if (errors.length > before) throw new Error(errors.slice(before).join(' | '));
+    },
+  },
+  {
+    name: 'T10 三語切換全站無 JS 錯誤（產品頁）',
+    page: 'products',
+    fn: async (page, errors) => {
+      const before = errors.length;
+      for (const lang of ['en', 'vi', 'zh']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(250);
+      }
+      if (errors.length > before) throw new Error(errors.slice(before).join(' | '));
+    },
+  },
+  {
+    name: 'T10 360° 產品影格能載入完成（遮罩會消失）',
+    page: 'products',
+    fn: async (page) => {
+      // jtShowSingle(i) 的 i 不是 JT_DATA 索引，要直接呼叫 jtSetupViewer(產品物件)
+      const started = await page.evaluate(() => {
+        const target = JT_DATA.find((p) => p.frames);
+        if (!target) return false;
+        jtSetupViewer(target);
+        return true;
+      });
+      if (!started) throw new Error('JT_DATA 找不到有 frames 的產品');
+      for (let i = 0; i < 80; i++) {
+        await page.waitForTimeout(500);
+        const done = await page.evaluate(() => {
+          const m = document.querySelector('#jt-modal-loading');
+          return !m || getComputedStyle(m).display === 'none' || getComputedStyle(m).opacity === '0';
+        });
+        if (done) return;
+      }
+      const txt = await page.$eval('#jt-modal-loading span', (e) => e.textContent).catch(() => '(無)');
+      throw new Error(`40 秒內遮罩沒消失，停在「${txt}」`);
+    },
+  },
+  {
+    name: 'T10 三頁桌機與手機皆無水平溢出',
+    page: 'index',
+    fn: async (page) => {
+      for (const [w, h] of [[1440, 900], [390, 844]]) {
+        await page.setViewportSize({ width: w, height: h });
+        await page.waitForTimeout(500);
+        const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+        if (over) throw new Error(`${w}px 下有水平溢出`);
+      }
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.waitForTimeout(200);
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */
