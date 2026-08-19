@@ -12,6 +12,46 @@ const CHECKS = [
       if (errors.length) throw new Error('JS errors: ' + errors.join(' | '));
     },
   },
+  {
+    name: 'T2 首頁 hero 標題 ≤ 56px',
+    page: 'index',
+    fn: async (page, _e, h) => {
+      const px = await h.fontSize(page, '.hero-h1');
+      if (px > 56) throw new Error(`hero-h1 = ${px}px，應 ≤ 56`);
+    },
+  },
+  {
+    name: 'T2 首頁產品線標題 ≤ 64px',
+    page: 'index',
+    fn: async (page, _e, h) => {
+      const px = await h.fontSize(page, '.prod-title');
+      if (px > 64) throw new Error(`prod-title = ${px}px，應 ≤ 64`);
+    },
+  },
+  {
+    name: 'T2 產品頁產品線標題 ≤ 64px',
+    page: 'products',
+    fn: async (page, _e, h) => {
+      const px = await h.fontSize(page, '.prod-title');
+      if (px > 64) throw new Error(`prod-title = ${px}px，應 ≤ 64`);
+    },
+  },
+  {
+    name: 'T2 首頁聯絡標題 ≤ 68px',
+    page: 'index',
+    fn: async (page, _e, h) => {
+      const px = await h.fontSize(page, '.contact-title');
+      if (px > 68) throw new Error(`contact-title = ${px}px，應 ≤ 68`);
+    },
+  },
+  {
+    name: 'T2 聯絡頁聯絡標題 ≤ 68px',
+    page: 'contact',
+    fn: async (page, _e, h) => {
+      const px = await h.fontSize(page, '.contact-title');
+      if (px > 68) throw new Error(`contact-title = ${px}px，應 ≤ 68`);
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */
