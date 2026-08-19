@@ -609,6 +609,19 @@ img{display:block;max-width:100%}
 .contact-title .r{color:var(--red)}
 
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:50px}
+/* 首頁只放台灣總公司 + 「查看全部據點」連結 */
+.contact-grid.one{grid-template-columns:1fr auto;align-items:center}
+.offices-more{display:inline-flex;align-items:center;gap:12px;justify-self:end;
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper);border-bottom:1px solid rgba(242,237,225,.3);padding-bottom:6px;
+  transition:color .25s,border-color .25s}
+.offices-more:hover{color:var(--yellow);border-color:var(--yellow)}
+.offices-more .arr{transition:transform .25s}
+.offices-more:hover .arr{transform:translateX(6px)}
+@media(max-width:820px){
+  .contact-grid.one{grid-template-columns:1fr;gap:28px}
+  .offices-more{justify-self:start}
+}
 .office{
   background:var(--graphite);padding:36px 32px;border:1px solid rgba(244,219,0,.14);
   position:relative;
@@ -1257,31 +1270,23 @@ body.jt-mnav-open{overflow:hidden}
       </h2>
     </div>
 
-    <div class="contact-grid">
+    <div class="contact-grid one">
       <div class="office reveal">
-        <span class="badge"><span data-zh="HQ · 總公司" data-en="HQ" data-vi="Trụ sở">HQ · 總公司</span></span>
-        <h4>振太機械企業股份有限公司</h4>
-        <div class="en-ttl">Jenn Tai Machine Co., Ltd.</div>
+        <span class="badge"><span data-zh="台灣總公司" data-en="Taiwan HQ" data-vi="Trụ sở Đài Loan">台灣總公司</span></span>
+        <h4 data-zh="振太機械企業股份有限公司" data-en="Jenn Tai Machine Enterprise Co., Ltd." data-vi="Jenn Tai Machine Enterprise Co., Ltd.">振太機械企業股份有限公司</h4>
+        <div class="en-ttl">JENN TAI MACHINE ENTERPRISE CO., LTD.</div>
         <dl>
-          <dt>Addr</dt><dd data-zh="高雄市岡山區岡山路 610 巷 23 號" data-en="No.23 Lane 610, Gangshan Rd, Gangshan, Kaohsiung" data-vi="Số 23 Hẻm 610, Đường Gangshan, Gangshan, Cao Hùng">高雄市岡山區岡山路 610 巷 23 號</dd>
-          <dt>Tel</dt><dd><a href="tel:+88676210108">+886-7-6210108</a></dd>
+          <dt>Addr</dt><dd data-zh="高雄市岡山區岡山路 610 巷 23 號" data-en="No.23, Lane 610, Gangshan Rd, Gangshan Dist, Kaohsiung City, Taiwan" data-vi="No.23, Lane 610, Gangshan Rd, Gangshan Dist, Kaohsiung City, Taiwan">高雄市岡山區岡山路 610 巷 23 號</dd>
+          <dt>Tel</dt><dd><a href="tel:+88676210108">+886-7-6210108</a> / <a href="tel:+88676210109">6210109</a></dd>
           <dt>Fax</dt><dd>+886-7-6216766</dd>
-          <dt>Mail</dt><dd><a href="mailto:info@jenntai.com.tw">info@jenntai.com.tw</a></dd>
+          <dt>Email</dt><dd><a href="mailto:chentai@jenntai.com.tw">chentai@jenntai.com.tw</a></dd>
           <dt>Hours</dt><dd data-zh="週一至週五 08:30 – 17:30" data-en="Mon–Fri 08:30 – 17:30" data-vi="T2–T6 08:30 – 17:30">週一至週五 08:30 – 17:30</dd>
         </dl>
       </div>
-      <div class="office alt reveal">
-        <span class="badge">FASTENER DIV.</span>
-        <h4>晨泰螺絲機械股份有限公司</h4>
-        <div class="en-ttl">Chen Tai Fastener Machine Co., Ltd.</div>
-        <dl>
-          <dt>Addr</dt><dd data-zh="高雄市岡山區中正街 230 號" data-en="No.230 Zhongzheng St, Gangshan, Kaohsiung" data-vi="Số 230 Phố Zhongzheng, Gangshan, Cao Hùng">高雄市岡山區中正街 230 號</dd>
-          <dt>Tel</dt><dd><a href="tel:+88676217639">+886-7-6217639</a></dd>
-          <dt>Fax</dt><dd>+886-7-6217816</dd>
-          <dt>Mail</dt><dd><a href="mailto:sales@chentai.com.tw">sales@chentai.com.tw</a></dd>
-          <dt>Skype</dt><dd>chentai-01</dd>
-        </dl>
-      </div>
+      <a class="offices-more reveal" href="contact.html">
+        <span data-zh="查看全部據點" data-en="View all offices" data-vi="Xem tất cả văn phòng">查看全部據點</span>
+        <span class="arr">→</span>
+      </a>
     </div>
 
     <div class="form-wrap">

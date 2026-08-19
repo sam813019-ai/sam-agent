@@ -395,6 +395,33 @@ const CHECKS = [
       if (over) throw new Error('390px 下有水平溢出');
     },
   },
+  {
+    name: 'T9 首頁聯絡區只有一張卡且無晨泰',
+    page: 'index',
+    fn: async (page) => {
+      const n = await page.$$eval('#contact .contact-grid .office', (els) => els.length);
+      if (n !== 1) throw new Error(`首頁卡片數 ${n}，應為 1`);
+      const txt = await page.$eval('#contact .contact-grid', (el) => el.innerText);
+      if (txt.includes('晨泰')) throw new Error('晨泰螺絲機械應已移除');
+      if (!txt.includes('振太機械企業股份有限公司')) throw new Error('缺少台灣總公司');
+    },
+  },
+  {
+    name: 'T9 查看全部據點連結存在且三語有字',
+    page: 'index',
+    fn: async (page) => {
+      const href = await page.$eval('#contact .offices-more', (el) => el.getAttribute('href'));
+      if (href !== 'contact.html') throw new Error(`href = ${href}`);
+      for (const lang of ['zh', 'en', 'vi']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(150);
+        const t = await page.$eval('#contact .offices-more', (el) => el.innerText.trim());
+        if (!t) throw new Error(`${lang} 沒有文字`);
+      }
+      await page.evaluate(() => window.jtSetLang('zh'));
+      await page.waitForTimeout(150);
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */
