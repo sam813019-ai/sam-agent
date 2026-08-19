@@ -608,19 +608,9 @@ img{display:block;max-width:100%}
 .contact-title .y{color:var(--yellow)}
 .contact-title .r{color:var(--red)}
 
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:50px}
-/* 首頁只放台灣總公司 + 「查看全部據點」連結 */
-.contact-grid.one{grid-template-columns:1fr auto;align-items:center}
-.offices-more{display:inline-flex;align-items:center;gap:12px;justify-self:end;
-  font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--paper);border-bottom:1px solid rgba(242,237,225,.3);padding-bottom:6px;
-  transition:color .25s,border-color .25s}
-.offices-more:hover{color:var(--yellow);border-color:var(--yellow)}
-.offices-more .arr{transition:transform .25s}
-.offices-more:hover .arr{transform:translateX(6px)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px 30px;margin-bottom:50px}
 @media(max-width:820px){
-  .contact-grid.one{grid-template-columns:1fr;gap:28px}
-  .offices-more{justify-self:start}
+  .contact-grid{grid-template-columns:1fr;gap:44px}
 }
 .office{
   background:var(--graphite);padding:36px 32px;border:1px solid rgba(244,219,0,.14);
@@ -635,7 +625,7 @@ img{display:block;max-width:100%}
 .office.alt .badge{background:var(--red);color:var(--paper)}
 .office h4{font-family:var(--f-sans-tc);font-weight:700;font-size:24px;margin:14px 0 4px;line-height:1.3}
 .office .en-ttl{font-family:var(--f-display);font-size:11px;letter-spacing:.18em;color:var(--steel);text-transform:uppercase;margin-bottom:22px}
-.office dl{display:grid;grid-template-columns:70px 1fr;gap:8px 16px;font-family:var(--f-mono);font-size:13px;line-height:1.7}
+.office dl{display:grid;grid-template-columns:64px 1fr;gap:8px 14px;font-family:var(--f-mono);font-size:12.5px;line-height:1.65;word-break:break-word}
 .office dt{color:var(--steel);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding-top:3px}
 .office dd{color:var(--paper)}
 .office dd a:hover{color:var(--yellow)}
@@ -901,7 +891,7 @@ body.jt-mnav-open{overflow:hidden}
 .hero .scroll-cue{position:absolute;z-index:2}
 @media(max-width:680px){.hero-content{padding-bottom:90px}}
 </style>
-<link rel="stylesheet" href="jt-ui.css?v=6">
+<link rel="stylesheet" href="jt-ui.css?v=8">
 <section class="hero" id="home">
   <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="media/hero-poster.jpg?v=2">
     <source src="media/hero-web.mp4?v=2" type="video/mp4">
@@ -1270,7 +1260,8 @@ body.jt-mnav-open{overflow:hidden}
       </h2>
     </div>
 
-    <div class="contact-grid one">
+    <div class="contact-grid">
+
       <div class="office reveal">
         <span class="badge"><span data-zh="台灣總公司" data-en="Taiwan HQ" data-vi="Trụ sở Đài Loan">台灣總公司</span></span>
         <h4 data-zh="振太機械企業股份有限公司" data-en="Jenn Tai Machine Enterprise Co., Ltd." data-vi="Jenn Tai Machine Enterprise Co., Ltd.">振太機械企業股份有限公司</h4>
@@ -1280,13 +1271,47 @@ body.jt-mnav-open{overflow:hidden}
           <dt>Tel</dt><dd><a href="tel:+88676210108">+886-7-6210108</a> / <a href="tel:+88676210109">6210109</a></dd>
           <dt>Fax</dt><dd>+886-7-6216766</dd>
           <dt>Email</dt><dd><a href="mailto:chentai@jenntai.com.tw">chentai@jenntai.com.tw</a></dd>
+          <dt>Email</dt><dd><a href="mailto:chentai.chentai@msa.hinet.net">chentai.chentai@msa.hinet.net</a></dd>
           <dt>Hours</dt><dd data-zh="週一至週五 08:30 – 17:30" data-en="Mon–Fri 08:30 – 17:30" data-vi="T2–T6 08:30 – 17:30">週一至週五 08:30 – 17:30</dd>
         </dl>
       </div>
-      <a class="offices-more reveal" href="contact.html">
-        <span data-zh="查看全部據點" data-en="View all offices" data-vi="Xem tất cả văn phòng">查看全部據點</span>
-        <span class="arr">→</span>
-      </a>
+
+      <div class="office alt reveal">
+        <span class="badge"><span data-zh="上海分公司" data-en="Shanghai" data-vi="Thượng Hải">上海分公司</span></span>
+        <h4 data-zh="上海振好機械有限公司" data-en="Shanghai Chenhao Machinery Co., Ltd." data-vi="Shanghai Chenhao Machinery Co., Ltd.">上海振好機械有限公司</h4>
+        <div class="en-ttl">SHANGHAI CHENHAO MACHINERY CO., LTD.</div>
+        <dl>
+          <dt>Addr</dt><dd data-zh="上海市嘉定區安亭鎮杭桂路 1112 號" data-en="No.1112, Hanggui Rd, Anting Town, Jiading District, Shanghai" data-vi="No.1112, Hanggui Rd, Anting Town, Jiading District, Shanghai">上海市嘉定區安亭鎮杭桂路 1112 號</dd>
+          <dt>Tel</dt><dd><a href="tel:+862169592750">+86-21-69592750</a> / <a href="tel:+862169592751">69592751</a></dd>
+          <dt>Fax</dt><dd>+86-21-69592752</dd>
+          <dt>Email</dt><dd><a href="mailto:zhenhaojixie@vip.126.com">zhenhaojixie@vip.126.com</a></dd>
+        </dl>
+      </div>
+
+      <div class="office reveal">
+        <span class="badge"><span data-zh="浙江分公司" data-en="Zhejiang" data-vi="Chiết Giang">浙江分公司</span></span>
+        <h4 data-zh="嘉興振太機械有限公司" data-en="Jiaxing Jenntai Machine Co., Ltd." data-vi="Jiaxing Jenntai Machine Co., Ltd.">嘉興振太機械有限公司</h4>
+        <div class="en-ttl">JIAXING JENNTAI MACHINE CO., LTD.</div>
+        <dl>
+          <dt>Addr</dt><dd data-zh="浙江省嘉興市嘉善縣姚莊鎮福源路 66 號" data-en="No.66, Fuyuan Rd, Yaozhuang Town, Jiashan County, Jiaxing City, Zhejiang Province" data-vi="No.66, Fuyuan Rd, Yaozhuang Town, Jiashan County, Jiaxing City, Zhejiang Province">浙江省嘉興市嘉善縣姚莊鎮福源路 66 號</dd>
+          <dt>Tel</dt><dd><a href="tel:+8657384566588">+86-573-84566588</a> / <a href="tel:+8657384566589">84566589</a></dd>
+          <dt>Fax</dt><dd>+86-573-84566586</dd>
+          <dt>Email</dt><dd><a href="mailto:jiaxingjenntai@jenntai.com.cn">jiaxingjenntai@jenntai.com.cn</a></dd>
+        </dl>
+      </div>
+
+      <div class="office alt reveal">
+        <span class="badge"><span data-zh="越南分公司" data-en="Vietnam" data-vi="Việt Nam">越南分公司</span></span>
+        <h4 data-zh="平陽振太責任有限公司" data-en="Binh Duong Jenn Tai Limited Liability Company" data-vi="Công ty TNHH Jenn Tai Bình Dương">平陽振太責任有限公司</h4>
+        <div class="en-ttl">BINH DUONG JENN TAI LIMITED LIABILITY COMPANY</div>
+        <dl>
+          <dt>Addr</dt><dd data-zh="越南胡志明市平陽坊神浪 3 工業區 N1 路旁 6B 地塊 CN19" data-en="CN19, Lo 6B, Giap Duong N1, KCN Song Than 3, Phuong Binh Duong, TP. Ho Chi Minh, Vietnam" data-vi="CN19, Lô 6B, Giáp Đường N1, KCN Sóng Thần 3, Phường Bình Dương, TP. Hồ Chí Minh, Việt Nam">越南胡志明市平陽坊神浪 3 工業區 N1 路旁 6B 地塊 CN19</dd>
+          <dt>Tel</dt><dd><a href="tel:+842743810082">+84-274-3810082</a> / <a href="tel:+84961236588">+84-961236588</a></dd>
+          <dt>Fax</dt><dd>+84-274-3819983</dd>
+          <dt>Email</dt><dd><a href="mailto:zhentai118.vn@gmail.com">zhentai118.vn@gmail.com</a></dd>
+        </dl>
+      </div>
+
     </div>
 
     <div class="form-wrap">
@@ -1512,7 +1537,7 @@ document.querySelectorAll('.stats, .ab-bignum').forEach(el=>statObs.observe(el))
 </div>
 
 <script src="jt-data.js?v=4"></script>
-<script src="jt-ui.js?v=7"></script>
+<script src="jt-ui.js?v=8"></script>
 
 <script id="jt-mnav-js">
 /* 手機全屏選單:複製桌機導覽內容,單一資料源(zhentai-test 相對路徑版) */

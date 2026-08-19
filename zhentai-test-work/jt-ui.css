@@ -17,8 +17,6 @@
 .prod-card:hover{transform:translateY(-3px);box-shadow:inset 0 3px 0 0 var(--yellow),0 18px 40px -18px rgba(0,0,0,.7)}
 .prod-card:hover .pc-img{transform:scale(1.06)}
 .prod-card .pc-bot{position:relative;z-index:2}
-.prod-card .idx-no{position:absolute;top:24px;right:24px;z-index:2;font-family:var(--f-mono);
-  font-size:10px;color:var(--steel);letter-spacing:.14em;}
 .prod-card h5{font-family:var(--f-sans-tc);font-weight:700;font-size:18px;line-height:1.4;
   margin-bottom:6px;color:var(--paper);}
 .prod-card .en{font-family:var(--f-display);font-size:11px;color:var(--steel);letter-spacing:.1em;margin-bottom:0;text-transform:uppercase;line-height:1.4}

@@ -43,14 +43,12 @@ window.jtRenderProducts = function(seriesSlug) {
   const grid = document.getElementById('jt-prod-grid');
   const list = JT_DATA.filter(p => p.series === seriesSlug);
   if (!list.length) { grid.innerHTML = `<div class="jt-grid-loading">${window.T('no_in_series')}</div>`; return; }
-  const total = list.length;
-  grid.innerHTML = list.map((p, i) => {
+  grid.innerHTML = list.map((p) => {
     const pcImg = jtCardThumb(p);
     return `
     <div class="prod-card" onclick="jtOpenModal(${p._i})">
       ${pcImg}
       <div class="pc-grad"></div>
-      <span class="idx-no">[${String(i+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}]</span>
       <div class="pc-bot">
         <h5>${nm(p)}</h5>
         <div class="en">${window.LANG === 'en' ? '' : p.en}</div>

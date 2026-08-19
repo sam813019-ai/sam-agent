@@ -110,7 +110,7 @@ const CHECKS = [
     },
   },
   {
-    name: 'T4 產品卡仍保留編號與中英名（產品頁）',
+    name: 'T4 產品卡只留中英名、不含編號（產品頁）',
     page: 'products',
     fn: async (page) => {
       await page.waitForSelector('.prod-card', { timeout: 10000 });
@@ -119,7 +119,11 @@ const CHECKS = [
         h5: !!el.querySelector('h5'),
         en: !!el.querySelector('.en'),
       }));
-      if (!has.idx || !has.h5 || !has.en) throw new Error(JSON.stringify(has));
+      if (has.idx) throw new Error('編號 .idx-no 應已移除');
+      if (!has.h5 || !has.en) throw new Error(JSON.stringify(has));
+      const n = await page.$$eval('.prod-card', (els) =>
+        els.filter((e) => /\[\s*\d+\s*\/\s*\d+\s*\]/.test(e.innerText)).length);
+      if (n) throw new Error(`還有 ${n} 張卡出現 [NN / NN] 編號`);
     },
   },
   {
@@ -396,30 +400,25 @@ const CHECKS = [
     },
   },
   {
-    name: 'T9 首頁聯絡區只有一張卡且無晨泰',
+    name: 'T9 首頁聯絡區直接顯示四張分公司卡',
     page: 'index',
     fn: async (page) => {
       const n = await page.$$eval('#contact .contact-grid .office', (els) => els.length);
-      if (n !== 1) throw new Error(`首頁卡片數 ${n}，應為 1`);
+      if (n !== 4) throw new Error(`首頁卡片數 ${n}，應為 4`);
       const txt = await page.$eval('#contact .contact-grid', (el) => el.innerText);
       if (txt.includes('晨泰')) throw new Error('晨泰螺絲機械應已移除');
-      if (!txt.includes('振太機械企業股份有限公司')) throw new Error('缺少台灣總公司');
+      for (const s of ['振太機械企業股份有限公司', '上海振好機械有限公司',
+                       '嘉興振太機械有限公司', '平陽振太責任有限公司']) {
+        if (!txt.includes(s)) throw new Error(`缺少「${s}」`);
+      }
     },
   },
   {
-    name: 'T9 查看全部據點連結存在且三語有字',
+    name: 'T9 首頁不再有「查看全部據點」連結',
     page: 'index',
     fn: async (page) => {
-      const href = await page.$eval('#contact .offices-more', (el) => el.getAttribute('href'));
-      if (href !== 'contact.html') throw new Error(`href = ${href}`);
-      for (const lang of ['zh', 'en', 'vi']) {
-        await page.evaluate((l) => window.jtSetLang(l), lang);
-        await page.waitForTimeout(150);
-        const t = await page.$eval('#contact .offices-more', (el) => el.innerText.trim());
-        if (!t) throw new Error(`${lang} 沒有文字`);
-      }
-      await page.evaluate(() => window.jtSetLang('zh'));
-      await page.waitForTimeout(150);
+      const n = await page.$$eval('#contact .offices-more', (els) => els.length);
+      if (n) throw new Error('.offices-more 應已移除');
     },
   },
   {
