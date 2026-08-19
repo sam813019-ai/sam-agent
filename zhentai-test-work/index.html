@@ -971,6 +971,26 @@ body.jt-mnav-open{overflow:hidden}
 .about .about-col{background:#fff;border-radius:16px;padding:32px 30px;
   box-shadow:0 10px 30px -22px rgba(10,9,8,.5)}
 
+/* 3.5 專利與認證 */
+.certs{margin-top:72px}
+.cert-head{font-family:var(--f-serif-tc);font-weight:900;
+  font-size:clamp(22px,2.4vw,34px);line-height:1.35;color:var(--black);
+  margin-bottom:34px;max-width:20em}
+.cert-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+.cert-item{display:flex;flex-direction:column;background:#fff;padding:16px 16px 18px;
+  border-radius:12px;box-shadow:0 10px 30px -22px rgba(10,9,8,.5);
+  transition:transform .3s ease,box-shadow .3s ease}
+.cert-item:hover{transform:translateY(-4px);box-shadow:0 18px 40px -22px rgba(10,9,8,.55)}
+.cert-img{display:block;background:var(--paper-2);overflow:hidden;border-radius:4px}
+.cert-img img{width:100%;height:auto;display:block}
+.cert-name{margin-top:14px;font-family:var(--f-sans-tc);font-size:13px;font-weight:600;
+  line-height:1.5;color:var(--black)}
+.cert-no{margin-top:6px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;
+  color:var(--steel);line-height:1.5}
+.cert-item:hover .cert-name{color:var(--red-deep)}
+@media(max-width:1080px){.cert-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){.cert-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+
 /* 4. 發展歷程：單行 10 格，左右對齊版心（與上方三欄卡片同寬，維持垂直節奏）
    窄螢幕欄寬不足時整條可橫向滑動，仍維持一行 */
 .about .timeline{margin-top:80px;overflow-x:auto}
@@ -1045,6 +1065,38 @@ body.jt-mnav-open{overflow:hidden}
       <div class="about-col reveal">
         <h4><span class="idx">03</span> <span data-zh="全球布局 · Global Network" data-en="Global Network" data-vi="Mạng lưới toàn cầu">全球布局 · Global Network</span></h4>
         <p data-zh="隨著企業的發展，於 2003 年 10 月在上海設立上海振好機械有限公司、2015 年 2 月在浙江設立嘉興振太機械有限公司、2018 年 9 月在越南設立平陽振太責任有限公司，以便更好的為用戶提供服務，建立起一個集研發、生產、銷售、服務網路化體系。" data-en="With the development of the company, we established Shanghai Chenhao Machinery Co., Ltd. in 2003, Jiaxing Jenn Tai Machinery Co., Ltd. in Zhejiang in 2015, and Binh Duong Jenn Tai Co., Ltd. in Vietnam in 2018, forming an integrated network of research and development, manufacturing, sales and service." data-vi="Năm 2003 thành lập Công ty Shanghai Chenhao Machinery; năm 2015 thành lập Công ty Jiaxing Jenn Tai Machinery tại Chiết Giang; năm 2018 thành lập Công ty Jenn Tai Bình Dương tại Việt Nam. Nhằm xây dựng một hệ thống hoàn chỉnh gồm nghiên cứu phát triển, sản xuất, kinh doanh và dịch vụ sau bán hàng.">隨著企業的發展，於 2003 年 10 月在上海設立上海振好機械有限公司、2015 年 2 月在浙江設立嘉興振太機械有限公司、2018 年 9 月在越南設立平陽振太責任有限公司，以便更好的為用戶提供服務，建立起一個集研發、生產、銷售、服務網路化體系。</p>
+      </div>
+    </div>
+
+    <!-- 專利與認證 -->
+    <div class="certs">
+      <h3 class="cert-head reveal" data-zh="榮獲多項發明專利，並通過 CE 和歐盟認證" data-en="Multiple invention patents, certified under CE and EU directives" data-vi="Đạt nhiều bằng sáng chế và chứng nhận CE, chỉ thị EU">榮獲多項發明專利，並通過 CE 和歐盟認證</h3>
+      <div class="cert-grid">
+        <a class="cert-item reveal" href="media/cert/ce-1.jpg" target="_blank" rel="noopener">
+          <span class="cert-img"><img src="media/cert/ce-1-thumb.jpg" alt="歐盟機械暨低電壓指令認證" loading="lazy"></span>
+          <span class="cert-name" data-zh="歐盟機械暨低電壓指令認證" data-en="Machinery &amp; Low Voltage Directives" data-vi="Chứng nhận chỉ thị máy móc &amp; điện áp thấp">歐盟機械暨低電壓指令認證</span>
+          <span class="cert-no">UDEM · M.2015.103.5327</span>
+        </a>
+        <a class="cert-item reveal" href="media/cert/ce-2.jpg" target="_blank" rel="noopener">
+          <span class="cert-img"><img src="media/cert/ce-2-thumb.jpg" alt="歐盟機械指令符合性認證" loading="lazy"></span>
+          <span class="cert-name" data-zh="歐盟機械指令符合性認證" data-en="Machinery Directive Attestation of Conformity" data-vi="Chứng nhận hợp chuẩn chỉ thị máy móc">歐盟機械指令符合性認證</span>
+          <span class="cert-no">UDEM · M.2023.206.C85868</span>
+        </a>
+        <a class="cert-item reveal" href="media/cert/patent-1.jpg" target="_blank" rel="noopener">
+          <span class="cert-img"><img src="media/cert/patent-1-thumb.jpg" alt="發明專利 · 鐵屑油水分離機" loading="lazy"></span>
+          <span class="cert-name" data-zh="發明專利 · 鐵屑油水分離機" data-en="Invention Patent · Iron Scrap &amp; Oil-Water Separator" data-vi="Bằng sáng chế · Máy tách phoi sắt và dầu">發明專利 · 鐵屑油水分離機</span>
+          <span class="cert-no">中華民國 發明第 I801264 號</span>
+        </a>
+        <a class="cert-item reveal" href="media/cert/patent-2.jpg" target="_blank" rel="noopener">
+          <span class="cert-img"><img src="media/cert/patent-2-thumb.jpg" alt="發明專利 · 套筒加工機" loading="lazy"></span>
+          <span class="cert-name" data-zh="發明專利 · 套筒加工機" data-en="Invention Patent · Socket Processing Machine" data-vi="Bằng sáng chế · Máy gia công đầu tuýp">發明專利 · 套筒加工機</span>
+          <span class="cert-no">中華民國 發明第 I471212 號</span>
+        </a>
+        <a class="cert-item reveal" href="media/cert/patent-3.jpg" target="_blank" rel="noopener">
+          <span class="cert-img"><img src="media/cert/patent-3-thumb.jpg" alt="發明專利 · 調整型鐵屑油水分離機" loading="lazy"></span>
+          <span class="cert-name" data-zh="發明專利 · 調整型鐵屑油水分離機" data-en="Invention Patent · Adjustable Iron Scrap &amp; Oil-Water Separator" data-vi="Bằng sáng chế · Máy tách phoi sắt và dầu điều chỉnh được">發明專利 · 調整型鐵屑油水分離機</span>
+          <span class="cert-no">中華民國 發明第 I850822 號</span>
+        </a>
       </div>
     </div>
 

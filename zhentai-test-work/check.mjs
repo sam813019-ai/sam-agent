@@ -346,6 +346,37 @@ const CHECKS = [
     },
   },
   {
+    name: 'T7b 專利與認證：5 張證書、圖片都載入、可點開全圖',
+    page: 'index',
+    fn: async (page) => {
+      const items = await page.$$eval('#about .cert-item', (els) => els.length);
+      if (items !== 5) throw new Error(`證書數 ${items}，應為 5`);
+      const imgs = await page.$$eval('#about .cert-item img',
+        (els) => els.map((e) => ({ src: e.getAttribute('src'), w: e.naturalWidth })));
+      const broken = imgs.filter((i) => !i.w);
+      if (broken.length) throw new Error(`圖片未載入：${broken.map((b) => b.src).join(', ')}`);
+      const hrefs = await page.$$eval('#about .cert-item', (els) => els.map((e) => e.getAttribute('href')));
+      if (hrefs.some((h) => !h || !h.startsWith('media/cert/') || h.includes('-thumb')))
+        throw new Error(`連結應指向全圖：${hrefs.join(', ')}`);
+    },
+  },
+  {
+    name: 'T7b 專利與認證標題三語皆有文字',
+    page: 'index',
+    fn: async (page) => {
+      for (const lang of ['zh', 'en', 'vi']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(150);
+        const t = await page.$eval('#about .cert-head', (el) => el.innerText.trim());
+        if (!t) throw new Error(`${lang} 標題是空的`);
+      }
+      await page.evaluate(() => window.jtSetLang('zh'));
+      await page.waitForTimeout(150);
+      const zh = await page.$eval('#about .cert-head', (el) => el.innerText);
+      if (!zh.includes('發明專利') || !zh.includes('CE')) throw new Error(`中文標題為「${zh}」`);
+    },
+  },
+  {
     name: 'T8 聯絡頁有四張分公司卡',
     page: 'contact',
     fn: async (page) => {
