@@ -256,7 +256,7 @@ const CHECKS = [
     page: 'index',
     fn: async (page) => {
       const need = ['.ab-hero', '.ab-card', '.ab-more', '.ab-bignum', '.ab-photos',
-                    '.ab-ph-1', '.ab-ph-2', '.ab-ph-3'];
+                    '.ab-ph-1', '.ab-ph-2'];
       for (const sel of need) {
         const n = await page.$$eval(`#about ${sel}`, (els) => els.length);
         if (!n) throw new Error(`缺少 ${sel}`);
@@ -264,12 +264,15 @@ const CHECKS = [
     },
   },
   {
-    name: 'T7 三張照片各自獨立 src（方便日後替換）',
+    name: 'T7 兩張照片、無圓角、各自獨立 src',
     page: 'index',
     fn: async (page) => {
       const srcs = await page.$$eval('#about .ab-photos img', (els) => els.map((e) => e.getAttribute('src')));
-      if (srcs.length !== 3) throw new Error(`照片數 ${srcs.length}，應為 3`);
+      if (srcs.length !== 2) throw new Error(`照片數 ${srcs.length}，應為 2`);
       if (srcs.some((s) => !s || s.startsWith('/'))) throw new Error(`必須為相對路徑：${srcs.join(', ')}`);
+      const radii = await page.$$eval('#about .ab-photos figure',
+        (els) => els.map((e) => getComputedStyle(e).borderRadius));
+      if (radii.some((r) => r && r !== '0px')) throw new Error(`照片仍有圓角：${radii.join(', ')}`);
     },
   },
   {
@@ -283,40 +286,48 @@ const CHECKS = [
     },
   },
   {
-    name: 'T7 時間軸保留且在數據區之後',
+    name: 'T7 數據帶已移除、時間軸保留 10 個節點',
     page: 'index',
     fn: async (page) => {
-      const r = await page.evaluate(() => {
-        const kids = [...document.querySelector('#about .wrap').children];
-        const iStats = kids.findIndex((k) => k.classList.contains('stats'));
-        const iTl = kids.findIndex((k) => k.classList.contains('timeline'));
-        const nodes = document.querySelectorAll('#about .tl-node').length;
-        return { iStats, iTl, nodes };
-      });
-      if (r.iTl < 0) throw new Error('時間軸不見了');
-      if (r.nodes !== 6) throw new Error(`時間軸節點 ${r.nodes} 個，應為 6`);
-      if (r.iTl < r.iStats) throw new Error('時間軸應排在數據區之後');
+      const stats = await page.$$eval('#about .stats', (els) => els.length);
+      if (stats) throw new Error('數據帶 .stats 應已移除');
+      const nodes = await page.$$eval('#about .tl-node', (els) => els.length);
+      if (nodes !== 10) throw new Error(`時間軸節點 ${nodes} 個，應為 10`);
+      const years = await page.$$eval('#about .tl-node .yr', (els) => els.map((e) => e.textContent.trim()));
+      const want = ['1985', '2005', '2008', '2011', '2012', '2013', '2014', '2016', '2024', '2025'];
+      if (years.join(',') !== want.join(',')) throw new Error(`年份為 ${years.join(', ')}`);
     },
   },
   {
-    name: 'T7 count-up 仍會跑（大數字與數據區）',
+    name: 'T7 大數字 count-up 仍會跑',
     page: 'index',
     fn: async (page) => {
       // observer 門檻 threshold:.4，且 html{scroll-behavior:smooth} 會讓捲動有動畫，
       // 固定等待會 flaky → 改成輪詢等值變化
-      const countedUp = async (sel) => {
-        await page.evaluate((s) => document.querySelector(s).scrollIntoView({ block: 'center' }), sel);
-        for (let i = 0; i < 40; i++) {
-          await page.waitForTimeout(250);
-          const vals = await page.$$eval(`${sel} .count`, (els) => els.map((e) => e.textContent.trim()));
-          if (vals.length && vals.every((v) => v !== '0')) return vals;
-        }
-        const last = await page.$$eval(`${sel} .count`, (els) => els.map((e) => e.textContent.trim()));
-        throw new Error(`${sel} 的 count-up 10 秒內沒跑完，值為 ${last.join(', ') || '(找不到 .count)'}`);
-      };
-
-      await countedUp('#about .ab-bignum');
-      await countedUp('#about .stats');
+      await page.evaluate(() => document.querySelector('#about .ab-bignum').scrollIntoView({ block: 'center' }));
+      for (let i = 0; i < 40; i++) {
+        await page.waitForTimeout(250);
+        const v = await page.$eval('#about .ab-bignum .count', (e) => e.textContent.trim());
+        if (v !== '0') return;
+      }
+      throw new Error('大數字 count-up 10 秒內沒跑');
+    },
+  },
+  {
+    name: 'T7 公司簡介文字取自公司簡介 docx',
+    page: 'index',
+    fn: async (page) => {
+      const txt = await page.$eval('#about', (el) => el.innerText);
+      const need = [
+        '專業生產振動送料機廠商',
+        '品質第一',
+        '上海振好機械有限公司',
+        '嘉興振太機械有限公司',
+        '平陽振太責任有限公司',
+        '升降式自動上料機',
+        '全自動上料平台系統',
+      ];
+      for (const s of need) if (!txt.includes(s)) throw new Error(`缺少「${s}」`);
     },
   },
   {
