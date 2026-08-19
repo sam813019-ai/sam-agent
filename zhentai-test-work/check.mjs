@@ -422,6 +422,42 @@ const CHECKS = [
     },
   },
   {
+    name: 'T9b 客製詢價表單已整區移除（首頁）',
+    page: 'index',
+    fn: async (page) => {
+      const n = await page.$$eval('.form-wrap, form, .fld', (els) => els.length);
+      if (n) throw new Error(`仍有 ${n} 個表單元素`);
+      const txt = await page.$eval('#contact', (el) => el.innerText);
+      for (const kw of ['客製詢價', 'Inquiry Form']) {
+        if (txt.includes(kw)) throw new Error(`仍出現「${kw}」`);
+      }
+    },
+  },
+  {
+    name: 'T9b 客製詢價表單已整區移除（聯絡頁）',
+    page: 'contact',
+    fn: async (page) => {
+      const n = await page.$$eval('.form-wrap, form, .fld', (els) => els.length);
+      if (n) throw new Error(`仍有 ${n} 個表單元素`);
+      const txt = await page.$eval('#contact', (el) => el.innerText);
+      for (const kw of ['客製詢價', 'Inquiry Form']) {
+        if (txt.includes(kw)) throw new Error(`仍出現「${kw}」`);
+      }
+    },
+  },
+  {
+    name: 'T9b 詢價按鈕與 modal CTA 仍指向有效目標',
+    page: 'products',
+    fn: async (page) => {
+      const cta = await page.$eval('.jt-modal-cta', (el) => el.getAttribute('href'));
+      if (cta !== 'contact.html') throw new Error(`modal CTA href = ${cta}`);
+      const nav = await page.$$eval('nav a.btn, nav .nav-cta a.btn', (els) =>
+        els.map((e) => e.getAttribute('href')));
+      if (!nav.some((h) => h && h.includes('contact.html')))
+        throw new Error(`導覽詢價鈕 href = ${nav.join(', ')}`);
+    },
+  },
+  {
     name: 'T10 三語切換全站無 JS 錯誤（首頁）',
     page: 'index',
     fn: async (page, errors) => {

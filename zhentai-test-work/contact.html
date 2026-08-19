@@ -667,25 +667,6 @@ img{display:block;max-width:100%}
   .contact-grid{grid-template-columns:1fr;gap:44px}
 }
 
-.form-wrap{display:grid;grid-template-columns:1fr 1.4fr;gap:40px;align-items:start;padding-top:40px;border-top:1px solid rgba(242,237,225,.14)}
-.form-wrap .blurb h5{font-family:var(--f-serif-tc);font-weight:700;font-size:28px;line-height:1.4;margin-bottom:14px}
-.form-wrap .blurb p{font-family:var(--f-sans-tc);font-size:14px;line-height:1.75;color:rgba(242,237,225,.7)}
-
-form{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-form .full{grid-column:1/-1}
-.fld{display:flex;flex-direction:column;gap:8px}
-.fld label{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel)}
-.fld label span{color:var(--red);margin-left:4px}
-.fld input,.fld textarea,.fld select{
-  background:transparent;border:0;border-bottom:1px solid rgba(242,237,225,.2);
-  color:var(--paper);font-family:var(--f-sans-tc);font-size:15px;padding:10px 0;
-  transition:border-color .2s;
-}
-.fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--yellow)}
-.fld textarea{resize:vertical;min-height:92px}
-form .sbt{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-form .sbt small{font-family:var(--f-mono);font-size:11px;color:var(--steel);letter-spacing:.1em}
-
 /* ─────────────────────────────────────────────
    FOOTER
 ───────────────────────────────────────────── */
@@ -734,7 +715,6 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
   .about-head,.caps-head,.prod-head{grid-template-columns:1fr;gap:24px}
   .about-cols{grid-template-columns:1fr;gap:28px}
   .contact-grid{grid-template-columns:1fr}
-  .form-wrap{grid-template-columns:1fr}
 }
 @media (max-width:720px){
   .nav ul,.nav-phone,.nav-tour{display:none}
@@ -962,49 +942,7 @@ body.jt-mnav-open{overflow:hidden}
 
     </div>
 
-    <div class="form-wrap">
-      <div class="blurb reveal">
-        <h5 data-i18n-html="1" data-zh="客製詢價<br>Inquiry Form" data-en="Custom Inquiry<br>Inquiry Form" data-vi="Yêu cầu báo giá<br>Inquiry Form">客製詢價<br>Inquiry Form</h5>
-        <p data-zh="告訴我們您的料件規格、產能需求與安裝環境，工程團隊將在 1 個工作日內回覆初步方案與報價範圍。" data-en="Tell us your component specs, capacity needs and installation environment. Our engineering team will reply with a preliminary plan and quote range within one working day." data-vi="Cho chúng tôi biết quy cách chi tiết, nhu cầu sản lượng và môi trường lắp đặt. Đội kỹ thuật sẽ phản hồi phương án và khoảng báo giá sơ bộ trong vòng một ngày làm việc.">告訴我們您的料件規格、產能需求與安裝環境，工程團隊將在 1 個工作日內回覆初步方案與報價範圍。</p>
-      </div>
-      <form class="reveal" onsubmit="event.preventDefault();alert('示範表單：已送出');">
-        <div class="fld">
-          <label>公司名稱 / Company<span>*</span></label>
-          <input type="text" required placeholder="Your company">
-        </div>
-        <div class="fld">
-          <label>聯絡人 / Name<span>*</span></label>
-          <input type="text" required placeholder="Your name">
-        </div>
-        <div class="fld">
-          <label>Email<span>*</span></label>
-          <input type="email" required placeholder="name@company.com">
-        </div>
-        <div class="fld">
-          <label>電話 / Tel</label>
-          <input type="tel" placeholder="+886 ...">
-        </div>
-        <div class="fld full">
-          <label>詢問產品 / Product Line</label>
-          <select>
-            <option>請選擇…</option>
-            <option>送料設備 · Feeding Systems</option>
-            <option>扣件相關設備 · Fastener Equipment</option>
-            <option>零配件 · Components & Parts</option>
-            <option>客製非標設備 · Custom Build</option>
-          </select>
-        </div>
-        <div class="fld full">
-          <label>需求描述 / Message<span>*</span></label>
-          <textarea required placeholder="料件材質、尺寸、產能需求…"></textarea>
-        </div>
-        <div class="sbt">
-          <small>▮ 我們將於 24 小時內回覆</small>
-          <button class="btn light" type="submit"><span data-zh="送出詢價" data-en="Send Inquiry" data-vi="Gửi yêu cầu">送出詢價</span> <span class="arr">→</span></button>
-        </div>
-      </form>
-    </div>
-  </div>
+</div>
 </section>
 
 <!-- ═════════════ FOOTER ═════════════ -->
