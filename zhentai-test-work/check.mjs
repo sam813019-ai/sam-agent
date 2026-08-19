@@ -330,6 +330,71 @@ const CHECKS = [
       await page.evaluate(() => window.jtSetLang('zh'));
     },
   },
+  {
+    name: 'T8 聯絡頁有四張分公司卡',
+    page: 'contact',
+    fn: async (page) => {
+      const n = await page.$$eval('.contact-grid .office', (els) => els.length);
+      if (n !== 4) throw new Error(`卡片數 ${n}，應為 4`);
+    },
+  },
+  {
+    name: 'T8 四間公司名與電話正確、晨泰已移除',
+    page: 'contact',
+    fn: async (page) => {
+      const txt = await page.$eval('.contact-grid', (el) => el.innerText);
+      const need = [
+        '振太機械企業股份有限公司', '+886-7-6210108',
+        '上海振好機械有限公司', '+86-21-69592750',
+        '嘉興振太機械有限公司', '+86-573-84566588',
+        '平陽振太責任有限公司', '+84-274-3810082',
+        'chentai@jenntai.com.tw', 'zhenhaojixie@vip.126.com',
+        'jiaxingjenntai@jenntai.com.cn', 'zhentai118.vn@gmail.com',
+      ];
+      for (const s of need) if (!txt.includes(s)) throw new Error(`缺少「${s}」`);
+      if (txt.includes('晨泰')) throw new Error('晨泰螺絲機械應已移除');
+    },
+  },
+  {
+    name: 'T8 tel/mailto 連結可點',
+    page: 'contact',
+    fn: async (page) => {
+      const tels = await page.$$eval('.contact-grid a[href^="tel:"]', (els) => els.length);
+      const mails = await page.$$eval('.contact-grid a[href^="mailto:"]', (els) => els.length);
+      if (tels < 4) throw new Error(`tel 連結只有 ${tels} 個`);
+      if (mails < 5) throw new Error(`mailto 連結只有 ${mails} 個（台灣兩個 + 其餘各一）`);
+    },
+  },
+  {
+    name: 'T8 分公司卡三語切換不報錯且英文地址有切',
+    page: 'contact',
+    fn: async (page, errors) => {
+      const before = errors.length;
+      for (const lang of ['en', 'vi', 'zh']) {
+        await page.evaluate((l) => window.jtSetLang(l), lang);
+        await page.waitForTimeout(150);
+      }
+      if (errors.length > before) throw new Error('切語言時出現 JS 錯誤：' + errors.slice(before).join(' | '));
+      await page.evaluate(() => window.jtSetLang('en'));
+      await page.waitForTimeout(200);
+      const en = await page.$eval('.contact-grid', (el) => el.innerText);
+      if (!en.includes('Kaohsiung')) throw new Error('英文版地址未切換');
+      await page.evaluate(() => window.jtSetLang('zh'));
+      await page.waitForTimeout(150);
+    },
+  },
+  {
+    name: 'T8 手機視窗四張卡不溢出',
+    page: 'contact',
+    fn: async (page) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.waitForTimeout(400);
+      const over = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.waitForTimeout(300);
+      if (over) throw new Error('390px 下有水平溢出');
+    },
+  },
 ];
 
 /** 取得元素的 computed font-size（px 數值） */
