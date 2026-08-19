@@ -958,7 +958,8 @@ body.jt-mnav-open{overflow:hidden}
 .ab-photos figure{margin:0;overflow:hidden;background:var(--cream);border-radius:0}
 .ab-photos img{width:100%;height:100%;object-fit:cover;display:block}
 /* 左下：較小、位置較低，往左移開不與右圖重疊 */
-.ab-photos .ab-ph-1{grid-column:1;grid-row:1;aspect-ratio:4/3;margin-top:120px;
+/* margin-top 90px 正好抵銷 .ab-hero 的 margin-bottom:-90px，使上緣緊貼卡片下緣 */
+.ab-photos .ab-ph-1{grid-column:1;grid-row:1;aspect-ratio:4/3;margin-top:90px;
   margin-left:-80px;position:relative;z-index:1}
 .ab-photos .ab-ph-1 img{object-position:center 78%}
 /* 右側主視覺（台灣廠房）：z-index 高於 .ab-hero(3)，疊在深色卡之上 */
