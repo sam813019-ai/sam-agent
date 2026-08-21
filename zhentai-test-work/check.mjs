@@ -351,6 +351,15 @@ const CHECKS = [
     fn: async (page) => {
       const items = await page.$$eval('#about .cert-item', (els) => els.length);
       if (items !== 5) throw new Error(`證書數 ${items}，應為 5`);
+
+      // 證書圖是 loading="lazy"，要先捲到該區才會載入
+      await page.evaluate(() => document.querySelector('#about .certs').scrollIntoView({ block: 'center' }));
+      for (let i = 0; i < 20; i++) {
+        await page.waitForTimeout(400);
+        const done = await page.$$eval('#about .cert-item img', (els) => els.every((e) => e.naturalWidth > 0));
+        if (done) break;
+      }
+
       const imgs = await page.$$eval('#about .cert-item img',
         (els) => els.map((e) => ({ src: e.getAttribute('src'), w: e.naturalWidth })));
       const broken = imgs.filter((i) => !i.w);
