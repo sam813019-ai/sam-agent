@@ -548,6 +548,53 @@ const CHECKS = [
     },
   },
   {
+    name: 'T13 群組資料卡內容不超出卡片（產品頁）',
+    page: 'products',
+    fn: async (page) => {
+      const opened = await page.evaluate(() => {
+        const t = JT_DATA.find((p) => p.items && p.items.length >= 8);
+        if (!t) return false;
+        jtOpenModal(t._i);
+        return true;
+      });
+      if (!opened) throw new Error('找不到 8 項以上的群組產品');
+      await page.waitForSelector('.jt-modal.open', { timeout: 8000 });
+      await page.waitForTimeout(2500);
+
+      const m = await page.evaluate(() => {
+        const card = document.querySelector('.jt-modal-group-card');
+        const cta = document.querySelector('.jt-group-actions') || document.querySelector('.jt-group-cta');
+        const cr = card.getBoundingClientRect();
+        return {
+          scrollH: card.scrollHeight, clientH: card.clientHeight,
+          cardBottom: Math.round(cr.bottom),
+          ctaBottom: Math.round(cta.getBoundingClientRect().bottom),
+          vh: window.innerHeight,
+        };
+      });
+      const over = m.scrollH - m.clientH;
+      if (over > 8) throw new Error(`內容超出卡片 ${over}px（scrollH ${m.scrollH} / clientH ${m.clientH}）`);
+      if (m.ctaBottom > m.cardBottom + 2)
+        throw new Error(`詢問報價鈕落在卡片外（鈕底 ${m.ctaBottom} > 卡底 ${m.cardBottom}）`);
+      if (m.cardBottom > m.vh) throw new Error(`卡片超出視窗（${m.cardBottom} > ${m.vh}）`);
+
+      // 縮圖不得溢出其容器（place-items:center 下 height:100% 會失效造成撐開）
+      const spill = await page.$$eval('.jt-group-thumb', (els) =>
+        els.map((box, i) => {
+          const img = box.querySelector('img');
+          if (!img || !img.naturalWidth) return null;
+          const b = box.getBoundingClientRect(), r = img.getBoundingClientRect();
+          return (r.height > b.height + 1 || r.width > b.width + 1)
+            ? `#${i + 1} 圖 ${Math.round(r.width)}x${Math.round(r.height)} > 框 ${Math.round(b.width)}x${Math.round(b.height)}`
+            : null;
+        }).filter(Boolean));
+      if (spill.length) throw new Error(`縮圖溢出容器：${spill.join('；')}`);
+
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(400);
+    },
+  },
+  {
     name: 'T12 360° 預設定格不自動轉，拖曳才轉',
     page: 'products',
     fn: async (page) => {

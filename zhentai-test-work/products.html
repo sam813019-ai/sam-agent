@@ -820,18 +820,21 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 .jt-modal-back:hover{color:var(--yellow)}
 /* 群組畫面 */
 .jt-modal-group-card{position:relative;background:#202830;border:1px solid #2E3A48;max-height:90vh;overflow:auto;display:flex;flex-direction:column}
-.jt-group-head{padding:40px 44px 22px}
+.jt-group-head{padding:30px 44px 16px}
 .jt-group-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#2E3A48;border-top:1px solid #2E3A48;border-bottom:1px solid #2E3A48}
 .jt-group-item{background:#202830;padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:background .2s}
 .jt-group-item:hover{background:#27313C}
 .jt-group-item:hover .gz{color:var(--yellow)}
-.jt-group-thumb{width:100%;aspect-ratio:1/1;background:#1A2028;display:grid;place-items:center;overflow:hidden;position:relative}
-.jt-group-thumb img{width:100%;height:100%;object-fit:contain}
+.jt-group-thumb{width:100%;height:clamp(105px,15vh,215px);background:#1A2028;display:grid;place-items:center;overflow:hidden;position:relative}
+/* grid area 的百分比高度在各瀏覽器解析不一致（height/max-height:100% 皆失效，
+   導致圖片照原始比例撐開溢出）→ 用絕對定位讓圖片框強制等同容器，
+   再由 object-fit:contain 等比縮放置中 */
+.jt-group-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .jt-group-thumb .ph{color:#455565;font-size:10px;letter-spacing:.16em;text-align:center;padding:8px}
 .jt-group-thumb .v3d{position:absolute;top:8px;right:8px;background:var(--yellow);color:#0A0908;font-family:var(--f-mono);font-size:8px;font-weight:700;letter-spacing:.1em;padding:3px 6px}
 .jt-group-item .gz{font-family:var(--f-sans-tc);font-size:13.5px;font-weight:600;color:var(--paper);line-height:1.35;transition:color .2s}
 .jt-group-item .ge{font-family:var(--f-display);font-size:9px;letter-spacing:.05em;color:#607080;text-transform:uppercase;line-height:1.4}
-.jt-group-cta{margin:26px 44px 36px}
+.jt-group-cta{margin:18px 44px 26px}
 @media(max-width:900px){.jt-group-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:680px){
   .jt-group-grid{grid-template-columns:repeat(2,1fr)}
@@ -1119,7 +1122,7 @@ setActive();
 </div>
 
 <script src="jt-data.js?v=4"></script>
-<script src="jt-ui.js?v=9"></script>
+<script src="jt-ui.js?v=10"></script>
 
 <script id="jt-mnav-js">
 /* 手機全屏選單:複製桌機導覽內容,單一資料源(zhentai-test 相對路徑版) */

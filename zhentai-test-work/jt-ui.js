@@ -157,7 +157,7 @@ function jtSetupGroupActions(p) {
     inquiry.parentNode.insertBefore(actions, inquiry);
     actions.appendChild(inquiry);
   }
-  actions.style.cssText = 'display:flex;gap:16px;flex-wrap:wrap;margin:26px 44px 36px';
+  actions.style.cssText = 'display:flex;gap:16px;flex-wrap:wrap;margin:18px 44px 26px';
   inquiry.style.margin = '0';
   let videoBtn = actions.querySelector('.jt-video-cta');
   if (p.videoUrl) {
