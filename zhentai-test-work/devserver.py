@@ -7,7 +7,7 @@ import urllib.parse
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REMOTE = "https://waynebear20996-mlebi.wpcomstaging.com/wp-content/uploads/zhentai-test"
-PORT = 8899
+PORT = 8901
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):

@@ -1,6 +1,6 @@
 import { chromium } from 'playwright-core';
 
-const BASE = 'http://localhost:8899';
+const BASE = 'http://localhost:8901';
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 /** 每個任務往這個陣列追加檢查項 */
@@ -545,6 +545,60 @@ const CHECKS = [
       }
       const txt = await page.$eval('#jt-modal-loading span', (e) => e.textContent).catch(() => '(無)');
       throw new Error(`40 秒內遮罩沒消失，停在「${txt}」`);
+    },
+  },
+  {
+    name: 'T12 360° 預設定格不自動轉，拖曳才轉',
+    page: 'products',
+    fn: async (page) => {
+      // 必須用 jtOpenModal 正式開啟 modal，否則 .jt-modal 是 pointer-events:none，
+      // 滑鼠事件進不到影格圖上（直接呼叫 jtSetupViewer 只設定內容不會開啟）
+      const started = await page.evaluate(() => {
+        const target = JT_DATA.find((p) => p.frames && !p.items);
+        if (!target) return false;
+        jtOpenModal(target._i);
+        return true;
+      });
+      if (!started) throw new Error('JT_DATA 找不到有 frames 的單品');
+      await page.waitForSelector('.jt-modal.open', { timeout: 8000 });
+
+      // 等影格載完（遮罩消失）
+      let ready = false;
+      for (let i = 0; i < 80; i++) {
+        await page.waitForTimeout(500);
+        ready = await page.evaluate(() => {
+          const m = document.querySelector('#jt-modal-loading');
+          return !m || getComputedStyle(m).display === 'none' || m.classList.contains('hidden');
+        });
+        if (ready) break;
+      }
+      if (!ready) throw new Error('影格載入逾時');
+
+      // 靜置 3 秒，影格不應自己前進
+      const before = await page.$eval('#jt-frame-img', (e) => e.src);
+      await page.waitForTimeout(3000);
+      const after = await page.$eval('#jt-frame-img', (e) => e.src);
+      if (before !== after)
+        throw new Error(`靜置 3 秒仍自轉：${before.split('/').pop()} → ${after.split('/').pop()}`);
+
+      // 拖曳後應該要換影格
+      const box = await page.$eval('#jt-frame-img', (e) => {
+        const r = e.getBoundingClientRect();
+        return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+      });
+      await page.mouse.move(box.x, box.y);
+      await page.mouse.down();
+      for (let i = 1; i <= 10; i++) await page.mouse.move(box.x - i * 12, box.y);
+      await page.mouse.up();
+      await page.waitForTimeout(300);
+      const dragged = await page.$eval('#jt-frame-img', (e) => e.src);
+      if (dragged === after) throw new Error('拖曳後影格沒有變化');
+
+      // 放開滑鼠後也不該恢復自轉
+      await page.waitForTimeout(2500);
+      const idle = await page.$eval('#jt-frame-img', (e) => e.src);
+      if (idle !== dragged)
+        throw new Error(`放開後又自轉：${dragged.split('/').pop()} → ${idle.split('/').pop()}`);
     },
   },
   {

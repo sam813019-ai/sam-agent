@@ -244,14 +244,13 @@ const FRAMES_TOTAL = 241;
 const FRAME_SENS = 3;
 let jtFrameCache = [], jtFrameLoaded = 0, jtFrameAllReady = false;
 let jtFrameOk = 0, jtFrameBad = new Set();
-let jtFrameCurrent = 0, jtFrameAutoTimer = null;
+let jtFrameCurrent = 0;
 let jtFrameDragging = false, jtFrameLastX = 0, jtFrameAccum = 0;
 
 function jtLoadFrames(baseUrl) {
   jtFrameCache = []; jtFrameLoaded = 0; jtFrameAllReady = false;
   jtFrameOk = 0; jtFrameBad = new Set();
   jtFrameCurrent = 0; jtFrameAccum = 0;
-  if (jtFrameAutoTimer) { clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
 
   const img = document.getElementById('jt-frame-img');
   const overlay = document.getElementById('jt-modal-loading');
@@ -288,9 +287,9 @@ function jtLoadFrames(baseUrl) {
     }
 
     // 有成功的影格就照常啟用（缺的那幾張由 _jtFrameShow 就近略過）
+    // 停在第一格不自動旋轉，等使用者拖曳才轉
     jtFrameAllReady = true;
     _jtFrameShow(0);
-    _jtFrameStartAuto();
   };
 
   for (let i = 0; i < FRAMES_TOTAL; i++) {
@@ -310,7 +309,6 @@ function jtLoadFrames(baseUrl) {
 }
 
 function jtStopFrames() {
-  if (jtFrameAutoTimer) { clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
   jtFrameDragging = false;
   const img = document.getElementById('jt-frame-img');
   if (img) {
@@ -339,13 +337,7 @@ function _jtFrameShow(n) {
   const c = jtFrameCache[t];
   if (c && c.complete && !jtFrameBad.has(t)) document.getElementById('jt-frame-img').src = c.src;
 }
-function _jtFrameStartAuto() {
-  if (jtFrameAutoTimer) return;
-  jtFrameAutoTimer = setInterval(() => {
-    if (!jtFrameDragging && jtFrameAllReady) _jtFrameShow(jtFrameCurrent + 1);
-  }, 40);
-}
-function _jtFMDown(e) { e.preventDefault(); jtFrameDragging = true; jtFrameLastX = e.clientX; clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
+function _jtFMDown(e) { e.preventDefault(); jtFrameDragging = true; jtFrameLastX = e.clientX; }
 function _jtFMMove(e) {
   if (!jtFrameDragging || !jtFrameAllReady) return;
   const dx = e.clientX - jtFrameLastX; jtFrameLastX = e.clientX;
@@ -353,8 +345,8 @@ function _jtFMMove(e) {
   const sh = Math.round(jtFrameAccum / FRAME_SENS);
   if (sh) { _jtFrameShow(jtFrameCurrent - sh); jtFrameAccum -= sh * FRAME_SENS; }
 }
-function _jtFMUp() { if (jtFrameDragging) { jtFrameDragging = false; _jtFrameStartAuto(); } }
-function _jtFTStart(e) { e.preventDefault(); jtFrameDragging = true; jtFrameLastX = e.touches[0].clientX; clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
+function _jtFMUp() { jtFrameDragging = false; }
+function _jtFTStart(e) { e.preventDefault(); jtFrameDragging = true; jtFrameLastX = e.touches[0].clientX; }
 function _jtFTMove(e) {
   e.preventDefault();
   if (!jtFrameDragging || !jtFrameAllReady) return;
