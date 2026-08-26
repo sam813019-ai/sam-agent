@@ -6,7 +6,6 @@ export interface FormValues {
   patientName: string;
   patientId: string;
   surgeonName: string;
-  date: string;
   flatK: number;
   flatKAxis: number;
   steepK: number;
@@ -17,6 +16,7 @@ export interface FormValues {
   lensFactor: number;
   sia: number;
   siaAxis: number;
+  targetRefraction: number;
 }
 
 export interface FormOptions {
@@ -38,12 +38,6 @@ export interface MappingResult {
   blockers: string[];
 }
 
-export function formatDate(d: Date): string {
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  return `${dd}/${mm}/${d.getFullYear()}`;
-}
-
 /** 依角膜屈光度大小判定平／陡，不信任 K1/K2 的編號順序 */
 function orderKeratometry(
   a: NumericMeasurement, aAxis: NumericMeasurement,
@@ -60,7 +54,6 @@ function orderKeratometry(
 export function mapToFormValues(
   eye: EyeData,
   profile: ClinicProfile,
-  today: Date,
 ): MappingResult {
   const blockers: string[] = [];
   const substitutions: Substitution[] = [];
@@ -92,21 +85,30 @@ export function mapToFormValues(
 
   // --- 鏡片常數：報告單印的是非散光片，官網要散光片 ---
   const raw = eye.lensModel.value;
-  let family = raw === null ? null : lookupToricFamily(raw);
-  if (family === null) family = getFamilyById(profile.preferredLensFamily);
+  const matched = raw === null ? null : lookupToricFamily(raw);
+  const family = matched ?? getFamilyById(profile.preferredLensFamily);
 
   if (family === null) {
     blockers.push(`認不出鏡片型號「${raw ?? '(未讀到)'}」，且設定檔的預設散光片系列無效。`);
-  } else if (raw !== null && lookupToricFamily(raw) === null) {
-    blockers.push(`認不出報告單上的鏡片型號「${raw}」，已改用設定檔的預設系列 ${family.label}，請人工確認。`);
+  } else if (matched === null) {
+    blockers.push(`未能從報告單確認鏡片型號「${raw ?? '(未讀到)'}」，已改用設定檔的預設系列 ${family.label}，請人工確認。`);
   }
 
-  if (family !== null && eye.aConstant.value !== null && eye.aConstant.value !== family.aConstant) {
+  if (family !== null && eye.aConstant.value !== family.aConstant) {
     substitutions.push({
       field: 'aConstant',
-      from: String(eye.aConstant.value),
+      from: eye.aConstant.value === null ? '(未讀到)' : eye.aConstant.rawText,
       to: String(family.aConstant),
       reason: `報告單上的常數屬於非散光片；官網需使用 ${family.label} 的散光片常數`,
+    });
+  }
+
+  if (family !== null) {
+    substitutions.push({
+      field: 'lensFactor',
+      from: '(報告單為非散光片 LF)',
+      to: String(family.lensFactor),
+      reason: `官網需使用 ${family.label} 的散光片 Lens Factor`,
     });
   }
 
@@ -118,11 +120,20 @@ export function mapToFormValues(
     reason: '手術誘發散光取自診所設定檔',
   });
 
+  // --- 目標屈光度：讀不到就用平光 0 D 當安全預設，並揭露 ---
+  if (eye.targetRefraction.value === null) {
+    substitutions.push({
+      field: 'targetRefraction',
+      from: '(未讀到)',
+      to: '0',
+      reason: '報告單未讀到目標屈光度，採用平光 0 D',
+    });
+  }
+
   const values: FormValues = {
     patientName: '',
     patientId: '',
     surgeonName: profile.surgeonName,
-    date: formatDate(today),
     flatK: pair?.flat ?? 0,
     flatKAxis: pair?.flatAxis ?? 0,
     steepK: pair?.steep ?? 0,
@@ -133,6 +144,7 @@ export function mapToFormValues(
     lensFactor: family?.lensFactor ?? 0,
     sia: profile.defaultSIA,
     siaAxis: profile.defaultSIAAxis,
+    targetRefraction: eye.targetRefraction.value ?? 0,
   };
 
   return {
