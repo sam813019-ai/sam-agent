@@ -1,0 +1,35 @@
+<!-- 仿 APACRS Toric Calculator 的真實結構：ASP.NET Web Forms、表格排版、
+     沒有 <label for>，欄位說明只是同列的一個 td。id 取自 docs/ascrs-field-map.md 實測結果。
+     兩個 K 欄位刻意「沒有可辨識的平/陡文字」，重現真實頁面的狀況。 -->
+<div id="calculator">
+  <table>
+    <tr><td>Patient Name</td><td><input id="MainContent_PatientName" type="text" /></td></tr>
+    <tr><td>Patient ID</td><td><input id="MainContent_PatientNo" type="text" /></td></tr>
+    <tr><td>Doctor Name</td><td><input id="MainContent_DoctorName" type="text" /></td></tr>
+
+    <tr><td>K</td><td><input id="MainContent_MeasuredK" type="text" /></td><td>(30~60 D)</td></tr>
+    <tr><td>Axis</td><td><input id="MainContent_MeasuredAxis" type="text" /></td><td>(0~180 degrees)</td></tr>
+    <tr><td>K</td><td><input id="MainContent_MeasuredK0" type="text" /></td><td>(30~60 D)</td></tr>
+    <tr><td>Axis</td><td><input id="MainContent_MeasuredAxis0" type="text" /></td><td>(0-180 degrees)</td></tr>
+
+    <tr><td>Axial Length</td><td><input id="MainContent_AxLength" type="text" /></td><td>(12~38 mm)</td></tr>
+    <tr><td>Optical ACD</td><td><input id="MainContent_OpticalACD" type="text" /></td><td>(0.0~6.0 mm)</td></tr>
+    <tr><td>Lens Thickness</td><td><input id="MainContent_LensThickness" type="text" /></td><td>(2.0~8.0 mm)</td></tr>
+    <tr><td>WTW</td><td><input id="MainContent_WTW" type="text" /></td><td>(8~14 mm)</td></tr>
+    <tr><td>Refraction</td><td><input id="MainContent_Refraction" type="text" value="0" /></td></tr>
+
+    <tr><td>Induced Cyl</td><td><input id="MainContent_InducedCyl" type="text" value="0" /></td><td>(0.0~2.0 D)</td></tr>
+    <tr><td>Incision Axis</td><td><input id="MainContent_IncisionAxis" type="text" value="0" /></td><td>(0~360 degrees)</td></tr>
+
+    <!-- 不可寫入 -->
+    <tr><td>A Constant</td><td><input id="MainContent_Aconstant" type="text" /></td></tr>
+    <tr><td>Lens Factor</td><td><input id="MainContent_LensFactor" type="text" /></td></tr>
+    <tr><td>Net Corneal Astig</td><td><input id="MainContent_NetCornealAstig" type="text" readonly /></td></tr>
+  </table>
+
+  <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="原始狀態" />
+  <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="原始驗證" />
+
+  <input type="submit" id="MainContent_Button1" value="Calculate" />
+  <input type="submit" id="MainContent_btnReset" value="Reset Form" />
+</div>
