@@ -1,3 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { App } from './App';
+import './index.css';
 
-createRoot(document.getElementById('root')!).render(<div>IOL 代填面板</div>);
+createRoot(document.getElementById('root')!).render(<App />);

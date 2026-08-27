@@ -1,3 +1,7 @@
 node_modules/
 dist/
 .DS_Store
+
+# 本機金鑰，絕不進版控
+.env
+.env.*

@@ -6,7 +6,11 @@ export default defineManifest({
   version: '0.1.0',
   description: 'IOLMaster 報告單辨識，自動填入 ASCRS Barrett Toric Calculator',
   permissions: ['storage', 'sidePanel', 'activeTab', 'scripting'],
-  host_permissions: ['https://www.ascrs.org/*'],
+  host_permissions: [
+    'https://www.ascrs.org/*',
+    'https://calc.apacrs.org/*',
+    'https://elden-iol.vercel.app/*',
+  ],
   background: { service_worker: 'src/background/index.ts', type: 'module' },
   side_panel: { default_path: 'src/sidepanel/index.html' },
   action: { default_title: '開啟 IOL 代填面板' },
