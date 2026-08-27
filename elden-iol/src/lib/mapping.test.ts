@@ -26,7 +26,7 @@ const sampleEye = (): EyeData => ({
   aConstant: num(119.3),
 });
 
-const profile = { ...DEFAULT_PROFILE, surgeonName: '中慈 Dr彭', defaultSIA: 0.2, defaultSIAAxis: 135 };
+const profile = { ...DEFAULT_PROFILE, surgeonName: '中慈 Dr彭', defaultSIA: 0.2, defaultSIAAxis: 180 };
 
 describe('mapToFormValues — 樣本報告單', () => {
   it('產出與 barrett_toric_result_sample.jpg 完全一致的輸入值', () => {
@@ -41,10 +41,10 @@ describe('mapToFormValues — 樣本報告單', () => {
       steepKAxis: 6,
       al: 24.49,
       acd: 3.15,
-      aConstant: 119.39,
-      lensFactor: 2.09,
+      lt: 4.99,
+      wtw: 11.6,
       sia: 0.2,
-      siaAxis: 135,
+      siaAxis: 180,
       targetRefraction: 0,
     });
   });
@@ -53,35 +53,65 @@ describe('mapToFormValues — 樣本報告單', () => {
     expect(mapToFormValues(sampleEye(), profile).blockers).toEqual([]);
   });
 
-  it('記錄 A Constant 從報告單值換成散光片值的替換說明', () => {
-    const { substitutions } = mapToFormValues(sampleEye(), profile);
-    const aConst = substitutions.find((s) => s.field === 'aConstant')!;
-    expect(aConst.from).toBe('119.3');
-    expect(aConst.to).toBe('119.39');
-    expect(aConst.reason).toContain('DIU');
-  });
-
-  it('記錄 Lens Factor 從非散光片換成散光片值的替換說明', () => {
-    const { substitutions } = mapToFormValues(sampleEye(), profile);
-    const lf = substitutions.find((s) => s.field === 'lensFactor');
-    expect(lf).toBeDefined();
-    expect(lf!.to).toBe('2.09');
-  });
-
-  it('報告單常數讀不到時，仍記錄 A Constant 替換說明（不留追溯空白）', () => {
-    const eye = sampleEye();
-    eye.aConstant = num(null);
-    const { substitutions, values } = mapToFormValues(eye, profile);
-    const aConst = substitutions.find((s) => s.field === 'aConstant');
-    expect(aConst).toBeDefined();
-    expect(aConst!.from).toBe('(未讀到)');
-    expect(aConst!.to).toBe('119.39');
-    expect(values.aConstant).toBe(119.39);
-  });
-
   it('記錄 SIA 來自設定檔而非報告單', () => {
     const { substitutions } = mapToFormValues(sampleEye(), profile);
     expect(substitutions.some((s) => s.field === 'sia')).toBe(true);
+  });
+});
+
+describe('mapToFormValues — 鏡片常數不代填（2026-08-27 客戶決定：由醫師在官網自選 IOL Model）', () => {
+  it('FormValues 不含 aConstant 與 lensFactor', () => {
+    const { values } = mapToFormValues(sampleEye(), profile);
+    expect(values).not.toHaveProperty('aConstant');
+    expect(values).not.toHaveProperty('lensFactor');
+  });
+
+  it('不產生任何鏡片常數的替換記錄', () => {
+    const { substitutions } = mapToFormValues(sampleEye(), profile);
+    expect(substitutions.some((s) => String(s.field) === 'aConstant')).toBe(false);
+    expect(substitutions.some((s) => String(s.field) === 'lensFactor')).toBe(false);
+  });
+
+  it('認不出鏡片型號時不再阻斷代填（常數本來就不填）', () => {
+    const eye = sampleEye();
+    eye.lensModel = text('某個沒見過的鏡片');
+    const { blockers } = mapToFormValues(eye, profile);
+    expect(blockers.some((b) => b.includes('鏡片'))).toBe(false);
+  });
+
+  it('完全讀不到鏡片型號時也不阻斷', () => {
+    const eye = sampleEye();
+    eye.lensModel = text(null);
+    eye.aConstant = num(null);
+    const { blockers } = mapToFormValues(eye, profile);
+    expect(blockers).toEqual([]);
+  });
+});
+
+describe('mapToFormValues — LT / WTW（客戶指定需帶入，官網為選填欄位）', () => {
+  it('讀到時直接帶入', () => {
+    const { values } = mapToFormValues(sampleEye(), profile);
+    expect(values.lt).toBe(4.99);
+    expect(values.wtw).toBe(11.6);
+  });
+
+  it('讀不到時為 null 代表留空，絕不寫入 0（0 落在官網合法範圍外）', () => {
+    const eye = sampleEye();
+    eye.lt = num(null);
+    eye.wtw = num(null);
+    const { values } = mapToFormValues(eye, profile);
+    expect(values.lt).toBeNull();
+    expect(values.wtw).toBeNull();
+  });
+
+  it('讀不到時記錄留空說明，且不視為阻斷（選填欄位）', () => {
+    const eye = sampleEye();
+    eye.lt = num(null);
+    eye.wtw = num(null);
+    const { substitutions, blockers } = mapToFormValues(eye, profile);
+    expect(substitutions.some((s) => s.field === 'lt')).toBe(true);
+    expect(substitutions.some((s) => s.field === 'wtw')).toBe(true);
+    expect(blockers).toEqual([]);
   });
 });
 
@@ -128,20 +158,10 @@ describe('mapToFormValues — 阻斷情境', () => {
     expect(mapToFormValues(eye, profile).blockers.some((b) => b.includes('AL'))).toBe(true);
   });
 
-  it('鏡片型號認不出來時回報阻斷，並且不亂猜常數', () => {
+  it('ACD 缺失時回報阻斷', () => {
     const eye = sampleEye();
-    eye.lensModel = text('某個沒見過的鏡片');
-    const { blockers } = mapToFormValues(eye, profile);
-    expect(blockers.some((b) => b.includes('鏡片'))).toBe(true);
-  });
-
-  it('鏡片型號完全讀不到時回報阻斷，不得靜默套用預設常數', () => {
-    const eye = sampleEye();
-    eye.lensModel = text(null);
-    const { blockers, values } = mapToFormValues(eye, profile);
-    expect(blockers.length).toBeGreaterThan(0);
-    expect(blockers.some((b) => b.includes('鏡片'))).toBe(true);
-    expect(values.aConstant).toBe(119.39); // 仍帶入預設值供參考，但 blocker 會擋住填入
+    eye.acd = num(null);
+    expect(mapToFormValues(eye, profile).blockers.some((b) => b.includes('ACD'))).toBe(true);
   });
 });
 

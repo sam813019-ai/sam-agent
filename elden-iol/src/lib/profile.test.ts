@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { DEFAULT_PROFILE, loadProfile, saveProfile } from './profile';
+import { DEFAULT_PROFILE, COMMON_SIA_PRESETS, loadProfile, saveProfile } from './profile';
 
 let store: Record<string, unknown> = {};
 
@@ -32,6 +32,18 @@ describe('ClinicProfile', () => {
     const p = await loadProfile();
     expect(p.surgeonName).toBe('只有這個欄位');
     expect(p.kIndex).toBe(DEFAULT_PROFILE.kIndex);
+  });
+
+  it('SIA 預設軸位與官網預設一致（0），不是憑空編的值', () => {
+    expect(DEFAULT_PROFILE.defaultSIA).toBe(0.2);
+    expect(DEFAULT_PROFILE.defaultSIAAxis).toBe(0);
+  });
+
+  it('提供客戶實務上兩組常用 SIA 快捷（0.2@180 與 0.2@0）', () => {
+    expect(COMMON_SIA_PRESETS).toEqual([
+      { sia: 0.2, axis: 180 },
+      { sia: 0.2, axis: 0 },
+    ]);
   });
 
   it('預設不儲存任何病患資料欄位', () => {

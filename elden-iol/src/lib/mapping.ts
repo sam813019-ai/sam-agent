@@ -1,6 +1,5 @@
 import type { EyeData, NumericMeasurement } from './schema';
 import type { ClinicProfile } from './profile';
-import { lookupToricFamily, getFamilyById } from './lens-constants';
 
 export interface FormValues {
   patientName: string;
@@ -12,8 +11,10 @@ export interface FormValues {
   steepKAxis: number;
   al: number;
   acd: number;
-  aConstant: number;
-  lensFactor: number;
+  /** 官網為選填欄位；null 代表「不寫入這一欄」，絕不可退化成 0 */
+  lt: number | null;
+  /** 同上 */
+  wtw: number | null;
   sia: number;
   siaAxis: number;
   targetRefraction: number;
@@ -79,38 +80,31 @@ export function mapToFormValues(
     blockers.push('角膜屈光度缺少軸位。');
   }
 
-  // --- 眼軸與前房 ---
+  // --- 眼軸與前房（必填）---
   if (eye.al.value === null) blockers.push('報告單缺少 AL（眼軸長）。');
   if (eye.acd.value === null) blockers.push('報告單缺少 ACD（前房深度）。');
 
-  // --- 鏡片常數：報告單印的是非散光片，官網要散光片 ---
-  const raw = eye.lensModel.value;
-  const matched = raw === null ? null : lookupToricFamily(raw);
-  const family = matched ?? getFamilyById(profile.preferredLensFamily);
-
-  if (family === null) {
-    blockers.push(`認不出鏡片型號「${raw ?? '(未讀到)'}」，且設定檔的預設散光片系列無效。`);
-  } else if (matched === null) {
-    blockers.push(`未能從報告單確認鏡片型號「${raw ?? '(未讀到)'}」，已改用設定檔的預設系列 ${family.label}，請人工確認。`);
-  }
-
-  if (family !== null && eye.aConstant.value !== family.aConstant) {
+  // --- LT / WTW（官網選填）：讀不到就留空並揭露，不阻斷、不填 0 ---
+  if (eye.lt.value === null) {
     substitutions.push({
-      field: 'aConstant',
-      from: eye.aConstant.value === null ? '(未讀到)' : eye.aConstant.rawText,
-      to: String(family.aConstant),
-      reason: `報告單上的常數屬於非散光片；官網需使用 ${family.label} 的散光片常數`,
+      field: 'lt',
+      from: '(未讀到)',
+      to: '(留空)',
+      reason: '報告單未讀到 LT 水晶體厚度，此欄為選填，留空不影響計算',
+    });
+  }
+  if (eye.wtw.value === null) {
+    substitutions.push({
+      field: 'wtw',
+      from: '(未讀到)',
+      to: '(留空)',
+      reason: '報告單未讀到 WTW 角膜橫徑，此欄為選填，留空不影響計算',
     });
   }
 
-  if (family !== null) {
-    substitutions.push({
-      field: 'lensFactor',
-      from: '(報告單為非散光片 LF)',
-      to: String(family.lensFactor),
-      reason: `官網需使用 ${family.label} 的散光片 Lens Factor`,
-    });
-  }
+  // --- 鏡片常數：2026-08-27 客戶決定不代填 ---
+  // A Constant 與 Lens Factor 由醫師在官網的 IOL Model 下拉自行選定。
+  // 報告單上的鏡片型號與常數仍由 OCR 讀出（EyeData 保留），僅供畫面顯示參考，不進 FormValues。
 
   // --- SIA：報告單沒有這個欄位 ---
   substitutions.push({
@@ -140,8 +134,8 @@ export function mapToFormValues(
     steepKAxis: pair?.steepAxis ?? 0,
     al: eye.al.value ?? 0,
     acd: eye.acd.value ?? 0,
-    aConstant: family?.aConstant ?? 0,
-    lensFactor: family?.lensFactor ?? 0,
+    lt: eye.lt.value,
+    wtw: eye.wtw.value,
     sia: profile.defaultSIA,
     siaAxis: profile.defaultSIAAxis,
     targetRefraction: eye.targetRefraction.value ?? 0,
