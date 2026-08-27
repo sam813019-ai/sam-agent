@@ -34,6 +34,12 @@ export const EyeDataSchema = z.object({
 
 export const RecognitionResultSchema = z.object({
   device: z.enum(['IOLMaster700', 'unknown']),
+  /**
+   * 報告單上印的儀器名稱字樣，逐字照抄（"IOLMaster 700"、"LENSTAR LS 900"…）。
+   * 客戶 2026-08-27 表示「會有其他機型」但尚未說明是哪些；device 判為 unknown 時，
+   * 這個欄位是我們唯一能得知實際遇到什麼機器的來源。
+   */
+  deviceRawText: z.string().nullable(),
   reportDate: z.string().nullable(),
   eyes: z.array(EyeDataSchema),
   warnings: z.array(z.string()),

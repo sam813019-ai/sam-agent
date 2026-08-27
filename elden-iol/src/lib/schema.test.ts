@@ -3,6 +3,7 @@ import { RecognitionResultSchema } from './schema';
 
 const sample = {
   device: 'IOLMaster700',
+  deviceRawText: 'IOLMaster 700',
   reportDate: '2026-07-17',
   warnings: ['OD: Axial length measurements slightly inconsistent. Please check fixation.'],
   overallConfidence: 0.94,
@@ -46,6 +47,12 @@ describe('RecognitionResultSchema', () => {
     const bad = structuredClone(sample);
     bad.eyes[0]!.al.confidence = 1.5;
     expect(() => RecognitionResultSchema.parse(bad)).toThrow();
+  });
+
+  it('deviceRawText 逐字記錄儀器名稱，允許 null（讀不到時）', () => {
+    expect(RecognitionResultSchema.parse(sample).deviceRawText).toBe('IOLMaster 700');
+    const unknownDevice = { ...structuredClone(sample), device: 'unknown', deviceRawText: null };
+    expect(() => RecognitionResultSchema.parse(unknownDevice)).not.toThrow();
   });
 
   it('未測量的欄位允許 value 為 null', () => {
