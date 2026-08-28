@@ -16,7 +16,10 @@ export default defineManifest({
   action: { default_title: '開啟 IOL 代填面板' },
   content_scripts: [
     {
-      matches: ['https://www.ascrs.org/tools/barrett-toric-calculator*'],
+      // 計算器本體在 calc.apacrs.org，不在 ascrs.org。
+      // 從 ascrs.org 進去時它是跨域 iframe，因此必須 all_frames 才注入得到。
+      matches: ['https://calc.apacrs.org/*'],
+      all_frames: true,
       js: ['src/content/index.ts'],
       run_at: 'document_idle',
     },
