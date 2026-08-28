@@ -5,3 +5,7 @@ dist/
 # 本機金鑰，絕不進版控
 .env
 .env.*
+
+# 病患報告單樣本：barrett_toric_result_sample.jpg 上有真實病患姓名。
+# 測試需要它們在本機，但絕不進版控。
+docs/samples/
