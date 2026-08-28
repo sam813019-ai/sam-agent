@@ -1,4 +1,7 @@
 {
+  "framework": null,
+  "buildCommand": "echo 'API only — 擴充功能不在此部署'",
+  "outputDirectory": "public",
   "functions": {
     "api/recognize.ts": { "maxDuration": 120 }
   }

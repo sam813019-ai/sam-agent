@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { RecognitionResultSchema } from '../src/lib/schema';
-import { buildExtractionPrompt } from './prompt';
+import { buildExtractionPrompt } from '../src/lib/prompt';
 
 const ALLOWED_MEDIA_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;

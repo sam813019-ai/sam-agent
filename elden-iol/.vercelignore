@@ -1,0 +1,14 @@
+# 測試檔在 api/ 下會被 Vercel 當成端點部署出去，必須排除
+api/*.test.ts
+api/recognize.integration.test.ts
+
+# 擴充功能自己的程式碼與資產，API 部署用不到
+# （api/recognize.ts 只 import src/lib/schema，故 src/lib 必須保留）
+src/content
+src/sidepanel
+src/background
+src/test-setup.ts
+dist
+docs
+tools
+node_modules
