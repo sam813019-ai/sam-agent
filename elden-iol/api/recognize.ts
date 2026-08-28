@@ -20,7 +20,16 @@ function getClient(): Anthropic {
   if (process.env['ANTHROPIC_API_KEY'] === undefined) {
     throw new MissingApiKeyError();
   }
-  client ??= new Anthropic();
+  if (client === null) {
+    // 綁在個人身分上的 API key（identity-linked）每次請求都必須指明 workspace，
+    // 否則一律回 400。workspace-scoped 的 key 則不需要，此時這個變數留空即可。
+    const workspaceId = process.env['ANTHROPIC_WORKSPACE_ID'];
+    client = new Anthropic(
+      workspaceId === undefined || workspaceId === ''
+        ? {}
+        : { defaultHeaders: { 'anthropic-workspace-id': workspaceId } },
+    );
+  }
   return client;
 }
 
@@ -92,6 +101,7 @@ export async function POST(request: Request): Promise<Response> {
 
     return json(response.parsed_output, 200);
   } catch (error) {
+    if (process.env['ELDEN_DEBUG'] === '1') console.error('[debug]', error);
     if (error instanceof MissingApiKeyError) {
       return json({ error: '辨識服務尚未設定 ANTHROPIC_API_KEY，請聯絡系統維護者。' }, 500);
     }
