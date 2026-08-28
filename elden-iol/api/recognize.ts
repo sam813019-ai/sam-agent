@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'node:crypto';
 import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 // Vercel 的 Node builder 只轉譯不打包，函式在 Node ESM 下執行，import 必須帶副檔名。
@@ -33,12 +34,22 @@ function getClient(): Anthropic {
   return client;
 }
 
+const ACCESS_TOKEN_HEADER = 'x-elden-token';
+
 function corsHeaders(): Record<string, string> {
   return {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': `Content-Type, ${ACCESS_TOKEN_HEADER}`,
   };
+}
+
+/** 等長比較，避免用回應時間逐字元猜出權杖 */
+function tokensMatch(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
 }
 
 function json(body: unknown, status: number): Response {
@@ -49,6 +60,17 @@ function json(body: unknown, status: number): Response {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  // 這個端點會花錢。沒有驗證的話，任何掃到網址的人都在用診所的額度。
+  const expectedToken = process.env['ELDEN_ACCESS_TOKEN'];
+  if (expectedToken === undefined || expectedToken === '') {
+    // 沒設定就一律擋下 —— 開著比擋著危險
+    return json({ error: '辨識服務尚未設定存取權杖，請聯絡系統維護者。' }, 500);
+  }
+  const presentedToken = request.headers.get(ACCESS_TOKEN_HEADER);
+  if (presentedToken === null || !tokensMatch(presentedToken, expectedToken)) {
+    return json({ error: '沒有存取權限' }, 401);
+  }
+
   let payload: { imageBase64?: unknown; mediaType?: unknown };
   try {
     payload = await request.json();

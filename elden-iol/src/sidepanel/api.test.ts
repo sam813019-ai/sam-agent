@@ -57,6 +57,17 @@ describe('recognizeImage', () => {
     expect(spy.mock.calls[0]![1].body as string).not.toContain('林許謹');
   });
 
+  it('每次請求都帶上存取權杖標頭', async () => {
+    const spy = vi.fn(
+      async (_url: string, init: RequestInit) =>
+        new Response(JSON.stringify(validResult), { status: 200 }),
+    );
+    vi.stubGlobal('fetch', spy);
+    await recognizeImage(fakeFile());
+    const headers = spy.mock.calls[0]![1].headers as Record<string, string>;
+    expect(headers).toHaveProperty('x-elden-token');
+  });
+
   it('伺服器回錯誤時，把錯誤訊息拋出來給 UI 顯示', async () => {
     mockFetch({ error: '辨識服務忙碌中，請稍後再試' }, 429);
     await expect(recognizeImage(fakeFile())).rejects.toThrow('辨識服務忙碌中');

@@ -1,8 +1,14 @@
 import { RecognitionResultSchema, type RecognitionResult } from '../lib/schema';
 import { redactImage, canvasToBase64Jpeg, IOLMASTER_PII_REGIONS } from '../lib/redact';
 
-/** 尚未部署；Task 12 上線前需確認此網址與 manifest 的 host_permissions 一致 */
 export const RECOGNIZE_ENDPOINT = 'https://elden-iol.vercel.app/api/recognize';
+
+/**
+ * 端點的存取權杖，建置時由 VITE_ELDEN_ACCESS_TOKEN 注入。
+ * 它擋的是網路上隨機掃描的人，不是擋診所使用者 —— 裝了擴充功能的人本來就讀得到它。
+ * 目的只有一個：別讓陌生人花我們的辨識額度。
+ */
+const ACCESS_TOKEN: string = import.meta.env.VITE_ELDEN_ACCESS_TOKEN ?? '';
 
 export async function recognizeImage(file: File): Promise<RecognitionResult> {
   const bitmap = await createImageBitmap(file);
@@ -12,7 +18,7 @@ export async function recognizeImage(file: File): Promise<RecognitionResult> {
 
   const response = await fetch(RECOGNIZE_ENDPOINT, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-elden-token': ACCESS_TOKEN },
     body: JSON.stringify({ imageBase64, mediaType: 'image/jpeg' }),
   });
 
