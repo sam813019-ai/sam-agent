@@ -114,6 +114,12 @@ export function App() {
 
       {eye !== undefined && (
         <ReviewTable
+          /*
+           * key 讓換眼別時整個元件重新掛載，清掉「已核對低信心欄位」的勾選狀態。
+           * 沒有它的話，在右眼核對過的欄位會被左眼沿用，
+           * 使用者根本沒看過左眼的數字就能按下填入。
+           */
+          key={`${selectedEye ?? 'none'}-${eye.laterality}`}
           eye={eye}
           mapping={mapToFormValues(eye, profile)}
           threshold={profile.confidenceThreshold}
