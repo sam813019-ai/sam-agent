@@ -1,10 +1,15 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
-import { RecognitionResultSchema } from '../src/lib/schema';
-import { buildExtractionPrompt } from '../src/lib/prompt';
+// Vercel 的 Node builder 只轉譯不打包，函式在 Node ESM 下執行，import 必須帶副檔名。
+// 本機 Vite/Vitest 的 bundler 解析不需要，所以少了 .js 在本機測不出來 —— 部署後才會 500。
+import { RecognitionResultSchema } from '../src/lib/schema.js';
+import { buildExtractionPrompt } from '../src/lib/prompt.js';
 
 const ALLOWED_MEDIA_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+
+/** 伺服器端沒設金鑰，與使用者送錯東西是兩回事，錯誤訊息不能混在一起 */
+class MissingApiKeyError extends Error {}
 
 /**
  * 延遲建立：模組載入時就 new Anthropic() 會在沒有金鑰（或在瀏覽器環境）時直接拋錯，
@@ -12,6 +17,9 @@ const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
  */
 let client: Anthropic | null = null;
 function getClient(): Anthropic {
+  if (process.env['ANTHROPIC_API_KEY'] === undefined) {
+    throw new MissingApiKeyError();
+  }
   client ??= new Anthropic();
   return client;
 }
@@ -84,6 +92,12 @@ export async function POST(request: Request): Promise<Response> {
 
     return json(response.parsed_output, 200);
   } catch (error) {
+    if (error instanceof MissingApiKeyError) {
+      return json({ error: '辨識服務尚未設定 ANTHROPIC_API_KEY，請聯絡系統維護者。' }, 500);
+    }
+    if (error instanceof Anthropic.AuthenticationError) {
+      return json({ error: '辨識服務的 API 金鑰無效或已失效，請聯絡系統維護者。' }, 500);
+    }
     if (error instanceof Anthropic.RateLimitError) {
       return json({ error: '辨識服務忙碌中，請稍後再試' }, 429);
     }
