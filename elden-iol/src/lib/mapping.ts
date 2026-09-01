@@ -5,19 +5,24 @@ export interface FormValues {
   patientName: string;
   patientId: string;
   surgeonName: string;
-  flatK: number;
-  flatKAxis: number;
-  steepK: number;
-  steepKAxis: number;
-  al: number;
-  acd: number;
+  /**
+   * 以下數值欄位一律可為 null，null 代表「這一格留白，由醫師自己填」。
+   * 客戶 2026-09-01：「判別如果有疑慮，請他空下來，我手動填」。
+   * 讀不到就留白，比填一個看起來合理但來源錯誤的數字安全得多。
+   */
+  flatK: number | null;
+  flatKAxis: number | null;
+  steepK: number | null;
+  steepKAxis: number | null;
+  al: number | null;
+  acd: number | null;
   /** 官網為選填欄位；null 代表「不寫入這一欄」，絕不可退化成 0 */
   lt: number | null;
   /** 同上 */
   wtw: number | null;
   sia: number;
   siaAxis: number;
-  targetRefraction: number;
+  targetRefraction: number | null;
 }
 
 export interface FormOptions {
@@ -69,20 +74,33 @@ export function mapToFormValues(
     ? orderKeratometry(eye.tk1, eye.tk1Axis, eye.tk2, eye.tk2Axis)
     : orderKeratometry(eye.k1, eye.k1Axis, eye.k2, eye.k2Axis);
 
-  if (pair === null) {
-    blockers.push(
-      useTK
-        ? '設定為使用 TK（含後表面），但報告單沒有 TK 值。請改用 K 或重新量測。'
-        : '報告單缺少 K1/K2 角膜屈光度。',
-    );
-  }
-  if (pair !== null && (pair.flatAxis === null || pair.steepAxis === null)) {
-    blockers.push('角膜屈光度缺少軸位。');
+  // 度數與軸位必須成套。少了任何一個就四格全留白 ——
+  // 分不出平陡、或有度數沒軸位，填進去的散光都是錯的。
+  const kUsable =
+    pair !== null && pair.flatAxis !== null && pair.steepAxis !== null;
+
+  if (!kUsable) {
+    const reason = useTK
+      ? '設定為使用 TK（含後表面），但報告單的 TK 值或軸位讀不完整，無法判定平／陡軸，四個 K 欄位皆留白，請人工填寫'
+      : '報告單的 K 值或軸位讀不完整，無法判定平／陡軸，四個 K 欄位皆留白，請人工填寫';
+    for (const field of ['flatK', 'flatKAxis', 'steepK', 'steepKAxis'] as const) {
+      substitutions.push({ field, from: '(讀不完整)', to: '(留空)', reason });
+    }
   }
 
-  // --- 眼軸與前房（必填）---
-  if (eye.al.value === null) blockers.push('報告單缺少 AL（眼軸長）。');
-  if (eye.acd.value === null) blockers.push('報告單缺少 ACD（前房深度）。');
+  // --- 眼軸與前房：讀不到就留白，不擋其他欄位 ---
+  if (eye.al.value === null) {
+    substitutions.push({
+      field: 'al', from: '(未讀到)', to: '(留空)',
+      reason: '報告單未讀到 AL 眼軸長，請人工填寫',
+    });
+  }
+  if (eye.acd.value === null) {
+    substitutions.push({
+      field: 'acd', from: '(未讀到)', to: '(留空)',
+      reason: '報告單未讀到 ACD 前房深度，請人工填寫',
+    });
+  }
 
   // --- LT / WTW（官網選填）：讀不到就留空並揭露，不阻斷、不填 0 ---
   if (eye.lt.value === null) {
@@ -114,13 +132,13 @@ export function mapToFormValues(
     reason: '手術誘發散光取自診所設定檔',
   });
 
-  // --- 目標屈光度：讀不到就用平光 0 D 當安全預設，並揭露 ---
+  // --- 目標屈光度：客戶指定預設 0（平光），這是他明確要求的行為，不是猜測 ---
   if (eye.targetRefraction.value === null) {
     substitutions.push({
       field: 'targetRefraction',
       from: '(未讀到)',
       to: '0',
-      reason: '報告單未讀到目標屈光度，採用平光 0 D',
+      reason: '報告單未讀到目標屈光度，依客戶指定採用平光 0 D',
     });
   }
 
@@ -128,12 +146,12 @@ export function mapToFormValues(
     patientName: '',
     patientId: '',
     surgeonName: profile.surgeonName,
-    flatK: pair?.flat ?? 0,
-    flatKAxis: pair?.flatAxis ?? 0,
-    steepK: pair?.steep ?? 0,
-    steepKAxis: pair?.steepAxis ?? 0,
-    al: eye.al.value ?? 0,
-    acd: eye.acd.value ?? 0,
+    flatK: kUsable ? pair.flat : null,
+    flatKAxis: kUsable ? pair.flatAxis : null,
+    steepK: kUsable ? pair.steep : null,
+    steepKAxis: kUsable ? pair.steepAxis : null,
+    al: eye.al.value,
+    acd: eye.acd.value,
     lt: eye.lt.value,
     wtw: eye.wtw.value,
     sia: profile.defaultSIA,

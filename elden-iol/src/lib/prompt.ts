@@ -38,7 +38,21 @@ export function buildExtractionPrompt(): string {
    **請依欄位標籤的語意抓取，不要依賴數值在畫面上的固定位置。**
    標籤與數值的對應關係看不清楚時，同樣填 null。
 
-8. **欄位對照**：
+8. **同一個欄位出現多個候選數值時，不要自己挑。**
+   不同機型會把同一個量測值印成好幾組，例如：
+   - NIDEK AL-Scan 的 AL 與 ACD 同時有 Optical 與 Ultrasound 兩組，
+     報告單上會有一行「Select: AL (Optical), ACD (Ultrasound)」之類的標示，
+     **依那行標示取對應的那一組**。
+   - NIDEK 的角膜屈光度分 KM φ2.4mm 與 KM φ3.3mm 兩區，
+     **一律優先取 φ2.4mm 那一組**（診所醫師指定）。R1 為一個主徑線、R2 為另一個，
+     各自帶自己的軸位；把它們當成 K1 / K2 回報。
+   - OCULUS Pentacam 的 ACD 標為「ACD (Ext.)」，K 值標為「SimK」。
+
+   **如果報告單上沒有標示、或你判斷不出該用哪一組，該欄位一律填 null，
+   並在 warnings 裡寫明「哪個欄位有幾個候選值、分別是多少」。**
+   醫師寧可自己補一格，也不要收到一個看起來很合理但選錯來源的數字。
+
+9. **欄位對照**：
    - AL = 眼軸長 (mm)
    - ACD = 前房深度 (mm)
    - LT = 水晶體厚度 (mm)
@@ -49,18 +63,18 @@ export function buildExtractionPrompt(): string {
    - lensModel = 計算所用的人工水晶體型號字串，逐字照抄（例如 "AMO Tecnic 1 ZCB00-1"）
    - aConstant = 該型號的 A const. 數值
 
-9. 軸位一律以度為單位的整數（0–180）。度數一律保留報告單上的小數位數。
+10. 軸位一律以度為單位的整數（0–180）。度數一律保留報告單上的小數位數。
 
-10. overallConfidence 反映你對整張報告單判讀的整體把握程度。
+11. overallConfidence 反映你對整張報告單判讀的整體把握程度。
     照片有大面積反光、嚴重變形或關鍵欄位被裁掉時，這個值就要明顯下降。
 
-11. device：確認是 IOLMaster 700 就填 "IOLMaster700"，其他機型一律填 "unknown"。
+12. device：確認是 IOLMaster 700 就填 "IOLMaster700"，其他機型一律填 "unknown"。
     deviceRawText 則**逐字記錄報告單上印的儀器名稱或型號字樣**
     （例如 "IOLMaster 700"、"LENSTAR LS 900"、"ARGOS"），讀不到就填 null。
     這是用來讓我們知道實際遇到哪些機型，即使 device 判為 unknown 也要盡量填。
     reportDate 取報告單上的 "Report dated" 日期，格式 YYYY-MM-DD；讀不到就填 null。
 
-12. **不要抽取病患姓名與病歷號。** 即使圖上看得到（包含技術員手寫的），
+13. **不要抽取病患姓名與病歷號。** 即使圖上看得到（包含技術員手寫的），
     也不要放進任何欄位、不要寫進 rawText、不要寫進 warnings。
     這份資料不儲存病患個資。`;
 }

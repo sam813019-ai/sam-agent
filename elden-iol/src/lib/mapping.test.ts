@@ -138,30 +138,68 @@ describe('mapToFormValues — K / TK 來源切換', () => {
     expect(values.steepKAxis).toBe(5);
   });
 
-  it('設定為 TK 但報告單沒有 TK 值時，回報阻斷而不靜默改用 K', () => {
-    const eye = sampleEye();
-    eye.tk1 = num(null); eye.tk2 = num(null);
-    const { blockers } = mapToFormValues(eye, { ...profile, keratometrySource: 'TK' });
-    expect(blockers.some((b) => b.includes('TK'))).toBe(true);
-  });
 });
 
 describe('mapToFormValues — 阻斷情境', () => {
-  it('沒有資料的眼睛回報阻斷', () => {
+  it('沒有資料的眼睛回報阻斷（整隻眼都不能填）', () => {
     const eye = { ...sampleEye(), hasData: false, status: 'Pseudophakic' as const };
     expect(mapToFormValues(eye, profile).blockers.length).toBeGreaterThan(0);
   });
+});
 
-  it('AL 缺失時回報阻斷', () => {
+// 客戶 2026-09-01：「判別如果有疑慮，請他空下來，我手動填」
+// 讀不到的欄位留白就好，不該連帶擋掉其他讀得到的欄位。
+describe('mapToFormValues — 讀不到的欄位留白，不擋其他欄位', () => {
+  it('AL 讀不到時該欄為 null，其他欄位照樣帶入，且不阻斷', () => {
     const eye = sampleEye();
     eye.al = num(null);
-    expect(mapToFormValues(eye, profile).blockers.some((b) => b.includes('AL'))).toBe(true);
+    const { values, blockers, substitutions } = mapToFormValues(eye, profile);
+    expect(values.al).toBeNull();
+    expect(values.acd).toBe(3.15);
+    expect(values.flatK).toBe(43.08);
+    expect(blockers).toEqual([]);
+    expect(substitutions.some((s) => s.field === 'al' && s.to === '(留空)')).toBe(true);
   });
 
-  it('ACD 缺失時回報阻斷', () => {
+  it('ACD 讀不到時同樣只留白該欄', () => {
     const eye = sampleEye();
     eye.acd = num(null);
-    expect(mapToFormValues(eye, profile).blockers.some((b) => b.includes('ACD'))).toBe(true);
+    const { values, blockers } = mapToFormValues(eye, profile);
+    expect(values.acd).toBeNull();
+    expect(values.al).toBe(24.49);
+    expect(blockers).toEqual([]);
+  });
+
+  it('K 值缺一邊時，四個 K 欄位全部留白 —— 分不出平陡就不能只填一半', () => {
+    const eye = sampleEye();
+    eye.k2 = num(null);
+    const { values, blockers, substitutions } = mapToFormValues(eye, profile);
+    expect(values.flatK).toBeNull();
+    expect(values.flatKAxis).toBeNull();
+    expect(values.steepK).toBeNull();
+    expect(values.steepKAxis).toBeNull();
+    expect(values.al).toBe(24.49);
+    expect(blockers).toEqual([]);
+    expect(substitutions.some((s) => s.field === 'flatK' && s.reason.includes('平'))).toBe(true);
+  });
+
+  it('軸位缺失時，度數也一起留白 —— 有度數沒軸位的散光是錯的', () => {
+    const eye = sampleEye();
+    eye.k1Axis = num(null);
+    const { values, blockers } = mapToFormValues(eye, profile);
+    expect(values.flatK).toBeNull();
+    expect(values.steepK).toBeNull();
+    expect(blockers).toEqual([]);
+  });
+
+  it('設定為 TK 但報告單沒有 TK 時，K 欄位留白並說明，不靜默改用 K 也不阻斷', () => {
+    const eye = sampleEye();
+    eye.tk1 = num(null); eye.tk2 = num(null);
+    const { values, blockers, substitutions } = mapToFormValues(eye, { ...profile, keratometrySource: 'TK' });
+    expect(values.flatK).toBeNull();
+    expect(values.al).toBe(24.49);
+    expect(blockers).toEqual([]);
+    expect(substitutions.some((s) => s.reason.includes('TK'))).toBe(true);
   });
 });
 

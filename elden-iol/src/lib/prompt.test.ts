@@ -53,6 +53,20 @@ describe('buildExtractionPrompt — 客戶實際使用情境（2026-08-27）', (
     expect(prompt).toContain('deviceRawText');
   });
 
+  it('NIDEK 兩組 K 值時優先取 2.4mm（客戶 2026-09-01 指示）', () => {
+    expect(prompt).toMatch(/2\.4/);
+    expect(prompt).toMatch(/NIDEK|KM/);
+  });
+
+  it('同一欄位有多個候選值時，要求依報告單自己的 Select 標示判斷', () => {
+    expect(prompt).toMatch(/Select/);
+    expect(prompt).toMatch(/Optical|Ultrasound/);
+  });
+
+  it('判斷不出該用哪一個值時一律留 null，不得挑一個交差', () => {
+    expect(prompt).toMatch(/判斷不出|無法判斷|分不出/);
+  });
+
   it('明確要求不要抽取病患姓名與病歷號', () => {
     expect(prompt).toMatch(/姓名/);
     expect(prompt).toMatch(/病歷號|病歷編號/);

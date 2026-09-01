@@ -83,10 +83,17 @@ describe('ReviewTable', () => {
     expect(screen.getByRole('button', { name: /填入/ })).toBeEnabled();
   });
 
-  it('有阻斷問題時，填入按鈕停用並顯示原因', () => {
-    setup(eye({ al: num(null) }));
+  it('整隻眼沒有量測資料時，填入按鈕停用並顯示原因', () => {
+    setup(eye({ hasData: false, status: 'Pseudophakic' }));
     expect(screen.getByRole('button', { name: /填入/ })).toBeDisabled();
-    expect(screen.getByText(/缺少 AL/)).toBeInTheDocument();
+    expect(screen.getByText(/沒有量測資料/)).toBeInTheDocument();
+  });
+
+  it('單一欄位讀不到時不擋填入，該列顯示留空與原因', () => {
+    setup(eye({ al: num(null) }));
+    expect(screen.getByRole('button', { name: /填入/ })).toBeEnabled();
+    expect(screen.getByTestId('row-al').textContent).toContain('留空');
+    expect(screen.getByTestId('substitution-al').textContent).toContain('請人工填寫');
   });
 
   it('按下填入時呼叫 onConfirm', async () => {
