@@ -67,6 +67,24 @@ describe('buildExtractionPrompt — 客戶實際使用情境（2026-08-27）', (
     expect(prompt).toMatch(/判斷不出|無法判斷|分不出/);
   });
 
+  it('要求讀取報告單上的 SIA 與切口軸位（實測樣本全都有印）', () => {
+    expect(prompt).toContain('sia');
+    expect(prompt).toContain('incisionAxis');
+    expect(prompt).toMatch(/Inc/);
+    expect(prompt).toMatch(/左右眼可能不同/);
+  });
+
+  it('把儀器警告與辨識說明分成兩個欄位，且明講不要寫「未見警告」', () => {
+    expect(prompt).toContain('extractionNotes');
+    expect(prompt).toMatch(/不要寫「未見警告」|空陣列本身就是/);
+    expect(prompt).toMatch(/Check warnings on all pages/);
+  });
+
+  it('給出可執行的判準：不是印在紙上的就不進 warnings', () => {
+    expect(prompt).toMatch(/不是印在紙上的/);
+    expect(prompt).toMatch(/多個候選值.*extractionNotes|extractionNotes/s);
+  });
+
   it('明確要求不要抽取病患姓名與病歷號', () => {
     expect(prompt).toMatch(/姓名/);
     expect(prompt).toMatch(/病歷號|病歷編號/);

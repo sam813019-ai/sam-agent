@@ -14,10 +14,20 @@ export function buildExtractionPrompt(): string {
 3. **borderline 欄位**：報告單會在數值旁印一個 (!) 驚嘆號標記，代表該量測值處於臨界範圍。
    看到 (!) 就把該欄位的 borderline 設為 true。
 
-4. **warnings 陣列必須抓取報告單上所有的文字警告**，
+4. **warnings 與 extractionNotes 是兩個不同的欄位，不要混在一起。**
+
+   **warnings：只放報告單上實際印出來的警告文字。**
    通常印在頁面最上方、旁邊有一個大驚嘆號圖示，
    例如 "OD: Axial length measurements slightly inconsistent. Please check fixation."
-   逐字照抄英文原文。沒有警告就給空陣列。這個欄位絕對不能省略。
+   逐字照抄原文。沒有就給空陣列 —— **不要寫「未見警告」之類的話**，空陣列本身就是那個意思。
+   這些會以紅色橫幅顯示給醫師看，摻進別的東西會稀釋真正的警告。
+   判準很簡單：**如果那句話不是印在紙上的，就不該進 warnings。**
+   「某欄位有多個候選值所以填 null」是你的判讀說明，不是報告單印的警告 —— 放 extractionNotes。
+   註：IOLMaster 每張都印的 "Check warnings on all pages!" 是固定字樣不是警告，放進 extractionNotes 即可。
+
+   **extractionNotes：放你判讀過程要交代的事。**
+   例如哪個欄位有多個候選值、為什麼填 null、照片哪裡被裁到或反光、
+   哪個數字前面有 # 或 * 之類的標記。這些不會用紅字顯示，寫多一點沒關係。
 
 5. **版面**：報告單左半邊是 OD（右眼），右半邊是 OS（左眼）。
    若某一眼的狀態 (LS) 是 Pseudophakic（已植入人工水晶體），
@@ -60,6 +70,10 @@ export function buildExtractionPrompt(): string {
    - K1 / K2 = 角膜前表面兩主徑線屈光度 (D)，各自帶一個軸位 (度)
    - TK1 / TK2 = Total K，含角膜後表面的量測值 (D)，各自帶軸位
    - targetRefraction = Target ref. 目標屈光度 (D)
+   - sia = 手術誘發散光。IOLMaster 印成「SIA 0.25 D」，Pentacam 印成「SIA 0.20 D @ 30°」。
+     這一欄在報告單上通常和 Target ref. 同一區塊，左右眼可能不同，務必分別讀取。
+   - incisionAxis = 切口軸位，緊接在 SIA 後面，IOLMaster 印成「Inc 135°」，
+     Pentacam 直接寫在 SIA 後面的「@ 30°」。單位是度。
    - lensModel = 計算所用的人工水晶體型號字串，逐字照抄（例如 "AMO Tecnic 1 ZCB00-1"）
    - aConstant = 該型號的 A const. 數值
 

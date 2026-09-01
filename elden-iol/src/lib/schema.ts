@@ -28,6 +28,13 @@ export const EyeDataSchema = z.object({
   tk2: NumericMeasurementSchema,
   tk2Axis: NumericMeasurementSchema,
   targetRefraction: NumericMeasurementSchema,
+  /**
+   * 報告單上印的手術誘發散光與切口軸位（IOLMaster 印成 "SIA 0.25 D Inc 135°"、
+   * Pentacam 印成 "SIA 0.20 D @ 30°"）。實測 7 張樣本全部都有，且左右眼可能不同 ——
+   * 這是醫師當次填進儀器的值，比診所設定檔的預設值更貼近這一台刀。
+   */
+  sia: NumericMeasurementSchema,
+  incisionAxis: NumericMeasurementSchema,
   lensModel: TextMeasurementSchema,
   aConstant: NumericMeasurementSchema,
 });
@@ -42,7 +49,14 @@ export const RecognitionResultSchema = z.object({
   deviceRawText: z.string().nullable(),
   reportDate: z.string().nullable(),
   eyes: z.array(EyeDataSchema),
+  /** 只放「報告單上實際印出來的」警告文字。這些會以紅色橫幅醒目顯示，不能摻雜其他東西 */
   warnings: z.array(z.string()),
+  /**
+   * 辨識過程的說明：哪些欄位有多個候選值、為什麼填 null、照片哪裡被裁到。
+   * 與 warnings 分開，否則「報告單上沒有警告」這種話會被當成儀器警告紅字顯示，
+   * 稀釋真正的警告。
+   */
+  extractionNotes: z.array(z.string()),
   overallConfidence: z.number().min(0).max(1),
 });
 

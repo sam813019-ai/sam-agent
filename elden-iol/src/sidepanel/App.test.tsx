@@ -17,6 +17,7 @@ const eyeWithLowConfidenceAL = (laterality: 'OD' | 'OS'): EyeData => ({
   k1: num(43.08), k1Axis: num(96), k2: num(45.58), k2Axis: num(6),
   tk1: num(43.0), tk1Axis: num(95), tk2: num(45.53), tk2Axis: num(5),
   targetRefraction: num(0),
+  sia: num(0.25), incisionAxis: num(135),
   lensModel: text('AMO Tecnic 1 ZCB00-1'),
   aConstant: num(119.3),
 });
@@ -28,6 +29,7 @@ vi.mock('./api', () => ({
     deviceRawText: 'IOLMaster 700',
     reportDate: '2026-07-17',
     warnings: [],
+    extractionNotes: [],
     overallConfidence: 0.9,
     eyes: [eyeWithLowConfidenceAL('OD'), eyeWithLowConfidenceAL('OS')],
   })),

@@ -17,6 +17,7 @@ const eye = (over: Partial<EyeData> = {}): EyeData => ({
   k1: num(43.08), k1Axis: num(96), k2: num(45.58), k2Axis: num(6),
   tk1: num(43.0), tk1Axis: num(95), tk2: num(45.53), tk2Axis: num(5),
   targetRefraction: num(0),
+  sia: num(0.25), incisionAxis: num(135),
   lensModel: text('AMO Tecnic 1 ZCB00-1'),
   aConstant: num(119.3),
   ...over,
@@ -36,11 +37,16 @@ describe('ReviewTable', () => {
     expect(screen.getAllByText('24.49').length).toBeGreaterThanOrEqual(2);
   });
 
-  it('顯示 SIA 的替換說明，讓使用者知道這個值不是紙上讀到的', () => {
+  it('SIA 與切口軸位有自己的列，顯示紙上讀到的值', () => {
     setup(eye());
-    const note = screen.getByTestId('substitution-sia');
-    expect(note.textContent).toContain('報告單無此欄位');
-    expect(note.textContent).toContain('0.2');
+    expect(screen.getByTestId('row-sia').textContent).toContain('0.25');
+    expect(screen.getByTestId('row-siaAxis').textContent).toContain('135');
+  });
+
+  it('報告單讀不到 SIA 時，該列顯示改用設定檔預設值的說明', () => {
+    setup(eye({ sia: num(null), incisionAxis: num(null) }));
+    expect(screen.getByTestId('substitution-sia').textContent).toContain('設定檔');
+    expect(screen.getByTestId('substitution-siaAxis').textContent).toContain('設定檔');
   });
 
   it('客戶指定要帶入的 LT、WTW、目標屈光度都列在確認表上', () => {

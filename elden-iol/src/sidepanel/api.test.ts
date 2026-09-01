@@ -6,6 +6,7 @@ const validResult = {
   deviceRawText: 'IOLMaster 700',
   reportDate: '2026-07-17',
   warnings: [],
+  extractionNotes: [],
   overallConfidence: 0.95,
   eyes: [],
 };

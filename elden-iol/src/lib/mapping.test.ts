@@ -22,6 +22,7 @@ const sampleEye = (): EyeData => ({
   tk1: num(43.0), tk1Axis: num(95),
   tk2: num(45.53), tk2Axis: num(5),
   targetRefraction: num(0),
+  sia: num(0.25), incisionAxis: num(135),
   lensModel: text('AMO Tecnic 1 ZCB00-1'),
   aConstant: num(119.3),
 });
@@ -43,8 +44,8 @@ describe('mapToFormValues — 樣本報告單', () => {
       acd: 3.15,
       lt: 4.99,
       wtw: 11.6,
-      sia: 0.2,
-      siaAxis: 180,
+      sia: 0.25,
+      siaAxis: 135,
       targetRefraction: 0,
     });
   });
@@ -53,9 +54,33 @@ describe('mapToFormValues — 樣本報告單', () => {
     expect(mapToFormValues(sampleEye(), profile).blockers).toEqual([]);
   });
 
-  it('記錄 SIA 來自設定檔而非報告單', () => {
-    const { substitutions } = mapToFormValues(sampleEye(), profile);
-    expect(substitutions.some((s) => s.field === 'sia')).toBe(true);
+  it('SIA 與切口軸位以報告單上印的為準，不用設定檔的預設值蓋掉', () => {
+    const { values, substitutions } = mapToFormValues(sampleEye(), profile);
+    expect(values.sia).toBe(0.25);
+    expect(values.siaAxis).toBe(135);
+    // 用了報告單的值就不是替換，不該產生替換說明
+    expect(substitutions.some((s) => s.field === 'sia')).toBe(false);
+  });
+
+  it('報告單讀不到 SIA 時才退回設定檔，並記錄這是替換', () => {
+    const eye = sampleEye();
+    eye.sia = num(null);
+    eye.incisionAxis = num(null);
+    const { values, substitutions } = mapToFormValues(eye, profile);
+    expect(values.sia).toBe(profile.defaultSIA);
+    expect(values.siaAxis).toBe(profile.defaultSIAAxis);
+    const sub = substitutions.find((s) => s.field === 'sia');
+    expect(sub).toBeDefined();
+    expect(sub!.reason).toContain('設定檔');
+  });
+
+  it('只讀到 SIA 沒讀到軸位時，軸位單獨退回設定檔', () => {
+    const eye = sampleEye();
+    eye.incisionAxis = num(null);
+    const { values, substitutions } = mapToFormValues(eye, profile);
+    expect(values.sia).toBe(0.25);
+    expect(values.siaAxis).toBe(profile.defaultSIAAxis);
+    expect(substitutions.some((s) => s.field === 'siaAxis')).toBe(true);
   });
 });
 
@@ -226,9 +251,12 @@ describe('mapToFormValues — 選項', () => {
     expect(options.cylinderConvention).toBe('negative');
   });
 
-  it('選項與 SIA 確實來自設定檔而非寫死', () => {
+  it('選項與 SIA 預設值確實來自設定檔而非寫死', () => {
+    const eye = sampleEye();
+    eye.sia = num(null);
+    eye.incisionAxis = num(null);
     const custom = { ...profile, kIndex: 1.332 as const, cylinderConvention: 'positive' as const, defaultSIA: 0.5, defaultSIAAxis: 90 };
-    const { values, options } = mapToFormValues(sampleEye(), custom);
+    const { values, options } = mapToFormValues(eye, custom);
     expect(options.kIndex).toBe(1.332);
     expect(options.cylinderConvention).toBe('positive');
     expect(values.sia).toBe(0.5);

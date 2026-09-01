@@ -108,6 +108,16 @@ export function App() {
             warnings={result.warnings}
             borderlineFields={eye === undefined ? [] : borderlineFieldsOf(eye)}
           />
+          {result.extractionNotes.length > 0 && (
+            <details className="mt-3 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded p-2">
+              <summary className="cursor-pointer">
+                辨識說明（{result.extractionNotes.length} 則）—— 哪些欄位留白、為什麼
+              </summary>
+              <ul className="mt-2 list-disc pl-4 space-y-1">
+                {result.extractionNotes.map((n) => <li key={n}>{n}</li>)}
+              </ul>
+            </details>
+          )}
           <EyeSelector eyes={result.eyes} selected={selectedEye} onSelect={setSelectedEye} />
         </>
       )}

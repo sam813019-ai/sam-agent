@@ -6,6 +6,7 @@ const sample = {
   deviceRawText: 'IOLMaster 700',
   reportDate: '2026-07-17',
   warnings: ['OD: Axial length measurements slightly inconsistent. Please check fixation.'],
+  extractionNotes: ['OD 欄位在照片左側被裁切'],
   overallConfidence: 0.94,
   eyes: [
     {
@@ -25,6 +26,8 @@ const sample = {
       tk2:     { value: 45.53, confidence: 0.95, borderline: false, rawText: '45.53 D' },
       tk2Axis: { value: 5,     confidence: 0.95, borderline: false, rawText: '5°' },
       targetRefraction: { value: 0, confidence: 0.99, borderline: false, rawText: '+0.00 D' },
+      sia:          { value: 0.25, confidence: 0.95, borderline: false, rawText: 'SIA 0.25 D' },
+      incisionAxis: { value: 135,  confidence: 0.95, borderline: false, rawText: 'Inc 135°' },
       lensModel:  { value: 'AMO Tecnic 1 ZCB00-1', confidence: 0.9, borderline: false, rawText: 'AMO Tecnic 1 ZCB00-1' },
       aConstant:  { value: 119.3, confidence: 0.96, borderline: false, rawText: 'A const.: 119.30' },
     },
@@ -36,6 +39,13 @@ describe('RecognitionResultSchema', () => {
     const parsed = RecognitionResultSchema.parse(sample);
     expect(parsed.eyes[0]!.al.value).toBe(24.49);
     expect(parsed.warnings).toHaveLength(1);
+  });
+
+  it('warnings 與 extractionNotes 分開存放，辨識說明不得混進儀器警告', () => {
+    const parsed = RecognitionResultSchema.parse(sample);
+    expect(parsed.warnings).toHaveLength(1);
+    expect(parsed.extractionNotes).toHaveLength(1);
+    expect(parsed.warnings.join()).not.toContain('裁切');
   });
 
   it('缺少 warnings 欄位時拒絕（警告是必要欄位，不得省略）', () => {

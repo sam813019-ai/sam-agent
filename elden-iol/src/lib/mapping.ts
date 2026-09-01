@@ -124,13 +124,28 @@ export function mapToFormValues(
   // A Constant 與 Lens Factor 由醫師在官網的 IOL Model 下拉自行選定。
   // 報告單上的鏡片型號與常數仍由 OCR 讀出（EyeData 保留），僅供畫面顯示參考，不進 FormValues。
 
-  // --- SIA：報告單沒有這個欄位 ---
-  substitutions.push({
-    field: 'sia',
-    from: '(報告單無此欄位)',
-    to: `${profile.defaultSIA} D @ ${profile.defaultSIAAxis}°`,
-    reason: '手術誘發散光取自診所設定檔',
-  });
+  // --- SIA 與切口軸位 ---
+  // 報告單上印的是醫師當次填進儀器的值，左右眼可能不同，優先採用。
+  // 讀不到才退回診所設定檔的預設值，並明確揭露這是替換而非紙上的數字。
+  const sia = eye.sia.value;
+  const incisionAxis = eye.incisionAxis.value;
+
+  if (sia === null) {
+    substitutions.push({
+      field: 'sia',
+      from: '(報告單未讀到)',
+      to: String(profile.defaultSIA),
+      reason: '報告單讀不到 SIA，改用診所設定檔的預設值，請確認是否適用這一台刀',
+    });
+  }
+  if (incisionAxis === null) {
+    substitutions.push({
+      field: 'siaAxis',
+      from: '(報告單未讀到)',
+      to: String(profile.defaultSIAAxis),
+      reason: '報告單讀不到切口軸位，改用診所設定檔的預設值，請確認是否適用這一台刀',
+    });
+  }
 
   // --- 目標屈光度：客戶指定預設 0（平光），這是他明確要求的行為，不是猜測 ---
   if (eye.targetRefraction.value === null) {
@@ -154,8 +169,8 @@ export function mapToFormValues(
     acd: eye.acd.value,
     lt: eye.lt.value,
     wtw: eye.wtw.value,
-    sia: profile.defaultSIA,
-    siaAxis: profile.defaultSIAAxis,
+    sia: sia ?? profile.defaultSIA,
+    siaAxis: incisionAxis ?? profile.defaultSIAAxis,
     targetRefraction: eye.targetRefraction.value ?? 0,
   };
 

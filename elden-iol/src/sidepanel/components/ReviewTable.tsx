@@ -38,6 +38,8 @@ export function ReviewTable({ eye, mapping, threshold, onConfirm }: Props) {
     { key: 'lt', label: 'LT 水晶體厚度', source: eye.lt, target: 'lt' },
     { key: 'wtw', label: 'WTW 角膜橫徑', source: eye.wtw, target: 'wtw' },
     { key: 'targetRefraction', label: '目標屈光度', source: eye.targetRefraction, target: 'targetRefraction' },
+    { key: 'sia', label: 'SIA 手術誘發散光', source: eye.sia, target: 'sia' },
+    { key: 'siaAxis', label: '切口軸位', source: eye.incisionAxis, target: 'siaAxis' },
   ];
 
   const lowConfidence = rows.filter((r) => r.source.confidence < threshold);
