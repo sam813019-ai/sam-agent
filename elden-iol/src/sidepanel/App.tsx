@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Dropzone } from './components/Dropzone';
+import { MaskEditor } from './components/MaskEditor';
 import { Disclaimer } from './components/Disclaimer';
 import { WarningBanner } from './components/WarningBanner';
 import { EyeSelector } from './components/EyeSelector';
@@ -10,6 +11,7 @@ import { mapToFormValues } from '../lib/mapping';
 import { sendFillRequest } from '../lib/messages';
 import { DEFAULT_PROFILE, loadProfile, saveProfile, type ClinicProfile } from '../lib/profile';
 import type { EyeData, RecognitionResult } from '../lib/schema';
+import type { Region } from '../lib/redact';
 
 /** 報告單上被儀器標了 (!) 的欄位，逐一列名給使用者看 */
 function borderlineFieldsOf(eye: EyeData): string[] {
@@ -21,6 +23,7 @@ function borderlineFieldsOf(eye: EyeData): string[] {
 }
 
 export function App() {
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RecognitionResult | null>(null);
@@ -33,14 +36,20 @@ export function App() {
     loadProfile().then(setProfile).catch(() => setProfile(DEFAULT_PROFILE));
   }, []);
 
-  const handleFile = async (file: File) => {
-    setBusy(true);
+  // 選了檔案先進遮蔽步驟，確認過才會上傳 —— 上傳是不可逆的
+  const handleFile = (file: File) => {
+    setPendingFile(file);
     setError(null);
     setStatus(null);
     setResult(null);
     setSelectedEye(null);
+  };
+
+  const handleMasked = async (file: File, regions: Region[]) => {
+    setPendingFile(null);
+    setBusy(true);
     try {
-      setResult(await recognizeImage(file));
+      setResult(await recognizeImage(file, regions));
     } catch (e) {
       setError(e instanceof Error ? e.message : '辨識失敗，請重試');
     } finally {
@@ -88,7 +97,15 @@ export function App() {
         />
       ) : (
       <>
-      <Dropzone onFile={(f) => { void handleFile(f); }} disabled={busy} />
+      {pendingFile === null ? (
+        <Dropzone onFile={handleFile} disabled={busy} />
+      ) : (
+        <MaskEditor
+          file={pendingFile}
+          onConfirm={(regions) => { void handleMasked(pendingFile, regions); }}
+          onCancel={() => setPendingFile(null)}
+        />
+      )}
 
       {busy && <p className="mt-3 text-sm text-slate-600">辨識中…</p>}
       {error !== null && (

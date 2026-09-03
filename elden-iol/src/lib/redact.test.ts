@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { redactImage, canvasToBase64Jpeg, IOLMASTER_PII_REGIONS } from './redact';
+import { redactImage, canvasToBase64Jpeg } from './redact';
 
 function whiteCanvas(w: number, h: number): HTMLCanvasElement {
   const c = document.createElement('canvas');
@@ -35,24 +35,20 @@ describe('redactImage', () => {
   });
 
   it('輸出尺寸與輸入一致', () => {
-    const out = redactImage(whiteCanvas(120, 80), 120, 80, IOLMASTER_PII_REGIONS);
+    const out = redactImage(whiteCanvas(120, 80), 120, 80, [{ x: 0, y: 0, w: 1, h: 0.3 }]);
     expect(out.width).toBe(120);
     expect(out.height).toBe(80);
   });
-});
 
-describe('IOLMASTER_PII_REGIONS', () => {
-  it('至少定義一個遮蔽區塊', () => {
-    expect(IOLMASTER_PII_REGIONS.length).toBeGreaterThan(0);
-  });
-
-  it('所有區塊座標都在 0–1 範圍內', () => {
-    for (const r of IOLMASTER_PII_REGIONS) {
-      expect(r.x).toBeGreaterThanOrEqual(0);
-      expect(r.y).toBeGreaterThanOrEqual(0);
-      expect(r.x + r.w).toBeLessThanOrEqual(1);
-      expect(r.y + r.h).toBeLessThanOrEqual(1);
-    }
+  it('多個區塊全部塗黑', () => {
+    const src = whiteCanvas(100, 100);
+    const out = redactImage(src, 100, 100, [
+      { x: 0, y: 0, w: 0.2, h: 0.2 },
+      { x: 0.8, y: 0.8, w: 0.2, h: 0.2 },
+    ]);
+    expect(pixelAt(out, 5, 5)).toEqual([0, 0, 0]);
+    expect(pixelAt(out, 95, 95)).toEqual([0, 0, 0]);
+    expect(pixelAt(out, 50, 50)).toEqual([255, 255, 255]);
   });
 });
 

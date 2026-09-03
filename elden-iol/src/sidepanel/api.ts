@@ -1,5 +1,5 @@
 import { RecognitionResultSchema, type RecognitionResult } from '../lib/schema';
-import { redactImage, canvasToBase64Jpeg, IOLMASTER_PII_REGIONS } from '../lib/redact';
+import { redactImage, canvasToBase64Jpeg, type Region } from '../lib/redact';
 
 export const RECOGNIZE_ENDPOINT = 'https://elden-iol.vercel.app/api/recognize';
 
@@ -10,10 +10,14 @@ export const RECOGNIZE_ENDPOINT = 'https://elden-iol.vercel.app/api/recognize';
  */
 const ACCESS_TOKEN: string = import.meta.env.VITE_ELDEN_ACCESS_TOKEN ?? '';
 
-export async function recognizeImage(file: File): Promise<RecognitionResult> {
+/**
+ * regions 是使用者在送出前親自框選的遮蔽區塊。
+ * 這裡不提供預設值 —— 沒框就是沒遮，由 UI 負責讓使用者知道這件事。
+ */
+export async function recognizeImage(file: File, regions: Region[]): Promise<RecognitionResult> {
   const bitmap = await createImageBitmap(file);
   // 個資在本機遮蔽後才離開這台電腦；送出的是重繪後的畫布，不含原檔位元組與檔名
-  const canvas = redactImage(bitmap, bitmap.width, bitmap.height, IOLMASTER_PII_REGIONS);
+  const canvas = redactImage(bitmap, bitmap.width, bitmap.height, regions);
   const imageBase64 = canvasToBase64Jpeg(canvas);
 
   const response = await fetch(RECOGNIZE_ENDPOINT, {

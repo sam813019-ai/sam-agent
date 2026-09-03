@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from './App';
+import { recognizeImage } from './api';
 import type { NumericMeasurement, TextMeasurement, EyeData } from '../lib/schema';
 
 const num = (value: number | null, confidence = 0.97): NumericMeasurement =>
@@ -36,17 +37,51 @@ vi.mock('./api', () => ({
 }));
 
 beforeEach(() => {
+  // recognizeImage 是模組層級的 mock，不清掉的話上一個測試的呼叫會算到下一個頭上
+  vi.clearAllMocks();
   vi.stubGlobal('chrome', {
     storage: { local: { get: vi.fn(async () => ({})), set: vi.fn(async () => undefined) } },
   });
+  vi.stubGlobal('createImageBitmap', vi.fn(async () => ({ width: 400, height: 300 })));
 });
 
-async function uploadAReport() {
+async function pickFile() {
   const { container } = render(<App />);
   const input = container.querySelector<HTMLInputElement>('input[type="file"]')!;
   await userEvent.upload(input, new File([new Uint8Array([1])], 'r.jpg', { type: 'image/jpeg' }));
+}
+
+/** 選檔 → 遮蔽步驟 → 確認送出 → 辨識結果 */
+async function uploadAReport() {
+  await pickFile();
+  await userEvent.click(await screen.findByTestId('ack-no-mask'));
+  await userEvent.click(screen.getByRole('button', { name: /確認送出/ }));
   await waitFor(() => expect(screen.getByRole('button', { name: /OD/ })).toBeInTheDocument());
 }
+
+describe('App — 上傳前必須先經過遮蔽確認', () => {
+  it('選了檔案不會直接送出辨識，先進遮蔽畫面', async () => {
+    await pickFile();
+    expect(await screen.findByTestId('mask-canvas')).toBeInTheDocument();
+    expect(recognizeImage).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: /OD/ })).toBeNull();
+  });
+
+  it('確認送出後才呼叫辨識，並把遮罩一起帶過去', async () => {
+    await pickFile();
+    await userEvent.click(await screen.findByTestId('ack-no-mask'));
+    await userEvent.click(screen.getByRole('button', { name: /確認送出/ }));
+    await waitFor(() => expect(recognizeImage).toHaveBeenCalled());
+    expect(vi.mocked(recognizeImage).mock.calls[0]![1]).toEqual([]);
+  });
+
+  it('按「換一張」回到選檔畫面，不會送出', async () => {
+    await pickFile();
+    await userEvent.click(await screen.findByRole('button', { name: '換一張' }));
+    expect(screen.queryByTestId('mask-canvas')).toBeNull();
+    expect(recognizeImage).not.toHaveBeenCalled();
+  });
+});
 
 describe('App — 換眼別時的確認狀態', () => {
   it('在 OD 確認過的低信心欄位，切到 OS 後不得沿用 —— OS 必須自己再確認一次', async () => {
