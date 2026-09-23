@@ -8,7 +8,7 @@
 //   2. 銷售紀錄     欄位：日期 店員 貨號 規格 數量 金額 付款方式
 //   3. 進貨紀錄     欄位：日期 貨號 規格 數量
 //   4. 打卡紀錄     欄位：日期 姓名 類型 userId
-//   5. 代購訂單     欄位：日期 姓名 商品編號 規格 進價 售價 數量 毛利 狀態 備註
+//   5. 代購訂單     欄位：日期 姓名 商品編號 品名 規格 進價 售價 數量 毛利 狀態 備註
 //   6. 商品表 🆕    (LIFF) id | code | name | spec | price | stock | image | description | active
 //   7. 訂單表 🆕    (LIFF) 訂單時間 | 訂單編號 | userId | 顧客名稱 | 商品明細 | 總金額 | 備註 | 狀態 | 連線代購
 //   8. 訂單明細 🆕  (LIFF) 訂單編號 | 商品ID | 商品編號 | 商品名稱 | 規格 | 單價 | 數量 | 小計 | 連線代購
@@ -21,6 +21,23 @@
 var CHANNEL_ACCESS_TOKEN = 'jt2P+BXndbz4m7WzmTEus3NhesXvqzM+CTLBYruY4zIzH8pVSo7VucdboYwETnqrcYh7G6ZXeiWtEwB9rzPmjTbWLfXr8CCeAnznC2HKCOhHsBtA9vXW+5ItApzBS/D23zKuq3nTl23YRXsl6dQRMgdB04t89/1O/w1cDnyilFU=';
 var RECIPIENTS = ["Ua2b29684b674dbf528710a842badb32a", "Uad977374c42a4c01399ac25ab6654c88"];
 var DRIVE_FOLDER_ID = "1wVyU0ye7EudnKH8WckdhrZ9L6oIu8NFc";
+
+// --- 管理員白名單（2026-09-06）---
+// bot 的所有指令都是內部工具，只有這三個 userId 能用（見 doPost 開頭的關卡）。
+// 沒有這道關卡的話：
+//   ① 客人打「本月報表」就看得到營收與淨利
+//   ② 任何人都能打「入庫」「賣」寫進庫存與銷售紀錄
+//   ③ 客人傳任何圖片都會收到「找不到上次入庫紀錄」的怪訊息
+// 要新增管理員：把對方的 userId 加進這個陣列即可。
+var ADMIN_USER_IDS = [
+  "Ua2b29684b674dbf528710a842badb32a",
+  "U36bdd037bc1f5aa0b6200d6b9e75053b",
+  "Uad977374c42a4c01399ac25ab6654c88"
+];
+
+function isAdmin_(userId) {
+  return ADMIN_USER_IDS.indexOf(userId) !== -1;
+}
 
 // --- LIFF 分頁名稱（對應 line-order Next.js 專案）---
 var LIFF_ORDERS_TAB      = "訂單表";
@@ -35,6 +52,16 @@ function doPost(e) {
   var event = msg.events[0];
   var replyToken = event.replyToken;
   var userId = event.source.userId;
+
+  // ── 權限關卡（2026-09-06）──────────────────────────────
+  // 這個官方帳號客人也在裡面，但 bot 指令是純內部工具：
+  // 入庫、銷售、打卡、代購、本月報表（會顯示營收與淨利）全都不該給客人碰。
+  // 客人要下單走 LIFF，不需要任何 bot 指令，所以非管理員一律靜默不回應。
+  // 圖片也一併擋掉——客人傳匯款截圖時會誤觸入庫的圖片關聯流程。
+  if (!isAdmin_(userId)) return;
+
+  // 加好友(follow)、封鎖(unfollow)、postback 等事件沒有 message 欄位
+  if (!event.message) return;
 
   if (event.message.type === 'text') {
     var userMsg = event.message.text.trim();
@@ -342,7 +369,7 @@ function handleClockIn(type, replyToken, userId) {
 
 // ==========================================
 // 代購訂單模組 (ProxyOrder Module) v3.0 — Dual-Write
-// 代購訂單欄位：日期 姓名 商品編號 規格 進價 售價 數量 毛利 狀態 備註
+// 代購訂單欄位：日期 姓名 商品編號 品名 規格 進價 售價 數量 毛利 狀態 備註（共11欄，品名=D欄）
 // 索引：          0    1     2      3   4    5   6    7    8    9
 // v3 新增：同步寫入 LIFF 訂單表 + 訂單明細，讓客人在 LIFF「我的訂單」看得到
 // ==========================================
@@ -387,12 +414,14 @@ function handleProxyOrder(parts, replyToken, userId) {
     var proxySheet = ss.getSheetByName("代購訂單");
     if (!proxySheet) {
       proxySheet = ss.insertSheet("代購訂單");
-      proxySheet.appendRow(["日期", "姓名", "商品編號", "規格", "進價", "售價", "數量", "毛利", "狀態", "備註"]);
+      proxySheet.appendRow(["日期", "姓名", "商品編號", "品名", "規格", "進價", "售價", "數量", "毛利", "狀態", "備註"]);
     }
 
     var orderId = generateLiveOrderId_();
+    // 代購訂單欄位：日期|姓名|商品編號|品名|規格|進價|售價|數量|毛利|狀態|備註
+    // D欄(品名)由 LIFF 系統填入，GAS 指令下單留空
     proxySheet.appendRow([
-      new Date(), name, sku, spec, cost, price, qty, profit, "手動加單", orderId
+      new Date(), name, sku, "", spec, cost, price, qty, profit, "手動加單", orderId
     ]);
 
     // 2️⃣ Dual-Write 到 LIFF 訂單表 + 訂單明細
@@ -470,21 +499,23 @@ function handleProxyCustomerQuery(parts, replyToken) {
 
   for (var i = 1; i < data.length; i++) {
     if (String(data[i][1]).trim() === targetName.trim()) {
-      var sku   = data[i][2];
-      var spec  = data[i][3];
-      var price = parseFloat(data[i][5]) || 0;
-      var qty   = parseInt(data[i][6]) || 0;
-      var sub   = price * qty;
-      var status = data[i][8] || "手動加單";
+      var sku    = data[i][2];
+      var pname  = data[i][3] || "";          // D=品名（新欄）
+      var spec   = data[i][4] || "";          // E=規格
+      var price  = parseFloat(data[i][6]) || 0;  // G=售價
+      var qty    = parseInt(data[i][7]) || 0;    // H=數量
+      var sub    = price * qty;
+      var status = String(data[i][9] || "手動加單");  // J=狀態
       if (status === "已取消") continue;
 
       var markMap = { "已完成": "✅", "已取貨": "✅", "已付款": "💰", "已到貨": "📦" };
       var mark = markMap[status] || "⏳";
-      lines.push(mark + " " + sku + " (" + spec + ") x" + qty + " = $" + sub.toLocaleString());
+      var label = pname ? (sku + " " + pname) : sku;
+      lines.push(mark + " " + label + (spec ? " (" + spec + ")" : "") + " x" + qty + " = $" + sub.toLocaleString());
 
       totalQty    += qty;
       totalAmount += sub;
-      if (status === "手動加單" || status === "已到貨" || status === "未取貨") pendingCount++;
+      if (status === "手動加單" || status === "已到貨" || status === "未取貨" || status === "新訂單") pendingCount++;
     }
   }
 
@@ -520,9 +551,9 @@ function handleProxyAllSummary(parts, replyToken) {
 
   for (var i = 1; i < data.length; i++) {
     var sku  = String(data[i][2]);
-    var spec = String(data[i][3]);
-    var qty  = parseInt(data[i][6]) || 0;
-    var cost = parseFloat(data[i][4]) || 0;
+    var spec = String(data[i][4] || "");    // E=規格
+    var qty  = parseInt(data[i][7]) || 0;   // H=數量
+    var cost = parseFloat(data[i][5]) || 0; // F=進價
     if (!sku || qty <= 0) continue;
     if (filterSku && sku !== filterSku) continue;
 
@@ -603,13 +634,13 @@ function handleProxyDeliver(parts, replyToken) {
 
     for (var i = 1; i < data.length; i++) {
       if (String(data[i][1]).trim() === targetName.trim() &&
-          String(data[i][8]) !== "已完成" && String(data[i][8]) !== "已取貨") {
-        sheet.getRange(i + 1, 9).setValue("已完成");
+          String(data[i][9]) !== "已完成" && String(data[i][9]) !== "已取貨") {
+        sheet.getRange(i + 1, 10).setValue("已完成");  // J欄(第10欄)=狀態
 
         var sku   = data[i][2];
-        var spec  = data[i][3];
-        var price = parseFloat(data[i][5]) || 0;
-        var qty   = parseInt(data[i][6]) || 0;
+        var spec  = data[i][4] || "";            // E=規格
+        var price = parseFloat(data[i][6]) || 0; // G=售價
+        var qty   = parseInt(data[i][7]) || 0;   // H=數量
         var sub   = price * qty;
         totalAmount += sub;
         updatedCount++;
@@ -739,8 +770,9 @@ function replyLine(token, text) {
 }
 
 // ==========================================
-// 狀態雙向同步：代購訂單 I欄 ↔ 訂單表 H欄
+// 狀態雙向同步：代購訂單 J欄 ↔ 訂單表 H欄
 // 在 Sheet 直接改狀態時自動同步另一張表
+// 代購訂單欄位（插入品名欄後）：A日期 B姓名 C商品編號 D品名 E規格 F進價 G售價 H數量 I毛利 J狀態 K備註
 // ==========================================
 function onEdit(e) {
   var sheet = e.source.getActiveSheet();
@@ -758,9 +790,9 @@ function onEdit(e) {
   var newStatus = String(range.getValue());
   if (!newStatus) return;
 
-  // 代購訂單 I欄（第9欄）被改 → 同步到訂單表 H欄
-  if (sheet.getName() === "代購訂單" && col === 9) {
-    var orderId = String(sheet.getRange(row, 10).getValue()); // J欄 = orderId
+  // 代購訂單 J欄（第10欄）被改 → 同步到訂單表 H欄
+  if (sheet.getName() === "代購訂單" && col === 10) {
+    var orderId = String(sheet.getRange(row, 11).getValue()); // K欄 = orderId
     if (!orderId) return;
     var ordersData = ordersSheet.getDataRange().getValues();
     for (var i = 1; i < ordersData.length; i++) {
@@ -771,14 +803,14 @@ function onEdit(e) {
     }
   }
 
-  // 訂單表 H欄（第8欄）被改 → 同步到代購訂單 I欄
+  // 訂單表 H欄（第8欄）被改 → 同步到代購訂單 J欄
   if (sheet.getName() === "訂單表" && col === 8) {
     var orderId = String(sheet.getRange(row, 2).getValue()); // B欄 = orderId
     if (!orderId) return;
     var proxyData = proxySheet.getDataRange().getValues();
     for (var i = 1; i < proxyData.length; i++) {
-      if (String(proxyData[i][9]) === orderId) {
-        proxySheet.getRange(i + 1, 9).setValue(newStatus);
+      if (String(proxyData[i][10]) === orderId) {   // K欄(index 10) = orderId
+        proxySheet.getRange(i + 1, 10).setValue(newStatus);  // J欄(第10欄) = 狀態
         break;
       }
     }
