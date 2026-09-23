@@ -37,3 +37,5 @@ docs/*名單*.csv
 docs/HEIWEI_CRM_執行手冊.md
 # 超過 GitHub 100MB 限制，放雲端硬碟
 德妍思/*.pptx
+scripts/backup/backup.log
+scripts/backup/launchd.err
