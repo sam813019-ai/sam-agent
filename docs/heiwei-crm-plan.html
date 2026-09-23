@@ -1,0 +1,296 @@
+<title>HEIWEI CRM 規劃書 · 受眾分析與完整會員經營體系</title>
+<style>
+  :root{
+    --paper:#F6F3EF; --surface:#FFFFFF; --surface-2:#FBF8F5;
+    --ink:#2E2A2C; --muted:#7A7175; --faint:#A8A0A3; --line:#E7DFDA;
+    --pink:#E8749F; --pink-deep:#C9527E; --pink-soft:#FBE7EF; --rose:#E7639B;
+    --gold:#C79A4B; --teal:#4C8C82; --clay:#C05F45;
+    --serif:"Noto Serif TC","Songti TC",serif;
+    --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    --shadow:0 14px 38px -22px rgba(60,40,50,.5);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --paper:#201C1E; --surface:#282326; --surface-2:#2F292C; --ink:#EDE7E9;
+      --muted:#AC9FA5; --faint:#7C7076; --line:#3A3237; --pink:#F09CBD; --pink-deep:#E8749F;
+      --pink-soft:#3A2A31; --gold:#D9B36A; --teal:#7FB8AE; --clay:#E08C72; --shadow:0 14px 38px -22px rgba(0,0,0,.7);}
+  }
+  :root[data-theme="dark"]{ --paper:#201C1E; --surface:#282326; --surface-2:#2F292C; --ink:#EDE7E9;
+    --muted:#AC9FA5; --faint:#7C7076; --line:#3A3237; --pink:#F09CBD; --pink-deep:#E8749F;
+    --pink-soft:#3A2A31; --gold:#D9B36A; --teal:#7FB8AE; --clay:#E08C72; --shadow:0 14px 38px -22px rgba(0,0,0,.7);}
+  :root[data-theme="light"]{ --paper:#F6F3EF; --surface:#FFFFFF; --surface-2:#FBF8F5; --ink:#2E2A2C;
+    --muted:#7A7175; --faint:#A8A0A3; --line:#E7DFDA; --pink:#E8749F; --pink-deep:#C9527E; --pink-soft:#FBE7EF;
+    --gold:#C79A4B; --teal:#4C8C82; --clay:#C05F45; --shadow:0 14px 38px -22px rgba(60,40,50,.5);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.7;
+    -webkit-font-smoothing:antialiased;font-size:15px}
+  .wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  header.head{text-align:center;padding-bottom:8px}
+  .eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--pink-deep);font-weight:700}
+  h1{font-family:var(--serif);font-size:clamp(28px,5.6vw,42px);font-weight:700;line-height:1.2;margin:12px 0 8px;text-wrap:balance}
+  .lede{color:var(--muted);font-size:15px;max-width:60ch;margin:0 auto}
+  .tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+  .tag{font-size:11.5px;letter-spacing:.04em;padding:4px 12px;border-radius:20px;background:var(--pink-soft);color:var(--pink-deep);font-weight:600}
+
+  .rule{height:1px;background:var(--line);margin:34px 0}
+  section{margin-top:34px}
+  .snum{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;
+    background:var(--pink);color:#fff;font-weight:800;font-size:15px;font-family:var(--sans);margin-right:10px}
+  h2{font-family:var(--serif);font-size:23px;font-weight:700;display:flex;align-items:center;margin-bottom:6px}
+  .sdesc{color:var(--muted);font-size:14px;margin:0 0 18px 40px}
+  @media(max-width:560px){.sdesc{margin-left:0}}
+  h3{font-size:16px;font-weight:800;color:var(--pink-deep);margin:22px 0 10px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 20px;box-shadow:var(--shadow)}
+  .card+.card{margin-top:14px}
+
+  /* KPI tiles */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 14px;box-shadow:var(--shadow)}
+  .kpi .n{font-size:26px;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1.1}
+  .kpi .l{font-size:12px;color:var(--muted);margin-top:4px}
+  .kpi .s{font-size:11px;color:var(--faint);margin-top:2px}
+
+  /* bar chart */
+  .bars{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .bar{display:grid;grid-template-columns:132px 1fr 84px;align-items:center;gap:10px;font-size:13px}
+  @media(max-width:560px){.bar{grid-template-columns:104px 1fr 64px}}
+  .bar .lab{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar .track{background:var(--surface-2);border-radius:8px;height:20px;overflow:hidden;border:1px solid var(--line)}
+  .bar .fill{height:100%;border-radius:8px}
+  .bar .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-size:12.5px}
+  .lg-pink{background:linear-gradient(90deg,var(--pink),var(--rose))}
+  .lg-gold{background:linear-gradient(90deg,#E4C079,var(--gold))}
+  .lg-teal{background:linear-gradient(90deg,#7FBDB3,var(--teal))}
+  .lg-grey{background:linear-gradient(90deg,#C9BFC3,#9A8F94)}
+
+  .insight{display:flex;gap:12px;padding:14px 16px;border-radius:12px;background:var(--pink-soft);margin-top:12px}
+  .insight .ic{font-size:22px;line-height:1.4}
+  .insight b{color:var(--pink-deep)}
+  .insight.gold{background:color-mix(in srgb,var(--gold) 14%,transparent)}
+  .insight.teal{background:color-mix(in srgb,var(--teal) 14%,transparent)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+  .scroll{overflow-x:auto}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:var(--surface-2);font-size:12px;letter-spacing:.03em;color:var(--muted);font-weight:700;white-space:nowrap}
+  td b{color:var(--pink-deep)}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
+  .p-vvip{background:color-mix(in srgb,var(--gold) 22%,transparent);color:var(--gold)}
+  .p-gold{background:var(--pink-soft);color:var(--pink-deep)}
+  .p-teal{background:color-mix(in srgb,var(--teal) 20%,transparent);color:var(--teal)}
+
+  ul.clean{list-style:none;padding:0;margin:8px 0 0}
+  ul.clean li{position:relative;padding-left:22px;margin:7px 0;font-size:14px}
+  ul.clean li::before{content:"";position:absolute;left:4px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--pink)}
+  .msg{background:var(--surface-2);border-left:3px solid var(--pink);border-radius:8px;padding:9px 13px;margin-top:8px;font-size:13px;color:var(--ink)}
+  .msg .t{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
+
+  .journey{display:flex;flex-direction:column;gap:12px}
+  .jrow{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start}
+  @media(max-width:560px){.jrow{grid-template-columns:1fr}}
+  .jstage{font-weight:800;color:var(--pink-deep);font-size:14px}
+  .jstage span{display:block;font-size:11.5px;color:var(--faint);font-weight:600;margin-top:2px}
+
+  .phase{border:1px solid var(--line);border-left:4px solid var(--pink);border-radius:12px;padding:14px 16px;background:var(--surface)}
+  .phase+.phase{margin-top:12px}
+  .phase .ph{font-weight:800;color:var(--pink-deep);font-size:14px}
+
+  footer{margin-top:44px;text-align:center;color:var(--faint);font-size:12px;line-height:1.9}
+  footer .bd{font-family:var(--serif);letter-spacing:.18em;color:var(--muted)}
+  .note{font-size:12px;color:var(--faint);margin-top:8px;font-style:italic}
+</style>
+
+<div class="wrap">
+
+  <header class="head">
+    <div class="eyebrow">HEIWEI · 會員經營戰略</div>
+    <h1>CRM 規劃書</h1>
+    <p class="lede">以近 12 個月真實訂單數據為基礎，設計一套從招募、分級、回購到 VIP 養成的完整會員經營體系。</p>
+    <div class="tags">
+      <span class="tag">數據期間 2025.08–2026.08</span>
+      <span class="tag">4,533 位下單會員</span>
+      <span class="tag">Shopline × LINE OA</span>
+    </div>
+  </header>
+
+  <div class="rule"></div>
+
+  <!-- 1 受眾分析 -->
+  <section>
+    <h2><span class="snum">1</span>受眾分析（真實數據）</h2>
+    <p class="sdesc">來源：Shopline 訂單資料，近 12 個月（2025-08-01 ~ 2026-08-02）。</p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="n">4,533</div><div class="l">下單會員數</div><div class="s">近 12 個月有訂單</div></div>
+      <div class="kpi"><div class="n">5,112</div><div class="l">訂單數</div><div class="s">平均 1.13 筆/人</div></div>
+      <div class="kpi"><div class="n">$1,295<span style="font-size:15px">萬</span></div><div class="l">營收（12 個月）</div><div class="s">NT$12.95M</div></div>
+      <div class="kpi"><div class="n">$2,533</div><div class="l">客單價 AOV</div><div class="s">營收 / 訂單</div></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>RFM 客戶分群（8 群）</h3>
+      <div class="bars">
+        <div class="bar"><span class="lab">近期新客 HLL</span><span class="track"><span class="fill lg-teal" style="width:100%"></span></span><span class="val">2,054・45.3%</span></div>
+        <div class="bar"><span class="lab">流失低價值 LLL</span><span class="track"><span class="fill lg-grey" style="width:91.8%"></span></span><span class="val">1,886・41.6%</span></div>
+        <div class="bar"><span class="lab">流失高價值 LHH</span><span class="track"><span class="fill lg-gold" style="width:11.6%"></span></span><span class="val">238・5.3%</span></div>
+        <div class="bar"><span class="lab">流失高消 LLH</span><span class="track"><span class="fill lg-gold" style="width:11.5%"></span></span><span class="val">236・5.2%</span></div>
+        <div class="bar"><span class="lab">流失高頻 LHL</span><span class="track"><span class="fill lg-gold" style="width:2.7%"></span></span><span class="val">55・1.2%</span></div>
+        <div class="bar"><span class="lab">高頻低消 HHL</span><span class="track"><span class="fill lg-pink" style="width:1.7%"></span></span><span class="val">35・0.8%</span></div>
+        <div class="bar"><span class="lab">最佳客戶 HHH</span><span class="track"><span class="fill lg-pink" style="width:1.2%"></span></span><span class="val">24・0.5%</span></div>
+        <div class="bar"><span class="lab">近期高消 HLH</span><span class="track"><span class="fill lg-pink" style="width:0.3%"></span></span><span class="val">5・0.1%</span></div>
+      </div>
+      <p class="note">H=高／L=低，順序為 R 近期性・F 頻率・M 金額。例：LHH＝很久沒買、但過去高頻高消（沉睡的好客人）。</p>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>地區分佈（可辨識縣市 TOP 5）</h3>
+      <div class="bars">
+        <div class="bar"><span class="lab">新北市</span><span class="track"><span class="fill lg-pink" style="width:100%"></span></span><span class="val">281 單</span></div>
+        <div class="bar"><span class="lab">台中市</span><span class="track"><span class="fill lg-pink" style="width:87%"></span></span><span class="val">244 單</span></div>
+        <div class="bar"><span class="lab">高雄市 🏠</span><span class="track"><span class="fill lg-pink" style="width:78%"></span></span><span class="val">218 單</span></div>
+        <div class="bar"><span class="lab">桃園市</span><span class="track"><span class="fill lg-pink" style="width:59%"></span></span><span class="val">166 單</span></div>
+        <div class="bar"><span class="lab">台北市</span><span class="track"><span class="fill lg-pink" style="width:52%"></span></span><span class="val">147 單</span></div>
+      </div>
+      <p class="note">72.3% 訂單「地址縣市未填」（多為超商取貨，系統未帶縣市）；可辨識部分以北北基＋中南都會為主，家鄉高雄排第 3。</p>
+    </div>
+
+    <h3>三個關鍵洞察</h3>
+    <div class="insight teal"><span class="ic">🎯</span><div><b>招得進、留不住 —— 回購是最大破口。</b>4,533 位會員但平均每人只買 1.13 次，代表絕大多數是「一次性客人」。把新客變回頭客，是這套 CRM 的第一優先。</div></div>
+    <div class="insight gold"><span class="ic">💰</span><div><b>高價值沉睡金礦。</b>約 <b>529 位</b>（LHH+LLH+LHL）曾經高頻/高消費的客人已沉睡 80–200 天；頭號客戶累積消費 <b>$262,384</b>（26 筆）卻 97 天沒回購。喚回這群人 ROI 最高、最快見效。</div></div>
+    <div class="insight"><span class="ic">👑</span><div><b>活躍 VIP 太少。</b>目前僅約 <b>24–64 位</b>頂級活躍客（HHH/HHL/HLH）。需要用分級制度把中間層養上來、把頂層留住。</div></div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- 2 會員分級 -->
+  <section>
+    <h2><span class="snum">2</span>會員分級制度（建議新建）</h2>
+    <p class="sdesc">你目前沒有階級制、只有點數回饋。建議用「近 12 個月累計消費」自動升等，讓中間層有目標、頂層有尊榮感。</p>
+    <div class="card scroll">
+      <table>
+        <thead><tr><th>等級</th><th>升等門檻<br>(近12月累計)</th><th>消費回饋</th><th>免運門檻</th><th>專屬權益</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill p-teal">一般會員</span></td><td>$0</td><td>1%</td><td>$1,000</td><td>生日 8 折券</td></tr>
+          <tr><td><span class="pill p-gold">銀卡 VIP</span></td><td>$3,000</td><td>3%</td><td>$800</td><td>生日禮 + 新品預購</td></tr>
+          <tr><td><span class="pill p-gold">金卡 VIP</span></td><td>$10,000</td><td>5%</td><td>免運</td><td>季度好禮 + 專屬客服 + 加碼轉盤</td></tr>
+          <tr><td><span class="pill p-vvip">尊榮 VVIP</span></td><td>$30,000</td><td>8%</td><td>免運</td><td>專人服務 + 限量新品 + 生日大禮 + 神秘禮盒</td></tr>
+        </tbody>
+      </table>
+      <p class="note">門檻/回饋為建議起點，可依毛利微調。VVIP 目前約僅個位數人（如宋珮瑄、施力文），正好做「尊榮小圈」高觸感經營。</p>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- 3 RFM 分群策略 -->
+  <section>
+    <h2><span class="snum">3</span>分群經營策略（對症下藥）</h2>
+    <p class="sdesc">每一群客人給不同的訊息與誘因，資源花在刀口上。</p>
+    <div class="card scroll">
+      <table>
+        <thead><tr><th>客群</th><th>人數</th><th>狀態</th><th>策略與行動</th></tr></thead>
+        <tbody>
+          <tr><td><b>最佳客戶</b> HHH</td><td>24</td><td>活躍高價值</td><td>VVIP 尊榮經營：專人 1:1、限量新品優先、生日大禮，維繫忠誠</td></tr>
+          <tr><td><b>流失高價值</b> LHH</td><td>238</td><td>😴 沉睡金礦</td><td><b>優先喚回</b>：專屬回歸禮 + 限時大優惠，一對一 LINE 招呼「好久不見」</td></tr>
+          <tr><td><b>流失高消</b> LLH</td><td>236</td><td>單筆高、沒回頭</td><td>推「回購優惠 + 補貨提醒」，用組合包提高再買動機</td></tr>
+          <tr><td><b>近期新客</b> HLL</td><td>2,054</td><td>🌱 潛力最大</td><td><b>養成第二筆</b>：首購後 7 天關懷 + 第二次購買折扣，導入會員分級誘因</td></tr>
+          <tr><td><b>高頻低消</b> HHL</td><td>35</td><td>常買但金額低</td><td>推客單價提升：滿額贈、加購、升級組合</td></tr>
+          <tr><td><b>流失低價值</b> LLL</td><td>1,886</td><td>低度關係</td><td>低成本廣觸：季度電子報、大檔期喚醒，不投入高成本</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- 4 生命週期自動化 -->
+  <section>
+    <h2><span class="snum">4</span>生命週期自動化旅程</h2>
+    <p class="sdesc">用 LINE 官方帳號（主力）＋ Email／簡訊，依觸發時機自動推播。以下為建議節點與文案。</p>
+    <div class="card">
+      <div class="journey">
+        <div class="jrow"><div class="jstage">歡迎<span>加入好友 / 首次註冊</span></div><div>
+          <div class="msg"><div class="t">LINE · 即時</div>歡迎加入 HEIWEI 💗 送你新人專屬 <b>$100 購物金</b>，防曬・面膜・保養一站購足。</div></div></div>
+        <div class="jrow"><div class="jstage">首購引導<span>加入後未購 3 天</span></div><div>
+          <div class="msg"><div class="t">LINE</div>還在猶豫嗎？熱銷 TOP3 幫你選好了！新人 $100 購物金這週到期，別錯過 ⏰</div></div></div>
+        <div class="jrow"><div class="jstage">首購後關懷<span>下單後 7 天</span></div><div>
+          <div class="msg"><div class="t">LINE</div>收到商品了嗎？用得習慣嗎 😊 分享使用心得，<b>抽幸運轉盤</b>再拿好禮！（接評價轉盤）</div></div></div>
+        <div class="jrow"><div class="jstage">回購 / 補貨<span>依消耗品週期（防曬/面膜 30–45 天）</span></div><div>
+          <div class="msg"><div class="t">LINE · 分眾</div>你的防曬／面膜差不多該補貨囉！老客回購 <b>再 92 折</b> + 滿額免運。</div></div></div>
+        <div class="jrow"><div class="jstage">升等激勵<span>接近升等門檻</span></div><div>
+          <div class="msg"><div class="t">LINE</div>再消費 <b>$X</b> 就能升 <b>金卡 VIP</b>，解鎖免運＋5% 回饋＋季度好禮！</div></div></div>
+        <div class="jrow"><div class="jstage">沉睡喚醒<span>60–90 天未回購</span></div><div>
+          <div class="msg"><div class="t">LINE / 簡訊</div>好久不見～送你 <b>回歸專屬 85 折</b>（7 天內有效），我們準備了新品等你 💗</div></div></div>
+        <div class="jrow"><div class="jstage">流失挽回<span>150–180 天未回購</span></div><div>
+          <div class="msg"><div class="t">簡訊 / Email</div>最後的想念 🎁 回來就送你一份大禮＋免運，只給老朋友的專屬連結。</div></div></div>
+        <div class="jrow"><div class="jstage">生日 / 週年<span>生日當月</span></div><div>
+          <div class="msg"><div class="t">LINE</div>生日快樂 🎂 專屬生日禮已放進你的帳戶，本月消費雙倍回饋！</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- 5 渠道 -->
+  <section>
+    <h2><span class="snum">5</span>渠道整合</h2>
+    <p class="sdesc">以 LINE 為主、Email／簡訊補位，既有互動工具接進會員旅程。</p>
+    <div class="card">
+      <ul class="clean">
+        <li><b>LINE 官方帳號（主力）</b>：分眾推播、圖文選單、1:1 關懷。⚠️ 免費版 200 則/月會爆 → 高價值分眾優先推、大量觸及改用其他渠道。</li>
+        <li><b>Email 電子報</b>：低成本廣觸（新品、衛教、大檔期），承接 LLL 低價值群與例行溝通。</li>
+        <li><b>簡訊 SMS</b>：只用在「高價值沉睡喚回、流失挽回、生日」等高 ROI 節點（成本較高、開封率高）。</li>
+        <li><b>幸運轉盤 / 評價轉盤</b>：既有工具接進「首購後關懷、回購獎勵、VIP 加碼」，讓互動變留存。</li>
+        <li><b>KOL 推薦人分潤</b>：追蹤每位 KOL 帶進來的客人 LTV，把高留存來源加碼投放。</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- 6 KPI + 時程 -->
+  <section>
+    <h2><span class="snum">6</span>KPI 與落地時程</h2>
+    <p class="sdesc">先做最快見效的（喚回沉睡高價值＋新客養第二筆），再建長期體系。</p>
+
+    <h3>要盯的指標</h3>
+    <div class="card">
+      <ul class="clean">
+        <li><b>回購率</b>（目前平均 1.13 筆/人 → 目標 3 個月拉到 1.3、6 個月 1.5）</li>
+        <li><b>沉睡喚回率</b>（529 位高價值沉睡客 → 喚回 %）</li>
+        <li><b>新客第二筆轉換率</b>（HLL 2,054 人 → 90 天內二購 %）</li>
+        <li>各等級人數與營收貢獻、客單價 AOV、會員 LTV、KOL 帶客留存率</li>
+      </ul>
+    </div>
+
+    <h3>90 天落地時程</h3>
+    <div class="phase"><div class="ph">第 1 個月 · 快速見效</div>
+      <ul class="clean">
+        <li>建立會員分級（4 級門檻/回饋）＋點數回饋規則盤點</li>
+        <li>啟動「高價值沉睡喚回」一次性活動（鎖定 529 人，專屬禮 + 1:1 LINE）</li>
+        <li>設定「新客首購後 7 天關懷 + 第二筆折扣」自動流程</li>
+      </ul></div>
+    <div class="phase"><div class="ph">第 2 個月 · 建立自動化</div>
+      <ul class="clean">
+        <li>串接生命週期全旅程（歡迎→回購→升等→沉睡→流失）自動推播</li>
+        <li>導入消耗品補貨提醒（防曬/面膜週期分眾）</li>
+        <li>Email 電子報上線，分流 LINE 推播壓力</li>
+      </ul></div>
+    <div class="phase"><div class="ph">第 3 個月 · VIP 與優化</div>
+      <ul class="clean">
+        <li>VVIP 尊榮小圈經營（專人、限量、大禮）</li>
+        <li>依 KOL 帶客 LTV 重新分配行銷資源</li>
+        <li>看 KPI 迭代：門檻、回饋、訊息時機 A/B 優化</li>
+      </ul></div>
+  </section>
+
+  <footer>
+    <div class="bd">HEIWEI ・ 何 謂 美</div>
+    CRM 規劃書 · 數據來源 Shopline（2025.08–2026.08）· 內部策略文件<br>
+    <span class="note">部分欄位（會員總數含未購者、點數回饋 %、客戶分群）因 Shopline API 限制未能讀取，以後台實際設定為準。</span>
+  </footer>
+
+</div>

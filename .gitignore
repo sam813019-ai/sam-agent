@@ -30,3 +30,8 @@ node_modules/
 heiwei-dealer-portal/*.pdf
 *.bak
 data/crm-groupbuy-v1/html/
+
+# 報告與交付 PDF（含顧客資料／體積大，本機與雲端硬碟保留）
+docs/*.pdf
+docs/*名單*.csv
+docs/HEIWEI_CRM_執行手冊.md

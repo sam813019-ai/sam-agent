@@ -1,0 +1,314 @@
+<title>何謂美商店配色</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600&display=swap">
+<style>
+  :root{
+    --night:#131011; --night-2:#1B1618; --night-3:#231D1F;
+    --on-night:#F2ECE8; --on-night-soft:#B4A8A3; --on-night-mute:#786C69;
+    --blush:#EFC4D2; --blush-deep:#AE5069; --balm:#F0DCB8; --sun:#E8A45C;
+    --line:rgba(242,236,232,.13);
+    --disp:"Italiana",serif; --serif:"Noto Serif TC",serif;
+    --sans:"Noto Sans TC","PingFang TC",sans-serif;
+  }
+  body{
+    background:var(--night); color:var(--on-night);
+    font-family:var(--sans); font-weight:300; line-height:1.85; margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:clamp(40px,7vw,80px) clamp(20px,5vw,40px) 100px;}
+  h1{font-family:var(--disp); font-size:clamp(38px,7vw,60px); font-weight:400;
+     letter-spacing:.08em; line-height:1.15; margin:0 0 6px; text-wrap:balance;}
+  .sub{font-size:12px; letter-spacing:.3em; color:var(--on-night-mute); margin:0 0 22px;}
+  .lead{font-size:16px; color:var(--on-night-soft); max-width:34em; margin:0 0 8px;}
+  h2{font-family:var(--serif); font-size:clamp(21px,3.4vw,26px); font-weight:600;
+     letter-spacing:.03em; margin:64px 0 6px; text-wrap:balance;}
+  h2 .n{font-family:var(--disp); font-size:15px; color:var(--sun); letter-spacing:.2em; display:block; margin-bottom:8px;}
+  .note{font-size:14.5px; color:var(--on-night-soft); max-width:36em; margin:0 0 24px;}
+  hr{border:0; border-top:1px solid var(--line); margin:0;}
+
+  /* 問題卡 */
+  .bad{display:grid; gap:12px; margin:0 0 8px;}
+  .bad-item{border:1px solid var(--line); background:var(--night-2); padding:18px 20px; border-left:3px solid var(--blush-deep);}
+  .bad-item h3{font-size:16px; font-weight:500; margin:0 0 6px; color:var(--on-night);}
+  .bad-item p{font-size:14px; color:var(--on-night-soft); margin:0;}
+  .ratio{font-family:var(--disp); font-size:26px; color:var(--blush); letter-spacing:.04em; float:right; margin-left:16px; line-height:1;}
+  .ratio.ok{color:#8FC9A0;}
+
+  .warn{border:1px solid var(--blush-deep); background:var(--night-3); padding:22px 24px; margin-bottom:8px;}
+  .warn h3{font-family:var(--serif); font-size:19px; font-weight:600; margin:0 0 12px; color:var(--blush);}
+  .warn p{font-size:14.5px; color:var(--on-night-soft); margin:0 0 12px;}
+  .warn ul{margin:0 0 12px; padding-left:20px;}
+  .warn li{font-size:14px; color:var(--on-night-soft); padding:3px 0;}
+  .warn b{color:var(--on-night); font-weight:500;}
+  .warn .fix{border-top:1px solid var(--line); padding-top:14px; margin:0; color:var(--on-night);}
+
+  /* 表格 */
+  .scroll{overflow-x:auto; margin:0 0 14px; border:1px solid var(--line);}
+  table{width:100%; min-width:660px; border-collapse:collapse; font-size:14px; background:var(--night-2);}
+  th{text-align:left; font-size:10.5px; font-weight:500; letter-spacing:.2em; text-transform:uppercase;
+     color:var(--on-night-mute); padding:14px 14px; border-bottom:1px solid var(--line); white-space:nowrap;}
+  td{padding:13px 14px; border-bottom:1px solid var(--line); color:var(--on-night-soft); vertical-align:middle;}
+  tr:last-child td{border-bottom:0;}
+  td.field{color:var(--on-night); font-weight:500; white-space:nowrap;}
+  .sw{display:inline-flex; align-items:center; gap:8px; white-space:nowrap;}
+  .chip{width:15px; height:15px; border-radius:2px; border:1px solid rgba(242,236,232,.2); flex:none;}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; letter-spacing:.02em;}
+  .old code{color:var(--on-night-mute);}
+  .new code{color:var(--on-night);}
+  .cr{font-variant-numeric:tabular-nums; font-size:13px; white-space:nowrap;}
+  .cr.ok{color:#8FC9A0;} .cr.no{color:#E0757D;}
+
+  /* 色票 */
+  .swatches{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px;}
+  .sc{border:1px solid var(--line);}
+  .sc .box{height:76px;}
+  .sc .meta{padding:11px 13px 13px; background:var(--night-2);}
+  .sc .nm{font-size:13px; color:var(--on-night); margin-bottom:2px;}
+  .sc .hex{font-family:ui-monospace,Menlo,monospace; font-size:12px; color:var(--on-night-mute); letter-spacing:.04em;}
+  .sc .use{font-size:11.5px; color:var(--on-night-soft); line-height:1.55; margin-top:6px;}
+
+  /* 預覽 */
+  .demo{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+  @media(max-width:640px){.demo{grid-template-columns:1fr}}
+  .demo > div{border:1px solid var(--line); overflow:hidden;}
+  .demo .cap{font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--on-night-mute); padding:10px 14px; background:var(--night-2); border-bottom:1px solid var(--line);}
+  .demo .body{padding:22px 18px; background:#fff;}
+  .btn{display:block; text-align:center; padding:13px; font-size:14px; letter-spacing:.1em; margin-bottom:9px;}
+  .btn-old{background:#e0d9d1; color:#666;}
+  .btn-new{background:#131011; color:#F2ECE8;}
+  .btn-buy-old{background:#e0d9d1; color:#666; border:1px solid #cfc6bb;}
+  .btn-buy-new{background:#fff; color:#131011; border:1px solid #131011;}
+  .tagrow{margin-top:14px; font-size:12px;}
+  .tag{display:inline-block; padding:4px 11px; font-size:11.5px; letter-spacing:.08em;}
+  .tag-old{background:#e0d9d1; color:#666;}
+  .tag-new{background:#EFC4D2; color:#131011;}
+  .lnk-old{color:#bfa26c;} .lnk-new{color:#AE5069;}
+  .demo .body p{font-size:13.5px; color:#2c2c2c; margin:0;}
+
+  .final{border:1px solid var(--line); background:var(--night-2); padding:22px 24px; margin-top:12px;}
+  .final ol{margin:0; padding-left:20px;}
+  .final li{font-size:14.5px; color:var(--on-night-soft); padding:5px 0;}
+  .final li b{color:var(--on-night); font-weight:500;}
+  .sig{margin-top:70px; padding-top:20px; border-top:1px solid var(--line);
+       font-size:11px; letter-spacing:.28em; color:var(--on-night-mute);}
+</style>
+
+<div class="wrap">
+
+  <div class="sub">HEIWEI 何謂美</div>
+  <h1>商店配色調整</h1>
+  <p class="lead">把 Shopline 主題「色彩」面板裡的十組設定、共 20 個色欄位，對齊「光的一天」v7 的視覺語彙。<br>
+  現況有兩處對比度不合格，另有一項改了會出事——先看第一段。</p>
+
+  <h2><span class="n">01</span>先別按發佈：頁面背景不能設黑</h2>
+  <p class="note">你後台的「頁面 → 背景」已經改成黑色（線上還是白的，代表還沒發佈）。
+  這一項發佈出去會出事，其他項都可以改，只有這個不行。</p>
+  <div class="warn">
+    <h3>每張商品圖都會變成一個白方塊</h3>
+    <p>我抓了 <code>vitamin-b-water</code> 的商品圖實測：</p>
+    <ul>
+      <li>透明像素 <b>0.0%</b>——圖片<b>沒有去背</b>，alpha 全部是 255</li>
+      <li>90.8% 的像素是不透明的近白色 <code>#FEFEFE</code></li>
+      <li>varm 主題的商品卡<b>沒有自己的白底</b>，圖是直接坐在頁面背景上</li>
+    </ul>
+    <p>三個條件加起來，黑底上會浮出一格一格的白方塊。v5 那次就是踩這個坑，
+    v7 自己也是這樣處理——深底走到型錄段就換亮底 <code>#F6F2EE</code>，因為那段要放商品圖。</p>
+    <p class="fix"><b>要真的做深底商店，唯一的路是把商品圖全部去背重出</b>（或重拍）。
+    在那之前，頁面背景請維持 <code>#ffffff</code>。</p>
+  </div>
+
+  <h2><span class="n">02</span>另外三個問題</h2>
+  <p class="note">數字是 WCAG 對比度，內文需要 4.5:1 以上才算合格。</p>
+  <div class="bad">
+    <div class="bad-item">
+      <span class="ratio">1.24</span>
+      <h3>防詐騙提示幾乎看不見</h3>
+      <p>底色 <code>#121A2F</code> 深藍配 <code>#2c2c2c</code> 深灰字。深藍是主題預設值沒改到，
+      跟整站米色系也毫無關係。這不是美感問題，是壞掉。</p>
+    </div>
+    <div class="bad-item">
+      <span class="ratio">2.44</span>
+      <h3>連結金褐在白底上讀不出來</h3>
+      <p><code>#bfa26c</code> 在白底只有 2.44:1。商品描述裡的連結客人會看不到。</p>
+    </div>
+    <div class="bad-item">
+      <span class="ratio">4.11</span>
+      <h3>五個地方共用同一個米灰</h3>
+      <p>公告欄、主要按鈕、立即購買、促銷標籤、頁尾底全是 <code>#e0d9d1</code>。
+      整站沒有層次，最傷的是 <b>CTA 按鈕跟背景融在一起</b>，客人找不到「加入購物車」在哪。</p>
+    </div>
+  </div>
+
+  <h2><span class="n">03</span>逐項對照</h2>
+  <p class="note">後台「網店設計 → 色彩」裡的欄位順序，照著改即可。</p>
+  <div class="scroll">
+    <table>
+      <tr><th>後台欄位</th><th>現況</th><th>建議</th><th>對比</th><th>為什麼</th></tr>
+
+      <tr><td class="field">頁面</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#fff"></span><code>#ffffff</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#fff"></span><code>#ffffff</code> <b style="color:#EFC4D2">維持</b></span></td>
+        <td class="cr ok">17.97</td>
+        <td><b style="color:#EFC4D2">別改黑</b>，商品圖沒去背，見第一段實測</td></tr>
+
+      <tr><td class="field">頁面文字</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#2c2c2c"></span><code>#2c2c2c</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#1A1614"></span><code>#1A1614</code></span></td>
+        <td class="cr ok">17.97</td>
+        <td>換成 v7 的墨色，帶一點暖，跟粉／米杏同一家族</td></tr>
+
+      <tr><td class="field">頁面連結</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#bfa26c"></span><code>#bfa26c</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#AE5069"></span><code>#AE5069</code></span></td>
+        <td class="cr ok">5.06</td>
+        <td>v7 產品粉加深到剛好合格的最淺值，保住粉調</td></tr>
+
+      <tr><td class="field">公告欄</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#e0d9d1"></span><code>#e0d9d1</code> / <code>#666</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#131011"></span><code>#131011</code> / <code>#F2ECE8</code></span></td>
+        <td class="cr ok">16.16</td>
+        <td>跟頁尾呼應，深色細條把內容上下框住</td></tr>
+
+      <tr><td class="field">頁首</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#f3f0ed"></span><code>#f3f0ed</code> / <code>#666</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#F6F2EE"></span><code>#F6F2EE</code> / <code>#1A1614</code></span></td>
+        <td class="cr ok">16.13</td>
+        <td>微調成 v7 的紙色，字加深讓導覽好讀</td></tr>
+      <tr><td class="field">頁首圖標</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#2c2c2c"></span><code>#2c2c2c</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#1A1614"></span><code>#1A1614</code></span></td>
+        <td class="cr ok">16.13</td>
+        <td>購物車與會員圖示，跟頁首文字同一支墨色</td></tr>
+
+
+      <tr><td class="field">主要按鈕</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#e0d9d1"></span><code>#e0d9d1</code> / <code>#666</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#131011"></span><code>#131011</code> / <code>#F2ECE8</code></span></td>
+        <td class="cr ok">16.16</td>
+        <td><b>改動最大的一項。</b>深炭底讓 CTA 從白底上跳出來</td></tr>
+
+      <tr><td class="field">立即購買按鈕</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#e0d9d1"></span><code>#e0d9d1</code> / <code>#666</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#fff;border-color:#131011"></span><code>#ffffff</code> / <code>#131011</code></span></td>
+        <td class="cr ok">17.97</td>
+        <td>做成外框樣式，跟主要按鈕分主次而不是打架</td></tr>
+
+      <tr><td class="field">商品促銷標籤</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#e0d9d1"></span><code>#e0d9d1</code> / <code>#666</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#EFC4D2"></span><code>#EFC4D2</code> / <code>#131011</code></span></td>
+        <td class="cr ok">12.16</td>
+        <td>唯一用滿產品粉的地方，粉是限量資源才醒目</td></tr>
+
+      <tr><td class="field">頁尾</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#e0d9d1"></span><code>#e0d9d1</code> / <code>#2c2c2c</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#131011"></span><code>#131011</code> / <code>#B4A8A3</code></span></td>
+        <td class="cr ok">8.17</td>
+        <td>跟 v7 的深色頁尾接得起來，不會斷成兩截</td></tr>
+      <tr><td class="field">頁尾圖標</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#2c2c2c"></span><code>#2c2c2c</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#B4A8A3"></span><code>#B4A8A3</code></span></td>
+        <td class="cr ok">8.17</td>
+        <td>社群圖示。底改深炭後原本的深灰會直接消失</td></tr>
+
+
+      <tr><td class="field">版權聲明</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#2c2c2c"></span><code>#2c2c2c</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#786C69"></span><code>#786C69</code></span></td>
+        <td class="cr ok">5.31</td>
+        <td>深底上的弱化字，跟 v7 頁尾底列同一支</td></tr>
+
+      <tr><td class="field">防詐騙提示</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#121A2F"></span><code>#121A2F</code> / <code>#2c2c2c</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#F6F2EE"></span><code>#F6F2EE</code> / <code>#5B534E</code></span></td>
+        <td class="cr ok">6.75</td>
+        <td>從 1.24:1 修好。深藍是預設值，跟品牌無關</td></tr>
+      <tr><td class="field">電郵通知</td>
+        <td class="old"><span class="sw"><span class="chip" style="background:#8FA3D9"></span><code>#8FA3D9（藍紫）</code></span></td>
+        <td class="new"><span class="sw"><span class="chip" style="background:#131011"></span><code>#131011 / #F2ECE8</code></span></td>
+        <td class="cr ok">16.16</td>
+        <td>訂單通知信的表頭。藍紫是主題預設，跟品牌完全無關</td></tr>
+
+    </table>
+  </div>
+
+  <h2><span class="n">04</span>改前改後</h2>
+  <p class="note">白底上的實際樣子。</p>
+  <div class="demo">
+    <div>
+      <div class="cap">現況</div>
+      <div class="body">
+        <span class="btn btn-old">加入購物車</span>
+        <span class="btn btn-buy-old">立即購買</span>
+        <div class="tagrow"><span class="tag tag-old">新品上市</span></div>
+        <p style="margin-top:12px">保養說明請見 <a class="lnk-old">成分介紹</a>。</p>
+      </div>
+    </div>
+    <div>
+      <div class="cap">調整後</div>
+      <div class="body">
+        <span class="btn btn-new">加入購物車</span>
+        <span class="btn btn-buy-new">立即購買</span>
+        <div class="tagrow"><span class="tag tag-new">新品上市</span></div>
+        <p style="margin-top:12px">保養說明請見 <a class="lnk-new">成分介紹</a>。</p>
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="n">05</span>色票</h2>
+  <p class="note">全部來自 v7 的 <code>:root</code>，只有連結色是為了通過對比度而加深的變體。</p>
+  <div class="swatches">
+    <div class="sc"><div class="box" style="background:#131011"></div><div class="meta">
+      <div class="nm">深炭</div><div class="hex">#131011</div>
+      <div class="use">公告欄、主要按鈕、頁尾</div></div></div>
+    <div class="sc"><div class="box" style="background:#1A1614"></div><div class="meta">
+      <div class="nm">墨</div><div class="hex">#1A1614</div>
+      <div class="use">白底上的內文、頁首字</div></div></div>
+    <div class="sc"><div class="box" style="background:#F6F2EE"></div><div class="meta">
+      <div class="nm">紙</div><div class="hex">#F6F2EE</div>
+      <div class="use">頁首底、防詐騙區底</div></div></div>
+    <div class="sc"><div class="box" style="background:#F2ECE8"></div><div class="meta">
+      <div class="nm">深底上主文</div><div class="hex">#F2ECE8</div>
+      <div class="use">深色按鈕與公告欄的字</div></div></div>
+    <div class="sc"><div class="box" style="background:#B4A8A3"></div><div class="meta">
+      <div class="nm">深底上次要</div><div class="hex">#B4A8A3</div>
+      <div class="use">頁尾文字與連結</div></div></div>
+    <div class="sc"><div class="box" style="background:#786C69"></div><div class="meta">
+      <div class="nm">深底上弱化</div><div class="hex">#786C69</div>
+      <div class="use">版權列</div></div></div>
+    <div class="sc"><div class="box" style="background:#EFC4D2"></div><div class="meta">
+      <div class="nm">產品粉</div><div class="hex">#EFC4D2</div>
+      <div class="use">促銷標籤、深底上的 hover</div></div></div>
+    <div class="sc"><div class="box" style="background:#AE5069"></div><div class="meta">
+      <div class="nm">深粉</div><div class="hex">#AE5069</div>
+      <div class="use">白底上的連結（粉的可讀版）</div></div></div>
+    <div class="sc"><div class="box" style="background:#F0DCB8"></div><div class="meta">
+      <div class="nm">米杏</div><div class="hex">#F0DCB8</div>
+      <div class="use">膏體色，留給素材與插圖</div></div></div>
+    <div class="sc"><div class="box" style="background:#E8A45C"></div><div class="meta">
+      <div class="nm">陽光橘</div><div class="hex">#E8A45C</div>
+      <div class="use">v7 晨光，商店端不用</div></div></div>
+  </div>
+
+  <h2><span class="n">06</span>建議的執行順序</h2>
+  <div class="final">
+    <ol>
+      <li><b>把頁面背景改回白色</b>—— 在商品圖去背之前不能發佈黑底</li>
+      <li><b>防詐騙提示</b>—— 這是壞的，先修，兩分鐘</li>
+      <li><b>主要按鈕改深炭</b>—— 對轉換率影響最大，CTA 終於看得見</li>
+      <li><b>頁尾改深炭</b>—— 讓 v7 那頁的深色頁尾接得起來</li>
+      <li><b>連結色</b>—— 影響所有商品描述裡的連結</li>
+      <li>其餘四項（頁面文字、公告欄、頁首、促銷標籤、版權）一次改完</li>
+    </ol>
+  </div>
+
+  <h2><span class="n">07</span>那要怎麼有深色感</h2>
+  <p class="note" style="max-width:38em">
+  很想這樣做，但 Shopline 的商品圖全是<b>白底拍攝</b>——v5 那次就踩過，
+  白底商品圖放在暗底上會浮出一塊塊白方塊，很難看。v7 自己也是這樣處理的：
+  深底走到型錄段就換成亮底 <code>#F6F2EE</code>，因為那段要放商品圖。<br><br>
+  所以商店端維持<b>白底為主</b>，只把「品牌訊號」——公告欄、按鈕、頁尾——換成深炭，
+  形成深色的框把白色內容包住。這樣既跟 v7 是同一個世界，商品圖也不會出事。</p>
+
+  <div class="sig">HEIWEI 何謂美 · 2026-08-28</div>
+</div>

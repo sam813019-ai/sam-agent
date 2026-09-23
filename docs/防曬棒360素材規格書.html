@@ -1,0 +1,509 @@
+<meta charset="utf-8">
+<title>防曬棒 360 素材規格書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap">
+
+<style>
+:root{
+  --ground:#FAF6F7;
+  --surface:#FFFFFF;
+  --surface-2:#F4EDEF;
+  --ink:#261E22;
+  --ink-2:#6E6167;
+  --ink-3:#9A8D93;
+  --rule:#E7DCE0;
+  --accent:#B34A68;
+  --accent-soft:#F5D9E1;
+  --cream:#B5854A;
+  --cream-soft:#F7E6CE;
+  --slate:#3F6580;
+  --slate-soft:#DDE7EE;
+  --shadow:0 1px 2px rgba(38,30,34,.05), 0 8px 24px -12px rgba(38,30,34,.14);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#161215;
+    --surface:#1F1A1D;
+    --surface-2:#282125;
+    --ink:#F2E9EC;
+    --ink-2:#AC9EA4;
+    --ink-3:#7C6F75;
+    --rule:#362C31;
+    --accent:#EB93AC;
+    --accent-soft:#46262F;
+    --cream:#E0B87F;
+    --cream-soft:#3B3025;
+    --slate:#8FB2C9;
+    --slate-soft:#26333C;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#161215;
+  --surface:#1F1A1D;
+  --surface-2:#282125;
+  --ink:#F2E9EC;
+  --ink-2:#AC9EA4;
+  --ink-3:#7C6F75;
+  --rule:#362C31;
+  --accent:#EB93AC;
+  --accent-soft:#46262F;
+  --cream:#E0B87F;
+  --cream-soft:#3B3025;
+  --slate:#8FB2C9;
+  --slate-soft:#26333C;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Helvetica Neue",sans-serif;
+  font-size:16px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:900px;margin:0 auto;padding:clamp(32px,6vw,72px) clamp(20px,5vw,40px) 96px}
+
+/* ---------- type ---------- */
+h1,h2,h3{font-family:"Newsreader","Noto Serif TC",serif;font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,5.2vw,46px);line-height:1.2;letter-spacing:-.01em}
+h2{font-size:clamp(21px,3vw,27px);line-height:1.3}
+h3{font-size:17px;line-height:1.45;font-weight:600}
+p{margin:0}
+.lede{color:var(--ink-2);font-size:clamp(16px,2vw,18px);max-width:60ch}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+}
+a{color:var(--accent)}
+
+/* ---------- masthead ---------- */
+header.mast{display:flex;flex-direction:column;gap:16px;padding-bottom:28px;border-bottom:2px solid var(--ink)}
+.mast-meta{
+  display:flex;flex-wrap:wrap;gap:8px 22px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+.mast-meta b{color:var(--ink-2);font-weight:500}
+
+/* ---------- section skeleton ---------- */
+section{display:flex;flex-direction:column;gap:20px;padding-top:clamp(44px,6vw,64px)}
+.sec-head{display:flex;flex-direction:column;gap:6px}
+
+/* ---------- callout ---------- */
+.callout{
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--accent-soft);border-radius:3px;
+  padding:20px 22px;border-left:3px solid var(--accent);
+}
+.callout .eyebrow{color:var(--accent)}
+.callout p{font-size:15.5px}
+
+/* ---------- inventory ---------- */
+.inv{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.inv-col{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:18px 20px;box-shadow:var(--shadow)}
+.inv-col h3{margin-bottom:12px;display:flex;align-items:baseline;gap:8px}
+.inv-col h3 span{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-3);font-weight:400}
+.inv-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:14.5px}
+.inv-list li{display:flex;gap:9px;line-height:1.55;color:var(--ink-2)}
+.inv-list li::before{content:"";flex:0 0 6px;height:6px;border-radius:50%;margin-top:9px;background:var(--ink-3)}
+.have li::before{background:var(--slate)}
+.need li::before{background:var(--accent)}
+.inv-list code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink);background:var(--surface-2);padding:1px 5px;border-radius:2px}
+
+/* ---------- route cards ---------- */
+.routes{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.route{
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:22px 24px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.route::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--ink-3)}
+.route.primary::before{background:var(--accent)}
+.route.backup::before{background:var(--slate)}
+.route-tag{
+  align-self:flex-start;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:2px;
+}
+.route.primary .route-tag{background:var(--accent-soft);color:var(--accent)}
+.route.backup .route-tag{background:var(--slate-soft);color:var(--slate)}
+.route-cost{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.route p{font-size:14.5px;color:var(--ink-2)}
+
+/* ---------- spec rows ---------- */
+.specs{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--rule);border-radius:3px;box-shadow:var(--shadow)}
+.spec{display:grid;grid-template-columns:150px 1fr;gap:4px 20px;padding:14px 22px;border-bottom:1px solid var(--rule)}
+.spec:last-child{border-bottom:0}
+.spec dt{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-3);padding-top:3px;
+}
+.spec dd{margin:0;font-size:15px}
+.spec dd small{display:block;color:var(--ink-2);font-size:13.5px;margin-top:3px;line-height:1.6}
+.spec strong{color:var(--accent);font-weight:500}
+@media (max-width:560px){
+  .spec{grid-template-columns:1fr;gap:2px}
+  .spec dt{padding-top:0}
+}
+
+/* ---------- checklist ---------- */
+.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.check li{
+  display:grid;grid-template-columns:20px 1fr;gap:14px;align-items:start;
+  padding:13px 4px;border-bottom:1px solid var(--rule);
+}
+.check li:last-child{border-bottom:0}
+.check li::before{
+  content:"";width:15px;height:15px;margin-top:5px;
+  border:1.5px solid var(--ink-3);border-radius:2px;
+}
+.check .t{font-size:15.5px;font-weight:500}
+.check .d{display:block;font-size:14px;color:var(--ink-2);margin-top:3px;font-weight:400;line-height:1.6}
+
+/* ---------- table ---------- */
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+th,td{text-align:left;padding:12px 18px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500;background:var(--surface-2);
+}
+tr:last-child td{border-bottom:0}
+td.pct{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--accent);white-space:nowrap}
+td small{display:block;color:var(--ink-2);font-size:13px;margin-top:2px}
+
+/* ---------- NG list ---------- */
+.ng{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.ng-row{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--surface)}
+.ng-row>div{padding:13px 18px;font-size:14.5px}
+.ng-row .bad{color:var(--ink);border-right:1px solid var(--rule)}
+.ng-row .why{color:var(--ink-2);font-size:14px}
+.ng-head{background:var(--surface-2)}
+.ng-head>div{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+@media (max-width:560px){
+  .ng-row{grid-template-columns:1fr}
+  .ng-row .bad{border-right:0;padding-bottom:2px;font-weight:500}
+  .ng-row .why{padding-top:0}
+  .ng-head{display:none}
+}
+
+/* ---------- naming block ---------- */
+.naming{
+  font-family:"IBM Plex Mono",monospace;font-size:13.5px;line-height:2;
+  background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;
+  padding:18px 22px;overflow-x:auto;white-space:pre;color:var(--ink-2);
+}
+.naming b{color:var(--accent);font-weight:500}
+
+footer{
+  margin-top:clamp(52px,7vw,80px);padding-top:24px;border-top:1px solid var(--rule);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);
+  display:flex;flex-wrap:wrap;gap:6px 20px;
+}
+
+/* ---------- 優先級卡 ---------- */
+.tier{display:flex;flex-direction:column;gap:14px}
+.tier-card{
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  padding:22px 26px;display:flex;flex-direction:column;gap:12px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.tier-card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px}
+.tier-a::before{background:var(--accent)}
+.tier-b::before{background:var(--slate)}
+.tier-c::before{background:var(--ink-3)}
+.tier-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px}
+.tier-head h3{flex:1 1 auto;min-width:190px;margin:0}
+.tier-tag{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;padding:3px 9px;border-radius:2px;white-space:nowrap;
+}
+.tier-a .tier-tag{background:var(--accent-soft);color:var(--accent)}
+.tier-b .tier-tag{background:var(--slate-soft);color:var(--slate)}
+.tier-c .tier-tag{background:var(--surface-2);color:var(--ink-3)}
+.tier-why{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.9}
+.tier-spec{
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-2);
+  background:var(--surface-2);border-radius:2px;padding:12px 15px;line-height:1.95;
+}
+.tier-spec strong{color:var(--accent);font-weight:500}
+.tier-spec code{color:var(--ink)}
+/* 驗收表的通過欄 */
+td.pass{color:var(--slate);font-family:"IBM Plex Mono",monospace;font-size:12.5px;white-space:nowrap}
+
+/* ---------- 列印／PDF ---------- */
+@media print{
+  /* 強制亮色：印出來不能是深底 */
+  :root{
+    --ground:#FFFFFF; --surface:#FFFFFF; --surface-2:#F4EDEF;
+    --ink:#1E1519; --ink-2:#544A4F; --ink-3:#8B7F85;
+    --rule:#D8CCD2; --accent:#A63E5C; --accent-soft:#F7E2E9;
+    --slate:#33566E; --slate-soft:#E1EAF0;
+    --shadow:none;
+  }
+  body{background:#fff;font-size:11.5pt;line-height:1.62}
+  .wrap{max-width:none;padding:0}
+  a{color:var(--ink);text-decoration:none}
+
+  section{padding-top:20pt}
+  h1{font-size:26pt}
+  h2{font-size:16pt}
+  h3{font-size:12pt}
+  .lede{font-size:11.5pt}
+
+  /* 不要把整塊內容切成兩頁 */
+  /* 眉標＋標題是一組，不能被拆到兩頁 */
+  h1,h2,h3{break-after:avoid;page-break-after:avoid}
+  .sec-head{break-inside:avoid;page-break-inside:avoid;break-after:avoid;page-break-after:avoid}
+  .tier-card,.route,.callout,.inv-col,.naming,.specs,.ng,.tw,
+  .check li,.spec,.ng-row,tr,footer{break-inside:avoid;page-break-inside:avoid}
+
+  /* 螢幕上靠橫向捲動的表格，印出來要整張攤平 */
+  .tw{overflow:visible;box-shadow:none}
+  table{min-width:0}
+  .naming{white-space:pre-wrap;word-break:break-all}
+
+  .tier-card,.route,.inv-col,.specs,.ng,.tw{border-color:var(--rule)}
+  .tier{gap:10pt}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">HEIWEI 何謂美 · 素材需求規格 · 第二版</div>
+  <h1>爆白潤色防曬棒<br>網頁素材規格書</h1>
+  <p class="lede">第一批 3D 素材已驗收上線。這一版記錄驗收結果，並列出讓網站真正有說服力還缺的東西 —— 依重要性排序。</p>
+  <div class="mast-meta">
+    <span><b>產品</b> Bright Tone-Up Sunscreen Stick</span>
+    <span><b>規格</b> SPF50+ ★★★★ / NET 15g</span>
+    <span><b>更新</b> 2026-08-21</span>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">驗收結果</div>
+    <h2>第一批：全數通過，已上線</h2>
+  </div>
+  <p class="lede" style="font-size:15px">來源是 Drive 資料夾「給山姆」（2026-07-16 交付）。實測規格如下，每一項都符合上一版規格書的要求。</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th>檢查項目</th><th>實測結果</th><th>判定</th></tr></thead>
+    <tbody>
+      <tr><td>Alpha 通道</td><td>qtrle / ARGB<small>不是一般 MP4，透明背景完整保留</small></td><td class="pass">通過</td></tr>
+      <tr><td>相機是否靜止</td><td>101 張的左右邊界都是 340 / 740<small>產品水平中心正好落在畫面中心 540</small></td><td class="pass">通過</td></tr>
+      <tr><td>影格序列</td><td>101 張 PNG，四位數補零<small>0000→0100 連續無跳號</small></td><td class="pass">通過</td></tr>
+      <tr><td>解析度</td><td>1080 × 1920，產品實佔 400 × 1484</td><td class="pass">通過</td></tr>
+      <tr><td>陰影是否燒進去背圖</td><td>無，alpha 邊緣乾淨</td><td class="pass">通過</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <div class="eyebrow">內容與預期不同 —— 但更好用</div>
+    <p>這段不是 360 轉盤，是「<strong style="color:inherit;font-weight:600">開蓋敘事</strong>」：<strong style="color:inherit;font-weight:600">蓋子脫離（影格 0–25）→ 本體整整轉一圈、膏體同步升起（26–86）→ 底部海綿分離（87–100）</strong>。有起承轉合，比純轉盤更適合捲軸敘事，網頁的四段文案就是照這個節奏切的。</p>
+    <p>轉檔後裁掉 71% 的透明空白，桌機版 101 張只有 2.2 MB、手機版 1.1 MB。已用在 v5 / v6 / v7 三個版本。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">診斷</div>
+    <h2>網站現在最大的問題：全部都是渲染圖</h2>
+  </div>
+  <p class="lede" style="font-size:15px">整個網站的產品影像<strong>只有那一段 3D 動畫，一張實拍都沒有</strong>。頁面上講了 12 個賣點，其中只有 2 個看得到畫面。</p>
+  <div class="ng">
+    <div class="ng-row ng-head"><div>網站上的宣稱</div><div>目前有什麼畫面佐證</div></div>
+    <div class="ng-row"><div class="bad">「偽素顏」「瞬時提亮素顏光」</div><div class="why">完全沒有。沒有任何一張臉。</div></div>
+    <div class="ng-row"><div class="bad">「流汗不融、不斑駁、不泛白」</div><div class="why">完全沒有。這是防曬最常被質疑的一點。</div></div>
+    <div class="ng-row"><div class="bad">「底部收著一塊海綿」</div><div class="why">只有 3D 渲染的米色塊，沒有實物。</div></div>
+    <div class="ng-row"><div class="bad">「固體潤色膏體」「服貼成膜」</div><div class="why">只有渲染的米杏色圓柱，看不出質地。</div></div>
+    <div class="ng-row"><div class="bad">「口袋尺寸」NET 15g</div><div class="why">沒有比例參照，消費者無從想像大小。</div></div>
+    <div class="ng-row"><div class="bad">「一抹順滑不黏膩」</div><div class="why">沒有塗抹畫面。</div></div>
+    <div class="ng-row"><div class="bad">SPF50+ ★★★★ / 不致粉刺</div><div class="why">只有文字，沒有檢驗報告可點開。</div></div>
+    <div class="ng-row"><div class="bad">開蓋、旋出、海綿分離的結構</div><div class="why">✅ 3D 動畫已完整呈現</div></div>
+    <div class="ng-row"><div class="bad">包裝外觀與印字</div><div class="why">✅ 3D 動畫已完整呈現</div></div>
+  </div>
+  <p class="lede" style="font-size:14.5px">3D 動畫解決的是「這是什麼東西」。剩下沒解決的是「它擦在臉上是什麼樣子」—— 而後者才是決定買不買的那一題。</p>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">第二批素材</div>
+    <h2>依重要性排序的素材清單</h2>
+  </div>
+
+  <div class="tier">
+
+    <article class="tier-card tier-a">
+      <div class="tier-head">
+        <span class="tier-tag">A · 必做</span>
+        <h3>塗抹前後同一張臉的對照</h3>
+      </div>
+      <p class="tier-why">「偽素顏」這個賣點唯一的證據。沒有它，文案講再多都是自說自話。網頁可以做成左右滑動對照 —— 這是整個站最有可能被截圖分享的一個互動。</p>
+      <div class="tier-spec">同一位模特 · 同一天 · 同角度 · 同光位 · 同白平衡<br>一張全素顏、一張只擦防曬棒（不上其他妝）<br>不修膚況、不磨皮 —— 修過就沒有說服力<br>正面 ＋ 45° 側面各一組，2400px 以上</div>
+    </article>
+
+    <article class="tier-card tier-a">
+      <div class="tier-head">
+        <span class="tier-tag">A · 必做</span>
+        <h3>上臉塗抹的影格序列</h3>
+      </div>
+      <p class="tier-why">目前的 3D 動畫只演到「產品打開」。這一段接著演「抹上去」，可以做成第二個捲軸場景，把敘事補完。因為相機同樣靜止，做法跟第一批完全一樣，我這邊的處理流程可以直接沿用。</p>
+      <div class="tier-spec">臉頰或手臂的連續塗抹動作，40–60 張<br><strong>相機、燈光、模特位置全程鎖死</strong>（跟轉盤同一套紀律）<br>建議用高速連拍或影片抽幀，30fps 以上<br>2000px 以上，去背或純色背景皆可</div>
+    </article>
+
+    <article class="tier-card tier-a">
+      <div class="tier-head">
+        <span class="tier-tag">A · 必做</span>
+        <h3>膏體質地 ＋ 海綿實物微距</h3>
+      </div>
+      <p class="tier-why">網頁在 16:00 那一段主打「底部收著一塊海綿」，但畫面上只有一塊 3D 渲染的米色方塊。膏體同理。這兩張是最快能補上的洞。</p>
+      <div class="tier-spec">膏體：刮下一小塊，拍出紋理與延展性，微距 f/8–f/11<br>海綿：底部拆開的實物特寫，看得出材質與孔隙<br>注意米杏色在白底容易曝過頭變死白 —— 壓半格<br>2400px 以上</div>
+    </article>
+
+    <article class="tier-card tier-b">
+      <div class="tier-head">
+        <span class="tier-tag">B · 顯著加分</span>
+        <h3>紫外線相機對照</h3>
+      </div>
+      <p class="tier-why">防曬類最強的視覺證據，沒有之一。UV 相機下，擦了防曬的皮膚會呈現黑色 —— 一張圖就講完了「它真的有擋住」。網頁上已經有 UV 時光機互動，這張圖放進去會直接把那一段從「知識」升級成「實證」。</p>
+      <div class="tier-spec">UV 相機或改機 ＋ UV 通過濾鏡<br>半臉塗抹對照（一邊擦、一邊不擦）最有衝擊力<br>同時要拍一張同角度的可見光對照<br>需要專門設備，建議找有拍過防曬的攝影棚</div>
+    </article>
+
+    <article class="tier-card tier-b">
+      <div class="tier-head">
+        <span class="tier-tag">B · 顯著加分</span>
+        <h3>闔蓋 360 轉盤（3D 渲染）</h3>
+      </div>
+      <p class="tier-why"><strong>模型還在渲染師手上，這批不用重新建模就能出。</strong>現有動畫是固定敘事，使用者不能自己操作。加一組闔蓋 360 就能做成可拖曳旋轉 —— 想看哪一面看哪一面，停留時間會明顯拉長。</p>
+      <div class="tier-spec">72 張，每 5° 繞 Y 軸一圈，闔蓋狀態<br>相機全程不動、正交或 85–105mm 等效長焦<br>2000 × 2000 正方形、PNG-24 帶 alpha、陰影另出一層<br>命名 <code>stick_spin_0000.png</code> → <code>stick_spin_0071.png</code></div>
+    </article>
+
+    <article class="tier-card tier-b">
+      <div class="tier-head">
+        <span class="tier-tag">B · 顯著加分</span>
+        <h3>剖面圖／爆炸圖（3D 渲染）</h3>
+      </div>
+      <p class="tier-why">成分區現在是四張純文字卡。有剖面圖就能把「棉花糖根／米糠／甘草根」標在膏體上、把海綿標在底座上，變成可互動的結構圖。一樣是模型還在就順手能出的東西。</p>
+      <div class="tier-spec">縱向剖面一張 ＋ 分件爆炸圖一張<br>各部件要能<strong>獨立輸出成單獨圖層</strong>，我才能個別標註與動畫<br>2400px 以上、透明 alpha</div>
+    </article>
+
+    <article class="tier-card tier-b">
+      <div class="tier-head">
+        <span class="tier-tag">B · 顯著加分</span>
+        <h3>手握與尺寸參照</h3>
+      </div>
+      <p class="tier-why">15g 只是一個數字。握在手上、放進口袋、丟進小包 —— 三張照片就能把「口袋尺寸」這個賣點落地。很快就能拍完，但沒有它消費者永遠在猜。</p>
+      <div class="tier-spec">握持 ／ 口袋 ／ 小包 各一張<br>手部要乾淨、指甲素色，避免搶焦點<br>2000px 以上</div>
+    </article>
+
+    <article class="tier-card tier-c">
+      <div class="tier-head">
+        <span class="tier-tag">C · 有餘力再做</span>
+        <h3>防水防汗實測</h3>
+      </div>
+      <p class="tier-why">水珠在塗抹過的皮膚上凝聚不化開的畫面，能佐證「流汗不融」。慢動作影片效果最好，但也可以用連拍影格做成捲軸互動。</p>
+      <div class="tier-spec">高速攝影或 240fps 慢動作<br>擦拭區與未擦區並排對照最有說服力</div>
+    </article>
+
+    <article class="tier-card tier-c">
+      <div class="tier-head">
+        <span class="tier-tag">C · 有餘力再做</span>
+        <h3>檢驗報告掃描檔</h3>
+      </div>
+      <p class="tier-why">SPF50+ ★★★★ 測試報告、不致粉刺測試、產品責任險證明。網頁的「品牌數字」區塊可以做成點擊展開 —— 敢把報告攤開來，信任感差很多。</p>
+      <div class="tier-spec">PDF 或 300dpi 掃描檔，去識別化敏感欄位後提供</div>
+    </article>
+
+    <article class="tier-card tier-c">
+      <div class="tier-head">
+        <span class="tier-tag">C · 有餘力再做</span>
+        <h3>高解析情境圖</h3>
+      </div>
+      <p class="tier-why">現有的 IG 圖解析度只夠當小圖，做不了滿版。海邊、球場、通勤補擦，橫式構圖，用在區塊之間當呼吸點。</p>
+      <div class="tier-spec">橫式 2560px 以上，左右要留出放字的空間<br>色溫偏暖，跟網站的「光」主題一致</div>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">為什麼先問渲染師</div>
+    <h2>模型還在，B 級那三項順手就能出</h2>
+  </div>
+  <div class="callout">
+    <div class="eyebrow">建議的下單順序</div>
+    <p>第一批已經證明 3D 模型、材質、燈光都建好且能用。<strong style="color:inherit;font-weight:600">闔蓋 360 轉盤、剖面圖、爆炸圖這三項都只是「同一個模型再算幾張」</strong>，不需要重新建模、不需要租攝影棚、不需要排模特檔期。</p>
+    <p>建議：先把這三項一起發給原渲染師，同時並行安排 A 級的實拍。實拍要找模特、排檔期，前置時間長，兩邊同時啟動才不會卡。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">通用交付規格</div>
+    <h2>不管誰拍，這幾條都適用</h2>
+  </div>
+  <dl class="specs">
+    <div class="spec"><dt>格式</dt><dd>PNG-24 帶 alpha 或未壓縮 JPG<small>壓縮與轉 WebP 由網頁端處理，請給原始檔。已經壓過的檔案二次壓縮會產生色帶，粉色漸層特別明顯。</small></dd></div>
+    <div class="spec"><dt>解析度</dt><dd>長邊 2400px 以上<small>序列類 2000px 以上即可，因為會被縮小播放。</small></dd></div>
+    <div class="spec"><dt>色彩</dt><dd>sRGB，附色卡<small>不同批次的素材要能對得起來，色卡是唯一可靠的依據。</small></dd></div>
+    <div class="spec"><dt>命名</dt><dd>英文小寫、底線分隔、四位數補零<small>序列不可跳號。中文檔名部署到伺服器會編碼出錯。</small></dd></div>
+    <div class="spec"><dt>序列紀律</dt><dd><strong>相機、燈光、白平衡全程鎖死</strong><small>任何自動項目都會讓影格之間產生亮度飄移，播放時就是閃爍，後製救不回來。</small></dd></div>
+  </dl>
+  <div class="naming">stick_spin_<b>0000</b>.webp   → stick_spin_<b>0071</b>.webp    闔蓋 360 轉盤
+stick_apply_<b>0000</b>.webp  → stick_apply_<b>0059</b>.webp   上臉塗抹序列
+face_before.jpg / face_after.jpg              前後對照（正面）
+face_before_45.jpg / face_after_45.jpg        前後對照（45°）
+uv_bare.jpg / uv_applied.jpg                  紫外線相機對照
+balm_macro.jpg                                膏體質地微距
+sponge_macro.jpg                              海綿實物微距
+scale_hand.jpg / scale_pocket.jpg             尺寸參照
+stick_section.png / stick_explode.png         剖面／爆炸（分層）</div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">驗收</div>
+    <h2>常見 NG，收件時逐項對</h2>
+  </div>
+  <div class="ng">
+    <div class="ng-row ng-head"><div>NG 狀況</div><div>後果</div></div>
+    <div class="ng-row"><div class="bad">序列中曝光或白平衡有飄移</div><div class="why">播放時整支產品在閃爍，無法修，只能重來</div></div>
+    <div class="ng-row"><div class="bad">前後對照的光位或角度不一致</div><div class="why">觀眾會認為是「換了張照片」，說服力歸零</div></div>
+    <div class="ng-row"><div class="bad">前後對照修了膚況或磨了皮</div><div class="why">同上，而且有廣告不實風險</div></div>
+    <div class="ng-row"><div class="bad">陰影燒進去背圖</div><div class="why">網頁換底色時邊緣浮出一塊灰</div></div>
+    <div class="ng-row"><div class="bad">剖面圖交成一張合併的平面圖</div><div class="why">無法個別標註成分，互動做不出來</div></div>
+    <div class="ng-row"><div class="bad">交 JPG 當去背圖</div><div class="why">沒有 alpha 通道，等於整批報廢</div></div>
+    <div class="ng-row"><div class="bad">交件前已經自行壓縮</div><div class="why">二次壓縮產生色帶，粉色漸層特別明顯</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">不是影像，但同樣卡住</div>
+    <h2>還缺的資料</h2>
+  </div>
+  <ul class="check">
+    <li><span><span class="t">真實的熱銷 TOP 3 名次</span><span class="d">網站的排行區塊目前沿用舊版的暫定順序（化妝水／安瓶／面膜），不是真實銷售數據。給我真實排行，或授權我從 Shopline 撈。</span></span></li>
+    <li><span><span class="t">Logo 的 SVG 原始檔</span><span class="d">不是 PNG。放大時才不會糊，也才能做描繪動畫。</span></span></li>
+    <li><span><span class="t">中文字型的商用授權確認</span><span class="d">最常被漏掉的一項。目前網站用的是免費的思源黑體／思源宋體，如果品牌有指定字型要先確認授權範圍。</span></span></li>
+    <li><span><span class="t">品牌色票 HEX</span><span class="d">主色、輔色、背景、文字灰階至少四組。現在網站的色是我從產品渲染圖取樣推的。</span></span></li>
+    <li><span><span class="t">成分的完整 INCI 全成分表</span><span class="d">法規要求，也是進階消費者會查的。目前只有四個主打成分的行銷名稱。</span></span></li>
+  </ul>
+</section>
+
+<footer>
+  <span>HEIWEI 何謂美</span>
+  <span>爆白潤色防曬棒 SPF50+ / 15g</span>
+  <span>第二版 · 2026-08-21</span>
+</footer>
+
+
+</div>

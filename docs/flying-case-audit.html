@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<title>FLYING CASE 官網健檢報告</title>
+<style>
+@page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "PingFang TC","Noto Sans TC","Heiti TC","Microsoft JhengHei",-apple-system,sans-serif;
+  font-size: 10.5pt; line-height: 1.72; color: #1b2430; margin: 0;
+  letter-spacing: .01em;
+}
+h1,h2,h3,h4 { line-height: 1.35; margin: 0; }
+code, .mono { font-family: "SF Mono","JetBrains Mono",Menlo,monospace; font-size: 9pt; }
+
+/* ---------- Cover ---------- */
+.cover { height: 252mm; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; }
+.cover-top .kicker { font-size: 9pt; letter-spacing: .28em; color: #8a94a6; font-weight: 600; }
+.cover-rule { height: 4px; width: 64px; background: #d4462f; margin: 14px 0 30px; }
+.cover h1 { font-size: 30pt; font-weight: 800; letter-spacing: -.01em; }
+.cover h1 small { display:block; font-size: 13pt; font-weight: 600; color:#5b6676; letter-spacing:.02em; margin-top:10px; }
+.cover-lead { margin-top: 26px; font-size: 11.5pt; color: #3a4552; }
+.verdict { margin-top: 26px; padding: 18px 20px; background: #fdf3f1; border-left: 4px solid #d4462f; border-radius: 0 6px 6px 0; }
+.verdict b { color: #a8321f; }
+.scorecards { display: flex; gap: 10px; margin-top: 28px; }
+.sc { flex:1; border:1px solid #e3e7ee; border-radius: 8px; padding: 14px 12px; text-align:center; }
+.sc .n { font-size: 21pt; font-weight: 800; letter-spacing:-.02em; }
+.sc .l { font-size: 8pt; color:#7b8698; margin-top: 4px; letter-spacing:.06em; }
+.sc.red .n { color:#d4462f; } .sc.amber .n { color:#c47a12; } .sc.gray .n { color:#4a5666; }
+.cover-meta { border-top:1px solid #e3e7ee; padding-top: 14px; font-size: 9pt; color:#7b8698; display:flex; justify-content:space-between; }
+
+/* ---------- Sections ---------- */
+.sec { page-break-inside: avoid; margin-top: 26px; }
+h2.sh { font-size: 14pt; font-weight: 800; padding-bottom: 8px; border-bottom: 2px solid #1b2430; display:flex; align-items:baseline; gap:10px; }
+h2.sh .tag { font-size: 8.5pt; font-weight:700; padding: 3px 9px; border-radius: 20px; color:#fff; letter-spacing:.06em; }
+.tag.p0 { background:#d4462f; } .tag.p1 { background:#c47a12; } .tag.p2 { background:#6b7688; } .tag.go { background:#1f7a4d; }
+h2.sh .desc { font-size:9pt; font-weight:500; color:#7b8698; margin-left:auto; }
+
+.item { page-break-inside: avoid; margin-top: 18px; padding-left: 14px; border-left: 2px solid #e8ecf2; }
+.item.crit { border-left-color:#d4462f; }
+.item h3 { font-size: 11.5pt; font-weight: 700; margin-bottom: 6px; }
+.item h3 .num { color:#aab3c0; font-weight:800; margin-right:7px; }
+.item p { margin: 6px 0; }
+.muted { color:#5b6676; }
+
+table { width:100%; border-collapse: collapse; margin: 10px 0; font-size: 9.5pt; }
+th { text-align:left; background:#f4f6f9; font-weight:700; color:#3a4552; padding: 7px 10px; border-bottom:1px solid #dfe4ec; font-size:9pt; }
+td { padding: 6px 10px; border-bottom: 1px solid #eef1f5; }
+td.num { text-align:right; font-family:"SF Mono",Menlo,monospace; font-weight:600; }
+tr.bad td.num { color:#d4462f; } tr.ok td.num { color:#1f7a4d; }
+tr.ok td:first-child::after { content:" ✓"; color:#1f7a4d; font-weight:700; }
+
+.fix { background:#f6f8fb; border-radius:6px; padding: 10px 13px; margin: 9px 0; font-size:9.5pt; }
+.fix b { color:#1f7a4d; }
+pre { background:#1b2430; color:#e6ebf2; padding: 11px 13px; border-radius:6px; font-family:"SF Mono",Menlo,monospace;
+      font-size: 8.2pt; line-height:1.6; overflow-x:auto; white-space: pre-wrap; word-break: break-all; margin: 8px 0; }
+ul { margin: 7px 0; padding-left: 19px; } li { margin: 4px 0; }
+.callout { border:1px solid #cfe4d8; background:#f2f9f5; border-radius:6px; padding: 12px 14px; margin: 12px 0; font-size:10pt; }
+.callout b { color:#1f7a4d; }
+
+.checklist { margin-top: 14px; }
+.chk { display:flex; gap:11px; align-items:flex-start; padding: 11px 13px; border:1px solid #e3e7ee; border-radius:7px; margin-bottom:9px; page-break-inside:avoid; }
+.chk .box { width:15px; height:15px; border:1.8px solid #98a3b3; border-radius:3px; flex:0 0 auto; margin-top:2px; }
+.chk .t { font-weight:700; font-size:10.5pt; }
+.chk .d { font-size:9.5pt; color:#5b6676; margin-top:3px; }
+.chk .im { margin-left:auto; flex:0 0 auto; font-size:8pt; font-weight:700; color:#fff; background:#1f7a4d; padding:3px 8px; border-radius:12px; white-space:nowrap; }
+.foot { margin-top: 30px; padding-top: 12px; border-top:1px solid #e3e7ee; font-size: 8.5pt; color:#8a94a6; }
+.pb { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-top">
+    <div class="kicker">WEBSITE AUDIT REPORT</div>
+    <div class="cover-rule"></div>
+    <h1>FLYING CASE 官網健檢報告
+      <small>flying-case.com ｜ 木箱起飛影像有限公司</small>
+    </h1>
+    <p class="cover-lead" style="color:#3a4552">
+      本報告以實際抓取全站 HTML 原始碼、逐一量測每個資源的實際檔案大小（HTTP <span class="mono">content-length</span>）為依據，
+      非目視推測。涵蓋首頁、關於我們、作品展示、應用產業、服務項目、聯絡我們，以及 sitemap 中的所有頁面。
+    </p>
+
+    <div class="verdict">
+      <b>總結一句話：</b>素材與內容都有，但「<b>首頁沒有內容</b>、<b>作品頁沒有說明</b>、<b>圖片肥到手機打不開</b>」
+      這三件事，讓網站目前幾乎無法替公司帶來詢價。三項都屬於可在兩週內修復的問題，且第一項的投報率遠高於其他所有優化的總和。
+    </div>
+
+    <div class="scorecards">
+      <div class="sc red"><div class="n">246<span style="font-size:11pt">MB</span></div><div class="l">最重頁面</div></div>
+      <div class="sc red"><div class="n">3</div><div class="l">P0 致命問題</div></div>
+      <div class="sc amber"><div class="n">6</div><div class="l">P1 影響轉單</div></div>
+      <div class="sc gray"><div class="n">6</div><div class="l">P2 收尾細節</div></div>
+    </div>
+  </div>
+
+  <div class="cover-meta">
+    <span>檢測日期：2026-08-26</span>
+    <span>平台：WordPress.com（Assembler 佈景主題）</span>
+  </div>
+</section>
+
+<!-- ============ P0 ============ -->
+<section class="sec" style="margin-top:0">
+  <h2 class="sh"><span class="tag p0">P0</span>致命問題<span class="desc">不修好，其他優化都沒有意義</span></h2>
+
+  <div class="item crit">
+    <h3><span class="num">01</span>頁面重量爆炸</h3>
+    <p>逐一量測每頁所有資源的實際傳輸大小後，結果如下：</p>
+    <table>
+      <thead><tr><th>頁面</th><th>路徑</th><th style="text-align:right">實測總重量</th></tr></thead>
+      <tbody>
+        <tr class="bad"><td>服務項目</td><td class="mono">/services/</td><td class="num">246.3 MB</td></tr>
+        <tr class="bad"><td>關於我們</td><td class="mono">/關於我們/</td><td class="num">152.8 MB</td></tr>
+        <tr class="bad"><td>首頁</td><td class="mono">/</td><td class="num">121.6 MB</td></tr>
+        <tr class="bad"><td>作品展示</td><td class="mono">/gallery/</td><td class="num">83.9 MB</td></tr>
+        <tr class="ok"><td>應用產業</td><td class="mono">/應用產業/</td><td class="num">12.5 MB</td></tr>
+        <tr class="ok"><td>聯絡我們</td><td class="mono">/contact/</td><td class="num">0.2 MB</td></tr>
+      </tbody>
+    </table>
+    <p>單一檔案最大的三個：<span class="mono">義享天地GIF.gif</span> <b>134 MB</b>、
+      首頁 <span class="mono">e9a696e9a081gif.gif</span> <b>78 MB</b>、
+      首頁影片 <span class="mono">2021-flyingcase-showreal.mp4</span> <b>121 MB</b>。</p>
+    <p class="muted">影響：4G 手機開服務項目頁需下載 246MB，約需 3–8 分鐘，並直接消耗客戶的行動數據。
+      實務上絕大多數訪客會在 5 秒內離開；Google 也會因 Core Web Vitals 不合格而壓低排名。</p>
+    <div class="fix"><b>解法：</b>所有 GIF 一律轉成 MP4，體積通常只剩原檔的 1–5%。
+      <pre>ffmpeg -i input.gif -vcodec libx264 -crf 24 -pix_fmt yuv420p \
+  -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -movflags +faststart output.mp4</pre>
+    </div>
+    <div class="callout"><b>好消息：</b>貴司的 <span class="mono">/應用產業/</span> 這一頁已經做對了——
+      全部使用 h264 MP4、附 poster 首幀，整頁只有 12.5 MB。<b>這頁就是全站的標準範本</b>，
+      把同樣做法套回首頁、作品展示與服務項目即可。</div>
+    <p>另外首頁影片檔名為 <span class="mono">2021-flyingcase-showreal</span>：一是 2021 年的舊 reel，
+      二是拼字誤植（showreal 應為 <b>showreel</b>）。建議更換 2026 年版本、壓至 10–20 MB、並加上首幀 poster。</p>
+  </div>
+
+  <div class="item crit">
+    <h3><span class="num">02</span>首頁完全沒有文字</h3>
+    <p>首頁的實際 DOM 結構為：header ＋ 一個 700px 高的影片區塊 ＋ <b>一個空的 <span class="mono">&lt;p&gt;</span></b> ＋ footer。
+      沒有標題、沒有一句話說明公司在做什麼、沒有行動呼籲、沒有作品、沒有客戶名單。全頁唯一的
+      <span class="mono">&lt;h1&gt;</span> 是站台名稱。</p>
+    <p class="muted">影響：訪客進站只看到一支無聲影片，不知道下一步該按哪裡；Google 抓不到任何可排名的文字內容。</p>
+    <div class="fix"><b>建議首頁結構：</b>
+      <ul>
+        <li>Hero — showreel ＋ 一句定位文案 ＋ 兩顆按鈕（看作品 / 聊需求）</li>
+        <li>精選案例 3–6 支（<b>務必附客戶名稱</b>）</li>
+        <li>四大服務：影像製作 / 特效 / 3D 建模 / 裸視 3D</li>
+        <li>合作客戶 Logo 牆</li>
+        <li>製作流程與交期說明</li>
+        <li>聯絡 CTA</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="item crit">
+    <h3><span class="num">03</span>作品展示頁等於沒有作品</h3>
+    <p><span class="mono">/gallery/</span> 全頁只有 4 顆 GIF 按鈕（合計 88 MB、<span class="mono">alt</span> 屬性全為空值），
+      點進去後的 <span class="mono">/249-2/</span>、<span class="mono">/257-2/</span>、
+      <span class="mono">/269-2/</span>、<span class="mono">/281-2/</span> 每頁就是
+      <b>7 支裸露的 YouTube iframe</b>——沒有標題、沒有客戶名、沒有任何一個字說明「這支我們做了什麼」。</p>
+    <p class="muted">影像製作公司最貴的資產就是作品頁，這頁目前的說服力接近於零。</p>
+    <div class="fix"><b>每支作品至少補上：</b>客戶／品牌名稱、片型（MV / TVC / 形象片 / 3D 動畫）、
+      <b>我方負責的環節</b>（前期企劃 / 拍攝 / 3D / 合成 / 剪輯 / 調色）、一句話的挑戰與解法、年份與片長。</div>
+    <p>URL 也應一併調整：<span class="mono">/249-2/ → /works/3d/</span>、
+      <span class="mono">/257-2/ → /works/mv/</span>、
+      <span class="mono">/269-2/ → /works/cf/</span>、
+      <span class="mono">/281-2/ → /works/reel/</span>。</p>
+  </div>
+</section>
+
+<!-- ============ P1 ============ -->
+<section class="sec pb">
+  <h2 class="sh"><span class="tag p1">P1</span>影響轉單<span class="desc">直接影響詢價率與專業觀感</span></h2>
+
+  <div class="item">
+    <h3><span class="num">04</span>導覽列有一半連到舊網址</h3>
+    <p>Showcase、Services、Contact 三個主選單連結指向
+      <span class="mono">waynebear20996-qbpja.wordpress.com/...</span>。雖然會 301 轉回正式網域，
+      但多一次跳轉，而且滑鼠一 hover 就會在瀏覽器狀態列露出 wordpress.com 測試網址——B2B 客戶看到會扣分。</p>
+    <div class="fix"><b>解法：</b>三個連結改為站內相對路徑（<span class="mono">/gallery/</span>、
+      <span class="mono">/services/</span>、<span class="mono">/contact/</span>）。</div>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">05</span>每頁底部都掛著留言板</h3>
+    <p>首頁以外的每一頁底部都出現「載入迴響中…／發表迴響…／電子郵件（必要）／名稱（必要）／網站」。
+      企業官網不應有公開留言區，除了觀感不專業，也會成為垃圾留言的入口。</p>
+    <div class="fix"><b>解法：</b>於 WordPress 後台關閉所有 Page 的 comments（討論設定 → 取消勾選「允許留言」）。</div>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">06</span>完全沒有任何追蹤代碼</h3>
+    <p>全站原始碼中找不到 GA4、Google Tag Manager、Meta Pixel 或任何分析工具。
+      等於不知道流量從哪裡來、哪一頁跳出率最高、哪支作品最多人看、詢價從哪個管道進來。</p>
+    <div class="fix"><b>解法：</b>最低限度先裝 GA4；若有投放 FB／IG 廣告需求，一併加上 Meta Pixel。</div>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">07</span>聯絡頁資訊過於單薄</h3>
+    <p>目前表單只有姓名／電子郵件／訊息三個欄位，收到的詢價幾乎無法判斷輕重與可行性。
+      電話 <span class="mono">07-3436111</span> 也沒有做成 <span class="mono">tel:</span> 連結，手機無法點擊撥號。</p>
+    <div class="fix"><b>建議加上：</b>公司名稱、需求類型（MV / TVC / 3D 建模 / 網站 / 線上展館）、
+      預算區間、期望上線日期；頁面另補公司地址 ＋ Google Map 嵌入 ＋ 統一編號 ＋ LINE 官方帳號 QR Code。</div>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">08</span>沒有結構化資料（Schema）</h3>
+    <p>全站找不到任何 <span class="mono">application/ld+json</span> 標記。</p>
+    <div class="fix"><b>解法：</b>加入 Organization 與 LocalBusiness schema（公司名、Logo、電話、地址、社群連結），
+      讓 Google 搜尋「木箱起飛」時能顯示知識面板與地圖資訊。</div>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">09</span>SEO 標題與描述設定不當</h3>
+    <p>首頁 <span class="mono">&lt;title&gt;</span> 塞入了長達 105 字的整段公司介紹，Google 搜尋結果只會顯示前約 30 字，
+      其餘全部被截斷。<span class="mono">/gallery/</span> 更是連 meta description 都沒有。</p>
+    <div class="fix"><b>建議首頁標題改為：</b><br>
+      <span class="mono">FLYING CASE 木箱起飛影像｜高雄 3D 動畫・特效・TVC/MV 影片製作</span><br>
+      並為每一頁補上 60–80 字、含關鍵字的 meta description。</div>
+  </div>
+</section>
+
+<!-- ============ P2 ============ -->
+<section class="sec" style="margin-top:34px">
+  <h2 class="sh"><span class="tag p2">P2</span>收尾細節<span class="desc">不急，但做完整體質感會明顯不同</span></h2>
+
+  <div class="item">
+    <h3><span class="num">10</span>孤兒頁與重複內容仍留在 sitemap</h3>
+    <ul>
+      <li><span class="mono">/2025/08/05/hello-world/</span> — WordPress 預設的「Hello World!」文章仍公開發佈中，建議直接刪除</li>
+      <li><span class="mono">/team/</span>（Crew）— 站內沒有任何入口可以連到</li>
+      <li><span class="mono">/film-3d-showcase/</span> 與 <span class="mono">/應用產業/</span> 內容完全重複，會互相稀釋 SEO 權重
+        → 擇一設 canonical 或改為 noindex</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">11</span>同一頁出現兩個 H1</h3>
+    <p><span class="mono">/應用產業/</span> 同時有站台名稱與頁面標題兩個 <span class="mono">&lt;h1&gt;</span>。
+      站台名稱應改用 <span class="mono">&lt;p&gt;</span> 或 <span class="mono">&lt;div&gt;</span>，每頁只保留一個 H1。</p>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">12</span>圖片 alt 大量缺失</h3>
+    <p>作品展示頁四顆按鈕的 <span class="mono">alt</span> 全為空字串；
+      服務項目頁的 <span class="mono">001~010</span> 圖檔也沒有描述性 alt。
+      這同時影響無障礙與圖片搜尋流量。</p>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">13</span>同頁 9 支影片同時自動播放</h3>
+    <p><span class="mono">/應用產業/</span> 頁面內有 9 支 <span class="mono">autoplay loop</span> 影片同時播放，
+      手機省電模式會直接阻擋，且非常耗電與耗流量。</p>
+    <div class="fix"><b>解法：</b>改為 <span class="mono">preload="none"</span> ＋ 點擊播放，或平時只顯示 poster 靜態圖。</div>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">14</span>沒有英文版</h3>
+    <p>既有 AC600 換箱機這類設備商客戶，也承接政府標案，建議增設 <span class="mono">/en/</span> 英文版，
+      至少涵蓋首頁、服務、作品三頁。</p>
+  </div>
+
+  <div class="item">
+    <h3><span class="num">15</span>頁尾仍掛著 WordPress.com 官方工具列</h3>
+    <p>訪客可見「註冊／登入／複製短網址／回報此內容／管理訂閱」等 WordPress.com 官方連結
+      （<span class="mono">wpcom-actionbar</span>），會削弱自有品牌感。升級方案後可移除。</p>
+  </div>
+</section>
+
+<!-- ============ ACTION ============ -->
+<section class="sec pb">
+  <h2 class="sh"><span class="tag go">本週</span>最省力的三件事<span class="desc">投報率由高至低排序</span></h2>
+  <div class="checklist">
+    <div class="chk">
+      <div class="box"></div>
+      <div>
+        <div class="t">1. 把 6 支大 GIF 全部轉成 MP4</div>
+        <div class="d">全站總重量可從約 600 MB 降至約 15 MB。這一件事的效益，大過其他所有優化加起來的總和。</div>
+      </div>
+      <div class="im">效益 ★★★</div>
+    </div>
+    <div class="chk">
+      <div class="box"></div>
+      <div>
+        <div class="t">2. 首頁補上一屏文案 ＋ 兩顆 CTA ＋ 精選 6 支作品</div>
+        <div class="d">讓訪客在 5 秒內知道「你們是誰、做什麼、下一步按哪裡」。</div>
+      </div>
+      <div class="im">效益 ★★★</div>
+    </div>
+    <div class="chk">
+      <div class="box"></div>
+      <div>
+        <div class="t">3. 導覽列三個連結改回 flying-case.com，並關掉留言區</div>
+        <div class="d">兩個後台設定即可完成，耗時約 10 分鐘。</div>
+      </div>
+      <div class="im">效益 ★★</div>
+    </div>
+  </div>
+
+  <h2 class="sh" style="margin-top:30px"><span class="tag p1">接續</span>第二階段（2–4 週）</h2>
+  <div class="checklist">
+    <div class="chk"><div class="box"></div><div>
+      <div class="t">4. 重做作品展示頁</div>
+      <div class="d">每支作品補上客戶名、片型、我方負責環節、年份片長；URL 改為語意化路徑。</div></div></div>
+    <div class="chk"><div class="box"></div><div>
+      <div class="t">5. 安裝 GA4（必要時加 Meta Pixel）</div>
+      <div class="d">開始累積流量與轉換資料，後續優化才有依據。</div></div></div>
+    <div class="chk"><div class="box"></div><div>
+      <div class="t">6. 擴充聯絡表單欄位，電話改為可點擊撥號</div>
+      <div class="d">加入公司名、需求類型、預算區間、期望上線日；補地址、Google Map、統編、LINE QR。</div></div></div>
+    <div class="chk"><div class="box"></div><div>
+      <div class="t">7. 修正 SEO 標題與描述，加入 Organization Schema</div>
+      <div class="d">首頁標題縮短為 30 字內；每頁補 meta description。</div></div></div>
+    <div class="chk"><div class="box"></div><div>
+      <div class="t">8. 清理孤兒頁與重複內容</div>
+      <div class="d">刪除 Hello World! 文章；處理 /film-3d-showcase/ 與 /應用產業/ 的重複。</div></div></div>
+  </div>
+
+  <div class="foot">
+    本報告之數據來源為 2026-08-26 對 flying-case.com 全站 HTML 原始碼與各資源 HTTP <span class="mono">content-length</span> 之實際量測結果。
+    未包含視覺呈現、跨瀏覽器相容性與實機 Lighthouse 效能評分。
+  </div>
+</section>
+
+</body>
+</html>

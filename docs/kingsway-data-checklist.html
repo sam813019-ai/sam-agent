@@ -1,0 +1,400 @@
+<title>KINGSWAY 網站待補資料</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
+
+<style>
+:root{
+  --ground:#FBF9F5; --surface:#FFFFFF; --surface-2:#F5F1E9;
+  --ink:#231F1A; --ink-2:#4A423A; --muted:#6E6559;
+  --rule:#E3DCCE; --rule-soft:#EFE9DD;
+  --brass:#8A6D2F; --brass-bright:#B29555; --brass-wash:#F7F0DF;
+  --urgent:#9E3A2A; --urgent-wash:#FBEDE9;
+  --soon:#7A6320;
+  --shadow:0 1px 2px rgba(35,31,26,.05), 0 8px 24px rgba(35,31,26,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#14120F; --surface:#1D1A16; --surface-2:#232019;
+    --ink:#EFE9DE; --ink-2:#CFC6B7; --muted:#9A9084;
+    --rule:#332E26; --rule-soft:#282419;
+    --brass:#D8B96A; --brass-bright:#E8CE8C; --brass-wash:#2A2418;
+    --urgent:#E0876F; --urgent-wash:#2E1E19;
+    --soon:#C9AC5E;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#14120F; --surface:#1D1A16; --surface-2:#232019;
+  --ink:#EFE9DE; --ink-2:#CFC6B7; --muted:#9A9084;
+  --rule:#332E26; --rule-soft:#282419;
+  --brass:#D8B96A; --brass-bright:#E8CE8C; --brass-wash:#2A2418;
+  --urgent:#E0876F; --urgent-wash:#2E1E19;
+  --soon:#C9AC5E;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:'Noto Sans TC','PingFang TC',system-ui,sans-serif;
+  font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased;
+}
+.page{max-width:860px; margin:0 auto; padding:56px 24px 72px;}
+
+/* ── 抬頭 ── */
+.masthead{border-bottom:1px solid var(--rule); padding-bottom:26px; margin-bottom:34px;}
+.wordmark{
+  font-family:'Cormorant Garamond',Georgia,serif; font-weight:700;
+  font-size:clamp(30px,6vw,44px); letter-spacing:.18em; color:var(--brass);
+  line-height:1; margin:0;
+}
+.wordmark-sub{
+  font-size:10px; letter-spacing:.42em; color:var(--muted);
+  text-transform:uppercase; margin:10px 0 0;
+}
+.doc-title{
+  font-family:'Cormorant Garamond',Georgia,serif; font-weight:600;
+  font-size:clamp(24px,4.6vw,32px); color:var(--ink); margin:26px 0 6px;
+  text-wrap:balance; letter-spacing:.02em;
+}
+.doc-meta{font-size:13.5px; color:var(--muted); margin:0;}
+.doc-meta b{color:var(--ink-2); font-weight:500;}
+
+/* ── 現況 ── */
+.status{
+  background:var(--surface); border:1px solid var(--rule); border-radius:4px;
+  padding:22px 24px; margin-bottom:14px; box-shadow:var(--shadow);
+}
+.status-live{
+  display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  font-size:15.5px; margin:0 0 14px; padding-bottom:14px;
+  border-bottom:1px dashed var(--rule);
+}
+.dot{width:8px; height:8px; border-radius:50%; background:var(--brass); flex:0 0 8px; transform:translateY(-2px);}
+.status-live b{font-weight:700;}
+.status-live a{color:var(--brass); text-decoration:none; border-bottom:1px solid var(--rule);}
+.status-live a:hover{border-bottom-color:var(--brass);}
+.status p{margin:0 0 8px; font-size:14.5px; color:var(--ink-2);}
+.status p:last-child{margin-bottom:0;}
+.status ul{margin:10px 0 0; padding-left:0; list-style:none;}
+.status li{
+  font-size:14.5px; color:var(--ink-2); padding:6px 0 6px 20px; position:relative; line-height:1.7;
+}
+.status li::before{
+  content:""; position:absolute; left:2px; top:15px;
+  width:6px; height:6px; border-radius:50%; background:var(--urgent);
+}
+.status li b{color:var(--ink);}
+
+/* ── 分組 ── */
+.tier{margin-top:40px;}
+.tier-head{display:flex; align-items:center; gap:12px; margin-bottom:4px;}
+.tier-mark{width:3px; height:26px; border-radius:2px; flex:0 0 3px;}
+.tier-1 .tier-mark{background:var(--urgent);}
+.tier-2 .tier-mark{background:var(--soon);}
+.tier-3 .tier-mark{background:var(--rule);}
+.tier-name{
+  font-family:'Cormorant Garamond',Georgia,serif; font-weight:600;
+  font-size:23px; letter-spacing:.03em; margin:0; color:var(--ink);
+}
+.tier-note{font-size:13.5px; color:var(--muted); margin:0 0 18px 15px;}
+
+.rows{display:flex; flex-direction:column; gap:10px;}
+.row{
+  display:grid; grid-template-columns:26px 1fr; gap:14px;
+  background:var(--surface); border:1px solid var(--rule); border-radius:4px;
+  padding:16px 18px; box-shadow:var(--shadow);
+}
+.box{
+  width:18px; height:18px; border:1.5px solid var(--brass); border-radius:2px;
+  margin-top:5px;
+}
+.row h3{
+  font-size:16.5px; font-weight:700; margin:0 0 3px; color:var(--ink);
+  letter-spacing:.01em;
+}
+.row .why{font-size:13.5px; color:var(--muted); margin:0 0 10px;}
+.spec{
+  background:var(--surface-2); border-radius:3px; padding:11px 14px;
+  font-size:13.5px; line-height:1.85; color:var(--ink-2);
+}
+.spec b{color:var(--ink); font-weight:500;}
+.spec code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px;
+  background:var(--brass-wash); color:var(--brass); padding:1px 6px; border-radius:3px;
+}
+.flag{
+  display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  padding:2px 9px; border-radius:2px; vertical-align:2px; margin-left:8px; font-weight:500;
+}
+.flag-urgent{background:var(--urgent-wash); color:var(--urgent);}
+
+/* ── 後台 ── */
+.panel{
+  margin-top:44px; background:var(--brass-wash); border:1px solid var(--rule);
+  border-left:3px solid var(--brass); border-radius:0 4px 4px 0; padding:24px 26px;
+}
+.panel h2{
+  font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; font-size:22px;
+  margin:0 0 8px; color:var(--ink); letter-spacing:.02em;
+}
+.panel p{font-size:14.5px; color:var(--ink-2); margin:0 0 12px;}
+.panel p:last-child{margin-bottom:0;}
+.panel .url{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px;
+  color:var(--brass); word-break:break-all;
+}
+.panel ol{margin:10px 0 0; padding-left:20px; font-size:14px; color:var(--ink-2); line-height:1.9;}
+
+/* ── 拍照建議 ── */
+.shots{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:16px;}
+.shot{background:var(--surface); border:1px solid var(--rule); border-radius:4px; padding:14px 16px;}
+.shot b{display:block; font-size:14.5px; margin-bottom:2px;}
+.shot span{display:block; font-size:13px; color:var(--muted); line-height:1.65;}
+
+.footer{
+  margin-top:52px; padding-top:22px; border-top:1px solid var(--rule);
+  font-size:13px; color:var(--muted); display:flex; justify-content:space-between;
+  gap:16px; flex-wrap:wrap;
+}
+
+@media (max-width:600px){
+  .page{padding:38px 18px 56px;}
+  .row{grid-template-columns:22px 1fr; gap:11px; padding:15px 16px;}
+}
+@page{size:A4; margin:15mm 14mm;}
+@media print{
+  /* 列印一律用淺色，不受瀏覽器深色模式影響 */
+  :root{
+    --ground:#FFFFFF; --surface:#FFFFFF; --surface-2:#F5F1E9;
+    --ink:#1A1713; --ink-2:#3D362E; --muted:#5F564A;
+    --rule:#D8D0BF; --rule-soft:#EFE9DD;
+    --brass:#7A5F26; --brass-bright:#9C8038; --brass-wash:#F7F0DF;
+    --urgent:#8C2F20; --urgent-wash:#FBEDE9; --soon:#6B5518;
+    --shadow:none;
+  }
+  body{background:#fff; font-size:15px; line-height:1.62;}
+  .page{max-width:none; padding:0;}
+  .masthead{padding-bottom:18px; margin-bottom:22px;}
+  .doc-title{margin:16px 0 5px;}
+  .status{padding:16px 18px;}
+  .status li{padding:4px 0 4px 20px; line-height:1.6;}
+  .status li::before{top:13px;}
+  .row .why{margin-bottom:7px;}
+  .spec{line-height:1.72;}
+  .panel{margin-top:26px; padding:18px 20px;}
+  .panel ol{line-height:1.75;}
+  .shots{gap:8px; margin-top:12px;}
+  .shot{padding:11px 13px;}
+  .shot span{line-height:1.55;}
+  /* 卡片本身不切開，但整個區塊允許跨頁，否則會留下大片空白 */
+  .row,.status,.shot,.panel{box-shadow:none; break-inside:avoid;}
+  .tier-head,.masthead{break-inside:avoid;}
+  .tier-head,.tier-note{break-after:avoid;}
+  .tier{margin-top:24px;}
+  .rows{gap:8px;}
+  .row{padding:13px 16px;}
+  .spec{padding:9px 12px;}
+  a{color:inherit;}
+  .status-live a{border-bottom:none;}
+  .footer{margin-top:20px; padding-top:14px;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important;}}
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <p class="wordmark">KINGSWAY</p>
+    <p class="wordmark-sub">Cuisine &amp; Live Music</p>
+    <h1 class="doc-title">網站待補資料清單</h1>
+    <p class="doc-meta">整理日期 <b>2026 年 8 月 21 日</b>　·　對應網站 <b>kingswaycuisine.com</b></p>
+  </header>
+
+  <section class="status">
+    <p class="status-live">
+      <span class="dot"></span>
+      <span><b>網站已正式上線</b>，網域已完成設定，<a href="https://kingswaycuisine.com" target="_blank" rel="noopener noreferrer">kingswaycuisine.com</a> 目前可以正常瀏覽。</span>
+    </p>
+    <p>不過站上有三個地方還是開發期間的示範內容，客人現在點進來就會看到，建議優先處理：</p>
+    <ul>
+      <li><b>「立即訂位」按鈕點了沒有反應</b>——訂位系統連結尚未提供，目前三顆按鈕都是空的。</li>
+      <li><b>菜單是示範用的假菜色與假價格</b>——例如「松露野菇燉飯 480」「Chateau Margaux 2018 8800」，並非貴店實際品項。</li>
+      <li><b>表演節目表停留在 5 月</b>——顯示的場次已經過期三個多月。</li>
+    </ul>
+  </section>
+
+  <!-- ── 立即 ── -->
+  <section class="tier tier-1">
+    <div class="tier-head">
+      <span class="tier-mark"></span>
+      <h2 class="tier-name">立即需要</h2>
+    </div>
+    <p class="tier-note">這四項直接影響客人看到的內容，補上之後網站才算真正對外。</p>
+
+    <div class="rows">
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>訂位系統連結<span class="flag flag-urgent">最優先</span></h3>
+          <p class="why">網站上三顆「立即訂位」按鈕都要靠它，這是全站最主要的行動點。</p>
+          <div class="spec">
+            請提供 <b>inline 訂位系統的店家專屬網址</b>。<br>
+            取得方式：登入 inline 商家後台 → 訂位設定 → 複製對外訂位連結，格式類似 <code>https://inline.app/booking/…</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>完整菜單</h3>
+          <p class="why">目前站上四個分類（精選料理／經典調酒／紅白酒／威士忌）都是示範資料。</p>
+          <div class="spec">
+            每一道品項請提供：<b>中文名稱</b>、<b>英文名稱</b>、<b>簡短介紹</b>（食材或基酒，約 10–20 字）、<b>售價</b>。<br>
+            分類若與現行四類不同，請一併告知要怎麼分。<br>
+            給 Excel、Word、手寫拍照都可以，不需要排版。
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>近期表演場次</h3>
+          <p class="why">現場音樂是主要賣點，過期的節目表比沒有節目表更傷。</p>
+          <div class="spec">
+            每一場請提供：<b>日期</b>、<b>開始與結束時間</b>、<b>表演者名稱</b>、<b>曲風</b>（如 Jazz、R&amp;B、Acoustic）、<b>是否為特別場次</b>。<br>
+            建議一次給未來一至兩個月，之後可自行在後台新增。
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>電話與營業時間</h3>
+          <p class="why">聯絡區目前這兩欄都是空白，手機版也無法一鍵撥號。</p>
+          <div class="spec">
+            <b>訂位電話</b>：格式 07-xxx-xxxx。<br>
+            <b>營業時間</b>：請含每週公休日，例如「週二至週日 18:00–02:00，週一公休」。<br>
+            另請提供一份<b>英文版營業時間</b>，供網站切換英文時顯示。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 本週 ── -->
+  <section class="tier tier-2">
+    <div class="tier-head">
+      <span class="tier-mark"></span>
+      <h2 class="tier-name">本週內補上</h2>
+    </div>
+    <p class="tier-note">不影響網站運作，但會明顯影響第一印象與到店轉換。</p>
+
+    <div class="rows">
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>餐廳實拍照片</h3>
+          <p class="why">目前全站只有 Logo，故事區與環境介紹都還是空的灰色區塊。</p>
+          <div class="spec">
+            <b>橫式優先</b>、解析度越高越好（手機直出即可，請勿套濾鏡或壓縮傳送）。<br>
+            傳送方式：Google 雲端硬碟或 LINE 傳原始檔皆可。建議拍攝內容見文末。
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>Google 地圖嵌入碼</h3>
+          <p class="why">聯絡區的地圖位置目前是空的，客人無法直接導航。</p>
+          <div class="spec">
+            Google 地圖搜尋店名 → 分享 → <b>嵌入地圖</b> → 複製整段 <code>&lt;iframe&gt;</code> 貼給我們即可。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 有空 ── -->
+  <section class="tier tier-3">
+    <div class="tier-head">
+      <span class="tier-mark"></span>
+      <h2 class="tier-name">有空再補</h2>
+    </div>
+    <p class="tier-note">缺了不影響使用，補上更完整。</p>
+
+    <div class="rows">
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>Facebook 粉絲專頁網址</h3>
+          <div class="spec">頁尾社群區使用。目前僅有 Instagram（<code>@kingsway_cuisine</code>）已串接。</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>LINE 官方帳號</h3>
+          <div class="spec">請提供 @ID 或加好友連結，供頁尾與行動版聯絡使用。</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="box"></span>
+        <div>
+          <h3>菜單英文翻譯</h3>
+          <div class="spec">
+            網站有中英雙語切換。若菜單只給中文，英文版會顯示中文內容。<br>
+            酒單品項多為原文，通常不需另譯；料理與調酒名稱建議補上英文。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 後台 ── -->
+  <section class="panel">
+    <h2>這些資料，之後貴店可以自己改</h2>
+    <p>網站附有專屬後台，菜單、表演場次、電話、營業時間、社群連結都能自行更新，不需要再透過我們。</p>
+    <p class="url">kingswaycuisine.com/studio</p>
+    <ol>
+      <li>以指定的 Google 帳號登入</li>
+      <li>左側選單選擇「菜單」「表演」或「網站設定」</li>
+      <li>修改後按右下角儲存，網站約一分鐘內自動更新</li>
+    </ol>
+    <p style="margin-top:14px;">第一次使用時我們會協助操作一次。上面清單中的資料仍請先提供，由我們統一建立初始內容。</p>
+  </section>
+
+  <!-- ── 拍照建議 ── -->
+  <section class="tier">
+    <div class="tier-head">
+      <span class="tier-mark" style="background:var(--brass);"></span>
+      <h2 class="tier-name">照片拍攝建議</h2>
+    </div>
+    <p class="tier-note">四個方向各三到五張，就足以撐起整個網站的視覺。</p>
+    <div class="shots">
+      <div class="shot"><b>空間</b><span>入口、座位區、包廂。建議在營業前燈光已開、桌面整理完畢時拍攝。</span></div>
+      <div class="shot"><b>吧台</b><span>酒櫃全景、調酒師工作中的畫面。可拍出品牌氛圍。</span></div>
+      <div class="shot"><b>餐點與調酒</b><span>招牌品項為主，俯拍與斜角各一。避免使用閃光燈。</span></div>
+      <div class="shot"><b>現場演出</b><span>表演進行中的舞台與觀眾席，最能傳達 Live Music 的定位。</span></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>KINGSWAY 網站待補資料清單</span>
+    <span>2026 / 08 / 21</span>
+  </footer>
+
+</div>
