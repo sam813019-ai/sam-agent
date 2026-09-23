@@ -29,3 +29,4 @@ node_modules/
 # 產生的客戶文件與備份檔
 heiwei-dealer-portal/*.pdf
 *.bak
+data/crm-groupbuy-v1/html/
