@@ -25,3 +25,7 @@ elden-iol-*.zip
 node_modules/
 **/node_modules/
 .DS_Store
+
+# 產生的客戶文件與備份檔
+heiwei-dealer-portal/*.pdf
+*.bak

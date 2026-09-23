@@ -17,7 +17,7 @@ function loadFont() {
 }
 
 module.exports = async function handler(req, res) {
-  const { name, contract_no, start_date } = req.query;
+  const { name, contract_no, start_date, tax_id, owner } = req.query;
   if (!name) return res.status(400).json({ error: 'name required' });
 
   try {
@@ -79,6 +79,39 @@ module.exports = async function handler(req, res) {
       font: latinFont,
       color: DARK
     });
+
+    // ── 4. 統一編號 / 負責人（選填，基底 PDF 無標籤，需自行畫）──
+    // 座標對齊基底 PDF 的「合約字號：」「有效期間：」兩行：
+    // 標籤冒號右緣 x≈0.2321W、行距 0.0262H、值起點 x=0.265W
+    const LABEL_SIZE  = 11;
+    const LABEL_RIGHT = width * 0.2321;
+    const LINE_GAP    = height * 0.0262;
+    let   nextY       = height * 0.370 - LINE_GAP;   // 接在「有效期間」下一行
+
+    // 基底 PDF 的標籤字重較粗；pdf-lib 1.17 的 renderingMode/strokeColor 在 drawText
+    // 沒有作用，因此用多次微位移疊印做出加粗效果。
+    const BOLD_OFFSET = 0.2;
+    const drawCJK = (text, x, y) => {
+      for (const [dx, dy] of [[0,0], [BOLD_OFFSET,0], [0,BOLD_OFFSET], [BOLD_OFFSET,BOLD_OFFSET]]) {
+        page.drawText(text, { x: x + dx, y: y + dy, size: LABEL_SIZE, font: cjkFont, color: DARK });
+      }
+    };
+
+    const drawExtraLine = (label, value, isCJKValue) => {
+      if (!value) return;
+      drawCJK(label, LABEL_RIGHT - cjkFont.widthOfTextAtSize(label, LABEL_SIZE), nextY);
+      if (isCJKValue) {
+        drawCJK(value, width * 0.265, nextY);
+      } else {
+        page.drawText(value, {
+          x: width * 0.265, y: nextY, size: LABEL_SIZE, font: latinFont, color: DARK
+        });
+      }
+      nextY -= LINE_GAP;
+    };
+
+    drawExtraLine('統一編號：', tax_id, false);   // 統編為數字，用 Helvetica
+    drawExtraLine('負責人：',   owner,  true);
 
     // ── 輸出 PDF ──────────────────────────────────
     const outBytes = await pdfDoc.save();
