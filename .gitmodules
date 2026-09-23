@@ -1,0 +1,3 @@
+[submodule "kingsway-website"]
+	url = https://github.com/sam813019-ai/kingsway-website.git
+	path = kingsway-website
