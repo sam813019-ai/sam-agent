@@ -1,0 +1,79 @@
+<!-- ═══════════════ 主打組合 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.lc{
+  --fruit:#E0533C; --fruit-dk:#B33C29; --fruit-soft:#FBE0D8; --fruit-mist:#FEF5F1;
+  --citrus:#E8913F; --citrus-soft:#FDEFDD;
+  --ink:#2C2A28; --muted:#7A6C63; --line:#F0E2D8; --card:#fff; --ok:#5F7F52;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.lc *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.lc img{max-width:100%; height:auto; display:block;}
+.lc :focus-visible{outline:3px solid var(--fruit-dk); outline-offset:3px; border-radius:6px;}
+.lc .lc-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--fruit-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.lc .lc-h2::before{content:""; width:4px; height:18px; background:var(--fruit); border-radius:2px; flex:0 0 4px;}
+.lc .lc-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .lc *,.lc *::before,.lc *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.lc-combos .combos{display:grid; gap:14px;}
+.lc-combos .combo{
+  border-radius:20px; padding:20px;
+  background:linear-gradient(140deg,#FFFBF8,#FBF2EC); border:1.5px solid #EFE0D4;
+}
+.lc-combos .combo.is-hot{background:linear-gradient(140deg,#FFF2EC,#FBE0D8); border-color:#F3CDB9;}
+.lc-combos .combo-tag{
+  display:inline-block; padding:3px 12px; border-radius:20px; background:var(--citrus); color:#fff;
+  font-size:11px; font-weight:700; letter-spacing:.1em; margin-bottom:8px;
+}
+.lc-combos .combo.is-hot .combo-tag{background:linear-gradient(120deg,var(--fruit),var(--fruit-dk));}
+.lc-combos .combo h3{font-size:19px; margin-bottom:4px; letter-spacing:.02em;}
+.lc-combos .contents{font-size:14px; color:var(--muted); margin-bottom:12px; line-height:1.85;}
+.lc-combos .combo-price{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+.lc-combos .combo-now{font-family:'Outfit',sans-serif; font-size:30px; font-weight:700; color:var(--fruit-dk); line-height:1;}
+.lc-combos .combo-was{font-size:14px; color:var(--muted); text-decoration:line-through;}
+.lc-combos .combo-save{display:inline-block; padding:3px 12px; border-radius:20px; background:#fff; font-size:13px; font-weight:700; color:var(--ok);}
+@media (min-width:721px){
+  .lc-combos .combos{grid-template-columns:1fr 1fr;}
+}
+</style>
+
+<section class="lc lc-combos">
+  <h2 class="lc-h2">主打組合</h2>
+  <p class="lc-lead">整組買最省，也最好搭配使用。</p>
+
+  <div class="combos">
+      <article class="combo is-hot">
+        <span class="combo-tag">主打</span>
+        <h3>夏日防曬三重奏</h3>
+        <p class="contents">爆白防曬隔離噴霧 ×1　＋　B 群保濕噴霧 ×1　＋　爆白潤色防曬棒 ×1</p>
+        <div class="combo-price">
+          <span class="combo-now">$1,999</span>
+          <span class="combo-was">原價 $3,020</span>
+          <span class="combo-save">省 $1,021</span>
+        </div>
+      </article>
+
+      <article class="combo">
+        <span class="combo-tag">輕量入門</span>
+        <h3>保濕防曬雙件組</h3>
+        <p class="contents">B 群保濕噴霧 ×1　＋　爆白潤色防曬棒 ×1</p>
+        <div class="combo-price">
+          <span class="combo-now">$1,550</span>
+          <span class="combo-was">原價 $2,180</span>
+          <span class="combo-save">省 $630</span>
+        </div>
+      </article>
+  </div>
+</section>

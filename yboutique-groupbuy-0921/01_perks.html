@@ -1,0 +1,81 @@
+<!-- ═══════════════ 開團好康（生日禮） ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.yb{
+  --gold:#C9A15C; --gold-dk:#8F6A2E; --gold-soft:#F4E4C8; --gold-mist:#FCF6EC;
+  --rose:#DDA089; --rose-soft:#FBE8E0;
+  --ink:#3A2E25; --muted:#8A7565; --line:#F0E4D3; --card:#fff; --ok:#6C8A5E;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.yb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.yb img{max-width:100%; height:auto; display:block;}
+.yb :focus-visible{outline:3px solid var(--gold-dk); outline-offset:3px; border-radius:6px;}
+.yb .yb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--gold-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.yb .yb-h2::before{content:""; width:4px; height:18px; background:var(--gold); border-radius:2px; flex:0 0 4px;}
+.yb .yb-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .yb *,.yb *::before,.yb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.yb-perks .perks{display:grid; gap:12px;}
+.yb-perks .perk{
+  display:flex; gap:14px; align-items:flex-start;
+  background:linear-gradient(140deg,#FFFCF6,#FBF0DF); border:1.5px solid var(--line);
+  border-radius:18px; padding:18px; position:relative;
+}
+.yb-perks .perk-n{
+  flex:0 0 40px; width:40px; height:40px; border-radius:50%;
+  background:linear-gradient(140deg,var(--gold),#E2C283); color:#fff;
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:15px;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 12px rgba(201,161,92,.35);
+}
+.yb-perks .perk b{display:block; font-size:16.5px; color:#5E4522;}
+.yb-perks .perk p{font-size:13.5px; color:var(--muted); margin-top:2px;}
+/* 限量標籤（前 200 名） */
+.yb-perks .tag-limit{
+  display:inline-block; vertical-align:2px; margin-left:6px; padding:1px 8px; border-radius:20px;
+  background:linear-gradient(120deg,var(--rose),#E9B8A5); color:#fff;
+  font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em;
+}
+@media (min-width:721px){ .yb-perks .perks{grid-template-columns:repeat(3,1fr);} .yb-perks .perk{flex-direction:column;} }
+</style>
+
+<section class="yb yb-perks">
+  <h2 class="yb-h2">生日慶好康</h2>
+  <p class="yb-lead">楊楊生日這週，三重禮一起送。</p>
+
+  <div class="perks">
+    <div class="perk">
+      <span class="perk-n">01</span>
+      <div>
+        <b>單筆滿 $1,000 免運</b>
+        <p>台灣本島與離島均適用，以單筆訂單金額計算。</p>
+      </div>
+    </div>
+    <div class="perk">
+      <span class="perk-n">02</span>
+      <div>
+        <b>前 200 名下單送旅行組<span class="tag-limit">限量</span></b>
+        <p>洗面乳 15ml ＋ 水安瓶 15ml，依下單順序計算，送完為止。</p>
+      </div>
+    </div>
+    <div class="perk">
+      <span class="perk-n">03</span>
+      <div>
+        <b>單筆滿 $4,000 送妝前智能 5GF 柔敏膠囊 1 盒</b>
+        <p>正貨一盒直接隨單附贈、不需登記，可與旅行組疊加。</p>
+      </div>
+    </div>
+  </div>
+</section>

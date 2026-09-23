@@ -1,0 +1,99 @@
+<!-- ═══════════════ 團購品項 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     產品圖直接吃 Shopline 圖床，不需要放進 assets/
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.yb{
+  --gold:#C9A15C; --gold-dk:#8F6A2E; --gold-soft:#F4E4C8; --gold-mist:#FCF6EC;
+  --rose:#DDA089; --rose-soft:#FBE8E0;
+  --ink:#3A2E25; --muted:#8A7565; --line:#F0E4D3; --card:#fff; --ok:#6C8A5E;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.yb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.yb img{max-width:100%; height:auto; display:block;}
+.yb :focus-visible{outline:3px solid var(--gold-dk); outline-offset:3px; border-radius:6px;}
+.yb .yb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--gold-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.yb .yb-h2::before{content:""; width:4px; height:18px; background:var(--gold); border-radius:2px; flex:0 0 4px;}
+.yb .yb-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .yb *,.yb *::before,.yb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.yb-items .items{display:grid; gap:14px;}
+.yb-items .item{
+  display:grid; grid-template-columns:104px 1fr; gap:16px; align-items:center;
+  background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px;
+}
+/* 圖框固定 1:1，美編上傳 1200×1200 正方圖即零裁切 */
+.yb-items .item-fig{background:var(--gold-mist); border-radius:14px; aspect-ratio:1/1; overflow:hidden;}
+/* 三張都是情境照（非去背），一律滿版填滿框、不留白邊 */
+.yb-items .item-fig img{width:100%; height:100%; object-fit:cover; object-position:center;}
+.yb-items .fig-spray img{object-position:62% 60%;}  /* 橫幅 3:2：瓶身偏右下 */
+.yb-items .fig-mist  img{object-position:50% 42%;}  /* 直幅 2:3：瓶身偏上 */
+.yb-items .fig-stick img{object-position:48% 52%;}  /* 方形 1:1：接近置中 */
+.yb-items .fig-amp   img{object-position:50% 50%;}  /* 直幅 2:3：瓶身置中 */
+.yb-items .item.is-new .item-fig{background:linear-gradient(150deg,var(--gold-soft),var(--rose-soft));}
+.yb-items .item h3{font-size:18px; font-weight:700; letter-spacing:.02em;}
+.yb-items .tag-new{
+  display:inline-block; vertical-align:2px; margin-left:8px; padding:2px 9px; border-radius:20px;
+  background:linear-gradient(120deg,var(--gold),#E2C283); color:#fff;
+  font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em;
+}
+.yb-items .spec{font-family:'Outfit',sans-serif; font-size:12px; color:var(--muted); letter-spacing:.06em; margin-top:2px;}
+.yb-items .item p.desc{font-size:14px; color:var(--muted); margin-top:6px;}
+@media (min-width:721px){
+  .yb-items .items{grid-template-columns:repeat(2,1fr);}  /* 四項 → 桌機 2×2 */
+  .yb-items .item{grid-template-columns:1fr; text-align:center; padding:20px;}
+}
+</style>
+
+<section class="yb yb-items">
+  <h2 class="yb-h2">團購品項</h2>
+  <p class="yb-lead">楊楊的日常四支：防曬、潤色、保濕、精華一次帶齊。</p>
+
+  <div class="items">
+    <article class="item is-new">
+      <div class="item-fig fig-stick"><img src="https://img.shoplineapp.com/media/image_clips/6a86b154b757ce93911d434e/original.jpg?1787212116=&owner_id=648be21890a1b5008d602f77" alt="HEIWEI 爆白潤色防曬棒 SPF50+" loading="lazy"></div>
+      <div>
+        <h3>爆白潤色防曬棒<span class="tag-new">NEW</span></h3>
+        <p class="spec">SPF50<sup>+</sup> ★★★★｜NET 15g</p>
+        <p class="desc">免沾手推開就好，自帶潤色可當底妝，補防曬不用毀妝。</p>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="item-fig fig-spray"><img src="https://img.shoplineapp.com/media/image_clips/6a86a1da4a84ab3e83e861ee/original.jpg?1787208152=&owner_id=648be21890a1b5008d602f77" alt="HEIWEI 爆白防曬隔離噴霧 2.0" loading="lazy"></div>
+      <div>
+        <h3>爆白防曬隔離噴霧</h3>
+        <p class="spec">SPF40 ★★★★｜150ml</p>
+        <p class="desc">噴一下全身都顧到，防曬同時隔離修飾，抗氧化、防水抗汗。</p>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="item-fig fig-mist"><img src="https://img.shoplineapp.com/media/image_clips/6a86a1b2c90b232686b52554/original.JPG?1787208111=&owner_id=648be21890a1b5008d602f77" alt="HEIWEI B 群保濕噴霧" loading="lazy"></div>
+      <div>
+        <h3>B 群保濕噴霧</h3>
+        <p class="spec">保濕定妝噴霧</p>
+        <p class="desc">冷氣房整天不乾荒，妝前打底、妝後定妝、隨時補水都行。</p>
+      </div>
+    </article>
+    <article class="item">
+      <div class="item-fig fig-amp"><img src="https://img.shoplineapp.com/media/image_clips/6aacf1116c7eda062535dcc2/original.jpeg?1789718799=&owner_id=648be21890a1b5008d602f77" alt="HEIWEI 高端精華水安瓶 50ml" loading="lazy"></div>
+      <div>
+        <h3>高端精華水安瓶</h3>
+        <p class="spec">Ampoule Essence｜50ml</p>
+        <p class="desc">大馬士革玫瑰精華＋撫紋雙胜肽＋玻尿酸，一瓶把水分和彈潤一起補回來。</p>
+      </div>
+    </article>
+  </div>
+</section>

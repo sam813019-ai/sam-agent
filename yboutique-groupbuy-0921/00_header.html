@@ -1,0 +1,141 @@
+<!-- ═══════════════ 首屏／團主形象照／開團倒數 ═══════════════
+     改開團日期：搜尋下方 START 與 END 兩行，以及 .yb-hero 裡的日期文字
+     換形象照：兩張圖已上傳 Shopline 圖床（絕對網址），本機 assets/ 只是備份；換圖要重新上傳再改網址
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* 生日蛋糕游標：整頁套用（含連結與按鈕），手機沒有游標不受影響；熱點設在燭火尖端 */
+body, body a, body button, body [role="button"]{cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cellipse%20cx='16'%20cy='29'%20rx='13'%20ry='2.4'%20fill='%23C9A15C'%20opacity='.55'/%3E%3Crect%20x='5'%20y='18'%20width='22'%20height='10'%20rx='2.5'%20fill='%23F3C9B4'%20stroke='%238F6A2E'%20stroke-width='1.2'/%3E%3Cpath%20d='M5%2020c2.5%200%202.5%202.4%205%202.4s2.5-2.4%205-2.4%202.5%202.4%205%202.4%202.5-2.4%205-2.4%201.5%201.2%202%201.2V18H5z'%20fill='%23FFF8EE'%20stroke='%238F6A2E'%20stroke-width='1.2'/%3E%3Crect%20x='8.5'%20y='11'%20width='15'%20height='7.5'%20rx='2'%20fill='%23F8DDD3'%20stroke='%238F6A2E'%20stroke-width='1.2'/%3E%3Cpath%20d='M8.5%2013c2%200%202%202%203.75%202s1.75-2%203.75-2%202%202%203.75%202%201.75-2%203.75-2V11h-15z'%20fill='%23FFF8EE'%20stroke='%238F6A2E'%20stroke-width='1.2'/%3E%3Crect%20x='14.8'%20y='4.5'%20width='2.4'%20height='6.5'%20rx='.8'%20fill='%23C9A15C'%20stroke='%238F6A2E'%20stroke-width='1'/%3E%3Cpath%20d='M16%20.8c1.6%201.6%202.2%202.6%202.2%203.6a2.2%202.2%200%200%201-4.4%200c0-1%20.6-2%202.2-3.6z'%20fill='%23F0A24B'%20stroke='%238F6A2E'%20stroke-width='1'/%3E%3Ccircle%20cx='16'%20cy='4.2'%20r='.9'%20fill='%23FFF3B0'/%3E%3C/svg%3E") 16 1, auto;}
+
+.yb-hero{
+  --gold:#C9A15C; --gold-dk:#8F6A2E;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  position:relative; overflow:hidden; line-height:1.75;
+  /* 上方香檳色文字帶，色值取自形象照頂端的奶油牆面，讓兩者無縫銜接 */
+  background:linear-gradient(180deg,#FBF3E6 0%,#F7E7D0 55%,#F3DCBF 100%);
+  border-radius:0 0 28px 28px;
+}
+.yb-hero *{box-sizing:border-box; margin:0; padding:0;}
+.yb-hero-img{position:relative; padding-top:300px;}  /* 讓出上方文字帶的高度 */
+.yb-hero-img img{width:100%; display:block;}
+.yb-hero-txt{position:absolute; z-index:2; top:0; left:0; right:0; padding:26px 22px 0; text-align:center;}
+.yb-hero .co{font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.3em; color:#A8865A; text-transform:uppercase;}
+/* 生日花體字：照片上髮夾「Happy Birthday」的呼應 */
+.yb-hero .bday{
+  font-family:'Cormorant Garamond','Times New Roman',serif; font-style:italic; font-weight:500;
+  font-size:30px; line-height:1; letter-spacing:.04em; color:var(--gold-dk); margin-top:10px;
+}
+.yb-hero h1{font-size:29px; font-weight:900; letter-spacing:.05em; margin:6px 0 6px; color:#7A5A2B;}
+.yb-hero .sub{font-size:14.5px; color:#8F6A3A;}
+.yb-hero .date-badge{
+  display:inline-block; margin-top:14px; padding:8px 20px; border-radius:30px;
+  background:rgba(255,255,255,.92); color:#7A5A2B; font-weight:700; font-size:14.5px; letter-spacing:.03em;
+  box-shadow:0 0 0 1px rgba(201,161,92,.35);
+}
+.yb-hero .countdown{display:flex; justify-content:center; gap:7px; margin-top:6px;}
+.yb-hero .cd-cell{background:rgba(255,255,255,.92); border-radius:12px; min-width:58px; padding:8px 5px;}
+.yb-hero .cd-num{font-family:'Outfit',sans-serif; font-size:22px; font-weight:700; line-height:1; color:var(--gold-dk);}
+.yb-hero .cd-lab{font-size:10.5px; color:#A8865A; letter-spacing:.08em; margin-top:3px;}
+.yb-hero .cd-note{font-size:12.5px; color:#8F6A3A; margin-top:14px; letter-spacing:.06em;}
+/* 金色小星光：慶生氛圍，位置固定在文字帶內、不壓到人像 */
+.yb-hero .spark{
+  position:absolute; z-index:1; color:var(--gold); font-size:14px; line-height:1; opacity:.55;
+  animation:yb-twinkle 2.8s ease-in-out infinite;
+}
+.yb-hero .spark.s1{top:22px; left:9%; font-size:12px; animation-delay:0s;}
+.yb-hero .spark.s2{top:74px; left:16%; font-size:18px; animation-delay:.9s;}
+.yb-hero .spark.s3{top:36px; right:11%; font-size:16px; animation-delay:1.6s;}
+.yb-hero .spark.s4{top:118px; right:7%; font-size:11px; animation-delay:.4s;}
+.yb-hero .spark.s5{top:200px; left:6%; font-size:13px; animation-delay:2.1s;}
+@keyframes yb-twinkle{0%,100%{opacity:.25; transform:scale(.85)} 50%{opacity:.85; transform:scale(1.1)}}
+/* 團主名牌 */
+.yb-host{
+  display:flex; align-items:center; gap:12px; justify-content:center;
+  background:rgba(255,255,255,.94); margin:-34px 20px 0; position:relative; z-index:3;
+  border-radius:20px; padding:12px 18px; box-shadow:0 8px 26px rgba(160,120,60,.16);
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+}
+.yb-host img{width:52px; height:52px; border-radius:50%; object-fit:cover; flex:0 0 52px; box-shadow:0 0 0 2px #F4E4C8;}
+.yb-host b{display:block; font-size:16px; color:#7A5A2B;}
+.yb-host span{display:block; font-size:12.5px; color:#8A7565; line-height:1.5;}
+@media (min-width:721px){
+  /* 桌機：左文字右照片兩欄，避免整張直式照撐爆版面 */
+  .yb-hero{max-width:920px; margin:0 auto; border-radius:0 0 28px 28px;}
+  .yb-hero .bday{font-size:40px;}
+  .yb-hero h1{font-size:36px;}
+  .yb-hero-img{padding-top:0; display:grid; grid-template-columns:1fr 1fr; align-items:center;}
+  .yb-hero-img img{order:2; height:520px; object-fit:cover; object-position:50% 18%;}
+  .yb-hero-txt{position:static; order:1; padding:40px 30px; text-align:left;}
+  .yb-hero .countdown{justify-content:flex-start;}
+  .yb-hero .spark.s3,.yb-hero .spark.s4{right:52%;}
+  .yb-host{margin:-38px auto 0; max-width:440px;}
+}
+@media (prefers-reduced-motion:reduce){ .yb-hero *{animation:none;} }
+</style>
+
+<header class="yb-hero">
+  <span class="spark s1" aria-hidden="true">✦</span>
+  <span class="spark s2" aria-hidden="true">✦</span>
+  <span class="spark s3" aria-hidden="true">✦</span>
+  <span class="spark s4" aria-hidden="true">✦</span>
+  <span class="spark s5" aria-hidden="true">✦</span>
+  <div class="yb-hero-img">
+    <img src="https://img.shoplineapp.com/media/image_clips/6aacee5916a427000b4480e7/original.jpg?1789718105=&owner_id=648be21890a1b5008d602f77" alt="團主楊楊的生日形象照">
+    <div class="yb-hero-txt">
+      <p class="co">YB × HEIWEI 何謂美</p>
+      <p class="bday">Happy Birthday</p>
+      <h1>楊楊的生日慶團</h1>
+      <p class="sub">生日這一週，把我最愛用的四支分享給妳。</p>
+      <p class="date-badge">2026 / 9 / 21（一） — 9 / 27（日）</p>
+
+      <p class="cd-note" id="yb-cd-note">距離結團</p>
+      <div class="countdown" id="yb-cd" aria-live="polite">
+        <div class="cd-cell"><div class="cd-num" data-cd="d">--</div><div class="cd-lab">天</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="h">--</div><div class="cd-lab">時</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="m">--</div><div class="cd-lab">分</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="s">--</div><div class="cd-lab">秒</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="yb-host">
+  <img src="https://img.shoplineapp.com/media/image_clips/6aacee5a963f6b09e0a16319/original.jpg?1789718106=&owner_id=648be21890a1b5008d602f77" alt="團主楊楊">
+  <div>
+    <b>團主・楊楊（YB）</b>
+    <span>本團商品皆為 HEIWEI 何謂美官方現貨</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* ── 開團／結團時間，要改日期改這兩行 ── */
+  var START = new Date('2026-09-21T00:00:00+08:00').getTime();
+  var END   = new Date('2026-09-27T23:59:59+08:00').getTime();
+
+  var cd = document.getElementById('yb-cd');
+  var note = document.getElementById('yb-cd-note');
+  if (!cd) return;
+  var cell = {
+    d: cd.querySelector('[data-cd="d"]'), h: cd.querySelector('[data-cd="h"]'),
+    m: cd.querySelector('[data-cd="m"]'), s: cd.querySelector('[data-cd="s"]')
+  };
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick() {
+    var now = Date.now(), target, label;
+    if (now < START)     { target = START; label = '距離開團'; }
+    else if (now <= END) { target = END;   label = '距離結團'; }
+    else { cd.style.display = 'none'; note.textContent = '本團已結束，感謝支持'; return false; }
+    var left = Math.max(0, Math.floor((target - now) / 1000));
+    cell.d.textContent = Math.floor(left / 86400);
+    cell.h.textContent = pad(Math.floor(left % 86400 / 3600));
+    cell.m.textContent = pad(Math.floor(left % 3600 / 60));
+    cell.s.textContent = pad(left % 60);
+    note.textContent = label;
+    return true;
+  }
+  if (tick()) { var t = setInterval(function(){ if (!tick()) clearInterval(t); }, 1000); }
+})();
+</script>

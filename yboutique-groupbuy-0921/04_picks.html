@@ -1,0 +1,45 @@
+<!-- ═══════════════ 主標題區塊：楊楊的生日愛用清單 ═══════════════
+     這支只放標題，下面接商品列表（Shopline 商品直接放在這段之後）。
+     色碼直接寫死、不用 CSS 變數：一來不會被外層主題的 --c-primary 蓋掉，
+     二來貼進 Shopline 也不會因為變數被過濾而失色。
+     副標不要的話，把 <p class="yb-mt-sub"> 那一行刪掉即可。
+     ══════════════════════════════════════════ -->
+<style>
+  .yb-mt{
+    font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+    max-width:820px; margin:52px auto 24px; padding:0 16px; text-align:center; color:#3A2E25;
+  }
+  .yb-mt *{box-sizing:border-box; margin:0; padding:0;}
+  .yb-mt-eyebrow{
+    font-family:'Outfit','Helvetica Neue',Arial,sans-serif;
+    font-size:11px; font-weight:600; letter-spacing:.34em; color:#8F6A2E;
+    text-transform:uppercase; display:block; margin-bottom:12px;
+  }
+  .yb-mt h2{
+    font-size:27px; font-weight:900; letter-spacing:.06em; line-height:1.35; color:#3A2E25;
+  }
+  .yb-mt-sub{font-size:14.5px; color:#8A7565; margin-top:8px !important; letter-spacing:.02em;}
+  /* 標題下方的金色細線與中央菱形 */
+  .yb-mt-rule{
+    display:flex; align-items:center; justify-content:center; gap:10px; margin-top:16px;
+  }
+  .yb-mt-rule i{
+    display:block; width:54px; height:1px;
+    background:linear-gradient(90deg,rgba(201,161,92,0),#C9A15C);
+  }
+  .yb-mt-rule i+i{background:linear-gradient(90deg,#C9A15C,rgba(201,161,92,0));}
+  .yb-mt-rule span{
+    width:7px; height:7px; background:#C9A15C; transform:rotate(45deg); border-radius:1px;
+  }
+  @media (min-width:721px){
+    .yb-mt{margin:64px auto 28px;}
+    .yb-mt h2{font-size:34px;}
+  }
+</style>
+
+<div class="yb-mt">
+  <span class="yb-mt-eyebrow">YANGYANG'S BIRTHDAY PICKS</span>
+  <h2>楊楊的生日愛用清單</h2>
+  <p class="yb-mt-sub">本團商品都在這裡，挑順手的帶回家</p>
+  <div class="yb-mt-rule"><i></i><span></span><i></i></div>
+</div>

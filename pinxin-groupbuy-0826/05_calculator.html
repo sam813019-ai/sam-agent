@@ -1,0 +1,368 @@
+<!-- ═══════════════ 團購試算（互動） ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.px{
+  --rose:#E98BA6; --rose-dk:#C9506E; --rose-soft:#FBE3EA; --rose-mist:#FDF4F7;
+  --gold:#C6A78E; --gold-soft:#F7EEE6;
+  --ink:#3B2A31; --muted:#8A737B; --line:#F2E2E7; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.px *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.px img{max-width:100%; height:auto; display:block;}
+.px :focus-visible{outline:3px solid var(--rose-dk); outline-offset:3px; border-radius:6px;}
+.px .px-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--rose-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.px .px-h2::before{content:""; width:4px; height:18px; background:var(--rose); border-radius:2px; flex:0 0 4px;}
+.px .px-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .px *,.px *::before,.px *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.px-calc .calc{background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden;}
+.px-calc .calc-group{
+  background:var(--rose-mist); color:var(--rose-dk); font-size:12.5px; font-weight:700;
+  letter-spacing:.14em; padding:9px 16px;
+}
+.px-calc .calc-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:12px 16px; border-bottom:1px solid var(--line);}
+.px-calc .calc-row:last-of-type{border-bottom:none;}
+.px-calc .calc-name{font-size:15px; font-weight:700; line-height:1.5;}
+.px-calc .calc-note{display:block; font-size:12px; color:var(--muted); font-weight:400;}
+.px-calc .calc-unit{display:block; font-family:'Outfit',sans-serif; font-size:13px; font-weight:600; color:var(--rose-dk);}
+.px-calc .stepper{display:flex; align-items:center; gap:3px;}
+.px-calc .stepper button{
+  width:42px; height:44px; border-radius:12px; border:1.5px solid var(--line); background:#fff;
+  font-size:19px; line-height:1; color:var(--rose-dk); cursor:pointer;
+  transition:background 180ms ease, border-color 180ms ease;
+}
+.px-calc .stepper button:hover{background:var(--rose-mist); border-color:var(--rose);}
+.px-calc .stepper button:disabled{opacity:.32; cursor:not-allowed;}
+.px-calc .stepper output{font-family:'Outfit',sans-serif; font-size:18px; font-weight:600; min-width:34px; text-align:center;}
+.px-calc .calc-sub{font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; color:var(--rose-dk); text-align:right; grid-column:1/-1; margin-top:-2px;}
+.px-calc .calc-sum{background:linear-gradient(150deg,#FDF4F7,#FBE7EC); padding:18px 16px;}
+.px-calc .sum-row{display:flex; justify-content:space-between; align-items:baseline; font-size:15px; margin-bottom:6px;}
+.px-calc .sum-row.total{font-size:17px; font-weight:700; margin:10px 0 0; padding-top:12px; border-top:1px dashed #E9C9D4;}
+.px-calc .sum-row .num{font-family:'Outfit',sans-serif; font-weight:600;}
+.px-calc .sum-row.total .num{font-size:29px; color:var(--rose-dk); line-height:1;}
+.px-calc .sum-was{color:var(--muted); text-decoration:line-through;}
+.px-calc .sum-save{color:var(--ok); font-weight:700;}
+.px-calc .meter{margin-top:14px;}
+.px-calc .meter+.meter{margin-top:10px;}
+.px-calc .meter-top{display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px;}
+.px-calc .meter-bar{height:8px; border-radius:8px; background:#fff; overflow:hidden;}
+.px-calc .meter-fill{height:100%; width:0; border-radius:8px; background:linear-gradient(90deg,var(--rose),var(--rose-dk)); transition:width 420ms cubic-bezier(.22,.8,.3,1);}
+.px-calc .meter.done .meter-fill{background:linear-gradient(90deg,#57B463,var(--ok));}
+.px-calc .meter.done .meter-top strong{color:var(--ok);}
+.px-calc .warn{
+  display:none; margin-top:14px; background:#fff; border-left:4px solid var(--rose);
+  border-radius:0 12px 12px 0; padding:12px 14px; font-size:13px; color:var(--rose-dk); line-height:1.7;
+}
+.px-calc .warn.show{display:block;}
+.px-calc .calc-hint{font-size:12.5px; color:var(--muted); margin-top:14px; line-height:1.7;}
+</style>
+
+<section class="px px-calc">
+  <h2 class="px-h2">團購試算</h2>
+  <p class="px-lead">選好數量，馬上知道多少錢、省多少、有沒有到免運和贈品門檻。</p>
+
+  <div class="calc" id="px-calc">
+      <div class="calc-group">組合</div>
+
+      <div class="calc-row" data-sku="c1" data-list="3020" data-price="1999">
+        <div class="calc-name">三效防曬組<span class="calc-note">爆白噴霧＋防曬棒＋B 群噴霧</span><span class="calc-unit">$1,999</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="三效防曬組 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="三效防曬組 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="c2" data-list="3570" data-price="2550">
+        <div class="calc-name">B 群保濕噴霧 三入組<span class="calc-note">平均 $850 一瓶</span><span class="calc-unit">$2,550</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="B 群保濕噴霧 三入組 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="B 群保濕噴霧 三入組 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="c3" data-list="2270" data-price="1699">
+        <div class="calc-name">洗顏保濕組<span class="calc-note">洗面乳＋B 群噴霧</span><span class="calc-unit">$1,699</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="洗顏保濕組 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="洗顏保濕組 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="c4" data-list="8390" data-price="5580">
+        <div class="calc-name">洗安蜜 ＋ 魚子亮白化妝水<span class="calc-unit">$5,580</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="洗安蜜 ＋ 魚子亮白化妝水 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="洗安蜜 ＋ 魚子亮白化妝水 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="c5" data-list="16110" data-price="10300">
+        <div class="calc-name">全系列體驗組<span class="calc-note">八件一次到位</span><span class="calc-unit">$10,300</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="全系列體驗組 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="全系列體驗組 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-group">單品</div>
+
+      <div class="calc-row" data-sku="u1" data-list="5660" data-price="3680">
+        <div class="calc-name">洗安蜜三件組<span class="calc-unit">$3,680</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="洗安蜜三件組 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="洗安蜜三件組 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u2" data-list="2730" data-price="1999">
+        <div class="calc-name">魚子亮白化妝水<span class="calc-unit">$1,999</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="魚子亮白化妝水 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="魚子亮白化妝水 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u3" data-list="2290" data-price="1750">
+        <div class="calc-name">水安瓶<span class="calc-unit">$1,750</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="水安瓶 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="水安瓶 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u4" data-list="2290" data-price="1750">
+        <div class="calc-name">蜜蜜霜<span class="calc-unit">$1,750</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="蜜蜜霜 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="蜜蜜霜 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u5" data-list="2050" data-price="1520">
+        <div class="calc-name">白膜淨去角質泥膜<span class="calc-unit">$1,520</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="白膜淨去角質泥膜 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="白膜淨去角質泥膜 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u6" data-list="1490" data-price="1140">
+        <div class="calc-name">5D 養敷面膜（盒）<span class="calc-unit">$1,140</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="5D 養敷面膜（盒） 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="5D 養敷面膜（盒） 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u7" data-list="1190" data-price="899">
+        <div class="calc-name">B 群保濕噴霧<span class="calc-unit">$899</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="B 群保濕噴霧 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="B 群保濕噴霧 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u8" data-list="1160" data-price="855">
+        <div class="calc-name">膠囊<span class="calc-unit">$855</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="膠囊 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="膠囊 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u9" data-list="1080" data-price="850">
+        <div class="calc-name">洗面乳<span class="calc-unit">$850</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="洗面乳 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="洗面乳 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u10" data-list="990" data-price="699">
+        <div class="calc-name">爆白潤色防曬棒<span class="calc-unit">$699</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="爆白潤色防曬棒 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="爆白潤色防曬棒 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="u11" data-list="840" data-price="520">
+        <div class="calc-name">爆白防曬隔離噴霧<span class="calc-unit">$520</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="爆白防曬隔離噴霧 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="爆白防曬隔離噴霧 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-group">加購（需搭配主商品）</div>
+
+      <div class="calc-row" data-sku="a1" data-list="298" data-price="120">
+        <div class="calc-name">5D 養敷面膜（單片）<span class="calc-unit">$120</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="5D 養敷面膜（單片） 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="5D 養敷面膜（單片） 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="a2" data-list="1880" data-price="1350">
+        <div class="calc-name">魚子亮白化妝水 150ml<span class="calc-unit">$1,350</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="魚子亮白化妝水 150ml 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="魚子亮白化妝水 150ml 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="a3" data-list="2050" data-price="999">
+        <div class="calc-name">白膜淨去角質泥膜<span class="calc-unit">$999</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="白膜淨去角質泥膜 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="白膜淨去角質泥膜 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+      <div class="calc-row" data-sku="a4" data-list="990" data-price="650">
+        <div class="calc-name">爆白潤色防曬棒<span class="calc-unit">$650</span></div>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="爆白潤色防曬棒 減一">−</button>
+          <output data-out>0</output>
+          <button type="button" data-step="1" aria-label="爆白潤色防曬棒 加一">＋</button>
+        </div>
+        <div class="calc-sub" data-sub></div>
+      </div>
+
+    <div class="calc-sum">
+      <div class="sum-row"><span>定價合計</span><span class="num sum-was" data-was>$0</span></div>
+      <div class="sum-row"><span>團購省下</span><span class="num sum-save" data-save>$0</span></div>
+      <div class="sum-row total"><span>應付金額</span><span class="num" data-total>$0</span></div>
+
+      <div class="meter" data-meter="ship">
+        <div class="meter-top"><strong>滿 $2,000 免運</strong><span data-meter-gap>還差 $2,000</span></div>
+        <div class="meter-bar"><div class="meter-fill" data-meter-fill></div></div>
+      </div>
+      <div class="meter" data-meter="gift">
+        <div class="meter-top"><strong>滿 $5,000 送好禮</strong><span data-meter-gap>還差 $5,000</span></div>
+        <div class="meter-bar"><div class="meter-fill" data-meter-fill></div></div>
+      </div>
+
+      <p class="warn" data-warn>目前只選了加購品。加購需要搭配任一組合或單品才能下單，請往上加一件主商品。</p>
+
+      <p class="calc-hint">試算結果僅供參考，實際金額以結帳頁面為準。</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  'use strict';
+  var calc = document.getElementById('px-calc');
+  if (!calc) return;
+  var NT = function (n) { return '$' + n.toLocaleString('en-US'); };
+
+  /* ══ 要改價格改 HTML 上每一列的 data-price（團購價）與 data-list（定價）══
+     門檻金額改下面兩行。                                              */
+  var FREE_SHIP = 2000;   /* 滿額免運 */
+  var GIFT      = 5000;   /* 滿額送好禮 */
+
+  var rows = calc.querySelectorAll('.calc-row');
+  var qty = {};
+  Array.prototype.forEach.call(rows, function (r) { qty[r.getAttribute('data-sku')] = 0; });
+
+  var elWas = calc.querySelector('[data-was]');
+  var elSave = calc.querySelector('[data-save]');
+  var elTotal = calc.querySelector('[data-total]');
+  var elWarn = calc.querySelector('[data-warn]');
+  var meters = calc.querySelectorAll('.meter');
+
+  function render() {
+    var total = 0, list = 0, mainCount = 0, addonCount = 0;
+
+    Array.prototype.forEach.call(rows, function (row) {
+      var sku = row.getAttribute('data-sku');
+      var n = qty[sku];
+      var sub = n * parseInt(row.getAttribute('data-price'), 10);
+      total += sub;
+      list  += n * parseInt(row.getAttribute('data-list'), 10);
+      if (sku.charAt(0) === 'a') { addonCount += n; } else { mainCount += n; }
+
+      row.querySelector('[data-out]').textContent = n;
+      row.querySelector('[data-sub]').textContent = n ? NT(sub) : '';
+      row.querySelector('[data-step="-1"]').disabled = (n === 0);
+    });
+
+    elWas.textContent   = NT(list);
+    elSave.textContent  = NT(Math.max(0, list - total));
+    elTotal.textContent = NT(total);
+    elWarn.className = 'warn' + (addonCount > 0 && mainCount === 0 ? ' show' : '');
+
+    Array.prototype.forEach.call(meters, function (m) {
+      var need = m.getAttribute('data-meter') === 'ship' ? FREE_SHIP : GIFT;
+      var done = total >= need;
+      m.querySelector('[data-meter-fill]').style.width = Math.min(100, total / need * 100) + '%';
+      m.classList.toggle('done', done);
+      m.querySelector('[data-meter-gap]').textContent = done ? '已達成 ✓' : '還差 ' + NT(need - total);
+    });
+  }
+
+  Array.prototype.forEach.call(rows, function (row) {
+    var sku = row.getAttribute('data-sku');
+    Array.prototype.forEach.call(row.querySelectorAll('[data-step]'), function (btn) {
+      btn.addEventListener('click', function () {
+        qty[sku] = Math.max(0, Math.min(99, qty[sku] + parseInt(btn.getAttribute('data-step'), 10)));
+        render();
+      });
+    });
+  });
+
+  render();
+})();
+</script>

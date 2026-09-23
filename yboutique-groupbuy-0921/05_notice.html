@@ -1,0 +1,35 @@
+<!-- ═══════════════ 注意事項 ═══════════════
+     色碼直接寫死、不用 CSS 變數：一來不會被外層主題的 --c-primary 蓋掉，
+     二來貼進 Shopline 也不會因為變數被過濾而失色。
+     ══════════════════════════════════════════ -->
+<style>
+  .yb-wrap { font-family: 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif; max-width: 780px; margin: 0 auto; padding: 0 16px; color: #3A2E25; overflow-x: hidden; }
+  .yb-section-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: #8F6A2E; text-transform: uppercase; margin-bottom: 16px; }
+  .yb-section-title::before { content: ''; display: block; width: 4px; height: 18px; background: #C9A15C; border-radius: 2px; }
+  .yb-notice { background: #FCF6EC; border-left: 3px solid #C9A15C; border-radius: 0 10px 10px 0; padding: 16px 20px; font-size: 13px; color: #8A7565; line-height: 2; }
+  .yb-notice strong { color: #8F6A2E; }
+  .yb-notice-item { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: break-word; word-break: break-word; min-width: 0; }
+  .yb-notice-item::before { content: '•'; color: #C9A15C; font-size: 13px; line-height: 2; flex-shrink: 0; }
+  .yb-notice-text { flex: 1; min-width: 0; }
+
+  @media (max-width: 540px) {
+    .yb-section-title { font-size: 12px; letter-spacing: 1px; }
+    .yb-notice { padding: 14px; font-size: 13px; line-height: 1.9; }
+    .yb-notice-item { gap: 6px; }
+  }
+</style>
+
+<div class="yb-wrap">
+  <div style="padding: 28px 0 8px;">
+    <div class="yb-section-title">注意事項</div>
+    <div class="yb-notice">
+      <div class="yb-notice-item"><span class="yb-notice-text">本活動商品為 <strong>現貨販售</strong>，下單即確認出貨安排。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">付款逾時（信用卡／Apple Pay／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">免運優惠以 <strong>單筆訂單金額 $1,000 以上</strong>為計算基準。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">旅行組（<strong>洗面乳 15ml ＋ 水安瓶 15ml</strong>）限 <strong>前 200 名下單者</strong>，依系統訂單成立順序計算，送完為止。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">滿額禮（<strong>妝前智能 5GF 柔敏膠囊 1 盒</strong>）以單筆訂單滿 $4,000 計算，數量有限，贈完為止，恕不折換現金。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">化粧品為個人衛生用品，一經拆封使用恕無法退換，請於收到時確認外包裝完整。</span></div>
+      <div class="yb-notice-item"><span class="yb-notice-text">如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</span></div>
+    </div>
+  </div>
+</div>

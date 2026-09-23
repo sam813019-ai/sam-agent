@@ -1,0 +1,34 @@
+<!-- ═══════════════ 注意事項 ═══════════════
+     色碼直接寫死、不用 CSS 變數：一來不會被外層主題的 --c-primary 蓋掉，
+     二來貼進 Shopline 也不會因為變數被過濾而失色。
+     ══════════════════════════════════════════ -->
+<style>
+  .lc-wrap { font-family: 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif; max-width: 780px; margin: 0 auto; padding: 0 16px; color: #2C2A28; overflow-x: hidden; }
+  .lc-section-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: #B33C29; text-transform: uppercase; margin-bottom: 16px; }
+  .lc-section-title::before { content: ''; display: block; width: 4px; height: 18px; background: #E0533C; border-radius: 2px; }
+  .lc-notice { background: #FEF5F1; border-left: 3px solid #E0533C; border-radius: 0 10px 10px 0; padding: 16px 20px; font-size: 13px; color: #7A6C63; line-height: 2; }
+  .lc-notice strong { color: #B33C29; }
+  .lc-notice-item { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: break-word; word-break: break-word; min-width: 0; }
+  .lc-notice-item::before { content: '•'; color: #E0533C; font-size: 13px; line-height: 2; flex-shrink: 0; }
+  .lc-notice-text { flex: 1; min-width: 0; }
+
+  @media (max-width: 540px) {
+    .lc-section-title { font-size: 12px; letter-spacing: 1px; }
+    .lc-notice { padding: 14px; font-size: 13px; line-height: 1.9; }
+    .lc-notice-item { gap: 6px; }
+  }
+</style>
+
+<div class="lc-wrap">
+  <div style="padding: 28px 0 8px;">
+    <div class="lc-section-title">注意事項</div>
+    <div class="lc-notice">
+      <div class="lc-notice-item"><span class="lc-notice-text">本活動商品為 <strong>現貨販售</strong>，下單即確認出貨安排。</span></div>
+      <div class="lc-notice-item"><span class="lc-notice-text">付款逾時（信用卡／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</span></div>
+      <div class="lc-notice-item"><span class="lc-notice-text">免運優惠以 <strong>單筆訂單金額 $1,000 以上</strong>為計算基準。</span></div>
+      <div class="lc-notice-item"><span class="lc-notice-text">滿額禮（<strong>白膜淨去角質泥膜 50ml 正裝</strong>）數量有限，贈完為止，恕不折換現金。</span></div>
+      <div class="lc-notice-item"><span class="lc-notice-text">化粧品為個人衛生用品，一經拆封使用恕無法退換，請於收到時確認外包裝完整。</span></div>
+      <div class="lc-notice-item"><span class="lc-notice-text">如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</span></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,228 @@
+<!-- ═══════════════ 團購試算（互動） ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.lc{
+  --fruit:#E0533C; --fruit-dk:#B33C29; --fruit-soft:#FBE0D8; --fruit-mist:#FEF5F1;
+  --citrus:#E8913F; --citrus-soft:#FDEFDD;
+  --ink:#2C2A28; --muted:#7A6C63; --line:#F0E2D8; --card:#fff; --ok:#5F7F52;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.lc *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.lc img{max-width:100%; height:auto; display:block;}
+.lc :focus-visible{outline:3px solid var(--fruit-dk); outline-offset:3px; border-radius:6px;}
+.lc .lc-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--fruit-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.lc .lc-h2::before{content:""; width:4px; height:18px; background:var(--fruit); border-radius:2px; flex:0 0 4px;}
+.lc .lc-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .lc *,.lc *::before,.lc *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.lc-calc .calc{background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden;}
+.lc-calc .calc-group{
+  background:var(--fruit-mist); color:var(--fruit-dk); font-size:12.5px; font-weight:700;
+  letter-spacing:.14em; padding:9px 16px;
+}
+.lc-calc .calc-row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:12px 16px; border-bottom:1px solid var(--line);}
+.lc-calc .calc-row:last-of-type{border-bottom:none;}
+.lc-calc .calc-name{font-size:15px; font-weight:700; line-height:1.5;}
+.lc-calc .calc-note{display:block; font-size:12px; color:var(--muted); font-weight:400;}
+.lc-calc .calc-unit{display:block; font-family:'Outfit',sans-serif; font-size:13px; font-weight:600; color:var(--fruit-dk);}
+.lc-calc .stepper{display:flex; align-items:center; gap:3px;}
+.lc-calc .stepper button{
+  width:42px; height:44px; border-radius:12px; border:1.5px solid var(--line); background:#fff;
+  font-size:19px; line-height:1; color:var(--fruit-dk); cursor:pointer;
+  transition:background 180ms ease, border-color 180ms ease;
+}
+.lc-calc .stepper button:hover{background:var(--fruit-mist); border-color:var(--fruit);}
+.lc-calc .stepper button:disabled{opacity:.32; cursor:not-allowed;}
+.lc-calc .stepper output{font-family:'Outfit',sans-serif; font-size:18px; font-weight:600; min-width:34px; text-align:center;}
+.lc-calc .calc-sub{font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; color:var(--fruit-dk); text-align:right; grid-column:1/-1; margin-top:-2px;}
+.lc-calc .calc-sum{background:linear-gradient(150deg,#FEF5F1,#FBE2D8); padding:18px 16px;}
+.lc-calc .sum-row{display:flex; justify-content:space-between; align-items:baseline; font-size:15px; margin-bottom:6px;}
+.lc-calc .sum-row.total{font-size:17px; font-weight:700; margin:10px 0 0; padding-top:12px; border-top:1px dashed #EFCDBB;}
+.lc-calc .sum-row .num{font-family:'Outfit',sans-serif; font-weight:600;}
+.lc-calc .sum-row.total .num{font-size:29px; color:var(--fruit-dk); line-height:1;}
+.lc-calc .sum-was{color:var(--muted); text-decoration:line-through;}
+.lc-calc .sum-save{color:var(--ok); font-weight:700;}
+.lc-calc .meter{margin-top:14px;}
+.lc-calc .meter+.meter{margin-top:10px;}
+.lc-calc .meter-top{display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px;}
+.lc-calc .meter-bar{height:8px; border-radius:8px; background:#fff; overflow:hidden;}
+.lc-calc .meter-fill{height:100%; width:0; border-radius:8px; background:linear-gradient(90deg,var(--fruit),var(--fruit-dk)); transition:width 420ms cubic-bezier(.22,.8,.3,1);}
+.lc-calc .meter.done .meter-fill{background:linear-gradient(90deg,#7FA36B,var(--ok));}
+.lc-calc .meter.done .meter-top strong{color:var(--ok);}
+.lc-calc .calc-hint{font-size:12.5px; color:var(--muted); margin-top:14px; line-height:1.7;}
+</style>
+
+<section class="lc lc-calc">
+  <h2 class="lc-h2">團購試算</h2>
+  <p class="lc-lead">選好數量，馬上知道多少錢、省多少、有沒有到免運和贈品門檻。</p>
+
+  <div class="calc" id="lc-calc">
+    <!-- data-sku 對應下方 JS 的 PRICE；data-list 是定價（用來算「定價合計」） -->
+    <div class="calc-group">主打組合</div>
+
+    <div class="calc-row" data-sku="combo3" data-list="3020">
+      <div class="calc-name">夏日防曬三重奏<span class="calc-note">噴霧 ＋ B 群 ＋ 防曬棒</span><span class="calc-unit">$1,999 / 組</span></div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="夏日防曬三重奏 減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="夏日防曬三重奏 加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-row" data-sku="combo2" data-list="2180">
+      <div class="calc-name">保濕防曬雙件組<span class="calc-note">B 群 ＋ 防曬棒</span><span class="calc-unit">$1,550 / 組</span></div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="保濕防曬雙件組 減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="保濕防曬雙件組 加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-group">單品（買越多單價越低）</div>
+
+    <div class="calc-row" data-sku="stick" data-list="990">
+      <div class="calc-name">爆白潤色防曬棒<span class="calc-note">1 入 $695／2 入以上 $635 一支</span></div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="爆白潤色防曬棒 減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="爆白潤色防曬棒 加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-row" data-sku="baobai" data-list="840">
+      <div class="calc-name">爆白防曬隔離噴霧<span class="calc-note">1 入 $520／2 入 $999／3–4 入 $480 起／5–9 入 $440 起／10 入以上 $420 起</span></div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="爆白防曬隔離噴霧 減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="爆白防曬隔離噴霧 加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-row" data-sku="bspray" data-list="1190">
+      <div class="calc-name">B 群保濕噴霧<span class="calc-note">1–2 入 $899 一瓶／3 入以上 $850 一瓶</span></div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="B 群保濕噴霧 減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="B 群保濕噴霧 加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-sum">
+      <div class="sum-row"><span>定價合計</span><span class="num sum-was" data-was>$0</span></div>
+      <div class="sum-row"><span>團購省下</span><span class="num sum-save" data-save>$0</span></div>
+      <div class="sum-row total"><span>應付金額</span><span class="num" data-total>$0</span></div>
+
+      <div class="meter" data-meter="ship">
+        <div class="meter-top"><strong>滿 $1,000 免運</strong><span data-meter-gap>還差 $1,000</span></div>
+        <div class="meter-bar"><div class="meter-fill" data-meter-fill></div></div>
+      </div>
+      <div class="meter" data-meter="gift">
+        <div class="meter-top"><strong>滿 $4,000 送白膜淨去角質泥膜 50ml</strong><span data-meter-gap>還差 $4,000</span></div>
+        <div class="meter-bar"><div class="meter-fill" data-meter-fill></div></div>
+      </div>
+
+      <p class="calc-hint">試算結果僅供參考，實際金額以結帳頁面為準。組合價與單品階梯價分開計算，兩者可同時購買。</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  'use strict';
+  var calc = document.getElementById('lc-calc');
+  if (!calc) return;
+  var NT = function (n) { return '$' + n.toLocaleString('en-US'); };
+
+  /* ══ 要改價格改這裡 ══════════════════════════════════
+     每個函式收「數量 n」，回傳「這個數量的總價」。
+     門檻金額改下面兩行 FREE_SHIP（免運）與 GIFT（贈品）。
+     ═══════════════════════════════════════════════════ */
+  var FREE_SHIP = 1000;   /* 滿額免運 */
+  var GIFT      = 4000;   /* 滿額送白膜淨去角質泥膜 50ml */
+
+  var PRICE = {
+    /* 組合固定價 */
+    combo3: function (n) { return n * 1999; },   /* 夏日防曬三重奏 */
+    combo2: function (n) { return n * 1550; },   /* 保濕防曬雙件組 */
+
+    /* 爆白潤色防曬棒：1 入 695，2 入以上每支 635 */
+    stick: function (n) { return n === 0 ? 0 : n === 1 ? 695 : n * 635; },
+
+    /* 爆白防曬隔離噴霧：1 入 520／2 入 999／3–4 入 @480／5–9 入 @440／10 入以上 @420 */
+    baobai: function (n) {
+      if (n === 0) return 0;
+      if (n === 1) return 520;
+      if (n === 2) return 999;
+      if (n <= 4)  return n * 480;
+      if (n <= 9)  return n * 440;
+      return n * 420;
+    },
+
+    /* B 群保濕噴霧：1–2 入 @899，3 入以上 @850 */
+    bspray: function (n) { return n === 0 ? 0 : n <= 2 ? n * 899 : n * 850; }
+  };
+  /* ═══════════════════════════════════════════════════ */
+
+  var rows    = calc.querySelectorAll('.calc-row');
+  var qty     = { combo3: 0, combo2: 0, stick: 0, baobai: 0, bspray: 0 };
+  var elWas   = calc.querySelector('[data-was]');
+  var elSave  = calc.querySelector('[data-save]');
+  var elTotal = calc.querySelector('[data-total]');
+  var meters  = calc.querySelectorAll('.meter');
+
+  function render() {
+    var total = 0, list = 0;
+    Array.prototype.forEach.call(rows, function (row) {
+      var sku = row.getAttribute('data-sku');
+      var n   = qty[sku];
+      var sub = PRICE[sku](n);
+      total += sub;
+      list  += n * parseInt(row.getAttribute('data-list'), 10);
+      row.querySelector('[data-out]').textContent = n;
+      row.querySelector('[data-sub]').textContent = n ? NT(sub) : '';
+      row.querySelector('[data-step="-1"]').disabled = (n === 0);
+    });
+
+    elWas.textContent   = NT(list);
+    elSave.textContent  = NT(Math.max(0, list - total));
+    elTotal.textContent = NT(total);
+
+    Array.prototype.forEach.call(meters, function (m) {
+      var need = m.getAttribute('data-meter') === 'ship' ? FREE_SHIP : GIFT;
+      var done = total >= need;
+      m.querySelector('[data-meter-fill]').style.width = Math.min(100, total / need * 100) + '%';
+      m.classList.toggle('done', done);
+      m.querySelector('[data-meter-gap]').textContent = done ? '已達成 ✓' : '還差 ' + NT(need - total);
+    });
+  }
+
+  Array.prototype.forEach.call(rows, function (row) {
+    var sku = row.getAttribute('data-sku');
+    Array.prototype.forEach.call(row.querySelectorAll('[data-step]'), function (btn) {
+      btn.addEventListener('click', function () {
+        qty[sku] = Math.max(0, Math.min(99, qty[sku] + parseInt(btn.getAttribute('data-step'), 10)));
+        render();
+      });
+    });
+  });
+
+  render();
+})();
+</script>

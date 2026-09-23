@@ -1,0 +1,100 @@
+<!-- ═══════════════ 單品團購價 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-prices .pcard{background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; margin-bottom:16px;}
+.gb-prices .pcard:last-child{margin-bottom:0;}
+.gb-prices .pcard-head{background:linear-gradient(135deg,var(--brand),var(--brand-dk)); color:#fff; padding:14px 18px;}
+.gb-prices .pcard.is-new .pcard-head{background:linear-gradient(135deg,var(--sky),#3FB2D6);}
+.gb-prices .pcard-name{font-size:17px; font-weight:700; letter-spacing:.02em;}
+.gb-prices .pcard-orig{font-size:12.5px; opacity:.9; margin-top:2px;}
+.gb-prices .ptable{width:100%; border-collapse:collapse; font-size:15px;}
+.gb-prices .ptable th{background:var(--brand-soft); color:var(--brand-dk); font-size:13px; font-weight:700; padding:10px 12px; text-align:center; letter-spacing:.06em;}
+.gb-prices .pcard.is-new .ptable th{background:var(--sky-soft); color:#1B6A88;}
+.gb-prices .ptable td{padding:12px; text-align:center; border-top:1px solid var(--line);}
+.gb-prices .ptable .qty{font-weight:700;}
+.gb-prices .ptable .price{font-family:'Outfit',sans-serif; font-size:18px; font-weight:700; color:var(--accent);}
+.gb-prices .ptable .unit{font-size:13px; color:var(--muted);}
+.gb-prices .ptable tr.best{background:#FFF9F2;}
+.gb-prices .pcard.is-new .ptable tr.best{background:#F4FBFD;}
+.gb-prices .badge{
+  display:inline-block; margin-left:6px; padding:1px 8px; border-radius:20px;
+  background:var(--accent); color:#fff; font-size:10.5px; font-weight:700; letter-spacing:.06em; vertical-align:1px;
+}
+</style>
+
+<section class="gb gb-prices">
+  <h2 class="gb-h2">單品團購價</h2>
+  <p class="gb-lead">買越多單價越低，數量可跨規格合併結帳。</p>
+
+  <div class="pcard is-new">
+    <div class="pcard-head">
+      <div class="pcard-name">爆白潤色防曬棒 <span style="font-size:11px;letter-spacing:.1em;">NEW</span></div>
+      <div class="pcard-orig">定價 $990</div>
+    </div>
+    <table class="ptable">
+      <thead><tr><th>數量</th><th>團購價</th><th>平均單價</th></tr></thead>
+      <tbody>
+        <tr><td class="qty">1 入</td><td class="price">$695</td><td class="unit">$695 / 支</td></tr>
+        <tr class="best"><td class="qty">2 入<span class="badge">最划算</span></td><td class="price">$1,270</td><td class="unit">$635 / 支</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcard">
+    <div class="pcard-head">
+      <div class="pcard-name">爆白防曬隔離噴霧</div>
+      <div class="pcard-orig">定價 $840</div>
+    </div>
+    <table class="ptable">
+      <thead><tr><th>數量</th><th>團購價</th><th>平均單價</th></tr></thead>
+      <tbody>
+        <tr><td class="qty">1 入</td><td class="price">$520</td><td class="unit">$520 / 瓶</td></tr>
+        <tr><td class="qty">2 入</td><td class="price">$999</td><td class="unit">$499 / 瓶</td></tr>
+        <tr><td class="qty">3 入</td><td class="price">$1,440</td><td class="unit">$480 / 瓶</td></tr>
+        <tr class="best"><td class="qty">5 入<span class="badge">超值</span></td><td class="price">$2,200</td><td class="unit">$440 / 瓶</td></tr>
+        <tr class="best"><td class="qty">10 入<span class="badge">最划算</span></td><td class="price">$4,200</td><td class="unit">$420 / 瓶</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcard">
+    <div class="pcard-head">
+      <div class="pcard-name">B 群保濕噴霧</div>
+      <div class="pcard-orig">定價 $1,190</div>
+    </div>
+    <table class="ptable">
+      <thead><tr><th>數量</th><th>團購價</th><th>平均單價</th></tr></thead>
+      <tbody>
+        <tr><td class="qty">1 入</td><td class="price">$899</td><td class="unit">$899 / 瓶</td></tr>
+        <tr class="best"><td class="qty">3 入<span class="badge">最划算</span></td><td class="price">$2,550</td><td class="unit">$850 / 瓶</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>

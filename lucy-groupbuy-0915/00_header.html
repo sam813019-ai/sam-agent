@@ -1,0 +1,112 @@
+<!-- ═══════════════ 首屏／團主形象照／開團倒數 ═══════════════
+     改開團日期：搜尋下方 START 與 END 兩行，以及 .lc-hero 裡的日期文字
+     換形象照：兩張圖已上傳 Shopline 圖床（絕對網址），本機 assets/ 只是備份；換圖要重新上傳再改網址
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+.lc-hero{
+  --fruit:#E0533C; --fruit-dk:#B33C29;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  position:relative; overflow:hidden; line-height:1.75;
+  /* 上方粉色文字帶，色值取自形象照頂端讓兩者無縫銜接 */
+  background:linear-gradient(180deg,#FEF3EC 0%,#FBE2D2 55%,#F7CDB4 100%);
+  border-radius:0 0 28px 28px;
+}
+.lc-hero *{box-sizing:border-box; margin:0; padding:0;}
+.lc-hero-img{position:relative; padding-top:268px;}  /* 讓出上方文字帶的高度 */
+.lc-hero-img img{width:100%; display:block;}
+.lc-hero-txt{position:absolute; z-index:2; top:0; left:0; right:0; padding:30px 22px 0; text-align:center;}
+.lc-hero .co{font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.3em; color:#B87A5E; text-transform:uppercase;}
+.lc-hero h1{font-size:30px; font-weight:900; letter-spacing:.05em; margin:10px 0 6px; color:#8E3520;}
+.lc-hero .sub{font-size:14.5px; color:#A8583F;}
+.lc-hero .date-badge{
+  display:inline-block; margin-top:14px; padding:8px 20px; border-radius:30px;
+  background:rgba(255,255,255,.92); color:#8E3520; font-weight:700; font-size:14.5px; letter-spacing:.03em;
+}
+.lc-hero .countdown{display:flex; justify-content:center; gap:7px; margin-top:6px;}
+.lc-hero .cd-cell{background:rgba(255,255,255,.92); border-radius:12px; min-width:58px; padding:8px 5px;}
+.lc-hero .cd-num{font-family:'Outfit',sans-serif; font-size:22px; font-weight:700; line-height:1; color:var(--fruit-dk);}
+.lc-hero .cd-lab{font-size:10.5px; color:#B87A5E; letter-spacing:.08em; margin-top:3px;}
+.lc-hero .cd-note{font-size:12.5px; color:#A8583F; margin-top:14px; letter-spacing:.06em;}
+/* 團主名牌 */
+.lc-host{
+  display:flex; align-items:center; gap:12px; justify-content:center;
+  background:rgba(255,255,255,.94); margin:-34px 20px 0; position:relative; z-index:3;
+  border-radius:20px; padding:12px 18px; box-shadow:0 8px 26px rgba(150,80,105,.14);
+}
+.lc-host img{width:52px; height:52px; border-radius:50%; object-fit:cover; flex:0 0 52px;}
+.lc-host b{display:block; font-size:16px; color:#8E3520;}
+.lc-host span{display:block; font-size:12.5px; color:#7A6C63; line-height:1.5;}
+@media (min-width:721px){
+  /* 桌機：左文字右照片兩欄，避免整張直式照撐爆版面 */
+  .lc-hero{max-width:920px; margin:0 auto; border-radius:0 0 28px 28px;}
+  .lc-hero h1{font-size:38px;}
+  .lc-hero-img{padding-top:0; display:grid; grid-template-columns:1fr 1fr; align-items:center;}
+  .lc-hero-img img{order:2; height:500px; object-fit:cover; object-position:50% 16%;}
+  .lc-hero-txt{position:static; order:1; padding:40px 30px; text-align:left;}
+  .lc-hero .countdown{justify-content:flex-start;}
+  .lc-host{margin:-38px auto 0; max-width:440px;}
+}
+@media (prefers-reduced-motion:reduce){ .lc-hero *{animation:none;} }
+</style>
+
+<header class="lc-hero">
+  <div class="lc-hero-img">
+    <img src="https://img.shoplineapp.com/media/image_clips/6aa6ffa1af0efe3d9d0778b9/original.jpg?1789329313=&owner_id=648be21890a1b5008d602f77" alt="團主 Lucy 的形象照">
+    <div class="lc-hero-txt">
+      <p class="co">LUCY × HEIWEI 何謂美</p>
+      <h1>Lucy 的夏季防曬保濕團</h1>
+      <p class="sub">夏天又曬又乾，防曬保濕這三支一次補齊。</p>
+      <p class="date-badge">2026 / 9 / 15（二） — 9 / 20（日）</p>
+
+      <p class="cd-note" id="lc-cd-note">距離結團</p>
+      <div class="countdown" id="lc-cd" aria-live="polite">
+        <div class="cd-cell"><div class="cd-num" data-cd="d">--</div><div class="cd-lab">天</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="h">--</div><div class="cd-lab">時</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="m">--</div><div class="cd-lab">分</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="s">--</div><div class="cd-lab">秒</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="lc-host">
+  <img src="https://img.shoplineapp.com/media/image_clips/6aa6ffa2629d4619dd63f99c/original.jpg?1789329313=&owner_id=648be21890a1b5008d602f77" alt="團主Lucy">
+  <div>
+    <b>團主・Lucy</b>
+    <span>本團商品皆為 HEIWEI 何謂美官方現貨</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* ── 開團／結團時間，要改日期改這兩行 ── */
+  var START = new Date('2026-09-15T00:00:00+08:00').getTime();
+  var END   = new Date('2026-09-20T23:59:59+08:00').getTime();
+
+  var cd = document.getElementById('lc-cd');
+  var note = document.getElementById('lc-cd-note');
+  if (!cd) return;
+  var cell = {
+    d: cd.querySelector('[data-cd="d"]'), h: cd.querySelector('[data-cd="h"]'),
+    m: cd.querySelector('[data-cd="m"]'), s: cd.querySelector('[data-cd="s"]')
+  };
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick() {
+    var now = Date.now(), target, label;
+    if (now < START)     { target = START; label = '距離開團'; }
+    else if (now <= END) { target = END;   label = '距離結團'; }
+    else { cd.style.display = 'none'; note.textContent = '本團已結束，感謝支持'; return false; }
+    var left = Math.max(0, Math.floor((target - now) / 1000));
+    cell.d.textContent = Math.floor(left / 86400);
+    cell.h.textContent = pad(Math.floor(left % 86400 / 3600));
+    cell.m.textContent = pad(Math.floor(left % 3600 / 60));
+    cell.s.textContent = pad(left % 60);
+    note.textContent = label;
+    return true;
+  }
+  if (tick()) { var t = setInterval(function(){ if (!tick()) clearInterval(t); }, 1000); }
+})();
+</script>

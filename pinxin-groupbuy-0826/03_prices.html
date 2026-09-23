@@ -1,0 +1,70 @@
+<!-- ═══════════════ 單品團購價 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.px{
+  --rose:#E98BA6; --rose-dk:#C9506E; --rose-soft:#FBE3EA; --rose-mist:#FDF4F7;
+  --gold:#C6A78E; --gold-soft:#F7EEE6;
+  --ink:#3B2A31; --muted:#8A737B; --line:#F2E2E7; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.px *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.px img{max-width:100%; height:auto; display:block;}
+.px :focus-visible{outline:3px solid var(--rose-dk); outline-offset:3px; border-radius:6px;}
+.px .px-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--rose-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.px .px-h2::before{content:""; width:4px; height:18px; background:var(--rose); border-radius:2px; flex:0 0 4px;}
+.px .px-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .px *,.px *::before,.px *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.px-prices .ptable{width:100%; border-collapse:collapse; font-size:15px; background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden;}
+.px-prices .ptable th,.px-prices .ptable td{padding:14px 10px; border-bottom:1px solid var(--line); vertical-align:middle;}
+.px-prices .ptable thead th{background:var(--rose-mist); color:var(--rose-dk); font-size:12.5px; font-weight:700; letter-spacing:.08em; padding:11px 10px; text-align:center;}
+.px-prices .ptable thead th:first-child{text-align:left; padding-left:16px;}
+.px-prices .ptable tbody th{text-align:left; font-weight:700; font-size:15px; padding-left:16px;}
+.px-prices .ptable tbody th .sub{display:block; font-size:12px; color:var(--muted); font-weight:400; line-height:1.5;}
+.px-prices .tag-new{
+  display:inline-block; vertical-align:2px; margin-left:7px; padding:1px 8px; border-radius:20px;
+  background:linear-gradient(120deg,var(--rose),var(--rose-dk)); color:#fff;
+  font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.1em;
+}
+.px-prices .was{font-family:'Outfit',sans-serif; font-size:13.5px; color:var(--muted); text-decoration:line-through; text-align:center; width:22%;}
+.px-prices .now{font-family:'Outfit',sans-serif; font-size:18px; font-weight:700; color:var(--rose-dk); text-align:center; width:22%;}
+.px-prices .off{font-size:12.5px; color:var(--ok); text-align:center; width:20%; white-space:nowrap;}
+.px-prices .ptable tr:last-child th,.px-prices .ptable tr:last-child td{border-bottom:none;}
+.px-prices .ptable tbody tr:nth-child(odd){background:#FFFDFE;}
+</style>
+
+<section class="px px-prices">
+  <h2 class="px-h2">單品團購價</h2>
+  <p class="px-lead">全品項都可以單買，數量不限，跨品項合併結帳一樣算免運。</p>
+
+  <table class="ptable">
+    <thead>
+      <tr><th scope="col">品項</th><th scope="col">定價</th><th scope="col">團購價</th><th scope="col">折抵</th></tr>
+    </thead>
+    <tbody>
+        <tr><th scope="row">洗安蜜三件組<span class="sub">洗面乳 ＋ 水安瓶 ＋ 蜜蜜霜</span></th><td class="was">$5,660</td><td class="now">$3,680</td><td class="off">省 $1,980</td></tr>
+        <tr><th scope="row">魚子亮白化妝水</th><td class="was">$2,730</td><td class="now">$1,999</td><td class="off">省 $731</td></tr>
+        <tr><th scope="row">水安瓶</th><td class="was">$2,290</td><td class="now">$1,750</td><td class="off">省 $540</td></tr>
+        <tr><th scope="row">蜜蜜霜</th><td class="was">$2,290</td><td class="now">$1,750</td><td class="off">省 $540</td></tr>
+        <tr><th scope="row">白膜淨去角質泥膜</th><td class="was">$2,050</td><td class="now">$1,520</td><td class="off">省 $530</td></tr>
+        <tr><th scope="row">5D 養敷面膜（盒）</th><td class="was">$1,490</td><td class="now">$1,140</td><td class="off">省 $350</td></tr>
+        <tr><th scope="row">B 群保濕噴霧</th><td class="was">$1,190</td><td class="now">$899</td><td class="off">省 $291</td></tr>
+        <tr><th scope="row">膠囊</th><td class="was">$1,160</td><td class="now">$855</td><td class="off">省 $305</td></tr>
+        <tr><th scope="row">洗面乳</th><td class="was">$1,080</td><td class="now">$850</td><td class="off">省 $230</td></tr>
+        <tr><th scope="row">爆白潤色防曬棒<span class="tag-new">NEW</span></th><td class="was">$990</td><td class="now">$699</td><td class="off">省 $291</td></tr>
+        <tr><th scope="row">爆白防曬隔離噴霧</th><td class="was">$840</td><td class="now">$520</td><td class="off">省 $320</td></tr>
+    </tbody>
+  </table>
+</section>

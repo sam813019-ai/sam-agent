@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yboutique × HEIWEI 何謂美｜夏日防曬開團 8/21–8/25</title>
+<meta name="description" content="爆白防曬隔離噴霧、B群保濕噴霧、全新爆白潤色防曬棒，三品項團購價，滿 $1,000 免運、滿 $4,000 送洗面乳。">
+<style>
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0; padding:0 0 56px; background:#FDF9F6; overflow-x:hidden;}
+</style>
+</head>
+<body>
+<!-- ⚠️ 這支 index.html 由 build.sh 自動產生，請勿直接改。
+     要改內容請改對應的 0X_*.html，然後跑：bash build.sh -->
+
+<!-- ═══════════════ 首屏／開團倒數 ═══════════════
+     改開團日期：搜尋下方 START 與 END 這兩行，還有 .gb-hero 裡的日期文字
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+.gb-hero{
+  --sky:#2E9FC9; --pink:#E0668A;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  position:relative; overflow:hidden; text-align:center; line-height:1.75;
+  background:linear-gradient(168deg,#CFE9F4 0%,#EFF7FB 42%,#FBEAF0 78%,#FDF6F2 100%);
+  padding:34px 20px 26px; border-radius:0 0 26px 26px;
+}
+.gb-hero *{box-sizing:border-box; margin:0; padding:0;}
+.gb-hero::before{
+  content:""; position:absolute; top:-80px; right:-70px; width:230px; height:230px; border-radius:50%;
+  background:radial-gradient(circle,rgba(255,238,190,.9) 0%,rgba(255,214,140,.45) 42%,rgba(255,214,140,0) 72%);
+  animation:gb-breathe 6s ease-in-out infinite;
+}
+@keyframes gb-breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+.gb-hero>*{position:relative; z-index:2;}
+.gb-hero .co{font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.3em; color:#3C6675; text-transform:uppercase;}
+.gb-hero h1{font-size:29px; font-weight:900; letter-spacing:.04em; margin:10px 0 6px; color:#123A4B;}
+.gb-hero .sub{font-size:15px; color:#3C6675;}
+/* 副標的斷行：手機才換行，桌機維持一行 */
+.gb-hero .sub .br-m{display:none;}
+@media (max-width:720px){ .gb-hero .sub .br-m{display:inline;} }
+.gb-hero .date-badge{
+  display:inline-block; margin-top:16px; padding:8px 22px; border-radius:30px;
+  background:rgba(255,255,255,.9); color:#123A4B; font-weight:700; font-size:15px; letter-spacing:.04em;
+}
+.gb-hero .countdown{display:flex; justify-content:center; gap:8px; margin-top:16px;}
+.gb-hero .cd-cell{background:rgba(255,255,255,.9); border-radius:12px; min-width:62px; padding:9px 6px;}
+.gb-hero .cd-num{font-family:'Outfit',sans-serif; font-size:24px; font-weight:700; line-height:1; color:var(--pink);}
+.gb-hero .cd-lab{font-size:11px; color:#5E7C88; letter-spacing:.08em; margin-top:3px;}
+.gb-hero .cd-note{font-size:13px; color:#3C6675; margin-top:10px;}
+@media (min-width:721px){ .gb-hero h1{font-size:38px;} }
+@media (prefers-reduced-motion:reduce){ .gb-hero::before{animation:none;} }
+</style>
+
+<header class="gb-hero">
+  <p class="co">Yboutique × HEIWEI 何謂美</p>
+  <h1>夏日防曬三重奏</h1>
+  <p class="sub">噴的、擦的，全套備齊。<br class="br-m">新品爆白潤色防曬棒首度開團。</p>
+  <p class="date-badge">2026 / 8 / 21（四） — 8 / 25（一）</p>
+
+  <div class="countdown" id="gb-cd" aria-live="polite">
+    <div class="cd-cell"><div class="cd-num" data-cd="d">--</div><div class="cd-lab">天</div></div>
+    <div class="cd-cell"><div class="cd-num" data-cd="h">--</div><div class="cd-lab">時</div></div>
+    <div class="cd-cell"><div class="cd-num" data-cd="m">--</div><div class="cd-lab">分</div></div>
+    <div class="cd-cell"><div class="cd-num" data-cd="s">--</div><div class="cd-lab">秒</div></div>
+  </div>
+  <p class="cd-note" id="gb-cd-note">距離結團</p>
+</header>
+
+<script>
+(function () {
+  'use strict';
+  /* ── 開團／結團時間，要改日期改這兩行 ── */
+  var START = new Date('2026-08-21T00:00:00+08:00').getTime();
+  var END   = new Date('2026-08-25T23:59:59+08:00').getTime();
+
+  var cd = document.getElementById('gb-cd');
+  var note = document.getElementById('gb-cd-note');
+  if (!cd) return;
+  var cell = {
+    d: cd.querySelector('[data-cd="d"]'), h: cd.querySelector('[data-cd="h"]'),
+    m: cd.querySelector('[data-cd="m"]'), s: cd.querySelector('[data-cd="s"]')
+  };
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick() {
+    var now = Date.now(), target, label;
+    if (now < START)      { target = START; label = '距離開團'; }
+    else if (now <= END)  { target = END;   label = '距離結團'; }
+    else { cd.style.display = 'none'; note.textContent = '本團已結束，感謝支持'; return false; }
+    var left = Math.max(0, Math.floor((target - now) / 1000));
+    cell.d.textContent = Math.floor(left / 86400);
+    cell.h.textContent = pad(Math.floor(left % 86400 / 3600));
+    cell.m.textContent = pad(Math.floor(left % 3600 / 60));
+    cell.s.textContent = pad(left % 60);
+    note.textContent = label;
+    return true;
+  }
+  if (tick()) { var t = setInterval(function(){ if (!tick()) clearInterval(t); }, 1000); }
+})();
+</script>
+
+<!-- ═══════════════ 團購品項 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-items .items{display:grid; gap:14px;}
+.gb-items .item{
+  display:grid; grid-template-columns:104px 1fr; gap:16px; align-items:center;
+  background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px;
+}
+/* 圖框固定 1:1，美編上傳 1200×1200 正方圖即零裁切 */
+.gb-items .item-fig{
+  background:var(--brand-soft); border-radius:14px;
+  aspect-ratio:1/1; overflow:hidden;
+}
+/* 三張都是情境照（非去背），一律滿版填滿框、不留白邊 */
+.gb-items .item-fig img{width:100%; height:100%; object-fit:cover; object-position:center;}
+/* 各自的視覺重心：現有非正方圖被裁切時主體才不會被切掉；換成 1:1 圖後此設定自動失效 */
+.gb-items .fig-spray img{object-position:62% 60%;}  /* 橫幅 3:2：瓶身偏右下 */
+.gb-items .fig-mist  img{object-position:50% 42%;}  /* 直幅 2:3：瓶身偏上 */
+.gb-items .fig-stick img{object-position:48% 52%;}  /* 方形 1:1：接近置中 */
+.gb-items .item.is-new .item-fig{background:linear-gradient(150deg,var(--sky-soft),var(--pink-soft));}
+.gb-items .item h3{font-size:18px; font-weight:700; letter-spacing:.02em;}
+.gb-items .tag-new{
+  display:inline-block; vertical-align:2px; margin-left:8px; padding:2px 9px; border-radius:20px;
+  background:linear-gradient(120deg,var(--sky),#41B7DA); color:#fff;
+  font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em;
+}
+.gb-items .spec{font-family:'Outfit',sans-serif; font-size:12px; color:var(--muted); letter-spacing:.06em; margin-top:2px;}
+.gb-items .item p.desc{font-size:14px; color:var(--muted); margin-top:6px;}
+@media (min-width:721px){
+  .gb-items .items{grid-template-columns:repeat(3,1fr);}
+  .gb-items .item{grid-template-columns:1fr; text-align:center; padding:20px;}
+}
+</style>
+
+<section class="gb gb-items">
+  <h2 class="gb-h2">團購品項</h2>
+
+  <div class="items">
+    <article class="item is-new">
+      <div class="item-fig fig-stick"><img src="https://img.shoplineapp.com/media/image_clips/6a86b154b757ce93911d434e/original.jpg?1787212116=&owner_id=648be21890a1b5008d602f77" alt="HEIWEI 爆白潤色防曬棒 SPF50+" loading="lazy"></div>
+      <div>
+        <h3>爆白潤色防曬棒<span class="tag-new">NEW</span></h3>
+        <p class="spec">SPF50<sup>+</sup> ★★★★｜NET 15g</p>
+        <p class="desc">免沾手推開就好，自帶潤色可當底妝，補防曬不用毀妝。</p>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="item-fig fig-spray"><img src="https://img.shoplineapp.com/media/image_clips/6a86a1da4a84ab3e83e861ee/original.jpg?1787208152=&owner_id=648be21890a1b5008d602f77" alt="HEIWEI 爆白防曬隔離噴霧 2.0" loading="lazy"></div>
+      <div>
+        <h3>爆白防曬隔離噴霧</h3>
+        <p class="spec">SPF40 ★★★★｜150ml</p>
+        <p class="desc">噴一下全身都顧到，防曬同時隔離修飾，抗氧化、防水抗汗。</p>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="item-fig fig-mist"><img src="https://img.shoplineapp.com/media/image_clips/6a86a1b2c90b232686b52554/original.JPG?1787208111=&owner_id=648be21890a1b5008d602f77" alt="HEIWEI B 群保濕噴霧" loading="lazy"></div>
+      <div>
+        <h3>B 群保濕噴霧</h3>
+        <p class="spec">保濕定妝噴霧</p>
+        <p class="desc">冷氣房整天不乾荒，妝前打底、妝後定妝、隨時補水都行。</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════ 單品團購價 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-prices .pcard{background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; margin-bottom:16px;}
+.gb-prices .pcard:last-child{margin-bottom:0;}
+.gb-prices .pcard-head{background:linear-gradient(135deg,var(--brand),var(--brand-dk)); color:#fff; padding:14px 18px;}
+.gb-prices .pcard.is-new .pcard-head{background:linear-gradient(135deg,var(--sky),#3FB2D6);}
+.gb-prices .pcard-name{font-size:17px; font-weight:700; letter-spacing:.02em;}
+.gb-prices .pcard-orig{font-size:12.5px; opacity:.9; margin-top:2px;}
+.gb-prices .ptable{width:100%; border-collapse:collapse; font-size:15px;}
+.gb-prices .ptable th{background:var(--brand-soft); color:var(--brand-dk); font-size:13px; font-weight:700; padding:10px 12px; text-align:center; letter-spacing:.06em;}
+.gb-prices .pcard.is-new .ptable th{background:var(--sky-soft); color:#1B6A88;}
+.gb-prices .ptable td{padding:12px; text-align:center; border-top:1px solid var(--line);}
+.gb-prices .ptable .qty{font-weight:700;}
+.gb-prices .ptable .price{font-family:'Outfit',sans-serif; font-size:18px; font-weight:700; color:var(--accent);}
+.gb-prices .ptable .unit{font-size:13px; color:var(--muted);}
+.gb-prices .ptable tr.best{background:#FFF9F2;}
+.gb-prices .pcard.is-new .ptable tr.best{background:#F4FBFD;}
+.gb-prices .badge{
+  display:inline-block; margin-left:6px; padding:1px 8px; border-radius:20px;
+  background:var(--accent); color:#fff; font-size:10.5px; font-weight:700; letter-spacing:.06em; vertical-align:1px;
+}
+</style>
+
+<section class="gb gb-prices">
+  <h2 class="gb-h2">單品團購價</h2>
+  <p class="gb-lead">買越多單價越低，數量可跨規格合併結帳。</p>
+
+  <div class="pcard is-new">
+    <div class="pcard-head">
+      <div class="pcard-name">爆白潤色防曬棒 <span style="font-size:11px;letter-spacing:.1em;">NEW</span></div>
+      <div class="pcard-orig">定價 $990</div>
+    </div>
+    <table class="ptable">
+      <thead><tr><th>數量</th><th>團購價</th><th>平均單價</th></tr></thead>
+      <tbody>
+        <tr><td class="qty">1 入</td><td class="price">$695</td><td class="unit">$695 / 支</td></tr>
+        <tr class="best"><td class="qty">2 入<span class="badge">最划算</span></td><td class="price">$1,270</td><td class="unit">$635 / 支</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcard">
+    <div class="pcard-head">
+      <div class="pcard-name">爆白防曬隔離噴霧</div>
+      <div class="pcard-orig">定價 $840</div>
+    </div>
+    <table class="ptable">
+      <thead><tr><th>數量</th><th>團購價</th><th>平均單價</th></tr></thead>
+      <tbody>
+        <tr><td class="qty">1 入</td><td class="price">$520</td><td class="unit">$520 / 瓶</td></tr>
+        <tr><td class="qty">2 入</td><td class="price">$999</td><td class="unit">$499 / 瓶</td></tr>
+        <tr><td class="qty">3 入</td><td class="price">$1,440</td><td class="unit">$480 / 瓶</td></tr>
+        <tr class="best"><td class="qty">5 入<span class="badge">超值</span></td><td class="price">$2,200</td><td class="unit">$440 / 瓶</td></tr>
+        <tr class="best"><td class="qty">10 入<span class="badge">最划算</span></td><td class="price">$4,200</td><td class="unit">$420 / 瓶</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcard">
+    <div class="pcard-head">
+      <div class="pcard-name">B 群保濕噴霧</div>
+      <div class="pcard-orig">定價 $1,190</div>
+    </div>
+    <table class="ptable">
+      <thead><tr><th>數量</th><th>團購價</th><th>平均單價</th></tr></thead>
+      <tbody>
+        <tr><td class="qty">1 入</td><td class="price">$899</td><td class="unit">$899 / 瓶</td></tr>
+        <tr class="best"><td class="qty">3 入<span class="badge">最划算</span></td><td class="price">$2,550</td><td class="unit">$850 / 瓶</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ 組合優惠 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-combos .combos{display:grid; gap:14px;}
+.gb-combos .combo{
+  position:relative; overflow:hidden; border-radius:18px; padding:20px;
+  background:linear-gradient(140deg,#FFF7F0,#FBEFE6); border:1.5px solid #EBD8C6;
+}
+.gb-combos .combo.is-hot{background:linear-gradient(140deg,var(--sky-soft),var(--pink-soft)); border-color:#CFE6F0;}
+.gb-combos .combo-tag{
+  display:inline-block; padding:3px 12px; border-radius:20px; background:var(--accent); color:#fff;
+  font-size:11px; font-weight:700; letter-spacing:.1em; margin-bottom:8px;
+}
+.gb-combos .combo.is-hot .combo-tag{background:linear-gradient(120deg,var(--pink),#C0456B);}
+.gb-combos .combo h3{font-size:19px; margin-bottom:4px;}
+.gb-combos .contents{font-size:14px; color:var(--muted); margin-bottom:12px;}
+.gb-combos .combo-price{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+.gb-combos .combo-now{font-family:'Outfit',sans-serif; font-size:30px; font-weight:700; color:var(--accent); line-height:1;}
+.gb-combos .combo.is-hot .combo-now{color:var(--pink);}
+.gb-combos .combo-was{font-size:14px; color:var(--muted); text-decoration:line-through;}
+.gb-combos .combo-save{display:inline-block; padding:3px 12px; border-radius:20px; background:#fff; font-size:13px; font-weight:700; color:var(--ok);}
+@media (min-width:721px){ .gb-combos .combos{grid-template-columns:1fr 1fr;} }
+</style>
+
+<section class="gb gb-combos">
+  <h2 class="gb-h2">組合優惠</h2>
+  <p class="gb-lead">整組買最省，也最好搭配使用。</p>
+
+  <div class="combos">
+    <article class="combo is-hot">
+      <span class="combo-tag">團購主打</span>
+      <h3>夏日防曬三重奏</h3>
+      <p class="contents">爆白防曬隔離噴霧 ×1　＋　B 群保濕噴霧 ×1　＋　爆白潤色防曬棒 ×1</p>
+      <div class="combo-price">
+        <span class="combo-now">$1,999</span>
+        <span class="combo-was">原價 $3,020</span>
+        <span class="combo-save">省 $1,021</span>
+      </div>
+    </article>
+
+    <article class="combo">
+      <span class="combo-tag">補水 ＋ 防曬</span>
+      <h3>保濕防曬雙件組</h3>
+      <p class="contents">B 群保濕噴霧 ×1　＋　爆白潤色防曬棒 ×1</p>
+      <div class="combo-price">
+        <span class="combo-now">$1,550</span>
+        <span class="combo-was">原價 $2,180</span>
+        <span class="combo-save">省 $630</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════ 團購試算（互動） ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-calc .calc{background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden;}
+.gb-calc .calc-row{display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:16px; border-bottom:1px solid var(--line);}
+.gb-calc .calc-row:last-of-type{border-bottom:none;}
+.gb-calc .calc-name{font-size:15.5px; font-weight:700;}
+.gb-calc .calc-note{font-size:12.5px; color:var(--muted); line-height:1.6;}
+.gb-calc .stepper{display:flex; align-items:center; gap:4px;}
+.gb-calc .stepper button{
+  width:44px; height:44px; border-radius:12px; border:1.5px solid var(--line); background:#fff;
+  font-size:20px; line-height:1; color:var(--brand-dk); cursor:pointer;
+  transition:background 180ms ease, border-color 180ms ease;
+}
+.gb-calc .stepper button:hover{background:var(--brand-soft); border-color:var(--brand);}
+.gb-calc .stepper button:disabled{opacity:.35; cursor:not-allowed;}
+.gb-calc .stepper output{font-family:'Outfit',sans-serif; font-size:19px; font-weight:600; min-width:38px; text-align:center;}
+.gb-calc .calc-sub{font-family:'Outfit',sans-serif; font-size:15px; font-weight:600; color:var(--accent); text-align:right; grid-column:1/-1; margin-top:-4px;}
+.gb-calc .calc-sum{background:var(--brand-soft); padding:18px 16px;}
+.gb-calc .sum-row{display:flex; justify-content:space-between; align-items:baseline; font-size:15px; margin-bottom:6px;}
+.gb-calc .sum-row.total{font-size:17px; font-weight:700; margin:10px 0 0; padding-top:12px; border-top:1px dashed #D9C7B4;}
+.gb-calc .sum-row .num{font-family:'Outfit',sans-serif; font-weight:600;}
+.gb-calc .sum-row.total .num{font-size:29px; color:var(--accent); line-height:1;}
+.gb-calc .sum-was{color:var(--muted); text-decoration:line-through;}
+.gb-calc .sum-save{color:var(--ok); font-weight:700;}
+.gb-calc .meter{margin-top:14px;}
+.gb-calc .meter+.meter{margin-top:10px;}
+.gb-calc .meter-top{display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px;}
+.gb-calc .meter-bar{height:8px; border-radius:8px; background:#fff; overflow:hidden;}
+.gb-calc .meter-fill{height:100%; width:0; border-radius:8px; background:linear-gradient(90deg,var(--brand),var(--accent)); transition:width 420ms cubic-bezier(.22,.8,.3,1);}
+.gb-calc .meter.done .meter-fill{background:linear-gradient(90deg,#57B463,var(--ok));}
+.gb-calc .meter.done .meter-top strong{color:var(--ok);}
+.gb-calc .calc-hint{font-size:12.5px; color:var(--muted); margin-top:14px; line-height:1.7;}
+</style>
+
+<section class="gb gb-calc">
+  <h2 class="gb-h2">團購試算</h2>
+  <p class="gb-lead">選好數量，馬上知道多少錢、省多少、有沒有到免運和贈品門檻。</p>
+
+  <div class="calc" id="gb-calc">
+    <!-- data-sku 對應下方 JS 的 PRICE；data-list 是定價（用來算「原價合計」） -->
+    <div class="calc-row" data-sku="stick" data-list="990">
+      <div>
+        <div class="calc-name">爆白潤色防曬棒</div>
+        <div class="calc-note">1 入 $695／2 入以上 $635 一支</div>
+      </div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="爆白潤色防曬棒減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="爆白潤色防曬棒加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-row" data-sku="baobai" data-list="840">
+      <div>
+        <div class="calc-name">爆白防曬隔離噴霧</div>
+        <div class="calc-note">1 入 $520／2 入 $999／3–4 入 $480 起／5 入以上 $440 起／10 入以上 $420 起</div>
+      </div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="爆白防曬隔離噴霧減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="爆白防曬隔離噴霧加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-row" data-sku="bspray" data-list="1190">
+      <div>
+        <div class="calc-name">B 群保濕噴霧</div>
+        <div class="calc-note">1–2 入 $899 一瓶／3 入以上 $850 一瓶</div>
+      </div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="B 群保濕噴霧減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="B 群保濕噴霧加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-row" data-sku="combo3" data-list="3020">
+      <div>
+        <div class="calc-name">夏日防曬三重奏（組合）</div>
+        <div class="calc-note">噴霧 ＋ B 群 ＋ 防曬棒，一組 $1,999</div>
+      </div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="夏日防曬三重奏減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="夏日防曬三重奏加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-row" data-sku="combo2" data-list="2180">
+      <div>
+        <div class="calc-name">保濕防曬雙件組（組合）</div>
+        <div class="calc-note">B 群 ＋ 防曬棒，一組 $1,550</div>
+      </div>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="保濕防曬雙件組減一">−</button>
+        <output data-out>0</output>
+        <button type="button" data-step="1" aria-label="保濕防曬雙件組加一">＋</button>
+      </div>
+      <div class="calc-sub" data-sub></div>
+    </div>
+
+    <div class="calc-sum">
+      <div class="sum-row"><span>原價合計</span><span class="num sum-was" data-was>$0</span></div>
+      <div class="sum-row"><span>團購省下</span><span class="num sum-save" data-save>$0</span></div>
+      <div class="sum-row total"><span>應付金額</span><span class="num" data-total>$0</span></div>
+
+      <div class="meter" data-meter="ship">
+        <div class="meter-top"><strong>滿 $1,000 免運</strong><span data-meter-gap>還差 $1,000</span></div>
+        <div class="meter-bar"><div class="meter-fill" data-meter-fill></div></div>
+      </div>
+
+      <div class="meter" data-meter="gift">
+        <div class="meter-top"><strong>滿 $4,000 送洗面乳</strong><span data-meter-gap>還差 $4,000</span></div>
+        <div class="meter-bar"><div class="meter-fill" data-meter-fill></div></div>
+      </div>
+
+      <p class="calc-hint">試算結果僅供參考，實際金額以結帳頁面為準。組合價與單品階梯價分開計算，兩者可同時購買。</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  'use strict';
+  var calc = document.getElementById('gb-calc');
+  if (!calc) return;
+  var NT = function (n) { return '$' + n.toLocaleString('en-US'); };
+
+  /* ══ 要改價格改這裡 ══════════════════════════════════
+     每個函式收「數量 n」，回傳「這個數量的總價」。
+     門檻金額改下面兩行 FREE_SHIP（免運）與 GIFT（贈品）。
+     ═══════════════════════════════════════════════════ */
+  var FREE_SHIP = 1000;   /* 滿額免運 */
+  var GIFT      = 4000;   /* 滿額送洗面乳 */
+
+  var PRICE = {
+    /* 爆白潤色防曬棒：1 入 695，2 入以上每支 635 */
+    stick: function (n) { return n === 0 ? 0 : n === 1 ? 695 : n * 635; },
+
+    /* 爆白防曬隔離噴霧：1 入 520／2 入 999／3–4 入 @480／5–9 入 @440／10 入以上 @420 */
+    baobai: function (n) {
+      if (n === 0) return 0;
+      if (n === 1) return 520;
+      if (n === 2) return 999;
+      if (n <= 4)  return n * 480;
+      if (n <= 9)  return n * 440;
+      return n * 420;
+    },
+
+    /* B 群保濕噴霧：1–2 入 @899，3 入以上 @850 */
+    bspray: function (n) { return n === 0 ? 0 : n <= 2 ? n * 899 : n * 850; },
+
+    /* 組合固定價 */
+    combo3: function (n) { return n * 1999; },   /* 夏日防曬三重奏 */
+    combo2: function (n) { return n * 1550; }    /* 保濕防曬雙件組 */
+  };
+  /* ═══════════════════════════════════════════════════ */
+
+  var rows  = calc.querySelectorAll('.calc-row');
+  var qty   = { stick: 0, baobai: 0, bspray: 0, combo3: 0, combo2: 0 };
+  var elWas = calc.querySelector('[data-was]');
+  var elSave = calc.querySelector('[data-save]');
+  var elTotal = calc.querySelector('[data-total]');
+  var meters = calc.querySelectorAll('.meter');
+
+  function render() {
+    var total = 0, list = 0;
+    Array.prototype.forEach.call(rows, function (row) {
+      var sku = row.getAttribute('data-sku');
+      var n = qty[sku];
+      var sub = PRICE[sku](n);
+      total += sub;
+      list  += n * parseInt(row.getAttribute('data-list'), 10);
+      row.querySelector('[data-out]').textContent = n;
+      row.querySelector('[data-sub]').textContent = n ? NT(sub) : '';
+      row.querySelector('[data-step="-1"]').disabled = (n === 0);
+    });
+
+    elWas.textContent   = NT(list);
+    elSave.textContent  = NT(Math.max(0, list - total));
+    elTotal.textContent = NT(total);
+
+    Array.prototype.forEach.call(meters, function (m) {
+      var need = m.getAttribute('data-meter') === 'ship' ? FREE_SHIP : GIFT;
+      var done = total >= need;
+      m.querySelector('[data-meter-fill]').style.width = Math.min(100, total / need * 100) + '%';
+      m.classList.toggle('done', done);
+      m.querySelector('[data-meter-gap]').textContent = done ? '已達成 ✓' : '還差 ' + NT(need - total);
+    });
+  }
+
+  Array.prototype.forEach.call(rows, function (row) {
+    var sku = row.getAttribute('data-sku');
+    Array.prototype.forEach.call(row.querySelectorAll('[data-step]'), function (btn) {
+      btn.addEventListener('click', function () {
+        qty[sku] = Math.max(0, Math.min(99, qty[sku] + parseInt(btn.getAttribute('data-step'), 10)));
+        render();
+      });
+    });
+  });
+
+  render();
+})();
+</script>
+
+<!-- ═══════════════ 下單好康 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-perks .perk{display:flex; gap:14px; align-items:flex-start; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:12px;}
+.gb-perks .perk:last-child{margin-bottom:0;}
+.gb-perks .perk-ic{flex:0 0 42px; width:42px; height:42px; border-radius:50%; background:var(--brand-soft); display:flex; align-items:center; justify-content:center;}
+.gb-perks .perk-ic svg{width:22px; height:22px; stroke:var(--brand-dk); fill:none; stroke-width:1.6;}
+.gb-perks .perk b{display:block; font-size:16px;}
+.gb-perks .perk p{font-size:13.5px; color:var(--muted); margin-top:2px;}
+</style>
+
+<section class="gb gb-perks">
+  <h2 class="gb-h2">下單好康</h2>
+
+  <div class="perk">
+    <span class="perk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 12h18M12 8v12"/><path d="M12 8s-1.6-4-4-4a2 2 0 000 4zM12 8s1.6-4 4-4a2 2 0 010 4z"/></svg></span>
+    <div>
+      <b>單筆滿 $4,000 送洗面乳</b>
+      <p>直接隨單附贈，不需登記，數量有限送完為止。</p>
+    </div>
+  </div>
+
+  <div class="perk">
+    <span class="perk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17.5" cy="18" r="1.8"/></svg></span>
+    <div>
+      <b>單筆滿 $1,000 免運費</b>
+      <p>台灣本島與離島均適用，以單筆訂單金額計算。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 付款方式 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-pay .pay{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+.gb-pay .pay-item{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; text-align:center;}
+.gb-pay .pay-item svg{width:24px; height:24px; stroke:var(--brand-dk); fill:none; stroke-width:1.6; margin:0 auto 6px;}
+.gb-pay .pay-item b{display:block; font-size:14.5px;}
+.gb-pay .pay-item span{display:block; font-size:12px; color:var(--muted); line-height:1.6; margin-top:2px;}
+@media (min-width:721px){ .gb-pay .pay{grid-template-columns:repeat(4,1fr);} }
+</style>
+
+<section class="gb gb-pay">
+  <h2 class="gb-h2">付款方式</h2>
+  <div class="pay">
+    <div class="pay-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/></svg>
+      <b>信用卡</b><span>15 分鐘內完成付款</span>
+    </div>
+    <div class="pay-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h16V20H4z"/><path d="M3 9.5L5 4h14l2 5.5"/><path d="M9 20v-5h6v5"/></svg>
+      <b>超商取貨付款</b><span>取貨時於門市付款</span>
+    </div>
+    <div class="pay-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></svg>
+      <b>超商貨到付款</b><span>送達時付款</span>
+    </div>
+    <div class="pay-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>
+      <b>LINE Pay</b><span>15 分鐘內完成付款</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 運費說明／出貨時程 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-ship .stable{width:100%; border-collapse:collapse; font-size:14px; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden;}
+.gb-ship .stable th{background:var(--brand-soft); color:var(--brand-dk); font-size:13px; padding:10px; text-align:center;}
+.gb-ship .stable td{padding:12px 10px; text-align:center; border-top:1px solid var(--line); color:var(--muted);}
+.gb-ship .stable td:first-child{color:var(--ink); font-weight:700;}
+.gb-ship .free{display:inline-block; padding:2px 10px; border-radius:20px; background:#EAF6EC; color:var(--ok); font-weight:700; font-size:12.5px;}
+.gb-ship .info{background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden;}
+.gb-ship .info-row{display:grid; grid-template-columns:96px 1fr; gap:12px; padding:14px 16px; border-bottom:1px solid var(--line); font-size:14.5px;}
+.gb-ship .info-row:last-child{border-bottom:none;}
+.gb-ship .info-row .k{font-weight:700; color:var(--brand-dk);}
+.gb-ship .info-row .v{color:var(--muted);}
+.gb-ship .gb-h2.second{margin-top:28px;}
+</style>
+
+<section class="gb gb-ship">
+  <h2 class="gb-h2">運費說明</h2>
+  <table class="stable">
+    <thead><tr><th>地區</th><th>寄件方式</th><th>運費</th><th>免運門檻</th></tr></thead>
+    <tbody>
+      <tr><td>台灣本島</td><td>順豐宅配<br>7-11 超商</td><td>$95<br>$65</td><td><span class="free">滿 $1,000 免運</span></td></tr>
+      <tr><td>台灣離島</td><td>郵局宅配<br>7-11 超商</td><td>$95<br>$65</td><td><span class="free">滿 $1,000 免運</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="gb-h2 second">出貨時程</h2>
+  <div class="info">
+    <div class="info-row"><span class="k">現貨出貨</span><span class="v">下單後約 <strong>1–3 個工作天</strong>安排出貨（不含例假日）</span></div>
+    <div class="info-row"><span class="k">結團後</span><span class="v">團購結束後 <strong>3 個工作天內</strong>全數出貨完畢</span></div>
+    <div class="info-row"><span class="k">海外地區</span><span class="v">本團<strong>不開放</strong>海外訂單</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════ 客服資訊 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-svc .info{background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden;}
+.gb-svc .info-row{display:grid; grid-template-columns:96px 1fr; gap:12px; padding:14px 16px; border-bottom:1px solid var(--line); font-size:14.5px;}
+.gb-svc .info-row:last-child{border-bottom:none;}
+.gb-svc .info-row .k{font-weight:700; color:var(--brand-dk);}
+.gb-svc .info-row .v{color:var(--muted);}
+.gb-svc .info-row .v a{color:inherit;}
+</style>
+
+<section class="gb gb-svc">
+  <h2 class="gb-h2">客服資訊</h2>
+  <div class="info">
+    <div class="info-row"><span class="k">官方 LINE</span><span class="v">@heiwei</span></div>
+    <div class="info-row"><span class="k">客服電話</span><span class="v"><a href="tel:0733430072">07-343-0072</a></span></div>
+    <div class="info-row"><span class="k">電子信箱</span><span class="v"><a href="mailto:heiweimei@gmail.com">heiweimei@gmail.com</a></span></div>
+    <div class="info-row"><span class="k">公司地址</span><span class="v">高雄市左營區文敬路 59 號 2 樓</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════ 注意事項 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-notice .notice{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:8px 18px;}
+.gb-notice .notice li{list-style:none; font-size:14px; color:var(--muted); padding:12px 0 12px 20px; position:relative; border-bottom:1px solid var(--line); line-height:1.8;}
+.gb-notice .notice li:last-child{border-bottom:none;}
+.gb-notice .notice li::before{content:""; position:absolute; left:2px; top:22px; width:6px; height:6px; border-radius:50%; background:var(--brand);}
+.gb-notice .notice strong{color:var(--ink);}
+</style>
+
+<section class="gb gb-notice">
+  <h2 class="gb-h2">注意事項</h2>
+  <ul class="notice">
+    <li>本活動商品為<strong>現貨販售</strong>，下單即確認出貨安排。</li>
+    <li>付款逾時（信用卡／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</li>
+    <li>免運與贈品皆以<strong>單筆訂單金額</strong>計算，不同筆訂單恕無法合併。</li>
+    <li>贈品數量有限，送完為止，恕不折換現金或更換其他品項。</li>
+    <li>化粧品為個人衛生用品，一經拆封使用恕無法退換，請於收到時確認外包裝完整。</li>
+    <li>如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</li>
+  </ul>
+</section>
+<footer style="max-width:780px;margin:44px auto 0;padding:22px 16px 0;text-align:center;font-size:13px;color:#6F675F;border-top:1px solid #EAE0D6;font-family:'Noto Sans TC','PingFang TC',sans-serif;">
+  HEIWEI 何謂美 × Yboutique｜2026 夏日防曬開團 8/21–8/25
+</footer>
+</body>
+</html>

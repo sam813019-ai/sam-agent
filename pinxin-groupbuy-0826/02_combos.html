@@ -1,0 +1,113 @@
+<!-- ═══════════════ 主打組合 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.px{
+  --rose:#E98BA6; --rose-dk:#C9506E; --rose-soft:#FBE3EA; --rose-mist:#FDF4F7;
+  --gold:#C6A78E; --gold-soft:#F7EEE6;
+  --ink:#3B2A31; --muted:#8A737B; --line:#F2E2E7; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.px *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.px img{max-width:100%; height:auto; display:block;}
+.px :focus-visible{outline:3px solid var(--rose-dk); outline-offset:3px; border-radius:6px;}
+.px .px-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--rose-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.px .px-h2::before{content:""; width:4px; height:18px; background:var(--rose); border-radius:2px; flex:0 0 4px;}
+.px .px-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .px *,.px *::before,.px *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.px-combos .combos{display:grid; gap:14px;}
+.px-combos .combo{
+  border-radius:20px; padding:20px;
+  background:linear-gradient(140deg,#FFFBF8,#FBF2EC); border:1.5px solid #EFE0D4;
+}
+.px-combos .combo.is-hot{background:linear-gradient(140deg,#FFF3F7,#FBE3EA); border-color:#F2C9D6;}
+.px-combos .combo-tag{
+  display:inline-block; padding:3px 12px; border-radius:20px; background:var(--gold); color:#fff;
+  font-size:11px; font-weight:700; letter-spacing:.1em; margin-bottom:8px;
+}
+.px-combos .combo.is-hot .combo-tag{background:linear-gradient(120deg,var(--rose),var(--rose-dk));}
+.px-combos .combo h3{font-size:19px; margin-bottom:4px; letter-spacing:.02em;}
+.px-combos .contents{font-size:14px; color:var(--muted); margin-bottom:12px; line-height:1.85;}
+.px-combos .combo-price{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+.px-combos .combo-now{font-family:'Outfit',sans-serif; font-size:30px; font-weight:700; color:var(--rose-dk); line-height:1;}
+.px-combos .combo-was{font-size:14px; color:var(--muted); text-decoration:line-through;}
+.px-combos .combo-save{display:inline-block; padding:3px 12px; border-radius:20px; background:#fff; font-size:13px; font-weight:700; color:var(--ok);}
+@media (min-width:721px){
+  .px-combos .combos{grid-template-columns:1fr 1fr;}
+  .px-combos .combo:last-child{grid-column:1/-1;}
+}
+</style>
+
+<section class="px px-combos">
+  <h2 class="px-h2">主打組合</h2>
+  <p class="px-lead">整組買最省，也最好搭配使用。</p>
+
+  <div class="combos">
+      <article class="combo is-hot">
+        <span class="combo-tag">主打</span>
+        <h3>三效防曬組</h3>
+        <p class="contents">爆白防曬隔離噴霧 ×1　＋　爆白潤色防曬棒 ×1　＋　B 群保濕噴霧 ×1</p>
+        <div class="combo-price">
+          <span class="combo-now">$1,999</span>
+          <span class="combo-was">原價 $3,020</span>
+          <span class="combo-save">省 $1,021</span>
+        </div>
+      </article>
+
+      <article class="combo">
+        <span class="combo-tag">回購最多</span>
+        <h3>B 群保濕噴霧 三入組</h3>
+        <p class="contents">B 群保濕噴霧 ×3（平均 $850 一瓶）</p>
+        <div class="combo-price">
+          <span class="combo-now">$2,550</span>
+          <span class="combo-was">原價 $3,570</span>
+          <span class="combo-save">省 $1,020</span>
+        </div>
+      </article>
+
+      <article class="combo">
+        <span class="combo-tag">入門組</span>
+        <h3>洗顏保濕組</h3>
+        <p class="contents">洗面乳 ×1　＋　B 群保濕噴霧 ×1</p>
+        <div class="combo-price">
+          <span class="combo-now">$1,699</span>
+          <span class="combo-was">原價 $2,270</span>
+          <span class="combo-save">省 $571</span>
+        </div>
+      </article>
+
+      <article class="combo">
+        <span class="combo-tag">保養升級</span>
+        <h3>洗安蜜 ＋ 魚子亮白化妝水</h3>
+        <p class="contents">洗安蜜三件組 ×1　＋　魚子亮白化妝水 ×1</p>
+        <div class="combo-price">
+          <span class="combo-now">$5,580</span>
+          <span class="combo-was">原價 $8,390</span>
+          <span class="combo-save">省 $2,810</span>
+        </div>
+      </article>
+
+      <article class="combo is-hot">
+        <span class="combo-tag">全品項</span>
+        <h3>全系列體驗組</h3>
+        <p class="contents">洗安蜜三件組・魚子亮白化妝水・B 群保濕噴霧・膠囊・白膜淨去角質泥膜・5D 養敷面膜（盒）・爆白潤色防曬棒・爆白防曬隔離噴霧　各 ×1</p>
+        <div class="combo-price">
+          <span class="combo-now">$10,300</span>
+          <span class="combo-was">原價 $16,110</span>
+          <span class="combo-save">省 $5,810</span>
+        </div>
+      </article>
+  </div>
+</section>

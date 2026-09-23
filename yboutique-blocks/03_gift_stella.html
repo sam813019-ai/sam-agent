@@ -1,0 +1,132 @@
+<style>
+  .yb-wrap { font-family: 'Noto Sans TC', 'Helvetica Neue', Arial, sans-serif; max-width: 780px; margin: 0 auto; padding: 0 16px; color: #2d2d2d; }
+
+  /* 標題 */
+  .yb-section-title { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #b08d7a; text-transform: uppercase; margin-bottom: 16px; }
+  .yb-section-title::before { content: ''; display: block; width: 4px; height: 18px; background: #c9a98a; border-radius: 2px; flex-shrink: 0; }
+
+  /* 下單即贈 banner */
+  .yb-gift-banner { background: linear-gradient(135deg, #fdf0e8 0%, #fae8d8 100%); border: 2px solid #e8c9aa; border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 18px; margin-bottom: 10px; position: relative; overflow: hidden; }
+  .yb-gift-icon { width: 46px; height: 46px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #a0694a; }
+  .yb-gift-title { font-size: 16px; font-weight: 700; color: #a0694a; margin-bottom: 5px; }
+  .yb-gift-tag { display: inline-block; background: #c9a98a; color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 10px; margin-left: 6px; }
+  .yb-gift-desc { font-size: 14px; font-weight: 600; color: #5a3a22; margin-bottom: 4px; }
+  .yb-gift-limit { font-size: 11px; color: #a88060; }
+
+  /* 贈品印章（備用，預設隱藏） */
+  .yb-gift-stamp {
+    display: none; /* 需要時改 block */
+    position: absolute; top: 50%; right: 28px;
+    transform: translateY(-50%) rotate(-18deg);
+    border: 3px solid rgba(180,30,30,0.75); border-radius: 6px;
+    padding: 6px 14px; text-align: center; pointer-events: none;
+    background: rgba(255,255,255,0.08);
+  }
+  .yb-gift-stamp::before { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(180,30,30,0.35); border-radius: 3px; }
+  .yb-gift-stamp-text { display: block; font-size: 13px; font-weight: 900; letter-spacing: 2px; color: rgba(180,30,30,0.80); line-height: 1.5; white-space: nowrap; }
+
+  /* 滿額禮 tier 列 */
+  .yb-tier-row { background: #fff; border: 1.5px solid #e8c9aa; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .yb-tier-badge { flex-shrink: 0; background: linear-gradient(135deg, #c9a98a, #a0694a); color: #fff; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 7px 16px; text-align: center; line-height: 1.4; white-space: nowrap; }
+  .yb-tier-badge small { display: block; font-size: 10px; font-weight: 400; opacity: 0.88; }
+  .yb-tier-arrow { flex-shrink: 0; color: #c9a98a; font-size: 22px; line-height: 1; }
+  .yb-tier-name { font-size: 14px; font-weight: 700; color: #5a3a22; }
+  .yb-tier-value { font-size: 12px; color: #a88060; margin-top: 3px; }
+
+  /* 免運費 */
+  .yb-free-ship-banner { background: #fff; border: 1.5px solid #c9a98a; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
+  .yb-free-ship-icon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #a0694a; }
+  .yb-free-ship-text { font-size: 14px; font-weight: 700; color: #a0694a; }
+  .yb-free-ship-sub { font-size: 12px; color: #b08d7a; margin-top: 2px; }
+
+  @media (max-width: 540px) {
+    .yb-gift-banner { padding: 16px 14px; gap: 12px; }
+    .yb-gift-icon { width: 38px; height: 38px; }
+    .yb-gift-title { font-size: 14px; }
+    .yb-tier-row { padding: 12px 14px; gap: 10px; }
+    .yb-tier-badge { font-size: 12px; padding: 6px 12px; }
+    .yb-gift-stamp { right: 10px; padding: 5px 10px; }
+    .yb-gift-stamp-text { font-size: 11px; }
+    .yb-free-ship-banner { padding: 12px 14px; }
+  }
+</style>
+
+<div class="yb-wrap">
+  <div style="padding: 28px 0 8px;">
+    <div class="yb-section-title">下單禮 &amp; 滿額禮 &amp; 免運</div>
+
+    <!-- ① 下單即贈 -->
+    <div class="yb-gift-banner">
+      <div class="yb-gift-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 12 20 22 4 22 4 12"/>
+          <rect x="2" y="7" width="20" height="5"/>
+          <line x1="12" y1="22" x2="12" y2="7"/>
+          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="yb-gift-title">
+          下單即贈
+          <span class="yb-gift-tag">限量 100 份</span>
+        </div>
+        <div class="yb-gift-desc">白膜淨去角質泥膜（5ml）</div>
+        <div class="yb-gift-limit">數量有限，贈完為止</div>
+      </div>
+      <!-- 贈品印章：需要時把 display:none 改掉 -->
+      <div class="yb-gift-stamp" aria-label="贈品已全數贈送完畢">
+        <span class="yb-gift-stamp-text">贈品已全數</span>
+        <span class="yb-gift-stamp-text">贈送完畢</span>
+      </div>
+    </div>
+
+    <!-- ② 滿 $3,000 滿額禮 -->
+    <div class="yb-tier-row">
+      <div class="yb-gift-icon" aria-hidden="true">
+        <!-- 星星 icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="yb-gift-title">滿 $3,000 加碼送</div>
+        <div class="yb-gift-desc">光透養膚面膜　一片</div>
+        <div class="yb-gift-limit">市價 $300</div>
+      </div>
+    </div>
+
+    <!-- ③ 滿 $5,000 滿額禮 -->
+    <div class="yb-tier-row">
+      <div class="yb-gift-icon" aria-hidden="true">
+        <!-- 皇冠 icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7z"/>
+          <line x1="5" y1="20" x2="19" y2="20"/>
+        </svg>
+      </div>
+      <div>
+        <div class="yb-gift-title">滿 $5,000 加碼送</div>
+        <div class="yb-gift-desc">活氧 B 群保濕噴霧（100ml）</div>
+        <div class="yb-gift-limit">市價 $1,190</div>
+      </div>
+    </div>
+
+    <!-- ④ 免運費 -->
+    <div class="yb-free-ship-banner">
+      <div class="yb-free-ship-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13"/>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="yb-free-ship-text">單筆消費滿 $1,500 免運費</div>
+        <div class="yb-free-ship-sub">台灣本島 &amp; 離島均適用<br>以單筆訂單金額計算</div>
+      </div>
+    </div>
+
+  </div>
+</div>

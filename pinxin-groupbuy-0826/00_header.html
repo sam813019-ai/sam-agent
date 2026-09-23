@@ -1,0 +1,112 @@
+<!-- ═══════════════ 首屏／團主形象照／開團倒數 ═══════════════
+     改開團日期：搜尋下方 START 與 END 兩行，以及 .px-hero 裡的日期文字
+     換形象照：assets/pinxin_hero.jpg 與 assets/pinxin_avatar.jpg
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+.px-hero{
+  --rose:#E98BA6; --rose-dk:#C9506E;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  position:relative; overflow:hidden; line-height:1.75;
+  /* 上方粉色文字帶，色值取自形象照頂端讓兩者無縫銜接 */
+  background:linear-gradient(180deg,#FDF0F3 0%,#FADCE3 55%,#F7C8D2 100%);
+  border-radius:0 0 28px 28px;
+}
+.px-hero *{box-sizing:border-box; margin:0; padding:0;}
+.px-hero-img{position:relative; padding-top:268px;}  /* 讓出上方文字帶的高度 */
+.px-hero-img img{width:100%; display:block;}
+.px-hero-txt{position:absolute; z-index:2; top:0; left:0; right:0; padding:30px 22px 0; text-align:center;}
+.px-hero .co{font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.3em; color:#A5677C; text-transform:uppercase;}
+.px-hero h1{font-size:30px; font-weight:900; letter-spacing:.05em; margin:10px 0 6px; color:#6E2A40;}
+.px-hero .sub{font-size:14.5px; color:#8A4E62;}
+.px-hero .date-badge{
+  display:inline-block; margin-top:14px; padding:8px 20px; border-radius:30px;
+  background:rgba(255,255,255,.92); color:#6E2A40; font-weight:700; font-size:14.5px; letter-spacing:.03em;
+}
+.px-hero .countdown{display:flex; justify-content:center; gap:7px; margin-top:6px;}
+.px-hero .cd-cell{background:rgba(255,255,255,.92); border-radius:12px; min-width:58px; padding:8px 5px;}
+.px-hero .cd-num{font-family:'Outfit',sans-serif; font-size:22px; font-weight:700; line-height:1; color:var(--rose-dk);}
+.px-hero .cd-lab{font-size:10.5px; color:#A5677C; letter-spacing:.08em; margin-top:3px;}
+.px-hero .cd-note{font-size:12.5px; color:#8A4E62; margin-top:14px; letter-spacing:.06em;}
+/* 團主名牌 */
+.px-host{
+  display:flex; align-items:center; gap:12px; justify-content:center;
+  background:rgba(255,255,255,.94); margin:-34px 20px 0; position:relative; z-index:3;
+  border-radius:20px; padding:12px 18px; box-shadow:0 8px 26px rgba(150,80,105,.14);
+}
+.px-host img{width:52px; height:52px; border-radius:50%; object-fit:cover; flex:0 0 52px;}
+.px-host b{display:block; font-size:16px; color:#6E2A40;}
+.px-host span{display:block; font-size:12.5px; color:#8A737B; line-height:1.5;}
+@media (min-width:721px){
+  /* 桌機：左文字右照片兩欄，避免整張直式照撐爆版面 */
+  .px-hero{max-width:920px; margin:0 auto; border-radius:0 0 28px 28px;}
+  .px-hero h1{font-size:38px;}
+  .px-hero-img{padding-top:0; display:grid; grid-template-columns:1fr 1fr; align-items:center;}
+  .px-hero-img img{order:2; height:500px; object-fit:cover; object-position:50% 16%;}
+  .px-hero-txt{position:static; order:1; padding:40px 30px; text-align:left;}
+  .px-hero .countdown{justify-content:flex-start;}
+  .px-host{margin:-38px auto 0; max-width:440px;}
+}
+@media (prefers-reduced-motion:reduce){ .px-hero *{animation:none;} }
+</style>
+
+<header class="px-hero">
+  <div class="px-hero-img">
+    <img src="./assets/pinxin_hero.jpg" alt="品馨手持 HEIWEI 爆白防曬隔離噴霧的形象照">
+    <div class="px-hero-txt">
+      <p class="co">PINXIN × HEIWEI 何謂美</p>
+      <h1>品馨的私藏保養團</h1>
+      <p class="sub">從防曬到保養，一次補齊整年的用量。</p>
+      <p class="date-badge">2026 / 8 / 26（三） — 9 / 2（三）</p>
+
+      <p class="cd-note" id="px-cd-note">距離結團</p>
+      <div class="countdown" id="px-cd" aria-live="polite">
+        <div class="cd-cell"><div class="cd-num" data-cd="d">--</div><div class="cd-lab">天</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="h">--</div><div class="cd-lab">時</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="m">--</div><div class="cd-lab">分</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="s">--</div><div class="cd-lab">秒</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="px-host">
+  <img src="./assets/pinxin_avatar.jpg" alt="團主品馨">
+  <div>
+    <b>團主・品馨</b>
+    <span>本團商品皆為 HEIWEI 何謂美官方現貨</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* ── 開團／結團時間，要改日期改這兩行 ── */
+  var START = new Date('2026-08-26T00:00:00+08:00').getTime();
+  var END   = new Date('2026-09-02T23:59:59+08:00').getTime();
+
+  var cd = document.getElementById('px-cd');
+  var note = document.getElementById('px-cd-note');
+  if (!cd) return;
+  var cell = {
+    d: cd.querySelector('[data-cd="d"]'), h: cd.querySelector('[data-cd="h"]'),
+    m: cd.querySelector('[data-cd="m"]'), s: cd.querySelector('[data-cd="s"]')
+  };
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick() {
+    var now = Date.now(), target, label;
+    if (now < START)     { target = START; label = '距離開團'; }
+    else if (now <= END) { target = END;   label = '距離結團'; }
+    else { cd.style.display = 'none'; note.textContent = '本團已結束，感謝支持'; return false; }
+    var left = Math.max(0, Math.floor((target - now) / 1000));
+    cell.d.textContent = Math.floor(left / 86400);
+    cell.h.textContent = pad(Math.floor(left % 86400 / 3600));
+    cell.m.textContent = pad(Math.floor(left % 3600 / 60));
+    cell.s.textContent = pad(left % 60);
+    note.textContent = label;
+    return true;
+  }
+  if (tick()) { var t = setInterval(function(){ if (!tick()) clearInterval(t); }, 1000); }
+})();
+</script>

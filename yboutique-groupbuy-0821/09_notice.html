@@ -1,0 +1,48 @@
+<!-- ═══════════════ 注意事項 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.gb{
+  --brand:#C9A98A; --brand-dk:#A8886A; --brand-soft:#F6EDE4;
+  --accent:#D4704A; --sky:#2E9FC9; --sky-soft:#E8F6FB;
+  --pink:#E0668A; --pink-soft:#FDF1F4;
+  --ink:#2C2A28; --muted:#6F675F; --line:#EAE0D6; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:780px; margin:44px auto 0; padding:0 16px;
+}
+.gb *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.gb img{max-width:100%; height:auto; display:block;}
+.gb :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.gb .gb-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--brand-dk); text-transform:uppercase; margin-bottom:16px;
+}
+.gb .gb-h2::before{content:""; width:4px; height:18px; background:var(--brand); border-radius:2px; flex:0 0 4px;}
+.gb .gb-lead{font-size:15px; color:var(--muted); margin:-8px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .gb *,.gb *::before,.gb *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.gb-notice .notice{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:8px 18px;}
+.gb-notice .notice li{list-style:none; font-size:14px; color:var(--muted); padding:12px 0 12px 20px; position:relative; border-bottom:1px solid var(--line); line-height:1.8;}
+.gb-notice .notice li:last-child{border-bottom:none;}
+.gb-notice .notice li::before{content:""; position:absolute; left:2px; top:22px; width:6px; height:6px; border-radius:50%; background:var(--brand);}
+.gb-notice .notice strong{color:var(--ink);}
+</style>
+
+<section class="gb gb-notice">
+  <h2 class="gb-h2">注意事項</h2>
+  <ul class="notice">
+    <li>本活動商品為<strong>現貨販售</strong>，下單即確認出貨安排。</li>
+    <li>付款逾時（信用卡／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</li>
+    <li>免運與贈品皆以<strong>單筆訂單金額</strong>計算，不同筆訂單恕無法合併。</li>
+    <li>贈品數量有限，送完為止，恕不折換現金或更換其他品項。</li>
+    <li>化粧品為個人衛生用品，一經拆封使用恕無法退換，請於收到時確認外包裝完整。</li>
+    <li>如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</li>
+  </ul>
+</section>

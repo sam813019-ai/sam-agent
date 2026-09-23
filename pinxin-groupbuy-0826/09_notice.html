@@ -1,0 +1,48 @@
+<!-- ═══════════════ 注意事項 ═══════════════
+     這支檔案可以單獨開、單獨改，改完跑 bash build.sh 重組 index.html
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+/* ── 共用底（每支區塊各有一份，改這支不會影響其他區塊）── */
+.px{
+  --rose:#E98BA6; --rose-dk:#C9506E; --rose-soft:#FBE3EA; --rose-mist:#FDF4F7;
+  --gold:#C6A78E; --gold-soft:#F7EEE6;
+  --ink:#3B2A31; --muted:#8A737B; --line:#F2E2E7; --card:#fff; --ok:#3E9349;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.75; text-align:left;
+  max-width:820px; margin:46px auto 0; padding:0 16px;
+}
+.px *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+.px img{max-width:100%; height:auto; display:block;}
+.px :focus-visible{outline:3px solid var(--rose-dk); outline-offset:3px; border-radius:6px;}
+.px .px-h2{
+  display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;
+  letter-spacing:.18em; color:var(--rose-dk); text-transform:uppercase; margin-bottom:14px;
+}
+.px .px-h2::before{content:""; width:4px; height:18px; background:var(--rose); border-radius:2px; flex:0 0 4px;}
+.px .px-lead{font-size:15px; color:var(--muted); margin:-6px 0 18px;}
+@media (prefers-reduced-motion:reduce){
+  .px *,.px *::before,.px *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+
+/* ── 本區塊專用 ── */
+.px-notice .notice{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:8px 18px;}
+.px-notice .notice li{list-style:none; font-size:14px; color:var(--muted); padding:12px 0 12px 20px; position:relative; border-bottom:1px solid var(--line); line-height:1.8;}
+.px-notice .notice li:last-child{border-bottom:none;}
+.px-notice .notice li::before{content:""; position:absolute; left:2px; top:22px; width:6px; height:6px; border-radius:50%; background:var(--rose);}
+.px-notice .notice strong{color:var(--ink);}
+</style>
+
+<section class="px px-notice">
+  <h2 class="px-h2">注意事項</h2>
+  <ul class="notice">
+    <li>本活動商品為<strong>現貨販售</strong>，下單即確認出貨安排。</li>
+    <li>付款逾時（信用卡／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</li>
+    <li><strong>加購價</strong>需與本團任一組合或單品一起購買，單獨下加購品恕無法出貨。</li>
+    <li>免運與贈品皆以<strong>單筆訂單金額</strong>計算，不同筆訂單恕無法合併。</li>
+    <li>贈品數量有限，送完為止，恕不折換現金或更換其他品項。</li>
+    <li>化粧品為個人衛生用品，一經拆封使用恕無法退換，請於收到時確認外包裝完整。</li>
+    <li>如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</li>
+  </ul>
+</section>

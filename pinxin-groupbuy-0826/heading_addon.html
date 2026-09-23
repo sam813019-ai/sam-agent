@@ -1,0 +1,41 @@
+<!-- 主標題區塊：加購專區
+     色碼直接寫死，不用 CSS 變數，貼 Shopline 也不會失色。
+     副標不要的話，把 <p class="px-mt-sub"> 那一行刪掉即可。 -->
+<style>
+  .px-mt{
+    font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+    max-width:820px; margin:52px auto 24px; padding:0 16px; text-align:center; color:#3B2A31;
+  }
+  .px-mt *{box-sizing:border-box; margin:0; padding:0;}
+  .px-mt-eyebrow{
+    font-family:'Outfit','Helvetica Neue',Arial,sans-serif;
+    font-size:11px; font-weight:600; letter-spacing:.34em; color:#C9506E;
+    text-transform:uppercase; display:block; margin-bottom:12px;
+  }
+  .px-mt h2{
+    font-size:27px; font-weight:900; letter-spacing:.06em; line-height:1.35; color:#3B2A31;
+  }
+  .px-mt-sub{font-size:14.5px; color:#8A737B; margin-top:8px !important; letter-spacing:.02em;}
+  .px-mt-rule{
+    display:flex; align-items:center; justify-content:center; gap:10px; margin-top:16px;
+  }
+  .px-mt-rule i{
+    display:block; width:54px; height:1px;
+    background:linear-gradient(90deg,rgba(233,139,166,0),#E98BA6);
+  }
+  .px-mt-rule i+i{background:linear-gradient(90deg,#E98BA6,rgba(233,139,166,0));}
+  .px-mt-rule span{
+    width:7px; height:7px; background:#E98BA6; transform:rotate(45deg); border-radius:1px;
+  }
+  @media (min-width:721px){
+    .px-mt{margin:64px auto 28px;}
+    .px-mt h2{font-size:34px;}
+  }
+</style>
+
+<div class="px-mt">
+  <span class="px-mt-eyebrow">ADD-ON DEALS</span>
+  <h2>加購專區</h2>
+  <p class="px-mt-sub">搭配任一商品，再帶一件更便宜</p>
+  <div class="px-mt-rule"><i></i><span></span><i></i></div>
+</div>

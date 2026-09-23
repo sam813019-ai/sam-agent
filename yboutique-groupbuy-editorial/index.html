@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yboutique × HEIWEI 開團資訊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* 粉金精品配色 */
+    --rose:       #C13B6A;   /* 主玫瑰 */
+    --rose-dk:    #9E2C54;   /* 深玫瑰 */
+    --rose-soft:  #F6E3EA;   /* 淡玫瑰底 */
+    --gold:       #B08A3C;   /* 金 */
+    --gold-lt:    #CBA65B;   /* 亮金 */
+    --ink:        #2A1A21;   /* 主文字 */
+    --muted:      #8A6B75;   /* 次文字 */
+    --line:       #EAD9DF;   /* 分隔線 */
+    --line-gold:  #E4CE9E;   /* 金色細線 */
+    --bg:         #FFFCFB;   /* 暖白背景 */
+    --card:       #FFFFFF;
+    --r:   14px;
+    --r-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; min-width: 0; }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  /* 頁面兩側極淡的金色暈染，強化雜誌感 */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(60vw 40vh at 15% -5%, rgba(203,166,91,.10), transparent 60%),
+      radial-gradient(55vw 40vh at 100% 8%, rgba(193,59,106,.07), transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+  .container { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 0 20px 64px; }
+
+  .serif { font-family: 'Playfair Display', 'Noto Serif TC', serif; }
+
+  /* ── Header ── */
+  .header { text-align: center; padding: 56px 0 40px; }
+  .brand-kicker {
+    font-size: 12px; letter-spacing: .42em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-bottom: 22px;
+  }
+  .brand-rule { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 auto 22px; max-width: 320px; }
+  .brand-rule::before, .brand-rule::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--line-gold)); }
+  .brand-rule::after { background: linear-gradient(90deg, var(--line-gold), transparent); }
+  .brand-rule .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); transform: rotate(45deg); }
+  .header h1 {
+    font-family: 'Playfair Display', 'Noto Serif TC', serif;
+    font-size: 40px; font-weight: 600; line-height: 1.25;
+    color: var(--ink); letter-spacing: .01em;
+  }
+  .header h1 em { font-style: italic; color: var(--rose); }
+  .header .sub { margin-top: 14px; font-size: 14px; color: var(--muted); letter-spacing: .12em; }
+  .date-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 26px; padding: 9px 22px;
+    border: 1px solid var(--line-gold); border-radius: 40px;
+    font-size: 13px; letter-spacing: .08em; color: var(--rose-dk); font-weight: 500;
+    background: linear-gradient(180deg, #fff, var(--rose-soft));
+  }
+  .date-badge svg { width: 15px; height: 15px; color: var(--gold); }
+
+  /* ── Section ── */
+  .section { margin-top: 52px; }
+  .section-title {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 22px;
+  }
+  .section-title .num {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 15px; color: var(--gold); font-weight: 500;
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', 'Noto Serif TC', serif;
+    font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: .01em;
+  }
+  .section-title .line { flex: 1; height: 1px; background: var(--line); align-self: center; }
+
+  /* ── Product cards ── */
+  .product-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--r); overflow: hidden; margin-bottom: 20px;
+    box-shadow: 0 8px 30px -18px rgba(158,44,84,.25);
+  }
+  .product-header {
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--line-gold);
+    background: linear-gradient(180deg, #fff 0%, var(--rose-soft) 130%);
+    position: relative;
+  }
+  .product-eyebrow { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 7px; }
+  .product-name { font-family: 'Playfair Display','Noto Serif TC',serif; font-size: 22px; font-weight: 600; color: var(--ink); }
+  .original-price { font-size: 13px; color: var(--muted); margin-top: 5px; }
+  .original-price s { color: #bfa9b0; }
+
+  .price-table { width: 100%; border-collapse: collapse; }
+  .price-table th {
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; padding: 14px 18px 10px; text-align: center;
+  }
+  .price-table th:first-child { text-align: left; }
+  .price-table td { padding: 14px 18px; text-align: center; border-top: 1px solid var(--line); font-size: 15px; }
+  .price-table td:first-child { text-align: left; }
+  .price-table tbody tr { transition: background-color .2s ease; }
+  .price-table tbody tr:hover { background: var(--rose-soft); }
+  .qty { font-weight: 600; color: var(--ink); }
+  .price { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--rose); font-size: 19px; letter-spacing: .01em; }
+  .unit { font-size: 12px; color: var(--muted); }
+  .best-deal { background: linear-gradient(90deg, rgba(203,166,91,.10), rgba(203,166,91,.03)); }
+  .best-deal:hover { background: linear-gradient(90deg, rgba(203,166,91,.16), rgba(203,166,91,.05)) !important; }
+  .best-deal .price { color: var(--gold); }
+  .tag {
+    display: inline-block; margin-left: 8px; padding: 2px 9px;
+    font-size: 10px; letter-spacing: .1em; font-weight: 600; border-radius: 20px;
+    color: #fff; background: var(--gold); vertical-align: middle;
+  }
+  .tag.hot { background: var(--rose); }
+
+  /* ── Gift & free shipping ── */
+  .highlight-card {
+    display: flex; align-items: flex-start; gap: 18px;
+    background: linear-gradient(135deg, #fff 0%, var(--rose-soft) 100%);
+    border: 1px solid var(--line-gold); border-radius: var(--r);
+    padding: 24px 26px; margin-bottom: 16px;
+  }
+  .highlight-icon {
+    flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: #fff; border: 1px solid var(--line-gold); color: var(--rose);
+  }
+  .highlight-icon svg { width: 22px; height: 22px; }
+  .highlight-title { font-family:'Noto Serif TC',serif; font-size: 17px; font-weight: 700; color: var(--rose-dk); margin-bottom: 5px; }
+  .highlight-desc { font-size: 14px; color: var(--ink); }
+  .highlight-desc .pill { display: inline-block; margin-left: 6px; padding: 1px 9px; font-size: 11px; border-radius: 12px; background: var(--gold); color: #fff; font-weight: 600; }
+  .highlight-note { font-size: 12px; color: var(--muted); margin-top: 6px; letter-spacing: .02em; }
+
+  /* ── Info blocks ── */
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 8px 24px; }
+  .row {
+    display: flex; align-items: flex-start; gap: 15px;
+    padding: 16px 0; border-bottom: 1px solid var(--line);
+  }
+  .row:last-child { border-bottom: none; }
+  .row-icon { flex-shrink: 0; width: 26px; height: 26px; color: var(--gold); display: grid; place-items: center; margin-top: 1px; }
+  .row-icon svg { width: 20px; height: 20px; }
+  .row-label { font-weight: 600; color: var(--ink); min-width: 92px; flex-shrink: 0; }
+  .row-body { flex: 1; }
+  .row-name { font-weight: 600; color: var(--ink); }
+  .row-note { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .row a { color: var(--rose); text-decoration: none; border-bottom: 1px solid var(--line-gold); }
+  .row a:hover { color: var(--rose-dk); }
+
+  /* ── Shipping table ── */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: var(--r); }
+  .ship-table { width: 100%; border-collapse: collapse; background: var(--card); }
+  .ship-table th {
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase; text-align: left;
+    color: var(--muted); font-weight: 600; padding: 14px 18px;
+    background: var(--rose-soft);
+  }
+  .ship-table td { padding: 16px 18px; font-size: 14px; border-top: 1px solid var(--line); vertical-align: top; line-height: 1.9; }
+  .ship-table td:first-child { font-weight: 600; white-space: nowrap; }
+  .free-ship { color: var(--gold); font-weight: 600; }
+
+  /* ── Notice ── */
+  .notice { background: linear-gradient(180deg,#fff, var(--rose-soft)); border: 1px solid var(--line-gold); border-radius: var(--r); padding: 22px 26px; }
+  .notice-item { display: flex; gap: 12px; align-items: flex-start; padding: 7px 0; font-size: 14px; color: var(--ink); overflow-wrap: break-word; word-break: break-word; }
+  .notice-item::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; margin-top: 11px; border-radius: 50%; background: var(--gold); }
+  .notice-item strong { color: var(--rose-dk); font-weight: 700; }
+
+  /* ── Footer ── */
+  .footer { text-align: center; margin-top: 64px; padding-top: 36px; }
+  .footer .brand-rule { margin-bottom: 18px; }
+  .footer-brand { font-family:'Playfair Display',serif; font-size: 16px; letter-spacing: .06em; color: var(--ink); }
+  .footer-brand em { font-style: italic; color: var(--rose); }
+  .footer-meta { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+
+  /* ── 手機版 ── */
+  @media (max-width: 540px) {
+    body { font-size: 15px; }
+    .container { padding: 0 16px 48px; }
+    .header { padding: 40px 0 30px; }
+    .header h1 { font-size: 30px; }
+    .brand-kicker { letter-spacing: .3em; font-size: 11px; }
+    .section { margin-top: 40px; }
+    .section-title h2 { font-size: 20px; }
+    .product-name { font-size: 19px; }
+    .price-table th, .price-table td { padding: 12px 12px; }
+    .price { font-size: 17px; }
+    .table-scroll .ship-table { min-width: 440px; }
+    .highlight-card { padding: 20px 18px; gap: 14px; }
+    .row-label { min-width: 78px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══ Header ══ -->
+  <header class="header">
+    <div class="brand-kicker">Yboutique &nbsp;×&nbsp; HEIWEI 何謂美</div>
+    <div class="brand-rule"><span class="dot"></span></div>
+    <h1 class="serif">品牌聯名<em>開團</em></h1>
+    <div class="sub">Limited Group Purchase · 2026</div>
+    <div class="date-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      團購時間 2026 / 05 / 01 — 05 / 10
+    </div>
+  </header>
+
+  <!-- ══ 團購品項 ══ -->
+  <section class="section">
+    <div class="section-title"><span class="num serif">01</span><h2 class="serif">團購品項</h2><span class="line"></span></div>
+
+    <div class="product-card">
+      <div class="product-header">
+        <div class="product-eyebrow">Best Seller</div>
+        <div class="product-name">爆白防曬噴霧 2.0</div>
+        <div class="original-price">定價 <s>$840</s></div>
+      </div>
+      <table class="price-table">
+        <thead>
+          <tr><th>數量</th><th>團購價</th><th>平均單價</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="qty">1 入</td><td class="price">$520</td><td class="unit">$520 / 瓶</td></tr>
+          <tr><td class="qty">2 入</td><td class="price">$999</td><td class="unit">$500 / 瓶</td></tr>
+          <tr><td class="qty">3 入</td><td class="price">$1,455</td><td class="unit">$485 / 瓶</td></tr>
+          <tr class="best-deal"><td class="qty">5 入 <span class="tag">超值</span></td><td class="price">$2,400</td><td class="unit">$480 / 瓶</td></tr>
+          <tr class="best-deal"><td class="qty">10 入 <span class="tag hot">最划算</span></td><td class="price">$4,500</td><td class="unit">$450 / 瓶</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="product-card">
+      <div class="product-header">
+        <div class="product-eyebrow">Hydrating</div>
+        <div class="product-name">B 群保濕噴霧</div>
+        <div class="original-price">定價 <s>$1,190</s></div>
+      </div>
+      <table class="price-table">
+        <thead>
+          <tr><th>數量</th><th>團購價</th><th>平均單價</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="qty">1 入</td><td class="price">$899</td><td class="unit">$899 / 瓶</td></tr>
+          <tr><td class="qty">2 入</td><td class="price">$1,740</td><td class="unit">$870 / 瓶</td></tr>
+          <tr class="best-deal"><td class="qty">3 入 <span class="tag hot">最划算</span></td><td class="price">$2,550</td><td class="unit">$850 / 瓶</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 下單禮 & 免運 ══ -->
+  <section class="section">
+    <div class="section-title"><span class="num serif">02</span><h2 class="serif">下單禮 &amp; 免運</h2><span class="line"></span></div>
+
+    <div class="highlight-card">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>
+      </div>
+      <div>
+        <div class="highlight-title">單筆消費滿 $999 即贈</div>
+        <div class="highlight-desc">魚子亮白化妝水 15ML<span class="pill">原價 $240</span></div>
+        <div class="highlight-note">數量有限 500 份，先搶先贏，贈完為止</div>
+      </div>
+    </div>
+
+    <div class="highlight-card">
+      <div class="highlight-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h13v13H1zM14 8h4l3 3v5h-7"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="17.5" cy="18.5" r="2"/></svg>
+      </div>
+      <div>
+        <div class="highlight-title">單筆消費滿 $999 免運費</div>
+        <div class="highlight-note">台灣本島 &amp; 離島均適用，以單筆訂單金額計算</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 付款方式 ══ -->
+  <section class="section">
+    <div class="section-title"><span class="num serif">03</span><h2 class="serif">付款方式</h2><span class="line"></span></div>
+    <div class="panel">
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div class="row-body"><div class="row-name">信用卡</div><div class="row-note">完成訂單後 15 分鐘內完成付款，逾時系統自動取消</div></div>
+      </div>
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 13h6"/></svg></div>
+        <div class="row-body"><div class="row-name">超商取貨付款</div><div class="row-note">取貨時於門市付款</div></div>
+      </div>
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></div>
+        <div class="row-body"><div class="row-name">超商貨到付款</div><div class="row-note">送達時付款</div></div>
+      </div>
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <div class="row-body"><div class="row-name">LINE Pay</div><div class="row-note">完成訂單後 15 分鐘內完成付款，逾時系統自動取消</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 運費說明 ══ -->
+  <section class="section">
+    <div class="section-title"><span class="num serif">04</span><h2 class="serif">運費說明</h2><span class="line"></span></div>
+    <div class="table-scroll">
+      <table class="ship-table">
+        <thead>
+          <tr><th>地區</th><th>寄件方式</th><th>運費</th><th>免運門檻</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>台灣本島</td>
+            <td>順豐宅配<br>7-11 超商</td>
+            <td>$95<br>$65</td>
+            <td><span class="free-ship">滿 $999 免運</span></td>
+          </tr>
+          <tr>
+            <td>台灣離島</td>
+            <td>郵局宅配<br>7-11 超商</td>
+            <td>$95<br>$65</td>
+            <td><span class="free-ship">滿 $999 免運</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 出貨時程 ══ -->
+  <section class="section">
+    <div class="section-title"><span class="num serif">05</span><h2 class="serif">出貨時程</h2><span class="line"></span></div>
+    <div class="panel">
+      <div class="row"><div class="row-label">現貨出貨</div><div class="row-body">下單後約 <strong>1～3 個工作天</strong>安排出貨（不含例假日）</div></div>
+      <div class="row"><div class="row-label">最晚出貨</div><div class="row-body">115 年 5 月 13 日前全數出貨完畢</div></div>
+      <div class="row"><div class="row-label">海外地區</div><div class="row-body">本團 <strong>不開放</strong> 海外訂單</div></div>
+    </div>
+  </section>
+
+  <!-- ══ 客服資訊 ══ -->
+  <section class="section">
+    <div class="section-title"><span class="num serif">06</span><h2 class="serif">客服資訊</h2><span class="line"></span></div>
+    <div class="panel">
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></div>
+        <div class="row-label">官方 LINE</div><div class="row-body"><a href="https://line.me/R/ti/p/@heiwei">@heiwei</a></div>
+      </div>
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg></div>
+        <div class="row-label">客服電話</div><div class="row-body"><a href="tel:0733430072">07-343-0072</a></div>
+      </div>
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></div>
+        <div class="row-label">電子信箱</div><div class="row-body"><a href="mailto:heiweimei@gmail.com">heiweimei@gmail.com</a></div>
+      </div>
+      <div class="row">
+        <div class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="row-label">公司地址</div><div class="row-body">高雄市左營區文敬路 59 號 2 樓</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 注意事項 ══ -->
+  <section class="section">
+    <div class="section-title"><span class="num serif">07</span><h2 class="serif">注意事項</h2><span class="line"></span></div>
+    <div class="notice">
+      <div class="notice-item">本活動商品為 <strong>現貨販售</strong>，下單即確認出貨安排。</div>
+      <div class="notice-item">付款逾時（信用卡／LINE Pay <strong>15 分鐘</strong>）系統將自動取消訂單，請重新下單。</div>
+      <div class="notice-item">免運優惠以 <strong>單筆訂單金額 $999 以上</strong> 為計算基準。</div>
+      <div class="notice-item">下單禮（魚子亮白化妝水）數量有限，贈完為止，恕不折換現金。</div>
+      <div class="notice-item">如有任何問題，請聯繫 LINE 官方帳號 <strong>@heiwei</strong> 或來電 07-343-0072 洽詢。</div>
+    </div>
+  </section>
+
+  <!-- ══ Footer ══ -->
+  <footer class="footer">
+    <div class="brand-rule"><span class="dot"></span></div>
+    <div class="footer-brand serif">HEIWEI 何謂美 <em>×</em> Yboutique</div>
+    <div class="footer-meta">2026 Brand Collaboration</div>
+  </footer>
+
+</div>
+</body>
+</html>
