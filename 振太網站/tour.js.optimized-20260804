@@ -1,0 +1,1648 @@
+(function () {
+  const state = {
+    lang: "zh",
+    sceneId: "entrance",
+    categoryId: "entrance",
+    missingSceneId: null
+  };
+
+  const translations = {
+    zh: {
+      brandKicker: "ONLINE EXHIBITION",
+      brandName: "振太機械線上展覽館",
+      missingImage: "「{name}」場景已保留，請放入 {path} 後再切換。",
+      entrance: "總入口大廳",
+      feeding: "送料(選向)系列館",
+      replenishing: "補料系列館",
+      sorting: "篩選系列館",
+      machinery: "機械系列館",
+      vibratingBowl720: "720震動盤",
+      jlSeries: "JL-0 / JL-1 / JL-2",
+      ml2: "ML-2",
+      ml3Hopper: "補料桶用 ML-3 For Hopper",
+      stl12: "STL-12",
+      stl67: "STL-6 / STL-7",
+      ml8: "ML-8",
+      vortex: "渦電流送料裝置",
+      flatFeeder: "層斗式送料機",
+      soundproofBox: "隔音箱",
+      fineTuningNa9004: "微調控制器(NA-9004)",
+      fullWaveNa9006: "全波控制器(NA-9006)",
+      hopperControllerNa903: "補料桶控制器(NA-903)",
+      microcomputerCtt: "微電腦控制器(CT-T)",
+      fineTuningCtn: "微調控制器(CT-N)",
+      smartVoltageInverter: "智能穩壓變頻控制器",
+      digitalInverter: "數字變頻控制器",
+      digitalVoltage: "數字調壓控制器",
+      autoExchangePlatform: "全自動雙層雙軌交換上料平台",
+      liftMetering: "升降式自動定量上料機",
+      filling: "填充式上料機",
+      magnetic: "磁力式上料機",
+      liftingSupplying: "提升機 + 兩段式補料",
+      barrelFlipper: "料桶翻料機",
+      horizontalBarrel: "平送式補料桶",
+      activeBarrel: "活動連接式補料桶",
+      eccentricBarrel: "偏心馬達補料桶",
+      oilSeparation: "油水 / 鐵屑分離設備館",
+      flatOilSeparator: "平送式鐵屑、油水分離機",
+      magneticOilSeparator: "磁力式鐵屑、油水分離機",
+      centrifugalSeparator: "離心甩油鐵屑分離機",
+      rollerSorting: "羅拉篩選機館",
+      rollerTwo: "羅拉篩選機（兩軸）",
+      rollerFour: "羅拉篩選機（四軸）",
+      straighteningMachine: "矯直機",
+      metalMarkingMachine: "金屬刻字機",
+      markingKnurlingMachine: "金屬刻字、滾花機(一機兩用)",
+      metalKnurlingMachine: "金屬滾花機"
+    },
+    en: {
+      brandKicker: "ONLINE EXHIBITION",
+      brandName: "Victor Taichung Machinery Online Exhibition Hall",
+      missingImage: "\"{name}\" is reserved. Add {path} before switching to this scene.",
+      entrance: "Main Entrance Hall",
+      feeding: "Feeding (Orientation) Series",
+      replenishing: "Replenishing Series",
+      sorting: "Sorting Series",
+      machinery: "Machinery Series",
+      vibratingBowl720: "720 Vibrating Bowl",
+      jlSeries: "JL-0 / JL-1 / JL-2",
+      ml2: "ML-2",
+      ml3Hopper: "ML-3 For Hopper",
+      stl12: "STL-12",
+      stl67: "STL-6 / STL-7",
+      ml8: "ML-8",
+      vortex: "Vortex Current Feeding Device",
+      flatFeeder: "Flat Hopper Feeder",
+      soundproofBox: "Soundproof Box",
+      fineTuningNa9004: "Fine-tuning Controller (NA-9004)",
+      fullWaveNa9006: "Full-wave Controller (NA-9006)",
+      hopperControllerNa903: "Hopper Controller (NA-903)",
+      microcomputerCtt: "Microcomputer Controller (CT-T)",
+      fineTuningCtn: "Fine-tuning Controller (CT-N)",
+      smartVoltageInverter: "Smart Regulated Inverter Controller",
+      digitalInverter: "Digital Inverter Controller",
+      digitalVoltage: "Digital Voltage Regulator",
+      autoExchangePlatform: "Fully Automatic Double-layer Dual-track Exchange Feeding Platform",
+      liftMetering: "Elevating Automatic Quantitative Feeder",
+      filling: "Filling Feeder",
+      magnetic: "Magnetic Feeder",
+      liftingSupplying: "Elevator + Two-stage Replenishing",
+      barrelFlipper: "Material Barrel Flipping Machine",
+      horizontalBarrel: "Horizontal Replenishing Hopper",
+      activeBarrel: "Active Connection Replenishing Hopper",
+      eccentricBarrel: "Eccentric Motor Replenishing Hopper",
+      oilSeparation: "Oil / Water / Iron Chip Separation Equipment Hall",
+      flatOilSeparator: "Flat Iron Chip, Oil-water Separator",
+      magneticOilSeparator: "Magnetic Iron Chip, Oil-water Separator",
+      centrifugalSeparator: "Centrifugal Oil-throwing Iron Chip Separator",
+      rollerSorting: "Roller Sorting Machine Hall",
+      rollerTwo: "Roller Sorting Machine (Two-shaft)",
+      rollerFour: "Roller Sorting Machine (Four-shaft)",
+      straighteningMachine: "Straightening Machine",
+      metalMarkingMachine: "Metal Marking Machine",
+      markingKnurlingMachine: "Metal Marking and Knurling Machine (Two-in-one)",
+      metalKnurlingMachine: "Metal Knurling Machine"
+    },
+    vi: {
+      brandKicker: "TRIEN LAM TRUC TUYEN",
+      brandName: "Phòng Triển Lãm Trực Tuyến Victor Taichung Machinery",
+      missingImage: "Cảnh \"{name}\" đã được giữ chỗ. Vui lòng thêm {path} trước khi chuyển cảnh.",
+      entrance: "Sảnh vào chính",
+      feeding: "Khu cấp liệu (định hướng)",
+      replenishing: "Khu bổ sung liệu",
+      sorting: "Khu phân loại",
+      machinery: "Khu máy móc",
+      vibratingBowl720: "Mâm rung 720",
+      jlSeries: "JL-0 / JL-1 / JL-2",
+      ml2: "ML-2",
+      ml3Hopper: "ML-3 dùng cho phễu",
+      stl12: "STL-12",
+      stl67: "STL-6 / STL-7",
+      ml8: "ML-8",
+      vortex: "Thiết bị cấp liệu dòng xoáy",
+      flatFeeder: "Máy cấp liệu dạng phễu tầng",
+      soundproofBox: "Hộp cách âm",
+      fineTuningNa9004: "Bộ điều khiển tinh chỉnh (NA-9004)",
+      fullWaveNa9006: "Bộ điều khiển toàn sóng (NA-9006)",
+      hopperControllerNa903: "Bộ điều khiển phễu cấp liệu (NA-903)",
+      microcomputerCtt: "Bộ điều khiển vi tính (CT-T)",
+      fineTuningCtn: "Bộ điều khiển tinh chỉnh (CT-N)",
+      smartVoltageInverter: "Bộ điều khiển biến tần ổn áp thông minh",
+      digitalInverter: "Bộ điều khiển biến tần kỹ thuật số",
+      digitalVoltage: "Bộ điều chỉnh điện áp kỹ thuật số",
+      autoExchangePlatform: "Sàn cấp liệu trao đổi hai tầng hai ray hoàn toàn tự động",
+      liftMetering: "Máy cấp liệu định lượng tự động dạng nâng",
+      filling: "Máy cấp liệu dạng nạp đầy",
+      magnetic: "Máy cấp liệu từ tính",
+      liftingSupplying: "Máy nâng + bổ sung liệu hai đoạn",
+      barrelFlipper: "Máy lật thùng liệu",
+      horizontalBarrel: "Phễu bổ sung liệu dạng ngang",
+      activeBarrel: "Phễu bổ sung liệu kết nối linh hoạt",
+      eccentricBarrel: "Phễu bổ sung liệu motor lệch tâm",
+      oilSeparation: "Khu thiết bị tách dầu / nước / mạt sắt",
+      flatOilSeparator: "Máy tách mạt sắt, dầu nước dạng ngang",
+      magneticOilSeparator: "Máy tách mạt sắt, dầu nước từ tính",
+      centrifugalSeparator: "Máy tách mạt sắt văng dầu ly tâm",
+      rollerSorting: "Khu máy phân loại con lăn",
+      rollerTwo: "Máy phân loại con lăn (hai trục)",
+      rollerFour: "Máy phân loại con lăn (bốn trục)",
+      straighteningMachine: "Máy nắn thẳng",
+      metalMarkingMachine: "Máy khắc chữ kim loại",
+      markingKnurlingMachine: "Máy khắc chữ và lăn nhám kim loại (hai chức năng)",
+      metalKnurlingMachine: "Máy lăn nhám kim loại"
+    }
+  };
+
+  translations.zh.hopperControllerNa903 = "補料桶控制器 NA-9013";
+  translations.en.hopperControllerNa903 = "Hopper Controller (NA-9013)";
+  translations.vi.hopperControllerNa903 = "Bộ điều khiển thùng tiếp liệu (NA-9013)";
+
+  const categories = [
+    { id: "entrance", labelKey: "entrance", sceneIds: ["entrance"] },
+    {
+      id: "feeding",
+      labelKey: "feeding",
+      sceneIds: [
+        "feeding",
+        "vibrating-bowl-720",
+        "stl-67",
+        "ml-8",
+        "ml-3-hopper",
+        "stl-12",
+        "jl-series",
+        "ml-2",
+        "vortex-feeder",
+        "flat-feeder",
+        "soundproof-box",
+        "fine-tuning-na-9004",
+        "full-wave-na-9006",
+        "hopper-controller-na-903",
+        "microcomputer-ctt",
+        "fine-tuning-ctn",
+        "smart-voltage-inverter",
+        "digital-inverter",
+        "digital-voltage"
+      ]
+    },
+    {
+      id: "replenishing",
+      labelKey: "replenishing",
+      sceneIds: [
+        "replenishing",
+        "magnetic-feeder",
+        "lifting-supplying",
+        "barrel-flipper",
+        "lift-metering",
+        "filling-feeder",
+        "auto-exchange-platform",
+        "eccentric-barrel",
+        "horizontal-barrel",
+        "active-barrel"
+      ]
+    },
+    {
+      id: "sorting",
+      labelKey: "sorting",
+      sceneIds: [
+        "sorting",
+        "centrifugal-separator",
+        "roller-four",
+        "roller-two",
+        "flat-oil-separator",
+        "magnetic-oil-separator"
+      ]
+    },
+    {
+      id: "machinery",
+      labelKey: "machinery",
+      sceneIds: [
+        "machinery",
+        "straightening-machine",
+        "metal-marking-machine",
+        "marking-knurling-machine",
+        "metal-knurling-machine"
+      ]
+    }
+  ];
+
+  const sceneList = [
+    { id: "entrance", categoryId: "entrance", labelKey: "entrance", image: "images/入口 A.webp", thumb: "images/入口 A.webp" },
+    { id: "feeding", categoryId: "feeding", labelKey: "feeding", image: "images/送料館 A_DeMain_0000.webp", thumb: "images/送料館 A_DeMain_0000.webp" },
+    { id: "vibrating-bowl-720", categoryId: "feeding", labelKey: "vibratingBowl720", image: "images/送料館 B_DeMain_0000.webp" },
+    { id: "stl-67", categoryId: "feeding", labelKey: "stl67", image: "images/送料館 C_DeMain_0000.webp" },
+    { id: "ml-8", categoryId: "feeding", labelKey: "ml8", image: "images/送料館 D_DeMain_0000.webp" },
+    { id: "ml-3-hopper", categoryId: "feeding", labelKey: "ml3Hopper", image: "images/送料館 E_DeMain_0000.webp" },
+    { id: "stl-12", categoryId: "feeding", labelKey: "stl12", image: "images/送料館 F_DeMain_0000.webp" },
+    { id: "jl-series", categoryId: "feeding", labelKey: "jlSeries", image: "images/送料館 G_DeMain_0000.webp" },
+    { id: "ml-2", categoryId: "feeding", labelKey: "ml2", image: "images/送料館 H_DeMain_0000.webp" },
+    { id: "vortex-feeder", categoryId: "feeding", labelKey: "vortex", image: "images/送料館 I_DeMain_0000.webp" },
+    { id: "flat-feeder", categoryId: "feeding", labelKey: "flatFeeder", image: "images/送料館 J_DeMain_0000.webp" },
+    { id: "soundproof-box", categoryId: "feeding", labelKey: "soundproofBox", image: "images/送料館 K_DeMain_0000.webp" },
+    { id: "fine-tuning-na-9004", categoryId: "feeding", labelKey: "fineTuningNa9004", image: "images/送料館 L_DeMain_0000.webp" },
+    { id: "full-wave-na-9006", categoryId: "feeding", labelKey: "fullWaveNa9006", image: "images/送料館 M_DeMain_0000.webp" },
+    { id: "hopper-controller-na-903", categoryId: "feeding", labelKey: "hopperControllerNa903", image: "images/送料館 N_DeMain_0000.webp" },
+    { id: "microcomputer-ctt", categoryId: "feeding", labelKey: "microcomputerCtt", image: "images/送料館 O_DeMain_0000.webp" },
+    { id: "fine-tuning-ctn", categoryId: "feeding", labelKey: "fineTuningCtn", image: "images/送料館 P_DeMain_0000.webp" },
+    { id: "smart-voltage-inverter", categoryId: "feeding", labelKey: "smartVoltageInverter", image: "images/送料館 Q_DeMain_0000.webp" },
+    { id: "digital-inverter", categoryId: "feeding", labelKey: "digitalInverter", image: "images/送料館 R_DeMain_0000.webp" },
+    { id: "digital-voltage", categoryId: "feeding", labelKey: "digitalVoltage", image: "images/送料館 S_DeMain_0000.webp" },
+    { id: "replenishing", categoryId: "replenishing", labelKey: "replenishing", image: "images/補料館A_DeMain_0000.webp", thumb: "images/補料館A_DeMain_0000.webp" },
+    { id: "magnetic-feeder", categoryId: "replenishing", labelKey: "magnetic", image: "images/補料館B_DeMain_0000.webp" },
+    { id: "lifting-supplying", categoryId: "replenishing", labelKey: "liftingSupplying", image: "images/補料館C_DeMain_0000.webp" },
+    { id: "barrel-flipper", categoryId: "replenishing", labelKey: "barrelFlipper", image: "images/補料館D_DeMain_0000.webp" },
+    { id: "lift-metering", categoryId: "replenishing", labelKey: "liftMetering", image: "images/補料館E_DeMain_0000.webp" },
+    { id: "filling-feeder", categoryId: "replenishing", labelKey: "filling", image: "images/補料館F_DeMain_0000.webp" },
+    { id: "auto-exchange-platform", categoryId: "replenishing", labelKey: "autoExchangePlatform", image: "images/補料館G_DeMain_0000.webp" },
+    { id: "eccentric-barrel", categoryId: "replenishing", labelKey: "eccentricBarrel", image: "images/補料館H_DeMain_0000.webp" },
+    { id: "horizontal-barrel", categoryId: "replenishing", labelKey: "horizontalBarrel", image: "images/補料館I_DeMain_0000.webp" },
+    { id: "active-barrel", categoryId: "replenishing", labelKey: "activeBarrel", image: "images/補料館J_DeMain_0000.webp" },
+    { id: "sorting", categoryId: "sorting", labelKey: "sorting", image: "images/篩選館A_DeMain_0000.webp?v=20260630-022", thumb: "images/篩選館A_DeMain_0000.webp?v=20260630-022" },
+    { id: "centrifugal-separator", categoryId: "sorting", labelKey: "centrifugalSeparator", image: "images/篩選館B_DeMain_0000.webp?v=20260630-022" },
+    { id: "roller-four", categoryId: "sorting", labelKey: "rollerFour", image: "images/篩選館C_DeMain_0000.webp?v=20260630-022" },
+    { id: "roller-two", categoryId: "sorting", labelKey: "rollerTwo", image: "images/篩選館D_DeMain_0000.webp?v=20260630-022" },
+    { id: "flat-oil-separator", categoryId: "sorting", labelKey: "flatOilSeparator", image: "images/篩選館E_DeMain_0000.webp?v=20260630-022" },
+    { id: "magnetic-oil-separator", categoryId: "sorting", labelKey: "magneticOilSeparator", image: "images/篩選館F_DeMain_0000.webp?v=20260630-022" },
+    { id: "machinery", categoryId: "machinery", labelKey: "machinery", image: "images/機械館A_DeMain_0000.webp", thumb: "images/機械館A_DeMain_0000.webp" },
+    { id: "straightening-machine", categoryId: "machinery", labelKey: "straighteningMachine", image: "images/機械館B_DeMain_0000.webp" },
+    { id: "metal-marking-machine", categoryId: "machinery", labelKey: "metalMarkingMachine", image: "images/機械館C_DeMain_0000.webp" },
+    { id: "marking-knurling-machine", categoryId: "machinery", labelKey: "markingKnurlingMachine", image: "images/機械館D_DeMain_0000.webp" },
+    { id: "metal-knurling-machine", categoryId: "machinery", labelKey: "metalKnurlingMachine", image: "images/機械館E_DeMain_0000.webp" }
+  ];
+
+  const sceneMap = Object.fromEntries(sceneList.map((scene) => [scene.id, scene]));
+  const categoryMap = Object.fromEntries(categories.map((category) => [category.id, category]));
+  const notice = document.getElementById("sceneNotice");
+  const sceneCrumb = document.getElementById("sceneCrumb");
+  const categoryTabs = document.getElementById("categoryTabs");
+  const sceneStrip = document.getElementById("sceneStrip");
+  const quickTour = document.getElementById("quickTour");
+  const quickTourToggle = document.getElementById("quickTourToggle");
+  const coordPanel = document.getElementById("coordPanel");
+  const productModal = document.getElementById("productModal");
+  const productModalClose = document.getElementById("productModalClose");
+  const productFrameImage = document.getElementById("productFrameImage");
+  const productModalImage = document.getElementById("productModalImage");
+  const productModalVideo = document.getElementById("productModalVideo");
+  const productFrameLoading = document.getElementById("productFrameLoading");
+  const productFrameHint = document.getElementById("productFrameHint");
+
+  const PRODUCT_FRAMES_TOTAL = 241;
+  const PRODUCT_FRAME_SENS = 3;
+  const PRODUCT_FRAME_AUTOPLAY_MS = 40;
+  // 第一階段每隔 8 張抓一張（31 張，約 1MB），載完就能轉，其餘背景續載
+  const PRODUCT_FRAME_STEP = 8;
+  let productFrameCache = [];
+  let productFrameReady = new Set();
+  let productFrameLoaded = 0;
+  let productFrameSuccess = 0;
+  let productFrameAllReady = false;
+  let productFrameCurrent = 0;
+  let productFrameAutoTimer = null;
+  let productFrameDragging = false;
+  let productFrameLastX = 0;
+  let productFrameAccum = 0;
+
+  const productDetails = {
+    vibratoryFeederSeries: {
+      sceneId: "vibrating-bowl-720",
+      seriesKey: "feeding",
+      image: "images/product-details/vibratory-feeder-series.png",
+      name: {
+        zh: "整組振動送料機系列",
+        en: "VIBRATORY FEEDER SERIES",
+        vi: "Hệ thống máy cấp liệu rung trọn bộ"
+      },
+      descTitle: {
+        zh: "產品特色",
+        en: "FEATURES",
+        vi: "ĐẶC ĐIỂM"
+      },
+      desc: {
+        zh: [
+          "整組振動送料系統，含振動送料機、自動補料桶、直線送料機與固定架",
+          "自動補料桶為節省人工而設計，出料量可用控制器調整",
+          "感應到振動盤沒料時自動補料；直線送料機銜接軌道避免卡料"
+        ],
+        en: [
+          "Complete vibratory feeding system: bowl feeder, auto hopper, linear feeder and frame",
+          "Auto hopper saves labor; feeding volume adjustable by controller",
+          "Auto replenishes when the bowl runs empty; linear feeder bridges the track to avoid jamming"
+        ],
+        vi: [
+          "Hệ thống cấp liệu rung trọn bộ: mâm rung, thùng tiếp liệu tự động, máy cấp liệu thẳng và khung",
+          "Thùng tiếp liệu tự động giúp tiết kiệm nhân công; lượng cấp điều chỉnh bằng bộ điều khiển",
+          "Tự động tiếp liệu khi mâm hết liệu; máy cấp liệu thẳng nối ray tránh kẹt liệu"
+        ]
+      }
+    },
+    vortexFeeder: {
+      sceneId: "vortex-feeder",
+      seriesKey: "feeding",
+      image: "images/product-details/vortex-feeder.png",
+      frames: "frames_out/eddy-current/",
+      name: {
+        zh: "渦電流送料裝置",
+        en: "FEEDING DEVICE FOR EDDY CURRENT INSPECTION MACHINE",
+        vi: "Thiết bị cấp liệu cho máy kiểm tra dòng xoáy"
+      },
+      descTitle: {
+        zh: "產品特色",
+        en: "FEATURES",
+        vi: "ĐẶC ĐIỂM"
+      },
+      desc: {
+        zh: ["配置於渦電流篩選機上", "對不同規格工件只需依牙徑更換轉盤"],
+        en: ["Equipped on eddy-current inspection machines", "Just change the turntable by thread diameter for different specs"],
+        vi: ["Lắp trên máy kiểm tra dòng xoáy", "Chỉ cần đổi mâm xoay theo đường kính ren cho quy cách khác nhau"]
+      }
+    }
+  };
+
+  const productDescTitle = {
+    zh: "產品特色",
+    en: "FEATURES",
+    vi: "ĐẶC ĐIỂM"
+  };
+
+  const linearFeederDesc = {
+    zh: [
+      "可搭配篩選機、組合機、研磨機、刻字機、補料桶等使用",
+      "可依客戶需求定做",
+      "機型：JL-0/JL-1/JL-2、ML-2、ML-3（補料桶用）、STL-6/STL-7、STL-12、ML-8"
+    ],
+    en: [
+      "Pairs with sorting, assembly, grinding, engraving machines and hoppers",
+      "Customizable on request",
+      "Models: JL-0/JL-1/JL-2, ML-2, ML-3 (for hopper), STL-6/STL-7, STL-12, ML-8"
+    ],
+    vi: [
+      "Kết hợp máy sàng lọc, lắp ráp, mài, khắc chữ và thùng tiếp liệu",
+      "Có thể đặt làm theo yêu cầu",
+      "Kiểu: JL-0/JL-1/JL-2, ML-2, ML-3 (cho thùng), STL-6/STL-7, STL-12, ML-8"
+    ]
+  };
+
+  const controllerDesc = {
+    zh: ["智能穩壓變頻、數字變頻、數字調壓、微電腦(CT-T)、微調(CT-N/NA-9004)、補料桶(NA-9013)、全波(NA-9006)等控制器"],
+    en: ["Controllers: smart voltage-stabilizing inverter, digital inverter, digital regulator, micro-computer (CT-T), fine-tune (CT-N/NA-9004), hopper (NA-9013), full-wave (NA-9006)"],
+    vi: ["Bộ điều khiển: biến tần ổn áp thông minh, biến tần số, điều áp số, vi tính (CT-T), tinh chỉnh (CT-N/NA-9004), thùng tiếp liệu (NA-9013), toàn sóng (NA-9006)"]
+  };
+
+  Object.assign(productDetails, {
+    vibratoryFeederSeries: {
+      sceneId: "vibrating-bowl-720",
+      seriesKey: "feeding",
+      image: "images/product-details/vibratory-feeder-series.png",
+      name: { zh: "整組振動送料機系列", en: "VIBRATORY FEEDER SERIES", vi: "Hệ thống máy cấp liệu rung trọn bộ" },
+      descTitle: productDescTitle,
+      desc: {
+        zh: [
+          "整組振動送料系統，含振動送料機、自動補料桶、直線送料機與固定架",
+          "自動補料桶為節省人工而設計，出料量可用控制器調整",
+          "感應到振動盤沒料時自動補料；直線送料機銜接軌道避免卡料"
+        ],
+        en: [
+          "Complete vibratory feeding system: bowl feeder, auto hopper, linear feeder and frame",
+          "Auto hopper saves labor; feeding volume adjustable by controller",
+          "Auto replenishes when the bowl runs empty; linear feeder bridges the track to avoid jamming"
+        ],
+        vi: [
+          "Hệ thống cấp liệu rung trọn bộ: mâm rung, thùng tiếp liệu tự động, máy cấp liệu thẳng và khung",
+          "Thùng tiếp liệu tự động giúp tiết kiệm nhân công; lượng cấp điều chỉnh bằng bộ điều khiển",
+          "Tự động tiếp liệu khi mâm hết liệu; máy cấp liệu thẳng nối ray tránh kẹt liệu"
+        ]
+      }
+    },
+    jlSeriesProduct: {
+      sceneId: "jl-series",
+      seriesKey: "feeding",
+      image: "images/product-details/jl-series.png",
+      frames: "frames_out/jl-0/",
+      name: { zh: "JL-0 / JL-1 / JL-2", en: "JL-0 / JL-1 / JL-2", vi: "JL-0 / JL-1 / JL-2" },
+      descTitle: productDescTitle,
+      desc: linearFeederDesc
+    },
+    ml2Product: {
+      sceneId: "ml-2",
+      seriesKey: "feeding",
+      image: "images/product-details/ml-2.png",
+      frames: "frames_out/ml-2/",
+      name: { zh: "ML-2", en: "ML-2", vi: "ML-2" },
+      descTitle: productDescTitle,
+      desc: linearFeederDesc
+    },
+    ml3HopperProduct: {
+      sceneId: "ml-3-hopper",
+      seriesKey: "feeding",
+      image: "images/product-details/ml-3-hopper.png",
+      frames: "frames_out/ml-3/",
+      name: { zh: "補料桶用 ML-3", en: "ML-3 For Hopper", vi: "ML-3 (cho thùng tiếp liệu)" },
+      descTitle: productDescTitle,
+      desc: linearFeederDesc
+    },
+    stl12Product: {
+      sceneId: "stl-12",
+      seriesKey: "feeding",
+      image: "images/product-details/stl-12.png",
+      frames: "frames_out/stl-12/",
+      name: { zh: "STL-12", en: "STL-12", vi: "STL-12" },
+      descTitle: productDescTitle,
+      desc: linearFeederDesc
+    },
+    stl67Product: {
+      sceneId: "stl-67",
+      seriesKey: "feeding",
+      image: "images/product-details/stl-67.png",
+      frames: "frames_out/stl-6/",
+      name: { zh: "STL-6 / STL-7", en: "STL-6 / STL-7", vi: "STL-6 / STL-7" },
+      descTitle: productDescTitle,
+      desc: linearFeederDesc
+    },
+    ml8Product: {
+      sceneId: "ml-8",
+      seriesKey: "feeding",
+      image: "images/product-details/ml-8.png",
+      frames: "frames_out/ml-8/",
+      name: { zh: "ML-8", en: "ML-8", vi: "ML-8" },
+      descTitle: productDescTitle,
+      desc: linearFeederDesc
+    },
+    flatFeederProduct: {
+      sceneId: "flat-feeder",
+      seriesKey: "feeding",
+      image: "images/product-details/flat-feeder-a.png",
+      name: { zh: "層斗式送料機", en: "STEP FEEDER", vi: "Máy cấp liệu kiểu bậc thang" },
+      descTitle: productDescTitle,
+      desc: {
+        zh: ["降低噪音、不怕油，適合大工件上料"],
+        en: ["Low noise, oil-resistant, suitable for large parts"],
+        vi: ["Giảm tiếng ồn, không sợ dầu, phù hợp chi tiết lớn"]
+      }
+    },
+    soundproofBoxProduct: {
+      sceneId: "soundproof-box",
+      seriesKey: "feeding",
+      image: "images/product-details/soundproof-box.png",
+      frames: "frames_out/soundproof-case/",
+      name: { zh: "隔音箱", en: "SOUND PROOF CASE", vi: "Hộp cách âm" },
+      descTitle: productDescTitle,
+      desc: {
+        zh: ["可降低生產噪音", "透明板設計便於觀察振動盤運轉情況"],
+        en: ["Reduces production noise", "Transparent panel for easy observation of bowl operation"],
+        vi: ["Giảm tiếng ồn sản xuất", "Tấm trong suốt giúp dễ quan sát mâm rung vận hành"]
+      }
+    },
+    smartVoltageInverterProduct: {
+      sceneId: "smart-voltage-inverter",
+      seriesKey: "feeding",
+      image: "images/product-details/smart-voltage-inverter.png",
+      name: { zh: "智能穩壓變頻控制器", en: "INTELLIGENCE FREQUENCY CONVERSION CONTROLLER", vi: "Bộ điều khiển biến tần ổn áp thông minh" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    digitalInverterProduct: {
+      sceneId: "digital-inverter",
+      seriesKey: "feeding",
+      image: "images/product-details/digital-inverter.png",
+      name: { zh: "數字變頻控制器", en: "FREQUENCY CONVERSION CONTROLLER", vi: "Bộ điều khiển biến tần số" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    digitalVoltageProduct: {
+      sceneId: "digital-voltage",
+      seriesKey: "feeding",
+      image: "images/product-details/digital-voltage.png",
+      name: { zh: "數字調壓控制器", en: "GENERAL CONTROLLER", vi: "Bộ điều khiển điều áp số" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    microcomputerCttProduct: {
+      sceneId: "microcomputer-ctt",
+      seriesKey: "feeding",
+      image: "images/product-details/microcomputer-ctt.png",
+      name: { zh: "微電腦控制器 (CT-T)", en: "MICRO-COMPUTER CONTROLLER", vi: "Bộ điều khiển vi tính (CT-T)" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    fineTuningCtnProduct: {
+      sceneId: "fine-tuning-ctn",
+      seriesKey: "feeding",
+      image: "images/product-details/fine-tuning-ctn.png",
+      name: { zh: "微調控制器 (CT-N)", en: "GENERAL CONTROLLER", vi: "Bộ điều khiển tinh chỉnh (CT-N)" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    hopperControllerNa9013Product: {
+      sceneId: "hopper-controller-na-903",
+      seriesKey: "feeding",
+      image: "images/product-details/hopper-controller-na-9013.png",
+      name: { zh: "補料桶控制器 NA-9013", en: "HOPPER CONTROLLER", vi: "Bộ điều khiển thùng tiếp liệu NA-9013" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    fineTuningNa9004Product: {
+      sceneId: "fine-tuning-na-9004",
+      seriesKey: "feeding",
+      image: "images/product-details/fine-tuning-na-9004.png",
+      name: { zh: "微調控制器 (NA-9004)", en: "GENERAL CONTROLLER", vi: "Bộ điều khiển tinh chỉnh (NA-9004)" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    fullWaveNa9006Product: {
+      sceneId: "full-wave-na-9006",
+      seriesKey: "feeding",
+      image: "images/product-details/full-wave-na-9006.png",
+      name: { zh: "全波控制器 (NA-9006)", en: "FULL WAVE TYPE CONTROLLER", vi: "Bộ điều khiển toàn sóng (NA-9006)" },
+      descTitle: productDescTitle,
+      desc: controllerDesc
+    },
+    vortexFeeder: {
+      sceneId: "vortex-feeder",
+      seriesKey: "feeding",
+      image: "images/product-details/vortex-feeder.png",
+      frames: "frames_out/eddy-current/",
+      name: { zh: "渦電流送料裝置", en: "FEEDING DEVICE FOR EDDY CURRENT INSPECTION MACHINE", vi: "Thiết bị cấp liệu cho máy kiểm tra dòng xoáy" },
+      descTitle: productDescTitle,
+      desc: {
+        zh: ["配置於渦電流篩選機上", "對不同規格工件只需依牙徑更換轉盤"],
+        en: ["Equipped on eddy-current inspection machines", "Just change the turntable by thread diameter for different specs"],
+        vi: ["Lắp trên máy kiểm tra dòng xoáy", "Chỉ cần đổi mâm xoay theo đường kính ren cho quy cách khác nhau"]
+      }
+    }
+  });
+
+  const defaultProductDesc = {
+    zh: ["可查看產品外觀與展場位置，實際規格請以產品資料為準。"],
+    en: ["View the product appearance and showroom location. Specifications are subject to the product data sheet."],
+    vi: ["Xem hình dáng sản phẩm và vị trí trong phòng trưng bày. Thông số thực tế vui lòng tham khảo tài liệu sản phẩm."]
+  };
+
+  const productName = (zh, en, vi = en) => ({ zh, en, vi });
+  const productEntry = (sceneId, seriesKey, name, frames, imageName) => ({
+    sceneId,
+    seriesKey,
+    image: `images/product-details/${imageName || sceneId}.png`,
+    frames,
+    name,
+    descTitle: productDescTitle,
+    desc: defaultProductDesc
+  });
+
+  Object.assign(productDetails, {
+    magneticFeederProduct: productEntry("magnetic-feeder", "replenishing", productName("磁力式上料機", "MAGNETIC FEEDER", "Máy cấp liệu từ tính"), "frames_out/magnetic-feeder/", "magnetic-feeder"),
+    liftingSupplyingProduct: productEntry("lifting-supplying", "replenishing", productName("提升機 + 兩段式補料", "LIFTER + TWO-STAGE REPLENISHING", "Máy nâng + bổ sung liệu hai giai đoạn"), "frames_out/lifter-two-stage/", "lifter-two-stage"),
+    barrelFlipperProduct: productEntry("barrel-flipper", "replenishing", productName("料桶翻料機", "TILT LOADER", "Máy lật thùng liệu"), "frames_out/tilt-loader/", "tilt-loader"),
+    liftMeteringProduct: productEntry("lift-metering", "replenishing", productName("升降式自動定量上料機", "AUTOMATIC ELEVATOR CONVEYOR", "Máy nâng cấp liệu định lượng tự động"), "frames_out/elevator-conveyor/", "elevator-conveyor"),
+    fillingFeederProduct: productEntry("filling-feeder", "replenishing", productName("填充式上料機", "FILLING FEEDER", "Máy cấp liệu dạng nạp đầy"), "frames_out/filling-feeder/", "filling-feeder"),
+    autoLoadingProduct: {
+      ...productEntry("auto-exchange-platform", "replenishing", productName("自動上料平台系統", "AUTOMATIC LOADING SYSTEM", "Hệ thống cấp liệu tự động"), null, "auto-loading-system"),
+      video: "../../media/自動上料平台系統 V4.mp4"
+    },
+    eccentricBarrelProduct: productEntry("eccentric-barrel", "replenishing", productName("偏心馬達補料桶", "ECCENTRIC MOTOR HOPPER", "Thùng bổ liệu motor lệch tâm"), "frames_out/eccentric-hopper/", "eccentric-hopper"),
+    horizontalBarrelProduct: productEntry("horizontal-barrel", "replenishing", productName("平送式補料桶", "LINEAR FEEDER TYPE HOPPER", "Thùng bổ liệu dạng cấp thẳng"), "frames_out/linear-hopper/", "linear-hopper"),
+    activeBarrelProduct: productEntry("active-barrel", "replenishing", productName("活動連接式補料桶", "CONNECTABLE HOPPER", "Thùng bổ liệu kết nối linh hoạt"), "frames_out/connectable-hopper/", "connectable-hopper"),
+
+    centrifugalSeparatorProduct: productEntry("centrifugal-separator", "sorting", productName("離心甩油鐵屑分離機", "CENTRIFUGAL SCRAP SEPARATOR", "Máy tách phoi dầu ly tâm"), "frames_out/centrifugal-scrap-sep/", "centrifugal-scrap-sep"),
+    rollerFourProduct: productEntry("roller-four", "sorting", productName("羅拉篩選機（四軸）", "ROLLER SORTING MACHINE (4-AXIS)", "Máy sàng con lăn (4 trục)"), "frames_out/roller-4axis/", "roller-4axis"),
+    rollerTwoProduct: productEntry("roller-two", "sorting", productName("羅拉篩選機（兩軸）", "ROLLER SORTING MACHINE (2-AXIS)", "Máy sàng con lăn (2 trục)"), null, "roller-2axis"),
+    flatOilSeparatorProduct: productEntry("flat-oil-separator", "sorting", productName("平送式鐵屑、油水分離機", "LINEAR SCRAP / OIL-WATER SEPARATOR", "Máy tách phoi / dầu nước dạng cấp thẳng"), "frames_out/linear-scrap-sep/", "linear-scrap-sep"),
+    magneticOilSeparatorProduct: productEntry("magnetic-oil-separator", "sorting", productName("磁力式鐵屑、油水分離機", "MAGNETIC SCRAP / OIL-WATER SEPARATOR", "Máy tách phoi / dầu nước dạng từ tính"), "frames_out/magnetic-scrap-sep/", "magnetic-scrap-sep"),
+
+    straighteningProduct: productEntry("straightening-machine", "machinery", productName("矯直機", "STRAIGHTENING MACHINE", "Máy nắn thẳng"), "frames_out/straightening/", "straightening"),
+    metalMarkingProduct: productEntry("metal-marking-machine", "machinery", productName("金屬刻字機", "METAL MARKING MACHINE", "Máy khắc chữ kim loại"), null, "metal-marking"),
+    markingKnurlingProduct: productEntry("marking-knurling-machine", "machinery", productName("金屬刻字、滾花機（一機兩用）", "METAL MARKING / KNURLING MACHINE", "Máy khắc chữ / cán nhám kim loại"), null, "marking-knurling"),
+    metalKnurlingProduct: productEntry("metal-knurling-machine", "machinery", productName("金屬滾花機", "METAL KNURLING MACHINE", "Máy cán nhám kim loại"), null, "metal-knurling")
+  });
+
+  const t = (key) => translations[state.lang][key] || translations.zh[key] || key;
+
+  const getLocalized = (value) => value?.[state.lang] || value?.zh || "";
+
+  const format = (template, values) =>
+    Object.entries(values).reduce((text, [key, value]) => text.replace(`{${key}}`, value), template);
+
+  const showNotice = (message) => {
+    if (!notice) return;
+    notice.textContent = message;
+    notice.hidden = false;
+  };
+
+  const hideNotice = () => {
+    if (!notice) return;
+    state.missingSceneId = null;
+    notice.hidden = true;
+    notice.textContent = "";
+  };
+
+  const verifyImage = (path) =>
+    new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve(true);
+      image.onerror = () => resolve(false);
+      image.src = `${path}?v=${Date.now()}`;
+    });
+
+  const updateActiveState = () => {
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+      element.textContent = t(element.dataset.i18n);
+    });
+
+    document.documentElement.lang = state.lang === "zh" ? "zh-Hant" : state.lang;
+
+    document.querySelectorAll(".lang-btn").forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.lang === state.lang);
+    });
+
+    document.querySelectorAll(".category-tab").forEach((button) => {
+      const category = categoryMap[button.dataset.category];
+      button.textContent = t(category.labelKey);
+      button.classList.toggle("is-active", button.dataset.category === state.categoryId);
+    });
+
+    document.querySelectorAll(".scene-card").forEach((button) => {
+      const scene = sceneMap[button.dataset.scene];
+      button.querySelector(".scene-card-title").textContent = t(scene.labelKey);
+      button.classList.toggle("is-active", button.dataset.scene === state.sceneId);
+    });
+
+    document.querySelectorAll(".gateway-hotspot").forEach((hotspot) => {
+      const label = hotspot.dataset.productId
+        ? getLocalized(productDetails[hotspot.dataset.productId]?.name)
+        : t(sceneMap[hotspot.dataset.targetScene]?.labelKey);
+      hotspot.setAttribute("aria-label", label);
+      hotspot.querySelector(".gateway-name").textContent = label;
+    });
+
+    const currentScene = sceneMap[state.sceneId];
+    if (sceneCrumb && currentScene) {
+      sceneCrumb.textContent = `${t("brandName")} / ${t(currentScene.labelKey)}`;
+    }
+
+    if (notice && !notice.hidden && state.missingSceneId) {
+      const missingScene = sceneMap[state.missingSceneId];
+      notice.textContent = format(t("missingImage"), { name: t(missingScene.labelKey), path: missingScene.image });
+    }
+
+    if (productModal?.classList.contains("is-open") && productModal.dataset.productId) {
+      openProductModal(productModal.dataset.productId);
+    }
+  };
+
+  const setCategory = (categoryId) => {
+    state.categoryId = categoryId;
+    renderSceneStrip();
+    updateActiveState();
+  };
+
+  const loadSceneSafely = async (sceneId) => {
+    const scene = sceneMap[sceneId];
+    if (!scene) return;
+
+    const imageExists = await verifyImage(scene.image);
+    if (!imageExists) {
+      state.missingSceneId = scene.id;
+      showNotice(format(t("missingImage"), { name: t(scene.labelKey), path: scene.image }));
+      return;
+    }
+
+    hideNotice();
+    state.sceneId = scene.id;
+    state.categoryId = scene.categoryId;
+    viewer.loadScene(scene.id);
+    renderSceneStrip();
+    updateActiveState();
+  };
+
+  const createGatewayHotspot = (hotSpotDiv, args) => {
+    hotSpotDiv.classList.add("gateway-hotspot");
+    hotSpotDiv.dataset.targetScene = args.sceneId;
+    hotSpotDiv.setAttribute("role", "button");
+    hotSpotDiv.setAttribute("tabindex", "0");
+
+    const icon = document.createElement("span");
+    icon.className = "gateway-icon";
+    icon.setAttribute("aria-hidden", "true");
+
+    const label = document.createElement("span");
+    label.className = "gateway-name";
+
+    hotSpotDiv.append(icon, label);
+
+    const goToScene = () => loadSceneSafely(args.sceneId);
+    hotSpotDiv.addEventListener("click", goToScene);
+    hotSpotDiv.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        goToScene();
+      }
+    });
+
+    updateActiveState();
+  };
+
+  const getProductFramePath = (baseUrl, index) => `${baseUrl}frame_${String(index).padStart(3, "0")}.webp`;
+
+  const setProductFrameLoadingText = (text) => {
+    const label = productFrameLoading?.querySelector("span");
+    if (label) label.textContent = text;
+  };
+
+  const showProductFrame = (index) => {
+    if (!productFrameImage || !productFrameCache.length) return;
+    productFrameCurrent = ((index % PRODUCT_FRAMES_TOTAL) + PRODUCT_FRAMES_TOTAL) % PRODUCT_FRAMES_TOTAL;
+    // 目標影格還沒載好時，就近找最接近的已就緒影格，避免閃爍或空白
+    let target = productFrameCurrent;
+    if (!productFrameReady.has(target) && productFrameReady.size) {
+      for (let d = 1; d <= PRODUCT_FRAMES_TOTAL; d += 1) {
+        const back = (target - d + PRODUCT_FRAMES_TOTAL) % PRODUCT_FRAMES_TOTAL;
+        const fwd  = (target + d) % PRODUCT_FRAMES_TOTAL;
+        if (productFrameReady.has(back)) { target = back; break; }
+        if (productFrameReady.has(fwd))  { target = fwd;  break; }
+      }
+    }
+    const frame = productFrameCache[target];
+    if (frame?.src) productFrameImage.src = frame.src;
+  };
+
+  const startProductFrameAuto = () => {
+    if (productFrameAutoTimer || !productFrameAllReady) return;
+    productFrameAutoTimer = window.setInterval(() => {
+      if (!productFrameDragging) showProductFrame(productFrameCurrent + 1);
+    }, PRODUCT_FRAME_AUTOPLAY_MS);
+  };
+
+  function stopProductFrames() {
+    if (productFrameAutoTimer) {
+      window.clearInterval(productFrameAutoTimer);
+      productFrameAutoTimer = null;
+    }
+
+    productFrameImage?.removeEventListener("pointerdown", handleProductFramePointerDown);
+    window.removeEventListener("pointermove", handleProductFramePointerMove);
+    window.removeEventListener("pointerup", handleProductFramePointerUp);
+    window.removeEventListener("pointercancel", handleProductFramePointerUp);
+
+    productFrameCache = [];
+    productFrameReady = new Set();
+    productFrameLoaded = 0;
+    productFrameSuccess = 0;
+    productFrameAllReady = false;
+    productFrameCurrent = 0;
+    productFrameDragging = false;
+    productFrameAccum = 0;
+  }
+
+  const stopProductVideo = () => {
+    if (!productModalVideo) return;
+    productModalVideo.pause();
+    productModalVideo.src = "";
+    productModalVideo.load();
+    productModalVideo.style.display = "none";
+  };
+
+  function handleProductFramePointerDown(event) {
+    if (!productFrameAllReady) return;
+    event.preventDefault();
+    productFrameDragging = true;
+    productFrameLastX = event.clientX;
+    productFrameAccum = 0;
+
+    if (productFrameAutoTimer) {
+      window.clearInterval(productFrameAutoTimer);
+      productFrameAutoTimer = null;
+    }
+
+    productFrameImage?.setPointerCapture?.(event.pointerId);
+  }
+
+  function handleProductFramePointerMove(event) {
+    if (!productFrameDragging || !productFrameAllReady) return;
+    event.preventDefault();
+
+    const deltaX = event.clientX - productFrameLastX;
+    productFrameLastX = event.clientX;
+    productFrameAccum += deltaX;
+
+    const frameShift = Math.trunc(productFrameAccum / PRODUCT_FRAME_SENS);
+    if (!frameShift) return;
+
+    showProductFrame(productFrameCurrent - frameShift);
+    productFrameAccum -= frameShift * PRODUCT_FRAME_SENS;
+  }
+
+  function handleProductFramePointerUp() {
+    if (!productFrameDragging) return;
+    productFrameDragging = false;
+    startProductFrameAuto();
+  }
+
+  const loadProductFrames = (baseUrl, altText, fallbackImage) => {
+    stopProductFrames();
+
+    if (!productFrameImage || !productFrameLoading) return;
+
+    productFrameImage.style.display = "block";
+    productFrameImage.alt = altText;
+    productFrameImage.src = getProductFramePath(baseUrl, 0);
+    productModalImage.style.display = "none";
+    productFrameHint.style.display = "block";
+    productFrameLoading.classList.remove("is-hidden");
+    setProductFrameLoadingText("載入 0%");
+
+    productFrameCache = new Array(PRODUCT_FRAMES_TOTAL);
+
+    // 第一階段：每隔 PRODUCT_FRAME_STEP 張抓一張，湊出可用的粗略轉動
+    const phase1 = [];
+    for (let i = 0; i < PRODUCT_FRAMES_TOTAL; i += PRODUCT_FRAME_STEP) phase1.push(i);
+    const phase1Set = new Set(phase1);
+    const phase2 = [];
+    for (let i = 0; i < PRODUCT_FRAMES_TOTAL; i += 1) if (!phase1Set.has(i)) phase2.push(i);
+
+    let phase1Settled = 0;
+    let phase1Done = false;
+
+    const finishPhase1 = () => {
+      if (phase1Done) return;
+      phase1Done = true;
+
+      // 一張都沒成功 → 退回靜態圖
+      if (!productFrameSuccess) {
+        if (fallbackImage) {
+          productFrameImage.style.display = "none";
+          productFrameHint.style.display = "none";
+          productModalImage.style.display = "block";
+          productModalImage.src = fallbackImage;
+          productModalImage.alt = altText;
+        }
+        productFrameLoading.classList.add("is-hidden");
+        return;
+      }
+
+      // 可以開始轉了，剩下的影格背景補齊
+      productFrameAllReady = true;
+      productFrameLoading.classList.add("is-hidden");
+      showProductFrame(0);
+      startProductFrameAuto();
+      loadBatch(phase2);
+    };
+
+    const loadOne = (index, isPhase1) => {
+      const frame = new Image();
+      frame.decoding = "async";
+      frame.onload = () => {
+        productFrameReady.add(index);
+        productFrameLoaded += 1;
+        productFrameSuccess += 1;
+        if (isPhase1) {
+          phase1Settled += 1;
+          const progress = Math.round((phase1Settled / phase1.length) * 100);
+          setProductFrameLoadingText(`載入 ${progress}%`);
+          if (phase1Settled === phase1.length) finishPhase1();
+        }
+      };
+      frame.onerror = () => {
+        productFrameLoaded += 1;
+        if (isPhase1) {
+          phase1Settled += 1;
+          if (phase1Settled === phase1.length) finishPhase1();
+        }
+      };
+      frame.src = getProductFramePath(baseUrl, index);
+      productFrameCache[index] = frame;
+    };
+
+    // 背景批次載入，一次 12 張，避免一口氣塞爆瀏覽器連線數
+    function loadBatch(list) {
+      const CHUNK = 12;
+      let cursor = 0;
+      const next = () => {
+        if (cursor >= list.length) return;
+        const slice = list.slice(cursor, cursor + CHUNK);
+        cursor += CHUNK;
+        let settled = 0;
+        slice.forEach((idx) => {
+          const frame = new Image();
+          frame.decoding = "async";
+          const done = (ok) => {
+            if (ok) { productFrameReady.add(idx); productFrameSuccess += 1; }
+            productFrameLoaded += 1;
+            settled += 1;
+            if (settled === slice.length) next();
+          };
+          frame.onload = () => done(true);
+          frame.onerror = () => done(false);
+          frame.src = getProductFramePath(baseUrl, idx);
+          productFrameCache[idx] = frame;
+        });
+      };
+      next();
+    }
+
+    phase1.forEach((index) => loadOne(index, true));
+
+    productFrameImage.addEventListener("pointerdown", handleProductFramePointerDown);
+    window.addEventListener("pointermove", handleProductFramePointerMove);
+    window.addEventListener("pointerup", handleProductFramePointerUp);
+    window.addEventListener("pointercancel", handleProductFramePointerUp);
+  };
+
+  const openProductModal = (productId) => {
+    const product = productDetails[productId];
+    if (!product || !productModal) return;
+
+    document.getElementById("productModalSeries").textContent = t(product.seriesKey);
+    document.getElementById("productModalTitle").textContent = getLocalized(product.name);
+    document.getElementById("productModalSubtitle").textContent = state.lang === "en" ? "" : product.name.en;
+    document.getElementById("productModalDescTitle").textContent = getLocalized(product.descTitle);
+
+    const altText = getLocalized(product.name);
+    stopProductVideo();
+    if (product.video && productModalVideo) {
+      stopProductFrames();
+      productFrameImage.style.display = "none";
+      productFrameHint.style.display = "none";
+      productFrameLoading.classList.add("is-hidden");
+      productModalImage.style.display = "none";
+      productModalVideo.style.display = "block";
+      productModalVideo.src = product.video;
+      productModalVideo.load();
+      productModalVideo.play().catch(() => {});
+    } else if (product.frames) {
+      loadProductFrames(product.frames, altText, product.image);
+    } else {
+      stopProductFrames();
+      productFrameImage.style.display = "none";
+      productFrameHint.style.display = "none";
+      productFrameLoading.classList.add("is-hidden");
+      productModalImage.style.display = "block";
+      productModalImage.src = product.image;
+      productModalImage.alt = altText;
+    }
+
+    const list = document.getElementById("productModalDesc");
+    list.innerHTML = "";
+    getLocalized(product.desc).forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+
+    productModal.classList.add("is-open");
+    productModal.dataset.productId = productId;
+    productModal.setAttribute("aria-hidden", "false");
+  };
+
+  const closeProductModal = () => {
+    if (!productModal) return;
+    stopProductFrames();
+    stopProductVideo();
+    productModal.classList.remove("is-open");
+    delete productModal.dataset.productId;
+    productModal.setAttribute("aria-hidden", "true");
+  };
+
+  const createInfoHotspot = (hotSpotDiv, args) => {
+    hotSpotDiv.classList.add("gateway-hotspot", "info-hotspot");
+    hotSpotDiv.dataset.productId = args.productId;
+    hotSpotDiv.setAttribute("role", "button");
+    hotSpotDiv.setAttribute("tabindex", "0");
+
+    const icon = document.createElement("span");
+    icon.className = "gateway-icon";
+    icon.setAttribute("aria-hidden", "true");
+
+    const label = document.createElement("span");
+    label.className = "gateway-name";
+
+    hotSpotDiv.append(icon, label);
+
+    const showProduct = () => openProductModal(args.productId);
+    hotSpotDiv.addEventListener("click", showProduct);
+    hotSpotDiv.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        showProduct();
+      }
+    });
+
+    updateActiveState();
+  };
+
+  const radiansToDegrees = (radians) => radians * (180 / Math.PI);
+
+  const degreesToRadians = (degrees) => degrees * (Math.PI / 180);
+
+  const normalizeYaw = (yaw) => {
+    let normalized = ((yaw + 180) % 360) - 180;
+    if (normalized < -180) normalized += 360;
+    return normalized;
+  };
+
+  const getCoordsFromScreenPoint = (clientX, clientY) => {
+    const panorama = document.getElementById("panorama");
+    const rect = panorama.getBoundingClientRect();
+    const x = (clientX - rect.left - rect.width / 2) / (rect.width / 2);
+    const y = (rect.height / 2 - (clientY - rect.top)) / (rect.width / 2);
+    const focalLength = 1 / Math.tan(degreesToRadians(viewer.getHfov()) / 2);
+    const viewPitch = degreesToRadians(viewer.getPitch());
+    const viewYaw = degreesToRadians(viewer.getYaw());
+
+    const pitchedY = y * Math.cos(viewPitch) + focalLength * Math.sin(viewPitch);
+    const pitchedZ = -y * Math.sin(viewPitch) + focalLength * Math.cos(viewPitch);
+    const pitch = radiansToDegrees(Math.atan2(pitchedY, Math.sqrt(x * x + pitchedZ * pitchedZ)));
+    const yaw = normalizeYaw(radiansToDegrees(viewYaw + Math.atan2(x, pitchedZ)));
+
+    return { pitch, yaw };
+  };
+
+  const setupCoordinateMode = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("coords") || !coordPanel) return;
+
+    const panorama = document.getElementById("panorama");
+    coordPanel.hidden = false;
+    coordPanel.textContent = "座標模式：在畫面上點一下取得 pitch / yaw";
+    window.tourCoordsFromPoint = getCoordsFromScreenPoint;
+
+    panorama.addEventListener("click", (event) => {
+      if (event.target.closest(".gateway-hotspot")) return;
+
+      const { pitch, yaw } = getCoordsFromScreenPoint(event.clientX, event.clientY);
+
+      coordPanel.textContent = `pitch: ${pitch.toFixed(1)}, yaw: ${yaw.toFixed(1)}`;
+    });
+  };
+
+  const buildPannellumScenes = () => {
+    const scenes = {};
+
+    sceneList.forEach((scene) => {
+      scenes[scene.id] = {
+        title: t(scene.labelKey),
+        type: "equirectangular",
+        panorama: scene.image,
+        // 低解預覽圖：高清全景載入前先顯示，避免黑畫面
+        preview: scene.image.replace("images/", "preview/"),
+        pitch: 0,
+        yaw: 0,
+        hotSpots: []
+      };
+    });
+
+    const go = (pitch, yaw, sceneId) => ({
+      pitch,
+      yaw,
+      type: "custom",
+      cssClass: "product-hotspot",
+      createTooltipFunc: createGatewayHotspot,
+      createTooltipArgs: { sceneId }
+    });
+
+    const info = (pitch, yaw, productId) => ({
+      pitch,
+      yaw,
+      type: "custom",
+      cssClass: "info-hotspot",
+      createTooltipFunc: createInfoHotspot,
+      createTooltipArgs: { productId }
+    });
+
+    scenes.entrance.hotSpots = [
+      { pitch: -9, yaw: -34, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "feeding" } },
+      { pitch: -8.7, yaw: -19, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "replenishing" } },
+      { pitch: -8.7, yaw: 19, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "sorting" } },
+      { pitch: -9, yaw: 34, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "machinery" } }
+    ];
+
+    scenes.feeding.hotSpots = [
+      { pitch: -22.9, yaw: 0.4, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "vibrating-bowl-720" } },
+      { pitch: -21.6, yaw: -63.3, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "stl-67" } },
+      { pitch: -15.1, yaw: -44.1, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "ml-8" } },
+      { pitch: -13.5, yaw: -27.4, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "ml-3-hopper" } },
+      { pitch: -6.3, yaw: -68.2, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "stl-12" } },
+      { pitch: -4.4, yaw: -46.6, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "jl-series" } },
+      { pitch: -3.5, yaw: -36.9, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "ml-2" } },
+      { pitch: -5.3, yaw: -16.3, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "vortex-feeder" } },
+      { pitch: 1.9, yaw: -0.2, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "flat-feeder" } },
+      { pitch: -12.1, yaw: 17.4, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "soundproof-box" } },
+      { pitch: -22.3, yaw: 68.4, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "fine-tuning-na-9004" } },
+      { pitch: -16.9, yaw: 45.2, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "full-wave-na-9006" } },
+      { pitch: -10.7, yaw: 29.4, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "hopper-controller-na-903" } },
+      { pitch: 1.9, yaw: 40.8, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "microcomputer-ctt" } },
+      { pitch: 2.5, yaw: 47.3, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "fine-tuning-ctn" } },
+      { pitch: 2.1, yaw: 54.7, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "smart-voltage-inverter" } },
+      { pitch: 2.1, yaw: 65.9, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "digital-inverter" } },
+      { pitch: 1.9, yaw: 81, type: "custom", cssClass: "product-hotspot", createTooltipFunc: createGatewayHotspot, createTooltipArgs: { sceneId: "digital-voltage" } }
+    ];
+
+    scenes["vibrating-bowl-720"].hotSpots = [
+      go(-24.3, -94.6, "stl-67"),
+      go(-22.1, -65.9, "ml-8"),
+      go(-16.5, -39.9, "ml-3-hopper"),
+      go(0, -90, "stl-12"),
+      go(1.1, -61.5, "jl-series"),
+      go(0, -49.6, "ml-2"),
+      go(6.9, -27.2, "vortex-feeder"),
+      go(5.3, 0.7, "flat-feeder"),
+      go(10.2, 35, "soundproof-box"),
+      go(-24.1, 96.3, "fine-tuning-na-9004"),
+      go(-20.7, 65, "full-wave-na-9006"),
+      go(-16.9, 43.2, "hopper-controller-na-903"),
+      go(2.8, 52.7, "microcomputer-ctt"),
+      go(2.8, 66.6, "fine-tuning-ctn"),
+      go(2.8, 80.7, "smart-voltage-inverter"),
+      go(2.8, 90.4, "digital-inverter"),
+      go(2.6, 102.7, "digital-voltage"),
+      info(-57.7, 0.2, "vibratoryFeederSeries")
+    ];
+
+    scenes["stl-12"].hotSpots = [
+      go(-64.7, -138.2, "stl-67"),
+      go(-40.8, 108.3, "ml-8"),
+      go(-19.9, 99.7, "ml-3-hopper"),
+      go(-13.4, 77.3, "jl-series"),
+      go(-11.8, 91.5, "vortex-feeder"),
+      go(-13.5, 126.9, "flat-feeder"),
+      go(-13.7, 145.7, "soundproof-box"),
+      go(-27.1, 163.3, "vibrating-bowl-720"),
+      info(-2.5, 0.5, "stl12Product")
+    ];
+
+    scenes["ml-8"].hotSpots = [
+      go(-32.9, -157.5, "vibrating-bowl-720"),
+      go(-16.9, -75.1, "stl-67"),
+      go(-0.7, -39.4, "stl-12"),
+      go(-0.4, 30.4, "jl-series"),
+      go(0, 51.2, "ml-2"),
+      go(-19.3, 34.5, "ml-3-hopper"),
+      go(-11.8, 90.5, "vortex-feeder"),
+      go(-11.6, 124.6, "flat-feeder"),
+      go(-13.2, 148.2, "soundproof-box"),
+      info(-38.3, 26.5, "ml8Product")
+    ];
+
+    scenes["ml-3-hopper"].hotSpots = [
+      go(-21.1, -132.7, "vibrating-bowl-720"),
+      go(-11.6, -74.9, "ml-8"),
+      go(-0.7, -58, "stl-12"),
+      go(-0.5, -25.5, "jl-series"),
+      go(-0.5, 11.6, "ml-2"),
+      go(-17.8, 85.6, "vortex-feeder"),
+      go(-16.7, 141, "flat-feeder"),
+      go(-11.6, 161.9, "soundproof-box"),
+      info(-37.4, 39.4, "ml3HopperProduct")
+    ];
+
+    scenes["stl-67"].hotSpots = [
+      go(10, 10.7, "stl-12"),
+      go(3.7, 60.3, "jl-series"),
+      go(-5.8, 85.4, "ml-8"),
+      go(4.7, 98.1, "vortex-feeder"),
+      go(-7.7, 121.5, "flat-feeder"),
+      go(-11.8, 138.5, "soundproof-box"),
+      go(-7.2, 160.7, "vibrating-bowl-720"),
+      info(-11.8, 46.8, "stl67Product")
+    ];
+
+    scenes["jl-series"].hotSpots = [
+      go(-14.1, -145.2, "vibrating-bowl-720"),
+      go(-17.2, -101.4, "stl-67"),
+      go(-36.9, -120.4, "ml-8"),
+      go(-55.2, 133.1, "ml-3-hopper"),
+      go(-11.4, -78.4, "stl-12"),
+      go(-21.3, 65.9, "ml-2"),
+      go(-22.1, 102.7, "vortex-feeder"),
+      go(-15.5, 147, "flat-feeder"),
+      go(-11.1, 170.7, "soundproof-box"),
+      info(8.3, 0, "jlSeriesProduct")
+    ];
+
+    scenes["smart-voltage-inverter"].hotSpots = [
+      go(-26.5, -172.1, "vibrating-bowl-720"),
+      go(-10.7, -147.3, "vortex-feeder"),
+      go(-13.7, -128.7, "flat-feeder"),
+      go(-15.8, -91.2, "soundproof-box"),
+      go(-22.9, -104.1, "hopper-controller-na-903"),
+      go(-50.3, -139.6, "full-wave-na-9006"),
+      go(-11.4, -71.2, "fine-tuning-ctn"),
+      go(-26.7, 62.8, "digital-inverter"),
+      go(-11.4, 82.1, "digital-voltage"),
+      go(-38.1, 123.6, "fine-tuning-na-9004"),
+      info(11.1, -2.5, "smartVoltageInverterProduct")
+    ];
+
+    scenes["fine-tuning-ctn"].hotSpots = [
+      go(-11.6, -160.8, "vortex-feeder"),
+      go(-19.2, -147.5, "flat-feeder"),
+      go(-26.7, -98.8, "soundproof-box"),
+      go(-52.9, -125.9, "hopper-controller-na-903"),
+      go(-23, -55.4, "ml-8"),
+      go(-16.9, 74.2, "smart-voltage-inverter"),
+      go(-5.1, 85.6, "digital-inverter"),
+      go(-20, 102.5, "fine-tuning-na-9004"),
+      go(-40.8, 123.4, "full-wave-na-9006"),
+      go(-17.8, 128.5, "feeding"),
+      go(-29.5, 162.9, "vibrating-bowl-720"),
+      info(9.3, -0.9, "fineTuningCtnProduct")
+    ];
+
+    scenes["digital-voltage"].hotSpots = [
+      go(-22.5, -160.5, "vibrating-bowl-720"),
+      go(-13, -123.9, "flat-feeder"),
+      go(-26.9, -103, "full-wave-na-9006"),
+      go(-55.4, -129.4, "fine-tuning-na-9004"),
+      go(-25.8, -58.5, "digital-inverter"),
+      info(10.9, -0.4, "digitalVoltageProduct")
+    ];
+
+    scenes["ml-2"].hotSpots = [
+      go(-14.4, -145, "vibrating-bowl-720"),
+      go(-21.6, -106.5, "ml-8"),
+      go(-51.3, -138, "ml-3-hopper"),
+      go(-9.5, -85.1, "stl-12"),
+      go(-24.4, -67.5, "jl-series"),
+      go(-36.6, 107.4, "vortex-feeder"),
+      go(-20, 152.2, "flat-feeder"),
+      info(4.9, -2.5, "ml2Product")
+    ];
+
+    scenes["full-wave-na-9006"].hotSpots = [
+      go(-8.4, -144.8, "vortex-feeder"),
+      go(-12.3, -128.8, "flat-feeder"),
+      go(-11.1, -89.8, "soundproof-box"),
+      go(-14.2, -75.4, "hopper-controller-na-903"),
+      go(-12.8, 79.5, "fine-tuning-na-9004"),
+      go(-10.7, 129.4, "feeding"),
+      go(-30.9, 167.3, "vibrating-bowl-720"),
+      go(2.8, -50.8, "ml-8"),
+      go(3.3, -30.6, "fine-tuning-ctn"),
+      go(3.5, 19.5, "smart-voltage-inverter"),
+      go(3.3, 40.3, "digital-inverter"),
+      go(1.6, 53.8, "digital-voltage"),
+      info(-16.2, 19.3, "fullWaveNa9006Product")
+    ];
+
+    scenes["digital-inverter"].hotSpots = [
+      go(-25.5, -161.9, "vibrating-bowl-720"),
+      go(-12.7, -129.9, "flat-feeder"),
+      go(-17.8, -95.1, "hopper-controller-na-903"),
+      go(-39.6, -111.4, "full-wave-na-9006"),
+      go(-24.3, -66.4, "smart-voltage-inverter"),
+      go(-28.7, 69.6, "digital-voltage"),
+      go(-62.1, 147.8, "fine-tuning-na-9004"),
+      info(13.5, -0.9, "digitalInverterProduct")
+    ];
+
+    scenes["fine-tuning-na-9004"].hotSpots = [
+      go(-23.2, -154.5, "vibrating-bowl-720"),
+      go(12.1, -133.9, "vortex-feeder"),
+      go(-8.8, -113, "flat-feeder"),
+      go(19.9, -85.1, "soundproof-box"),
+      go(-7.4, -85.4, "hopper-controller-na-903"),
+      go(-9.7, -74.9, "full-wave-na-9006"),
+      go(15.1, -66.1, "microcomputer-ctt"),
+      go(15.5, -55.2, "fine-tuning-ctn"),
+      go(1.8, -34.6, "smart-voltage-inverter"),
+      go(26.2, -4, "digital-inverter"),
+      go(5.6, 20.6, "digital-voltage"),
+      info(-42.2, 0, "fineTuningNa9004Product")
+    ];
+
+    scenes["soundproof-box"].hotSpots = [
+      go(-31.3, -129.2, "vibrating-bowl-720"),
+      go(-36.6, 126.6, "microcomputer-ctt"),
+      go(-24.3, 149.8, "fine-tuning-ctn"),
+      info(20, 38.1, "soundproofBoxProduct")
+    ];
+
+    scenes["hopper-controller-na-903"].hotSpots = [
+      go(-9.1, -160.3, "vortex-feeder"),
+      go(-17.4, -134.8, "flat-feeder"),
+      go(-28.5, -75.8, "soundproof-box"),
+      go(3.9, 22, "fine-tuning-ctn"),
+      go(3.2, 51.2, "smart-voltage-inverter"),
+      go(-0.2, 66.8, "digital-inverter"),
+      go(-16.7, 80.2, "full-wave-na-9006"),
+      go(-8.8, 105.1, "feeding"),
+      go(-23, 147, "vibrating-bowl-720"),
+      info(-17.1, 18.5, "hopperControllerNa9013Product")
+    ];
+
+    scenes["microcomputer-ctt"].hotSpots = [
+      go(-19, -143.8, "flat-feeder"),
+      go(-39.6, -103, "soundproof-box"),
+      go(-22.7, 61.3, "fine-tuning-ctn"),
+      go(-10.4, 84.6, "smart-voltage-inverter"),
+      go(-11.6, 125.7, "feeding"),
+      go(-22.9, 146.1, "vibrating-bowl-720"),
+      go(-33.8, 112.7, "full-wave-na-9006"),
+      go(-62.9, 154, "hopper-controller-na-903"),
+      info(5.6, -0.7, "microcomputerCttProduct")
+    ];
+
+    scenes["vortex-feeder"].hotSpots = [
+      go(-25.3, -148.2, "jl-series"),
+      go(-38, -108.5, "ml-2"),
+      go(-16.3, 88.2, "soundproof-box"),
+      go(-34.5, 72.2, "flat-feeder"),
+      go(-24.3, 141.7, "vibrating-bowl-720"),
+      info(1.8, -2.5, "vortexFeeder")
+    ];
+
+    scenes["flat-feeder"].hotSpots = [
+      go(-19, -145.7, "stl-67"),
+      go(-22.9, -131.8, "ml-8"),
+      go(-26, -108.3, "ml-3-hopper"),
+      go(-0.5, -133.1, "stl-12"),
+      go(-1.4, -115.1, "jl-series"),
+      go(-1.2, -97.7, "ml-2"),
+      go(-33.5, 77.3, "vortex-feeder"),
+      go(-32.5, 34.5, "soundproof-box"),
+      go(3.3, 103, "microcomputer-ctt"),
+      go(3.5, 115.7, "fine-tuning-ctn"),
+      go(3.3, 126.6, "smart-voltage-inverter"),
+      go(3.3, 137.3, "digital-inverter"),
+      go(3.2, 147.3, "digital-voltage"),
+      go(-19.2, 144.8, "fine-tuning-na-9004"),
+      go(-24, 130.6, "full-wave-na-9006"),
+      go(-30.6, 110, "hopper-controller-na-903"),
+      go(-48.2, 174.7, "vibrating-bowl-720"),
+      info(2.3, 0, "flatFeederProduct")
+    ];
+
+    scenes.replenishing.hotSpots = [
+      go(-21.8, -116.6, "magnetic-feeder"),
+      go(-21, -65, "lifting-supplying"),
+      go(-15, -42, "barrel-flipper"),
+      go(-11, -24, "lift-metering"),
+      go(-9, -13, "filling-feeder"),
+      go(-9, 0, "auto-exchange-platform"),
+      go(-10, 17, "eccentric-barrel"),
+      go(-13, 39, "horizontal-barrel"),
+      go(-21, 72, "active-barrel")
+    ];
+
+    scenes["magnetic-feeder"].hotSpots = [
+      go(-19, -150, "replenishing"),
+      go(-21, 64, "lifting-supplying"),
+      go(-16, 80, "barrel-flipper"),
+      go(-13, 104, "auto-exchange-platform"),
+      go(-17, 143, "active-barrel"),
+      info(-24, -24, "magneticFeederProduct")
+    ];
+
+    scenes["lifting-supplying"].hotSpots = [
+      go(-18, -122, "replenishing"),
+      go(-22, -98, "magnetic-feeder"),
+      go(-13, 76, "barrel-flipper"),
+      go(-15, 98, "lift-metering"),
+      go(-13, 125, "auto-exchange-platform"),
+      go(-19, -151, "active-barrel"),
+      info(2, -8, "liftingSupplyingProduct")
+    ];
+
+    scenes["barrel-flipper"].hotSpots = [
+      go(-15, -104, "replenishing"),
+      go(-14, -90, "magnetic-feeder"),
+      go(-17, -78, "lifting-supplying"),
+      go(-14, 72, "lift-metering"),
+      go(-16, 96, "filling-feeder"),
+      go(-15, 126, "auto-exchange-platform"),
+      go(-18, 150, "eccentric-barrel"),
+      info(-3, 0, "barrelFlipperProduct")
+    ];
+
+    scenes["lift-metering"].hotSpots = [
+      go(-16, -103, "replenishing"),
+      go(-15, -86, "lifting-supplying"),
+      go(-15, -78, "barrel-flipper"),
+      go(-16, 73, "filling-feeder"),
+      go(-14, 113, "auto-exchange-platform"),
+      go(-16, 148, "eccentric-barrel"),
+      info(-2, 6, "liftMeteringProduct")
+    ];
+
+    scenes["filling-feeder"].hotSpots = [
+      go(-15, -131, "replenishing"),
+      go(-15, -102, "barrel-flipper"),
+      go(-16, -90, "lift-metering"),
+      go(-15, 110, "auto-exchange-platform"),
+      go(-18, -151, "horizontal-barrel"),
+      info(-4, 5, "fillingFeederProduct")
+    ];
+
+    scenes["auto-exchange-platform"].hotSpots = [
+      go(-16, -136, "barrel-flipper"),
+      go(-15, -118, "lift-metering"),
+      go(-16, -101, "filling-feeder"),
+      go(-17, 84, "eccentric-barrel"),
+      go(-16, 121, "horizontal-barrel"),
+      go(-16, 151, "active-barrel"),
+      info(3, 0, "autoLoadingProduct")
+    ];
+
+    scenes["eccentric-barrel"].hotSpots = [
+      go(-17, -151, "lift-metering"),
+      go(-16, -134, "filling-feeder"),
+      go(-20, -105, "auto-exchange-platform"),
+      go(-17, 72, "horizontal-barrel"),
+      go(-16, 112, "active-barrel"),
+      info(-5, 2, "eccentricBarrelProduct")
+    ];
+
+    scenes["horizontal-barrel"].hotSpots = [
+      go(-17, -154, "lift-metering"),
+      go(-16, -133, "filling-feeder"),
+      go(-18, -103, "auto-exchange-platform"),
+      go(-17, -76, "eccentric-barrel"),
+      go(-15, 82, "active-barrel"),
+      info(-4, 4, "horizontalBarrelProduct")
+    ];
+
+    scenes["active-barrel"].hotSpots = [
+      go(-18, 108, "replenishing"),
+      go(-18, 145, "magnetic-feeder"),
+      go(-17, -135, "lifting-supplying"),
+      go(-16, -92, "auto-exchange-platform"),
+      go(-17, -77, "horizontal-barrel"),
+      info(1, 4, "activeBarrelProduct")
+    ];
+
+    scenes.sorting.hotSpots = [
+      go(-21, -47, "centrifugal-separator"),
+      go(-15, -24, "roller-four"),
+      go(-11, -8, "roller-two"),
+      go(-11, 11, "flat-oil-separator"),
+      go(-14, 34, "magnetic-oil-separator")
+    ];
+
+    scenes["centrifugal-separator"].hotSpots = [
+      go(-14, -141, "sorting"),
+      go(-17, 83, "roller-four"),
+      go(-19, 100, "roller-two"),
+      go(-16, 126, "flat-oil-separator"),
+      go(-15, 145, "magnetic-oil-separator"),
+      info(7, -5, "centrifugalSeparatorProduct")
+    ];
+
+    scenes["roller-four"].hotSpots = [
+      go(-14, -120, "sorting"),
+      go(-16, -96, "centrifugal-separator"),
+      go(-15, 80, "roller-two"),
+      go(-16, 125, "flat-oil-separator"),
+      info(6, 1, "rollerFourProduct")
+    ];
+
+    scenes["roller-two"].hotSpots = [
+      go(-14, -105, "sorting"),
+      go(-14, -90, "centrifugal-separator"),
+      go(-16, -78, "roller-four"),
+      go(-18, -150, "flat-oil-separator"),
+      info(5, 7, "rollerTwoProduct")
+    ];
+
+    scenes["flat-oil-separator"].hotSpots = [
+      go(-16, -145, "centrifugal-separator"),
+      go(-16, -119, "roller-four"),
+      go(-14, -82, "roller-two"),
+      go(-15, 88, "magnetic-oil-separator"),
+      info(-7, 8, "flatOilSeparatorProduct")
+    ];
+
+    scenes["magnetic-oil-separator"].hotSpots = [
+      go(-15, -151, "sorting"),
+      go(-15, -111, "centrifugal-separator"),
+      go(-15, -90, "roller-four"),
+      go(-14, -58, "flat-oil-separator"),
+      info(-5, 48, "magneticOilSeparatorProduct")
+    ];
+
+    scenes.machinery.hotSpots = [
+      go(-18, -78, "straightening-machine"),
+      go(-14, -20, "metal-marking-machine"),
+      go(-13, 22, "marking-knurling-machine"),
+      go(-14, 72, "metal-knurling-machine")
+    ];
+
+    scenes["straightening-machine"].hotSpots = [
+      go(-16, 65, "metal-marking-machine"),
+      go(-16, 100, "marking-knurling-machine"),
+      go(-15, 127, "metal-knurling-machine"),
+      info(-3, 5, "straighteningProduct")
+    ];
+
+    scenes["metal-marking-machine"].hotSpots = [
+      go(-15, 119, "machinery"),
+      go(-16, -116, "straightening-machine"),
+      go(-14, 82, "marking-knurling-machine"),
+      info(-4, 8, "metalMarkingProduct")
+    ];
+
+    scenes["marking-knurling-machine"].hotSpots = [
+      go(-16, -119, "straightening-machine"),
+      go(-15, -80, "metal-marking-machine"),
+      go(-15, 116, "metal-knurling-machine"),
+      info(2, 7, "markingKnurlingProduct")
+    ];
+
+    scenes["metal-knurling-machine"].hotSpots = [
+      go(-16, -141, "machinery"),
+      go(-16, -106, "straightening-machine"),
+      go(-15, -80, "marking-knurling-machine"),
+      info(-3, 7, "metalKnurlingProduct")
+    ];
+
+    return scenes;
+  };
+
+  const renderCategories = () => {
+    categoryTabs.innerHTML = "";
+    categories.forEach((category) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "category-tab";
+      button.dataset.category = category.id;
+      button.addEventListener("click", () => setCategory(category.id));
+      categoryTabs.appendChild(button);
+    });
+  };
+
+  function renderSceneStrip() {
+    const category = categoryMap[state.categoryId];
+    sceneStrip.innerHTML = "";
+
+    category.sceneIds.forEach((sceneId) => {
+      const scene = sceneMap[sceneId];
+      const button = document.createElement("button");
+      const thumb = document.createElement("img");
+      const title = document.createElement("span");
+
+      button.type = "button";
+      button.className = "scene-card";
+      button.dataset.scene = scene.id;
+      button.addEventListener("click", () => loadSceneSafely(scene.id));
+
+      thumb.src = scene.thumb || scene.image;
+      thumb.alt = "";
+      thumb.loading = "lazy";
+      thumb.addEventListener("error", () => {
+        button.classList.add("is-missing");
+        thumb.remove();
+      });
+
+      title.className = "scene-card-title";
+      button.append(thumb, title);
+      sceneStrip.appendChild(button);
+    });
+  }
+
+  renderCategories();
+  renderSceneStrip();
+
+  const viewer = pannellum.viewer("panorama", {
+    default: {
+      firstScene: "entrance",
+      sceneFadeDuration: 900,
+      autoLoad: true,
+      showControls: true,
+      compass: false,
+      hfov: 120,
+      minHfov: 90,
+      maxHfov: 120
+    },
+    scenes: buildPannellumScenes()
+  });
+
+  viewer.on("scenechange", (sceneId) => {
+    const scene = sceneMap[sceneId];
+    if (!scene) return;
+    state.sceneId = scene.id;
+    state.categoryId = scene.categoryId;
+    renderSceneStrip();
+    updateActiveState();
+  });
+
+  document.querySelectorAll(".lang-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.lang = button.dataset.lang;
+      updateActiveState();
+    });
+  });
+
+  productModalClose?.addEventListener("click", closeProductModal);
+  productModal?.addEventListener("click", (event) => {
+    if (event.target === productModal) closeProductModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeProductModal();
+  });
+
+  quickTourToggle?.addEventListener("click", () => {
+    const isCollapsed = quickTour.classList.toggle("is-collapsed");
+    quickTourToggle.setAttribute("aria-expanded", String(!isCollapsed));
+    quickTourToggle.setAttribute("aria-label", isCollapsed ? "展開快速導覽" : "收合快速導覽");
+  });
+
+  setupCoordinateMode();
+  updateActiveState();
+})();

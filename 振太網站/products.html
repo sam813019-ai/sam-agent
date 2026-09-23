@@ -504,43 +504,57 @@ img{display:block;max-width:100%}
 
 .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(242,237,225,.14)}
 .prod-card{
-  background:var(--ink);padding:28px 24px 24px;position:relative;
-  display:flex;flex-direction:column;min-height:280px;
-  transition:background .3s ease,transform .3s ease;
-  cursor:pointer;
+  background:var(--ink);padding:26px 24px 22px;position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;min-height:300px;
+  transition:transform .35s ease,box-shadow .35s ease;
+  cursor:pointer;overflow:hidden;
 }
-.prod-card:hover{background:var(--yellow);color:var(--black)}
-.prod-card:hover .mdl{color:var(--red)}
-.prod-card:hover .arr{transform:translateX(6px);color:var(--black)}
+/* hover 浮現產品圖（淡入、置中、不裁切） */
+.prod-card .pc-img{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:30px 30px 86px;opacity:1;transform:scale(1);
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;z-index:0;
+}
+.prod-card .pc-img img{max-width:100%;max-height:100%;object-fit:contain;
+  filter:drop-shadow(0 14px 30px rgba(0,0,0,.55));}
+/* 底部漸層：恆顯示，保證文字可讀 */
+.prod-card .pc-grad{
+  position:absolute;left:0;right:0;bottom:0;height:64%;z-index:1;opacity:1;
+  background:linear-gradient(to top,var(--ink) 6%,rgba(32,40,48,.88) 40%,rgba(32,40,48,0));
+  pointer-events:none;
+}
+.prod-card:hover{transform:translateY(-3px);box-shadow:inset 0 3px 0 0 var(--yellow),0 18px 40px -18px rgba(0,0,0,.7)}
+.prod-card:hover .pc-img{transform:scale(1.06)}
+.prod-card .pc-top,.prod-card .pc-bot{position:relative;z-index:2}
 .prod-card .mdl{
   font-family:var(--f-mono);font-size:11px;font-weight:600;
-  letter-spacing:.14em;color:var(--yellow);margin-bottom:14px;
+  letter-spacing:.14em;color:var(--yellow);
 }
 .prod-card .idx-no{
-  position:absolute;top:20px;right:22px;font-family:var(--f-mono);
+  position:absolute;top:24px;right:24px;z-index:2;font-family:var(--f-mono);
   font-size:10px;color:var(--steel);letter-spacing:.14em;
 }
 .prod-card .icon{
-  width:56px;height:56px;margin-bottom:22px;
-  display:grid;place-items:center;
+  width:46px;height:46px;margin:20px 0;
+  display:grid;place-items:center;color:var(--steel);
   background:rgba(244,219,0,.06);border:1px solid rgba(244,219,0,.22);
 }
-.prod-card:hover .icon{background:rgba(10,9,8,.1);border-color:var(--black)}
 .prod-card h5{
   font-family:var(--f-sans-tc);font-weight:700;font-size:18px;line-height:1.4;
-  margin-bottom:8px;
+  margin-bottom:6px;color:var(--paper);
 }
-.prod-card .en{font-family:var(--f-display);font-size:11px;color:var(--steel);letter-spacing:.1em;margin-bottom:16px;text-transform:uppercase}
-.prod-card:hover .en{color:var(--concrete)}
-.prod-card .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
-.prod-card .chip{
-  font-family:var(--f-mono);font-size:10px;
-  padding:4px 8px;border:1px solid rgba(242,237,225,.18);
-  letter-spacing:.06em;color:rgba(242,237,225,.75);
-}
-.prod-card:hover .chip{border-color:var(--black);color:var(--black)}
-.prod-card .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.prod-card .en{font-family:var(--f-display);font-size:11px;color:var(--steel);letter-spacing:.1em;margin-bottom:16px;text-transform:uppercase;line-height:1.4}
+.prod-card:hover h5{color:#fff}
+.prod-card .foot{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+.prod-card:hover .foot{color:var(--yellow)}
 .prod-card .arr{transition:transform .3s ease}
+.prod-card:hover .arr{transform:translateX(6px);color:var(--yellow)}
+/* 觸控裝置無 hover → 直接顯示產品圖 */
+@media (hover:none){
+  .prod-card .pc-img{opacity:1;transform:none;padding:22px 22px 100px}
+  .prod-card .pc-grad{opacity:1}
+}
 
 /* ─────────────────────────────────────────────
    CAPABILITIES
@@ -740,7 +754,7 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 .jt-modal.open .jt-modal-inner{transform:translateY(0) scale(1);opacity:1}
 .jt-modal-card{display:grid;grid-template-columns:1fr 1fr;min-height:520px;background:#141414;border:1px solid #222;overflow:hidden;position:relative}
 .jt-modal-accent{position:absolute;top:0;left:0;width:3px;height:100%;background:#E53128;z-index:1}
-.jt-modal-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(50px,9vw,110px);font-weight:900;color:rgba(255,255,255,.028);white-space:nowrap;pointer-events:none;user-select:none;letter-spacing:.05em}
+.jt-modal-bg-text{display:none}
 .jt-modal-close{position:absolute;top:16px;right:16px;z-index:10;background:none;border:1px solid #333;color:#888;width:36px;height:36px;font-size:16px;cursor:pointer;transition:border-color .2s,color .2s;line-height:1}
 .jt-modal-close:hover{border-color:#F4DB00;color:#F4DB00}
 /* Viewer col */
@@ -764,6 +778,12 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 .jt-spec-label{color:#555}
 .jt-spec-value{color:#ccc;text-align:right}
 .jt-spec-value.hi{color:#F4DB00}
+.jt-desc{margin-bottom:26px}
+.jt-desc-title{font-size:11px;letter-spacing:.2em;color:#F4DB00;text-transform:uppercase;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid #222}
+.jt-desc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.jt-desc-list li{position:relative;padding-left:16px;font-size:13.5px;line-height:1.6;color:#bdbdbd}
+.jt-desc-list li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;background:#F4DB00;transform:rotate(45deg)}
+.jt-group-desc .jt-desc-list li{color:#9aa}
 .jt-modal-cta{display:inline-flex;align-items:center;background:#F4DB00;color:#0A0908;border:none;padding:13px 26px;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:background .2s,transform .15s;align-self:flex-start}
 .jt-modal-cta:hover{background:#ffe94d;transform:translateX(2px)}
 /* Prod grid loading state */
@@ -795,9 +815,96 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 .jt-spec-row{border-bottom-color:#27313C}
 .jt-spec-label{color:#607080}
 .jt-spec-value{color:var(--paper)}
+.jt-desc-title{border-bottom-color:#2E3A48}
+.jt-desc-list li{color:#aab4be}
 .jt-no-model{color:#455565}
 .jt-no-model svg{stroke:#455565}
 @media(max-width:680px){.jt-modal-viewer-col{border-bottom-color:#2E3A48}}
+
+/* ░░ 產品改版：放大 modal + PNG + 群組 ░░ */
+.jt-modal-inner{width:min(1180px,96vw)}
+.jt-modal-card{min-height:560px}
+#jt-modal-canvas{height:420px!important}
+.jt-modal-viewer-col{padding:40px}
+.jt-modal-info-col{padding:48px 48px 48px 52px}
+.jt-modal-photo{max-width:100%;max-height:440px;width:auto;height:auto;object-fit:contain;display:block}
+/* 縮圖列（多張照片） */
+.jt-modal-thumbs{display:none;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center}
+.jt-modal-thumbs.show{display:flex}
+.jt-modal-thumbs img{width:52px;height:52px;object-fit:cover;border:1px solid #2E3A48;cursor:pointer;opacity:.55;transition:opacity .2s,border-color .2s;background:#1A2028}
+.jt-modal-thumbs img:hover{opacity:.85}
+.jt-modal-thumbs img.active{opacity:1;border-color:var(--yellow)}
+/* 返回系列鍵 */
+.jt-modal-back{position:absolute;top:16px;left:20px;z-index:8;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:#607080;cursor:pointer;text-transform:uppercase;transition:color .2s}
+.jt-modal-back:hover{color:var(--yellow)}
+/* 群組畫面 */
+.jt-modal-group-card{position:relative;background:#202830;border:1px solid #2E3A48;max-height:90vh;overflow:auto;display:flex;flex-direction:column}
+.jt-group-head{padding:40px 44px 22px}
+.jt-group-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#2E3A48;border-top:1px solid #2E3A48;border-bottom:1px solid #2E3A48}
+.jt-group-item{background:#202830;padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:background .2s}
+.jt-group-item:hover{background:#27313C}
+.jt-group-item:hover .gz{color:var(--yellow)}
+.jt-group-thumb{width:100%;aspect-ratio:1/1;background:#1A2028;display:grid;place-items:center;overflow:hidden;position:relative}
+.jt-group-thumb img{width:100%;height:100%;object-fit:contain}
+.jt-group-thumb .ph{color:#455565;font-size:10px;letter-spacing:.16em;text-align:center;padding:8px}
+.jt-group-thumb .v3d{position:absolute;top:8px;right:8px;background:var(--yellow);color:#0A0908;font-family:var(--f-mono);font-size:8px;font-weight:700;letter-spacing:.1em;padding:3px 6px}
+.jt-group-item .gz{font-family:var(--f-sans-tc);font-size:13.5px;font-weight:600;color:var(--paper);line-height:1.35;transition:color .2s}
+.jt-group-item .ge{font-family:var(--f-display);font-size:9px;letter-spacing:.05em;color:#607080;text-transform:uppercase;line-height:1.4}
+.jt-group-cta{margin:26px 44px 36px}
+@media(max-width:900px){.jt-group-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){
+  .jt-group-grid{grid-template-columns:repeat(2,1fr)}
+  .jt-group-head{padding:28px 24px 18px}
+  .jt-group-cta{margin:22px 24px 28px}
+  .jt-modal-photo{max-height:300px}
+  #jt-modal-canvas{height:300px!important}
+  .jt-modal-info-col{padding:28px 24px}
+}
+/* 語言切換鈕 */
+.lang-switch{display:flex;gap:2px;border:1px solid #2E3A48;border-radius:3px;overflow:hidden}
+.lang-switch button{background:transparent;border:none;color:#7d8a98;font-size:11px;font-weight:700;letter-spacing:.05em;padding:5px 9px;cursor:pointer;transition:background .15s,color .15s;font-family:inherit}
+.lang-switch button:hover{color:#cdd6df}
+.lang-switch button.active{background:#F4DB00;color:#0A0908}
+@media(max-width:920px){.lang-switch{margin-left:auto}}
+</style>
+
+<style id="jt-mnav-css">
+/* ===== 手機版導覽優化 2026-07-09 ===== */
+.brand{min-width:0}
+.brand-txt .zh{white-space:nowrap}
+@media (max-width:920px){
+  .nav ul,.nav-phone,.nav .nav-cta{display:none!important}
+  .menu-toggle{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid var(--concrete,#3a4656);background:transparent;color:inherit;font-size:20px;cursor:pointer;flex:none}
+}
+@media (max-width:480px){
+  .brand{gap:10px}
+  .brand .hex{width:38px;height:38px}
+  .brand-txt .en{font-size:13px}
+  .brand-txt .zh{font-size:9.5px;letter-spacing:.05em}
+}
+/* 全屏手機選單 */
+.jt-mnav{position:fixed;left:0;right:0;top:var(--nav-h,72px);bottom:0;z-index:8990;background:rgba(10,13,18,.97);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;flex-direction:column;padding:26px 26px 40px;transform:translateY(-10px);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;overflow-y:auto}
+.jt-mnav.open{opacity:1;transform:none;pointer-events:auto}
+.jt-mnav ul{list-style:none;margin:0;padding:0;display:block}
+.jt-mnav ul a{display:flex;align-items:baseline;gap:14px;padding:15px 2px;font-family:var(--f-display,inherit);font-weight:800;font-size:19px;letter-spacing:.1em;color:#F2EDE1;text-decoration:none;border-bottom:1px solid rgba(242,237,225,.12)}
+.jt-mnav ul a .num{color:var(--yellow,#F4DB00);font-size:11px}
+.jt-mnav ul a:active{color:var(--yellow,#F4DB00)}
+.jt-mnav-foot{margin-top:auto;padding-top:26px;display:flex;flex-direction:column;gap:16px}
+.jt-mnav-foot .lang-switch{align-self:flex-start}
+.jt-mnav-cta{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--yellow,#F4DB00);color:#0A0908;font-family:var(--f-display,inherit);font-weight:800;letter-spacing:.16em;padding:15px 18px;text-decoration:none;font-size:15px}
+.jt-mnav-tel{font-family:var(--f-mono,monospace);font-size:13px;color:#8b97a5;letter-spacing:.06em}
+.jt-mnav-tel a{color:#F2EDE1;text-decoration:none}
+body.jt-mnav-open{overflow:hidden}
+@media (min-width:921px){.jt-mnav{display:none!important}}
+/* 產品線四系列選單：手機改 2x2 */
+@media (max-width:720px){
+  .tabs{display:grid;grid-template-columns:1fr 1fr}
+  .tab{border-right:1px solid rgba(242,237,225,.12);border-bottom:1px solid rgba(242,237,225,.12);padding:16px 14px;gap:10px}
+  .tab:nth-child(2n){border-right:0}
+  .tab:nth-child(n+3){border-bottom:0}
+  .tab .zh{font-size:14px}
+  .tab .en-lbl{font-size:9px}
+}
 </style>
 </head>
 
@@ -816,17 +923,21 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
       </span>
     </a>
     <ul>
-      <li><a href="index.html"><span class="num">01</span>首頁</a></li>
-      <li><a href="index.html#about"><span class="num">02</span>公司簡介</a></li>
-      <li><a href="products.html"><span class="num">03</span>產品介紹</a></li>
-      <li><a href="index.html#capabilities"><span class="num">04</span>核心能力</a></li>
-      <li><a href="index.html#catalog"><span class="num">05</span>線上目錄</a></li>
-      <li><a href="index.html#news"><span class="num">06</span>最新消息</a></li>
-      <li><a href="contact.html"><span class="num">07</span>聯絡我們</a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#home"><span class="num">01</span><span data-zh="首頁" data-en="Home" data-vi="Trang chủ">首頁</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#latest"><span class="num">02</span><span data-zh="最新產品" data-en="Latest" data-vi="Sản phẩm mới">最新產品</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#about"><span class="num">03</span><span data-zh="公司簡介" data-en="About" data-vi="Giới thiệu">公司簡介</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/products.html"><span class="num">04</span><span data-zh="產品介紹" data-en="Products" data-vi="Sản phẩm">產品介紹</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#news"><span class="num">05</span><span data-zh="最新消息" data-en="News" data-vi="Tin tức">最新消息</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/contact.html"><span class="num">06</span><span data-zh="聯絡我們" data-en="Contact" data-vi="Liên hệ">聯絡我們</span></a></li>
     </ul>
     <div class="nav-cta">
+      <div class="lang-switch">
+        <button data-lang-btn="zh" onclick="jtSetLang('zh')">中</button>
+        <button data-lang-btn="en" onclick="jtSetLang('en')">EN</button>
+        <button data-lang-btn="vi" onclick="jtSetLang('vi')">VI</button>
+      </div>
       <div class="nav-phone"><span>TEL</span>+886-7-6210108</div>
-      <a href="contact.html" class="btn">詢價 <span class="arr">→</span></a>
+      <a href="/wp-content/uploads/zhentai/contact.html" class="btn"><span data-zh="詢價" data-en="Inquiry" data-vi="Báo giá">詢價</span> <span class="arr">→</span></a>
     </div>
     <button class="menu-toggle" aria-label="menu">≡</button>
   </div>
@@ -838,10 +949,13 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
   <div class="wrap">
     <div class="prod-head">
       <h2 class="prod-title reveal">
-        產品線 <span class="y">/ 四大系列</span><br>
+        <span data-zh="產品線" data-en="Products" data-vi="Sản phẩm">產品線</span> <span class="y" data-zh="/ 四大系列" data-en="/ 4 Series" data-vi="/ 4 Dòng sản phẩm">/ 四大系列</span><br>
         <span style="font-family:var(--f-display);font-size:.3em;letter-spacing:.1em;color:var(--steel);font-weight:700;text-transform:uppercase">Product Catalogue · 4 Series · 39 Models</span>
       </h2>
-      <p class="prod-intro reveal">
+      <p class="prod-intro reveal"
+         data-zh="從振動送料、補料系統、篩選設備到機械加工，振太機械提供完整設備鏈。所有型號皆可依客戶生產線需求客製振盤軌道與控制邏輯。"
+         data-en="From vibratory feeding and replenishing to sorting and machining, JENN TAI offers a complete equipment chain. Every model can be customized with bowl tracks and control logic for your production line."
+         data-vi="Từ cấp liệu rung, tiếp liệu đến sàng lọc và gia công cơ khí, JENN TAI cung cấp chuỗi thiết bị hoàn chỉnh. Mọi kiểu máy đều có thể tùy chỉnh ray mâm và logic điều khiển theo dây chuyền của bạn.">
         從振動送料、補料系統、篩選設備到機械加工，振太機械提供完整設備鏈。所有型號皆可依客戶生產線需求客製振盤軌道與控制邏輯。
       </p>
     </div>
@@ -849,19 +963,19 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
     <div class="tabs" id="jt-tabs" role="tablist">
       <button class="tab active" data-series="feeding-orientation" role="tab">
         <span class="idx">01</span>
-        <span><span class="zh">送料選向系列</span><span class="en-lbl">Feeding (Orientation) · 20 Models</span></span>
+        <span><span class="zh" data-zh="送料選向系列" data-en="Feeding (Orientation)" data-vi="Cấp liệu (định hướng)">送料選向系列</span><span class="en-lbl">Feeding (Orientation) · 20 Models</span></span>
       </button>
       <button class="tab" data-series="replenishing" role="tab">
         <span class="idx">02</span>
-        <span><span class="zh">補料系列</span><span class="en-lbl">Replenishing · 9 Models</span></span>
+        <span><span class="zh" data-zh="補料系列" data-en="Replenishing" data-vi="Tiếp liệu">補料系列</span><span class="en-lbl">Replenishing · 9 Models</span></span>
       </button>
       <button class="tab" data-series="sorting" role="tab">
         <span class="idx">03</span>
-        <span><span class="zh">篩選系列</span><span class="en-lbl">Sorting · 5 Models</span></span>
+        <span><span class="zh" data-zh="篩選系列" data-en="Sorting" data-vi="Sàng lọc">篩選系列</span><span class="en-lbl">Sorting · 5 Models</span></span>
       </button>
       <button class="tab" data-series="machinery" role="tab">
         <span class="idx">04</span>
-        <span><span class="zh">機械系列</span><span class="en-lbl">Machinery · 5 Models</span></span>
+        <span><span class="zh" data-zh="機械系列" data-en="Machinery" data-vi="Cơ khí">機械系列</span><span class="en-lbl">Machinery · 5 Models</span></span>
       </button>
     </div>
 
@@ -888,28 +1002,28 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
             <span class="zh">振太機械 · Since 1985</span>
           </span>
         </div>
-        <p>專業振動送料機、扣件自動化設備、非標客製製造商。以技術創新與品質承諾，為全球產線提供可靠的送料解決方案。</p>
+        <p data-zh="專業振動送料機、扣件自動化設備、非標客製製造商。以技術創新與品質承諾，為全球產線提供可靠的送料解決方案。" data-en="Professional manufacturer of vibratory feeders, fastener automation and custom non-standard equipment. Reliable feeding solutions for production lines worldwide, built on innovation and quality." data-vi="Nhà sản xuất chuyên nghiệp máy cấp liệu rung, thiết bị tự động hóa ốc vít và thiết bị phi tiêu chuẩn. Giải pháp cấp liệu đáng tin cậy cho dây chuyền toàn cầu, dựa trên đổi mới và chất lượng.">專業振動送料機、扣件自動化設備、非標客製製造商。以技術創新與品質承諾，為全球產線提供可靠的送料解決方案。</p>
       </div>
 
       <div class="foot-col">
         <h6>Sitemap</h6>
         <ul>
-          <li><a href="index.html">首頁 Home</a></li>
-          <li><a href="index.html#about">公司簡介 About</a></li>
-          <li><a href="products.html">產品介紹 Products</a></li>
-          <li><a href="index.html#capabilities">核心能力 Capabilities</a></li>
-          <li><a href="index.html#catalog">線上目錄 Catalogue</a></li>
-          <li><a href="index.html#news">最新消息 News</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html">首頁 Home</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#about">公司簡介 About</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html">產品介紹 Products</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#capabilities">核心能力 Capabilities</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#catalog">線上目錄 Catalogue</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#news">最新消息 News</a></li>
         </ul>
       </div>
 
       <div class="foot-col">
         <h6>Products</h6>
         <ul>
-          <li><a href="products.html">送料設備</a></li>
-          <li><a href="products.html">扣件相關設備</a></li>
-          <li><a href="products.html">零配件</a></li>
-          <li><a href="products.html">客製非標</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html" data-zh="送料設備" data-en="Feeding Equipment" data-vi="Thiết bị cấp liệu">送料設備</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html" data-zh="扣件相關設備" data-en="Fastener Equipment" data-vi="Thiết bị ốc vít">扣件相關設備</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html" data-zh="零配件" data-en="Accessories" data-vi="Phụ kiện">零配件</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html" data-zh="客製非標" data-en="Custom / Non-standard" data-vi="Tùy chỉnh / Phi tiêu chuẩn">客製非標</a></li>
         </ul>
       </div>
 
@@ -918,8 +1032,8 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
         <ul>
           <li><span class="mono">+886-7-6210108</span></li>
           <li><span class="mono">info@jenntai.com.tw</span></li>
-          <li>高雄市岡山區岡山路 610 巷 23 號</li>
-          <li><a href="contact.html" style="color:var(--yellow)">前往詢價 →</a></li>
+          <li data-zh="高雄市岡山區岡山路 610 巷 23 號" data-en="No.23 Lane 610, Gangshan Rd, Gangshan Dist, Kaohsiung, Taiwan" data-vi="Số 23 Hẻm 610, Đường Gangshan, Q. Gangshan, TP Cao Hùng, Đài Loan">高雄市岡山區岡山路 610 巷 23 號</li>
+          <li><a href="/wp-content/uploads/zhentai/contact.html" style="color:var(--yellow)">前往詢價 →</a></li>
         </ul>
       </div>
     </div>
@@ -936,12 +1050,7 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 
 <script>
 // ── Product tab switching ──
-const jtTabs = document.querySelectorAll('#jt-tabs .tab');
-jtTabs.forEach(t => t.addEventListener('click', () => {
-  jtTabs.forEach(x => x.classList.remove('active'));
-  t.classList.add('active');
-  jtRenderProducts(t.dataset.series);
-}));
+// 分頁切換改由 jt-ui.js 處理
 
 // Reveal on scroll
 const io=new IntersectionObserver((entries)=>{
@@ -983,21 +1092,25 @@ setActive();
 <div id="jt-modal" class="jt-modal" aria-hidden="true">
   <div class="jt-modal-inner">
     <button class="jt-modal-close" id="jt-modal-close">✕</button>
-    <div class="jt-modal-card">
+    <!-- ░░ 單品畫面：PNG 大圖 或 360° ░░ -->
+    <div class="jt-modal-card" id="jt-modal-single">
       <div class="jt-modal-accent"></div>
       <div class="jt-modal-bg-text" id="jt-modal-bg-text">JENN TAI</div>
-      <!-- Left: 3D viewer -->
+      <!-- Left: viewer -->
       <div class="jt-modal-viewer-col">
+        <a class="jt-modal-back" id="jt-modal-back" style="display:none" data-zh="← 返回系列" data-en="← Back" data-vi="← Quay lại">← 返回系列</a>
         <div class="jt-modal-loading" id="jt-modal-loading">
-          <div class="jt-spinner"></div><span>載入模型中</span>
+          <div class="jt-spinner"></div><span data-zh="載入模型中" data-en="Loading model" data-vi="Đang tải mô hình">載入模型中</span>
         </div>
         <div class="jt-no-model" id="jt-no-model">
-          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#333" stroke-width="1.5"><rect x="4" y="4" width="36" height="36" rx="2"/><path d="M14 22h16M22 14v16"/></svg>
-          <span>3D 模型即將上線</span>
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#455565" stroke-width="1.5"><circle cx="22" cy="22" r="17"/><path d="M22 9v26M9 22h26" opacity=".45"/></svg>
+          <span id="jt-no-model-txt">360° 模型準備中</span>
         </div>
-        <img id="jt-frame-img" style="display:none;width:100%;height:360px;object-fit:contain;cursor:grab" alt="產品 360°">
+        <img id="jt-modal-photo" class="jt-modal-photo" style="display:none" alt="">
+        <img id="jt-frame-img" style="display:none;width:100%;height:420px;object-fit:contain;cursor:grab" alt="產品 360°">
         <canvas id="jt-modal-canvas"></canvas>
-        <div class="jt-modal-hint" id="jt-modal-hint">← 拖曳旋轉 · 滾輪縮放 →</div>
+        <div class="jt-modal-thumbs" id="jt-modal-thumbs"></div>
+        <div class="jt-modal-hint" id="jt-modal-hint"></div>
       </div>
       <!-- Right: info -->
       <div class="jt-modal-info-col">
@@ -1006,300 +1119,56 @@ setActive();
         <div class="jt-modal-name-en" id="jt-modal-name-en"></div>
         <div class="jt-modal-badge" id="jt-modal-badge"></div>
         <div class="jt-spec-table" id="jt-modal-specs"></div>
-        <a href="contact.html" class="jt-modal-cta">詢問報價 INQUIRY →</a>
+        <a href="/wp-content/uploads/zhentai/contact.html" class="jt-modal-cta" data-zh="詢問報價 INQUIRY →" data-en="INQUIRY →" data-vi="BÁO GIÁ →">詢問報價 INQUIRY →</a>
       </div>
+    </div>
+    <!-- ░░ 群組畫面：一次呈現多個子項目 ░░ -->
+    <div class="jt-modal-group-card" id="jt-modal-group-screen" style="display:none">
+      <div class="jt-modal-accent"></div>
+      <div class="jt-group-head">
+        <div class="jt-modal-series-tag" id="jt-group-series"></div>
+        <h2 class="jt-modal-name-zh" id="jt-group-name-zh"></h2>
+        <div class="jt-modal-name-en" id="jt-group-name-en"></div>
+        <div class="jt-group-desc" id="jt-group-desc"></div>
+      </div>
+      <div class="jt-group-grid" id="jt-group-grid"></div>
+      <a href="/wp-content/uploads/zhentai/contact.html" class="jt-modal-cta jt-group-cta" data-zh="詢問報價 INQUIRY →" data-en="INQUIRY →" data-vi="BÁO GIÁ →">詢問報價 INQUIRY →</a>
     </div>
   </div>
 </div>
 
-<script type="module">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+<script src="/wp-content/uploads/zhentai/jt-data.js?v=2"></script>
+<script src="/wp-content/uploads/zhentai/jt-ui.js?v=2"></script>
 
-// ── Config ──
-const WP_API = location.hostname === 'jenntai.com.tw'
-  ? 'https://jenntai.com.tw/wp-json/wp/v2'
-  : 'https://waynebear20996-mlebi.wpcomstaging.com/wp-json/wp/v2';
-
-let jtAllProducts = [];
-let jtRenderer, jtScene, jtCamera, jtControls, jtAnimId, jtCurrentGlb;
-
-// ── Fetch all products ──
-async function jtFetchProducts() {
-  const res = await fetch(`${WP_API}/jt-products?per_page=100&_fields=id,title,jt_name_en,jt_model,jt_glb_url,jt_frames_url,jt_specs,series_info`);
-  jtAllProducts = await res.json();
-  jtRenderProducts('feeding-orientation');
-}
-
-// ── Render product grid ──
-window.jtRenderProducts = function(seriesSlug) {
-  const grid = document.getElementById('jt-prod-grid');
-  const list = jtAllProducts.filter(p => p.series_info && p.series_info.some(s => s.slug === seriesSlug));
-  if (!list.length) { grid.innerHTML = '<div class="jt-grid-loading">此系列暫無產品</div>'; return; }
-  grid.innerHTML = list.map((p, i) => `
-    <div class="prod-card" style="cursor:pointer" onclick="jtOpenModal(${p.id})">
-      <span class="idx-no">[${String(i+1).padStart(2,'0')} / ${String(list.length).padStart(2,'0')}]</span>
-      ${p.jt_model ? `<div class="mdl">${p.jt_model}</div>` : '<div class="mdl" style="opacity:.3">—</div>'}
-      <div class="icon">
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="7"/>
-          <path d="M20 6v8M20 26v8M6 20h8M26 20h8"/>
-        </svg>
-      </div>
-      <h5>${p.title.rendered}</h5>
-      <div class="en" style="font-size:10px;letter-spacing:.06em;margin-top:4px;opacity:.6;line-height:1.4">${p.jt_name_en || ''}</div>
-      <div class="foot"><span>VIEW 3D</span><span class="arr">→</span></div>
-    </div>`).join('');
-};
-
-// ── Open modal ──
-window.jtOpenModal = function(productId) {
-  const p = jtAllProducts.find(x => x.id === productId);
-  if (!p) return;
-
-  // Populate info
-  const series = p.series_info && p.series_info[0];
-  document.getElementById('jt-modal-series').textContent = series ? series.name + ' · ' + (series.slug === 'feeding-orientation' ? 'Feeding Series' : series.slug === 'replenishing' ? 'Replenishing Series' : series.slug === 'sorting' ? 'Sorting Series' : 'Machinery Series') : '';
-  document.getElementById('jt-modal-name-zh').textContent = p.title.rendered;
-  document.getElementById('jt-modal-name-en').textContent = p.jt_name_en || '';
-  document.getElementById('jt-modal-bg-text').textContent = p.jt_model || 'JENN TAI';
-  document.getElementById('jt-modal-badge').innerHTML = p.jt_model ? `<span>●</span> MODEL · ${p.jt_model} <span>●</span> JENN TAI` : '';
-
-  // Specs
-  let specs = [];
-  try { specs = JSON.parse(p.jt_specs || '[]'); } catch(e) {}
-  document.getElementById('jt-modal-specs').innerHTML = specs.map(s =>
-    `<div class="jt-spec-row"><span class="jt-spec-label">${s.label}</span><span class="jt-spec-value${s.highlight?' hi':''}">${s.value}</span></div>`
-  ).join('');
-
-  // Show modal
-  const modal = document.getElementById('jt-modal');
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
-
-  // Init/update viewer
-  const glbUrl = p.jt_glb_url;
-  const framesUrl = p.jt_frames_url;
-  jtStopFrames();
-  if (framesUrl) {
-    document.getElementById('jt-modal-canvas').style.display = 'none';
-    document.getElementById('jt-no-model').style.display = 'none';
-    document.getElementById('jt-modal-hint').textContent = '← 拖曳旋轉 →';
-    jtLoadFrames(framesUrl);
-  } else if (glbUrl) {
-    document.getElementById('jt-frame-img').style.display = 'none';
-    document.getElementById('jt-no-model').style.display = 'none';
-    document.getElementById('jt-modal-canvas').style.display = 'block';
-    document.getElementById('jt-modal-loading').classList.remove('hidden');
-    document.getElementById('jt-modal-hint').textContent = '← 拖曳旋轉 · 滾輪縮放 →';
-    jtLoadGlb(glbUrl);
-  } else {
-    document.getElementById('jt-frame-img').style.display = 'none';
-    document.getElementById('jt-no-model').style.display = 'flex';
-    document.getElementById('jt-modal-canvas').style.display = 'none';
-    document.getElementById('jt-modal-loading').classList.add('hidden');
-    document.getElementById('jt-modal-hint').textContent = '← 拖曳旋轉 · 滾輪縮放 →';
-    jtInitRenderer();
+<script id="jt-mnav-js">
+/* 手機全屏選單：複製桌機導覽內容，單一資料源 */
+(function(){
+  var nav=document.querySelector('.nav'); if(!nav) return;
+  var toggle=nav.querySelector('.menu-toggle'); if(!toggle) return;
+  var panel=document.createElement('div'); panel.className='jt-mnav';
+  var srcUl=nav.querySelector('ul');
+  if(srcUl) panel.appendChild(srcUl.cloneNode(true));
+  var foot=document.createElement('div'); foot.className='jt-mnav-foot';
+  var lang=nav.querySelector('.lang-switch'); if(lang) foot.appendChild(lang.cloneNode(true));
+  var cta=nav.querySelector('.nav-cta .btn');
+  var a=document.createElement('a'); a.className='jt-mnav-cta';
+  a.href=cta?cta.getAttribute('href'):'/wp-content/uploads/zhentai/contact.html';
+  a.innerHTML='<span data-zh="\u8a62\u50f9" data-en="Inquiry" data-vi="B\u00e1o gi\u00e1">\u8a62\u50f9</span> <span>\u2192</span>';
+  foot.appendChild(a);
+  var tel=document.createElement('div'); tel.className='jt-mnav-tel';
+  tel.innerHTML='TEL <a href="tel:+88676210108">+886-7-6210108</a>';
+  foot.appendChild(tel);
+  panel.appendChild(foot);
+  document.body.appendChild(panel);
+  function setOpen(o){
+    panel.classList.toggle('open',o);
+    document.body.classList.toggle('jt-mnav-open',o);
+    toggle.textContent=o?'\u2715':'\u2261';
   }
-};
-
-// ── Close modal ──
-window.jtCloseModal = function() {
-  document.getElementById('jt-modal').classList.remove('open');
-  document.getElementById('jt-modal').setAttribute('aria-hidden','true');
-  document.body.style.overflow = '';
-  if (jtAnimId) { cancelAnimationFrame(jtAnimId); jtAnimId = null; }
-  jtStopFrames();
-};
-
-// ── Frame Animation Viewer ──
-const FRAMES_TOTAL = 241;
-const FRAME_SENS = 3;
-let jtFrameCache = [], jtFrameLoaded = 0, jtFrameAllReady = false;
-let jtFrameCurrent = 0, jtFrameAutoTimer = null;
-let jtFrameDragging = false, jtFrameLastX = 0, jtFrameAccum = 0;
-
-function jtLoadFrames(baseUrl) {
-  jtFrameCache = []; jtFrameLoaded = 0; jtFrameAllReady = false;
-  jtFrameCurrent = 0; jtFrameAccum = 0;
-  if (jtFrameAutoTimer) { clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
-
-  const img = document.getElementById('jt-frame-img');
-  const overlay = document.getElementById('jt-modal-loading');
-  img.style.display = 'block';
-  overlay.classList.remove('hidden');
-  document.querySelector('#jt-modal-loading span').textContent = '載入中 0%';
-  img.src = `${baseUrl}frame_000.webp`;
-
-  for (let i = 0; i < FRAMES_TOTAL; i++) {
-    const fi = new Image();
-    jtFrameCache[i] = fi;
-    fi.onload = () => {
-      jtFrameLoaded++;
-      const pct = Math.round(jtFrameLoaded / FRAMES_TOTAL * 100);
-      const sp = document.querySelector('#jt-modal-loading span');
-      if (sp) sp.textContent = `載入中 ${pct}%`;
-      if (jtFrameLoaded === FRAMES_TOTAL) {
-        jtFrameAllReady = true;
-        overlay.classList.add('hidden');
-        _jtFrameStartAuto();
-      }
-    };
-    fi.src = `${baseUrl}frame_${String(i).padStart(3,'0')}.webp`;
-  }
-
-  img.addEventListener('mousedown', _jtFMDown);
-  window.addEventListener('mousemove', _jtFMMove);
-  window.addEventListener('mouseup', _jtFMUp);
-  img.addEventListener('touchstart', _jtFTStart, { passive: false });
-  window.addEventListener('touchmove', _jtFTMove, { passive: false });
-  window.addEventListener('touchend', _jtFMUp);
-}
-
-function jtStopFrames() {
-  if (jtFrameAutoTimer) { clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
-  jtFrameDragging = false;
-  const img = document.getElementById('jt-frame-img');
-  if (img) {
-    img.style.display = 'none';
-    img.removeEventListener('mousedown', _jtFMDown);
-    img.removeEventListener('touchstart', _jtFTStart);
-  }
-  window.removeEventListener('mousemove', _jtFMMove);
-  window.removeEventListener('mouseup', _jtFMUp);
-  window.removeEventListener('touchmove', _jtFTMove);
-  window.removeEventListener('touchend', _jtFMUp);
-}
-
-function _jtFrameShow(n) {
-  jtFrameCurrent = ((n % FRAMES_TOTAL) + FRAMES_TOTAL) % FRAMES_TOTAL;
-  const c = jtFrameCache[jtFrameCurrent];
-  if (c && c.complete) document.getElementById('jt-frame-img').src = c.src;
-}
-function _jtFrameStartAuto() {
-  if (jtFrameAutoTimer) return;
-  jtFrameAutoTimer = setInterval(() => {
-    if (!jtFrameDragging && jtFrameAllReady) _jtFrameShow(jtFrameCurrent + 1);
-  }, 40);
-}
-function _jtFMDown(e) { e.preventDefault(); jtFrameDragging = true; jtFrameLastX = e.clientX; clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
-function _jtFMMove(e) {
-  if (!jtFrameDragging || !jtFrameAllReady) return;
-  const dx = e.clientX - jtFrameLastX; jtFrameLastX = e.clientX;
-  jtFrameAccum += dx;
-  const sh = Math.round(jtFrameAccum / FRAME_SENS);
-  if (sh) { _jtFrameShow(jtFrameCurrent - sh); jtFrameAccum -= sh * FRAME_SENS; }
-}
-function _jtFMUp() { if (jtFrameDragging) { jtFrameDragging = false; _jtFrameStartAuto(); } }
-function _jtFTStart(e) { e.preventDefault(); jtFrameDragging = true; jtFrameLastX = e.touches[0].clientX; clearInterval(jtFrameAutoTimer); jtFrameAutoTimer = null; }
-function _jtFTMove(e) {
-  e.preventDefault();
-  if (!jtFrameDragging || !jtFrameAllReady) return;
-  const dx = e.touches[0].clientX - jtFrameLastX; jtFrameLastX = e.touches[0].clientX;
-  jtFrameAccum += dx;
-  const sh = Math.round(jtFrameAccum / FRAME_SENS);
-  if (sh) { _jtFrameShow(jtFrameCurrent - sh); jtFrameAccum -= sh * FRAME_SENS; }
-}
-
-document.getElementById('jt-modal-close').addEventListener('click', jtCloseModal);
-document.getElementById('jt-modal').addEventListener('click', e => { if (e.target === e.currentTarget) jtCloseModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') jtCloseModal(); });
-
-// ── Init Three.js renderer (once) ──
-function jtInitRenderer() {
-  const canvas = document.getElementById('jt-modal-canvas');
-  if (jtRenderer) return;
-  jtRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  jtRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  jtRenderer.shadowMap.enabled = true;
-  jtRenderer.outputColorSpace = THREE.SRGBColorSpace;
-  jtRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-  jtRenderer.toneMappingExposure = 1.2;
-
-  jtScene = new THREE.Scene();
-  jtScene.background = new THREE.Color(0xffffff);
-
-  jtCamera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
-  jtCamera.position.set(2.5, 1.5, 3.5);
-
-  jtScene.add(new THREE.AmbientLight(0xffffff, 0.5));
-  const key = new THREE.DirectionalLight(0xfff5e0, 2.0);
-  key.position.set(4, 6, 4); key.castShadow = true; jtScene.add(key);
-  const fill = new THREE.DirectionalLight(0xd0e8ff, 0.6);
-  fill.position.set(-4, 2, -2); jtScene.add(fill);
-  const rim = new THREE.DirectionalLight(0xF4DB00, 0.35);
-  rim.position.set(0, -2, -4); jtScene.add(rim);
-
-  jtControls = new OrbitControls(jtCamera, canvas);
-  jtControls.enableDamping = true;
-  jtControls.dampingFactor = 0.06;
-  jtControls.minDistance = 0.3;
-  jtControls.maxDistance = 14;
-  jtControls.autoRotate = true;
-  jtControls.autoRotateSpeed = 0.7;
-  canvas.addEventListener('pointerdown', () => { jtControls.autoRotate = false; });
-
-  jtResizeRenderer();
-  window.addEventListener('resize', jtResizeRenderer);
-}
-
-function jtResizeRenderer() {
-  const canvas = document.getElementById('jt-modal-canvas');
-  const w = canvas.parentElement.clientWidth - 64;
-  const h = 360;
-  jtRenderer.setSize(w, h);
-  jtCamera.aspect = w / h;
-  jtCamera.updateProjectionMatrix();
-}
-
-// ── Load GLB ──
-function jtLoadGlb(url) {
-  jtInitRenderer();
-  if (jtAnimId) { cancelAnimationFrame(jtAnimId); jtAnimId = null; }
-
-  // Clear old model
-  jtScene.children = jtScene.children.filter(c => c.isLight || c.isMesh);
-
-  const loader = new GLTFLoader();
-  loader.load(url, (gltf) => {
-    const model = gltf.scene;
-    const box = new THREE.Box3().setFromObject(model);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 2.5 / maxDim;
-    model.scale.setScalar(scale);
-    model.position.sub(center.multiplyScalar(scale));
-    model.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
-    jtScene.add(model);
-
-    const nb = new THREE.Box3().setFromObject(model);
-    const nc = nb.getCenter(new THREE.Vector3());
-    jtControls.target.copy(nc);
-    jtCamera.position.set(nc.x + maxDim*scale*1.8, nc.y + maxDim*scale*0.8, nc.z + maxDim*scale*2.2);
-    jtCamera.lookAt(nc);
-    jtControls.autoRotate = true;
-
-    document.getElementById('jt-modal-loading').classList.add('hidden');
-    jtAnimate();
-  }, (xhr) => {
-    const pct = Math.round(xhr.loaded / xhr.total * 100);
-    document.querySelector('#jt-modal-loading span').textContent = `載入中 ${pct}%`;
-  }, (err) => {
-    document.querySelector('#jt-modal-loading span').textContent = '模型載入失敗';
-  });
-}
-
-function jtAnimate() {
-  jtAnimId = requestAnimationFrame(jtAnimate);
-  jtControls.update();
-  jtRenderer.render(jtScene, jtCamera);
-}
-
-// ── Boot ──
-jtFetchProducts();
+  toggle.addEventListener('click',function(){setOpen(!panel.classList.contains('open'))});
+  panel.addEventListener('click',function(e){ if(e.target.closest('a')) setOpen(false); });
+  if(window.jtApplyI18n){ try{window.jtApplyI18n()}catch(e){} }
+})();
 </script>
 </body>
 </html>

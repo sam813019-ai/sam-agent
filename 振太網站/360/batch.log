@@ -1,0 +1,42 @@
+=== [1/20] 升降式自動定量上料機 → elevator-conveyor ===
+[OK] elevator-conveyor: 241 張 webp，平均 27KB，來源 241 PNG
+=== [2/20] 填充式上料機 → filling-feeder ===
+[OK] filling-feeder: 241 張 webp，平均 46KB，來源 241 PNG
+=== [3/20] 磁力式上料機 → magnetic-feeder ===
+[OK] magnetic-feeder: 241 張 webp，平均 43KB，來源 241 PNG
+=== [4/20] 提升機+兩段式補料 → lifter-two-stage ===
+[OK] lifter-two-stage: 241 張 webp，平均 88KB，來源 241 PNG
+=== [5/20] 平送式補料桶 → linear-hopper ===
+[OK] linear-hopper: 241 張 webp，平均 71KB，來源 241 PNG
+=== [6/20] 連接式補料桶 → connectable-hopper ===
+[OK] connectable-hopper: 241 張 webp，平均 129KB，來源 241 PNG
+=== [7/20] 偏心馬達補料桶 → eccentric-hopper ===
+[OK] eccentric-hopper: 241 張 webp，平均 87KB，來源 241 PNG
+=== [8/20] 平送式鐵屑油水分離機 → linear-scrap-sep ===
+[OK] linear-scrap-sep: 241 張 webp，平均 40KB，來源 241 PNG
+=== [9/20] 磁力式鐵屑油水分離機 → magnetic-scrap-sep ===
+[OK] magnetic-scrap-sep: 241 張 webp，平均 40KB，來源 241 PNG
+=== [10/20] 離心鐵屑分離機 → centrifugal-scrap-sep ===
+[OK] centrifugal-scrap-sep: 241 張 webp，平均 142KB，來源 241 PNG
+=== [11/20] 羅拉篩選機(四軸) → roller-4axis ===
+[OK] roller-4axis: 241 張 webp，平均 45KB，來源 241 PNG
+=== [12/20] 渦電流 → eddy-current ===
+[OK] eddy-current: 241 張 webp，平均 53KB，來源 241 PNG
+=== [13/20] 隔音箱 → soundproof-case ===
+[OK] soundproof-case: 241 張 webp，平均 90KB，來源 241 PNG
+=== [14/20] Jl-0 → jl-0 ===
+[OK] jl-0: 241 張 webp，平均 78KB，來源 241 PNG
+=== [15/20] ML-2 → ml-2 ===
+[OK] ml-2: 241 張 webp，平均 37KB，來源 241 PNG
+=== [16/20] ML-3 → ml-3 ===
+[OK] ml-3: 241 張 webp，平均 45KB，來源 241 PNG
+=== [17/20] ML-8 → ml-8 ===
+[OK] ml-8: 241 張 webp，平均 48KB，來源 241 PNG
+=== [18/20] STL-6 → stl-6 ===
+[OK] stl-6: 241 張 webp，平均 38KB，來源 241 PNG
+=== [19/20] STL-12 → stl-12 ===
+[OK] stl-12: 241 張 webp，平均 29KB，來源 241 PNG
+=== [20/20] 攪直機 → straightening ===
+[OK] straightening: 241 張 webp，平均 56KB，來源 241 PNG
+
+全部完成，耗時 1613s，失敗: 無

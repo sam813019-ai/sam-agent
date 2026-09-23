@@ -1,0 +1,212 @@
+  centrifugal-scrap-sep [30/241] WROTE 30
+  centrifugal-scrap-sep [60/241] WROTE 30
+  centrifugal-scrap-sep [90/241] WROTE 30
+  centrifugal-scrap-sep [120/241] WROTE 30
+  centrifugal-scrap-sep [150/241] WROTE 30
+  centrifugal-scrap-sep [180/241] WROTE 30
+  centrifugal-scrap-sep [210/241] WROTE 30
+  centrifugal-scrap-sep [240/241] WROTE 30
+  centrifugal-scrap-sep [241/241] WROTE 1
+[DONE] centrifugal-scrap-sep: 本機 241 張 (f000=184444 f240=184396) | 伺服器 241 files; f000=184444 f240=184396
+  connectable-hopper [30/241] WROTE 30
+  connectable-hopper [60/241] WROTE 30
+  connectable-hopper [90/241] WROTE 30
+  connectable-hopper [120/241] WROTE 30
+  connectable-hopper [150/241] WROTE 30
+  connectable-hopper [180/241] WROTE 30
+  connectable-hopper [210/241] WROTE 30
+  connectable-hopper [240/241] WROTE 30
+  connectable-hopper [241/241] WROTE 1
+[DONE] connectable-hopper: 本機 241 張 (f000=159740 f240=159752) | 伺服器 241 files; f000=159740 f240=159752
+  eccentric-hopper [30/241] WROTE 30
+  eccentric-hopper [60/241] WROTE 30
+  eccentric-hopper [90/241] WROTE 30
+  eccentric-hopper [120/241] WROTE 30
+  eccentric-hopper [150/241] WROTE 30
+  eccentric-hopper [180/241] WROTE 30
+  eccentric-hopper [210/241] WROTE 30
+  eccentric-hopper [240/241] WROTE 30
+  eccentric-hopper [241/241] WROTE 1
+[DONE] eccentric-hopper: 本機 241 張 (f000=70508 f240=70508) | 伺服器 241 files; f000=70508 f240=70508
+  eddy-current [30/241] WROTE 30
+  eddy-current [60/241] WROTE 30
+  eddy-current [90/241] WROTE 30
+  eddy-current [120/241] WROTE 30
+  eddy-current [150/241] WROTE 30
+  eddy-current [180/241] WROTE 30
+  eddy-current [210/241] WROTE 30
+  eddy-current [240/241] WROTE 30
+  eddy-current [241/241] WROTE 1
+[DONE] eddy-current: 本機 241 張 (f000=59398 f240=59470) | 伺服器 241 files; f000=59398 f240=59470
+  elevator-conveyor [30/241] WROTE 30
+  elevator-conveyor [60/241] WROTE 30
+  elevator-conveyor [90/241] WROTE 30
+  elevator-conveyor [120/241] WROTE 30
+  elevator-conveyor [150/241] WROTE 30
+  elevator-conveyor [180/241] WROTE 30
+  elevator-conveyor [210/241] WROTE 30
+  elevator-conveyor [240/241] WROTE 30
+  elevator-conveyor [241/241] WROTE 1
+[DONE] elevator-conveyor: 本機 241 張 (f000=28490 f240=28502) | 伺服器 241 files; f000=28490 f240=28502
+  filling-feeder [30/241] WROTE 30
+  filling-feeder [60/241] WROTE 30
+  filling-feeder [90/241] WROTE 30
+  filling-feeder [120/241] WROTE 30
+  filling-feeder [150/241] WROTE 30
+  filling-feeder [180/241] WROTE 30
+  filling-feeder [210/241] WROTE 30
+  filling-feeder [240/241] WROTE 30
+  filling-feeder [241/241] WROTE 1
+[DONE] filling-feeder: 本機 241 張 (f000=33418 f240=33392) | 伺服器 241 files; f000=33418 f240=33392
+  jl-0 [30/241] WROTE 30
+  jl-0 [60/241] WROTE 30
+  jl-0 [90/241] WROTE 30
+  jl-0 [120/241] WROTE 30
+  jl-0 [150/241] WROTE 30
+  jl-0 [180/241] WROTE 30
+  jl-0 [210/241] WROTE 30
+  jl-0 [240/241] WROTE 30
+  jl-0 [241/241] WROTE 1
+[DONE] jl-0: 本機 241 張 (f000=100150 f240=100150) | 伺服器 241 files; f000=100150 f240=100150
+  lifter-two-stage [30/241] WROTE 30
+  lifter-two-stage [60/241] WROTE 30
+  lifter-two-stage [90/241] WROTE 30
+  lifter-two-stage [120/241] WROTE 30
+  lifter-two-stage [150/241] WROTE 30
+  lifter-two-stage [180/241] WROTE 30
+  lifter-two-stage [210/241] WROTE 30
+  lifter-two-stage [240/241] WROTE 30
+  lifter-two-stage [241/241] WROTE 1
+[DONE] lifter-two-stage: 本機 241 張 (f000=67602 f240=67670) | 伺服器 241 files; f000=67602 f240=67670
+  linear-hopper [30/241] WROTE 30
+  linear-hopper [60/241] WROTE 30
+  linear-hopper [90/241] WROTE 30
+  linear-hopper [120/241] WROTE 30
+  linear-hopper [150/241] WROTE 30
+  linear-hopper [180/241] WROTE 30
+  linear-hopper [210/241] WROTE 30
+  linear-hopper [240/241] WROTE 30
+  linear-hopper [241/241] WROTE 1
+[DONE] linear-hopper: 本機 241 張 (f000=69778 f240=69788) | 伺服器 241 files; f000=69778 f240=69788
+  linear-scrap-sep [30/241] WROTE 30
+  linear-scrap-sep [60/241] WROTE 30
+  linear-scrap-sep [90/241] WROTE 30
+  linear-scrap-sep [120/241] WROTE 30
+  linear-scrap-sep [150/241] WROTE 30
+  linear-scrap-sep [180/241] WROTE 30
+  linear-scrap-sep [210/241] WROTE 30
+  linear-scrap-sep [240/241] WROTE 30
+  linear-scrap-sep [241/241] WROTE 1
+[DONE] linear-scrap-sep: 本機 241 張 (f000=37060 f240=37040) | 伺服器 241 files; f000=37060 f240=37040
+  magnetic-feeder [30/241] WROTE 30
+  magnetic-feeder [60/241] WROTE 30
+  magnetic-feeder [90/241] WROTE 30
+  magnetic-feeder [120/241] WROTE 30
+  magnetic-feeder [150/241] WROTE 30
+  magnetic-feeder [180/241] WROTE 30
+  magnetic-feeder [210/241] WROTE 30
+  magnetic-feeder [240/241] WROTE 30
+  magnetic-feeder [241/241] WROTE 1
+[DONE] magnetic-feeder: 本機 241 張 (f000=45794 f240=45768) | 伺服器 241 files; f000=45794 f240=45768
+  magnetic-scrap-sep [30/241] WROTE 30
+  magnetic-scrap-sep [60/241] WROTE 30
+  magnetic-scrap-sep [90/241] WROTE 30
+  magnetic-scrap-sep [120/241] WROTE 30
+  magnetic-scrap-sep [150/241] WROTE 30
+  magnetic-scrap-sep [180/241] WROTE 30
+  magnetic-scrap-sep [210/241] WROTE 30
+  magnetic-scrap-sep [240/241] WROTE 30
+  magnetic-scrap-sep [241/241] WROTE 1
+[DONE] magnetic-scrap-sep: 本機 241 張 (f000=44210 f240=44156) | 伺服器 241 files; f000=44210 f240=44156
+  ml-2 [30/241] WROTE 30
+  ml-2 [60/241] WROTE 30
+  ml-2 [90/241] WROTE 30
+  ml-2 [120/241] WROTE 30
+  ml-2 [150/241] WROTE 30
+  ml-2 [180/241] WROTE 30
+  ml-2 [210/241] WROTE 30
+  ml-2 [240/241] WROTE 30
+  ml-2 [241/241] WROTE 1
+[DONE] ml-2: 本機 241 張 (f000=32736 f240=32680) | 伺服器 241 files; f000=32736 f240=32680
+  ml-3 [30/241] WROTE 30
+  ml-3 [60/241] WROTE 30
+  ml-3 [90/241] WROTE 30
+  ml-3 [120/241] WROTE 30
+  ml-3 [150/241] WROTE 30
+  ml-3 [180/241] WROTE 30
+  ml-3 [210/241] WROTE 30
+  ml-3 [240/241] WROTE 30
+  ml-3 [241/241] WROTE 1
+[DONE] ml-3: 本機 241 張 (f000=29254 f240=29254) | 伺服器 241 files; f000=29254 f240=29254
+  ml-8 [30/241] WROTE 30
+  ml-8 [60/241] WROTE 30
+  ml-8 [90/241] WROTE 30
+  ml-8 [120/241] WROTE 30
+  ml-8 [150/241] WROTE 30
+  ml-8 [180/241] WROTE 30
+  ml-8 [210/241] WROTE 30
+  ml-8 [240/241] WROTE 30
+  ml-8 [241/241] WROTE 1
+[DONE] ml-8: 本機 241 張 (f000=42126 f240=42126) | 伺服器 241 files; f000=42126 f240=42126
+  roller-4axis [30/241] WROTE 30
+  roller-4axis [60/241] WROTE 30
+  roller-4axis [90/241] WROTE 30
+  roller-4axis [120/241] WROTE 30
+  roller-4axis [150/241] WROTE 30
+  roller-4axis [180/241] WROTE 30
+  roller-4axis [210/241] WROTE 30
+  roller-4axis [240/241] WROTE 30
+  roller-4axis [241/241] WROTE 1
+[DONE] roller-4axis: 本機 241 張 (f000=47238 f240=47238) | 伺服器 241 files; f000=47238 f240=47238
+  soundproof-case [30/241] WROTE 30
+  soundproof-case [60/241] WROTE 30
+  soundproof-case [90/241] WROTE 30
+  soundproof-case [120/241] WROTE 30
+  soundproof-case [150/241] WROTE 30
+  soundproof-case [180/241] WROTE 30
+  soundproof-case [210/241] WROTE 30
+  soundproof-case [240/241] WROTE 30
+  soundproof-case [241/241] WROTE 1
+[DONE] soundproof-case: 本機 241 張 (f000=80638 f240=81262) | 伺服器 241 files; f000=80638 f240=81262
+  stl-12 [30/241] WROTE 30
+  stl-12 [60/241] WROTE 30
+  stl-12 [90/241] WROTE 30
+  stl-12 [120/241] WROTE 30
+  stl-12 [150/241] WROTE 30
+  stl-12 [180/241] WROTE 30
+  stl-12 [210/241] WROTE 30
+  stl-12 [240/241] WROTE 30
+  stl-12 [241/241] WROTE 1
+[DONE] stl-12: 本機 241 張 (f000=21770 f240=21774) | 伺服器 241 files; f000=21770 f240=21774
+  stl-6 [30/241] WROTE 30
+  stl-6 [60/241] WROTE 30
+  stl-6 [90/241] WROTE 30
+  stl-6 [120/241] WROTE 30
+  stl-6 [150/241] WROTE 30
+  stl-6 [180/241] WROTE 30
+  stl-6 [210/241] WROTE 30
+  stl-6 [240/241] WROTE 30
+  stl-6 [241/241] WROTE 1
+[DONE] stl-6: 本機 241 張 (f000=42266 f240=42300) | 伺服器 241 files; f000=42266 f240=42300
+  straightening [30/241] WROTE 30
+  straightening [60/241] WROTE 30
+  straightening [90/241] WROTE 30
+  straightening [120/241] WROTE 30
+  straightening [150/241] WROTE 30
+  straightening [180/241] WROTE 30
+  straightening [210/241] WROTE 30
+  straightening [240/241] WROTE 30
+  straightening [241/241] WROTE 1
+[DONE] straightening: 本機 241 張 (f000=49024 f240=48998) | 伺服器 241 files; f000=49024 f240=48998
+  tilt-loader [30/241] WROTE 30
+  tilt-loader [60/241] WROTE 30
+  tilt-loader [90/241] WROTE 30
+  tilt-loader [120/241] WROTE 30
+  tilt-loader [150/241] WROTE 30
+  tilt-loader [180/241] WROTE 30
+  tilt-loader [210/241] WROTE 30
+  tilt-loader [240/241] WROTE 30
+  tilt-loader [241/241] WROTE 1
+[DONE] tilt-loader: 本機 241 張 (f000=55266 f240=55216) | 伺服器 241 files; f000=55266 f240=55216
+
+上傳完成。失敗: 無

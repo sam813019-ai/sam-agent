@@ -798,6 +798,41 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 .jt-no-model{color:#455565}
 .jt-no-model svg{stroke:#455565}
 @media(max-width:680px){.jt-modal-viewer-col{border-bottom-color:#2E3A48}}
+.lang-switch{display:flex;gap:2px;border:1px solid #2E3A48;border-radius:3px;overflow:hidden}
+.lang-switch button{background:transparent;border:none;color:#7d8a98;font-size:11px;font-weight:700;letter-spacing:.05em;padding:5px 9px;cursor:pointer;font-family:inherit}
+.lang-switch button:hover{color:#cdd6df}
+.lang-switch button.active{background:var(--yellow,#F4DB00);color:#0A0908}
+</style>
+
+<style id="jt-mnav-css">
+/* ===== 手機版導覽優化 2026-07-09 ===== */
+.brand{min-width:0}
+.brand-txt .zh{white-space:nowrap}
+@media (max-width:920px){
+  .nav ul,.nav-phone,.nav .nav-cta{display:none!important}
+  .menu-toggle{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid var(--concrete,#3a4656);background:transparent;color:inherit;font-size:20px;cursor:pointer;flex:none}
+}
+@media (max-width:480px){
+  .brand{gap:10px}
+  .brand .hex{width:38px;height:38px}
+  .brand-txt .en{font-size:13px}
+  .brand-txt .zh{font-size:9.5px;letter-spacing:.05em}
+}
+/* 全屏手機選單 */
+.jt-mnav{position:fixed;left:0;right:0;top:var(--nav-h,72px);bottom:0;z-index:8990;background:rgba(10,13,18,.97);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;flex-direction:column;padding:26px 26px 40px;transform:translateY(-10px);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;overflow-y:auto}
+.jt-mnav.open{opacity:1;transform:none;pointer-events:auto}
+.jt-mnav ul{list-style:none;margin:0;padding:0;display:block}
+.jt-mnav ul a{display:flex;align-items:baseline;gap:14px;padding:15px 2px;font-family:var(--f-display,inherit);font-weight:800;font-size:19px;letter-spacing:.1em;color:#F2EDE1;text-decoration:none;border-bottom:1px solid rgba(242,237,225,.12)}
+.jt-mnav ul a .num{color:var(--yellow,#F4DB00);font-size:11px}
+.jt-mnav ul a:active{color:var(--yellow,#F4DB00)}
+.jt-mnav-foot{margin-top:auto;padding-top:26px;display:flex;flex-direction:column;gap:16px}
+.jt-mnav-foot .lang-switch{align-self:flex-start}
+.jt-mnav-cta{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--yellow,#F4DB00);color:#0A0908;font-family:var(--f-display,inherit);font-weight:800;letter-spacing:.16em;padding:15px 18px;text-decoration:none;font-size:15px}
+.jt-mnav-tel{font-family:var(--f-mono,monospace);font-size:13px;color:#8b97a5;letter-spacing:.06em}
+.jt-mnav-tel a{color:#F2EDE1;text-decoration:none}
+body.jt-mnav-open{overflow:hidden}
+@media (min-width:921px){.jt-mnav{display:none!important}}
+
 </style>
 </head>
 
@@ -816,17 +851,21 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
       </span>
     </a>
     <ul>
-      <li><a href="index.html"><span class="num">01</span>首頁</a></li>
-      <li><a href="index.html#about"><span class="num">02</span>公司簡介</a></li>
-      <li><a href="products.html"><span class="num">03</span>產品介紹</a></li>
-      <li><a href="index.html#capabilities"><span class="num">04</span>核心能力</a></li>
-      <li><a href="index.html#catalog"><span class="num">05</span>線上目錄</a></li>
-      <li><a href="index.html#news"><span class="num">06</span>最新消息</a></li>
-      <li><a href="contact.html"><span class="num">07</span>聯絡我們</a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#home"><span class="num">01</span><span data-zh="首頁" data-en="Home" data-vi="Trang chủ">首頁</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#latest"><span class="num">02</span><span data-zh="最新產品" data-en="Latest" data-vi="Sản phẩm mới">最新產品</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#about"><span class="num">03</span><span data-zh="公司簡介" data-en="About" data-vi="Giới thiệu">公司簡介</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/products.html"><span class="num">04</span><span data-zh="產品介紹" data-en="Products" data-vi="Sản phẩm">產品介紹</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/index.html#news"><span class="num">05</span><span data-zh="最新消息" data-en="News" data-vi="Tin tức">最新消息</span></a></li>
+      <li><a href="/wp-content/uploads/zhentai/contact.html"><span class="num">06</span><span data-zh="聯絡我們" data-en="Contact" data-vi="Liên hệ">聯絡我們</span></a></li>
     </ul>
     <div class="nav-cta">
+      <div class="lang-switch">
+        <button data-lang-btn="zh" onclick="jtSetLang('zh')">中</button>
+        <button data-lang-btn="en" onclick="jtSetLang('en')">EN</button>
+        <button data-lang-btn="vi" onclick="jtSetLang('vi')">VI</button>
+      </div>
       <div class="nav-phone"><span>TEL</span>+886-7-6210108</div>
-      <a href="contact.html" class="btn">詢價 <span class="arr">→</span></a>
+      <a href="/wp-content/uploads/zhentai/contact.html" class="btn"><span data-zh="詢價" data-en="Inquiry" data-vi="Báo giá">詢價</span> <span class="arr">→</span></a>
     </div>
     <button class="menu-toggle" aria-label="menu">≡</button>
   </div>
@@ -837,8 +876,8 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 <section class="contact" id="contact">
   <div class="wrap">
     <div class="contact-head reveal">
-      <div class="sec-label" style="color:var(--steel)">[07] 聯絡我們 · Contact</div>
-      <h2 class="contact-title">
+      <div class="sec-label" style="color:var(--steel)"><span data-zh="[07] 聯絡我們 · Contact" data-en="[07] Contact Us" data-vi="[07] Liên hệ">[07] 聯絡我們 · Contact</span></div>
+      <h2 class="contact-title" data-i18n-html="1" data-zh="把你的生產線<br><span class=&quot;y&quot;>自動化</span>的第<span class=&quot;r&quot;>一步</span>，<br>從一封信開始。" data-en="The first <span class=&quot;y&quot;>step</span> to <span class=&quot;r&quot;>automate</span><br>your production line<br>starts with one message." data-vi="Bước <span class=&quot;y&quot;>đầu tiên</span> để <span class=&quot;r&quot;>tự động hóa</span><br>dây chuyền của bạn<br>bắt đầu từ một tin nhắn.">
         把你的生產線<br>
         <span class="y">自動化</span>的第<span class="r">一步</span>，<br>
         從一封信開始。
@@ -847,15 +886,15 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 
     <div class="contact-grid">
       <div class="office reveal">
-        <span class="badge">HQ · 總公司</span>
+        <span class="badge"><span data-zh="HQ · 總公司" data-en="HQ" data-vi="Trụ sở">HQ · 總公司</span></span>
         <h4>振太機械企業股份有限公司</h4>
         <div class="en-ttl">Jenn Tai Machine Co., Ltd.</div>
         <dl>
-          <dt>Addr</dt><dd>高雄市岡山區岡山路 610 巷 23 號</dd>
+          <dt>Addr</dt><dd data-zh="高雄市岡山區岡山路 610 巷 23 號" data-en="No.23 Lane 610, Gangshan Rd, Gangshan, Kaohsiung" data-vi="Số 23 Hẻm 610, Đường Gangshan, Gangshan, Cao Hùng">高雄市岡山區岡山路 610 巷 23 號</dd>
           <dt>Tel</dt><dd><a href="tel:+88676210108">+886-7-6210108</a></dd>
           <dt>Fax</dt><dd>+886-7-6216766</dd>
           <dt>Mail</dt><dd><a href="mailto:info@jenntai.com.tw">info@jenntai.com.tw</a></dd>
-          <dt>Hours</dt><dd>週一至週五 08:30 – 17:30</dd>
+          <dt>Hours</dt><dd data-zh="週一至週五 08:30 – 17:30" data-en="Mon–Fri 08:30 – 17:30" data-vi="T2–T6 08:30 – 17:30">週一至週五 08:30 – 17:30</dd>
         </dl>
       </div>
       <div class="office alt reveal">
@@ -863,7 +902,7 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
         <h4>晨泰螺絲機械股份有限公司</h4>
         <div class="en-ttl">Chen Tai Fastener Machine Co., Ltd.</div>
         <dl>
-          <dt>Addr</dt><dd>高雄市岡山區中正街 230 號</dd>
+          <dt>Addr</dt><dd data-zh="高雄市岡山區中正街 230 號" data-en="No.230 Zhongzheng St, Gangshan, Kaohsiung" data-vi="Số 230 Phố Zhongzheng, Gangshan, Cao Hùng">高雄市岡山區中正街 230 號</dd>
           <dt>Tel</dt><dd><a href="tel:+88676217639">+886-7-6217639</a></dd>
           <dt>Fax</dt><dd>+886-7-6217816</dd>
           <dt>Mail</dt><dd><a href="mailto:sales@chentai.com.tw">sales@chentai.com.tw</a></dd>
@@ -874,8 +913,8 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
 
     <div class="form-wrap">
       <div class="blurb reveal">
-        <h5>客製詢價<br>Inquiry Form</h5>
-        <p>告訴我們您的料件規格、產能需求與安裝環境，工程團隊將在 1 個工作日內回覆初步方案與報價範圍。</p>
+        <h5 data-i18n-html="1" data-zh="客製詢價<br>Inquiry Form" data-en="Custom Inquiry<br>Inquiry Form" data-vi="Yêu cầu báo giá<br>Inquiry Form">客製詢價<br>Inquiry Form</h5>
+        <p data-zh="告訴我們您的料件規格、產能需求與安裝環境，工程團隊將在 1 個工作日內回覆初步方案與報價範圍。" data-en="Tell us your component specs, capacity needs and installation environment. Our engineering team will reply with a preliminary plan and quote range within one working day." data-vi="Cho chúng tôi biết quy cách chi tiết, nhu cầu sản lượng và môi trường lắp đặt. Đội kỹ thuật sẽ phản hồi phương án và khoảng báo giá sơ bộ trong vòng một ngày làm việc.">告訴我們您的料件規格、產能需求與安裝環境，工程團隊將在 1 個工作日內回覆初步方案與報價範圍。</p>
       </div>
       <form class="reveal" onsubmit="event.preventDefault();alert('示範表單：已送出');">
         <div class="fld">
@@ -910,7 +949,7 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
         </div>
         <div class="sbt">
           <small>▮ 我們將於 24 小時內回覆</small>
-          <button class="btn light" type="submit">送出詢價 <span class="arr">→</span></button>
+          <button class="btn light" type="submit"><span data-zh="送出詢價" data-en="Send Inquiry" data-vi="Gửi yêu cầu">送出詢價</span> <span class="arr">→</span></button>
         </div>
       </form>
     </div>
@@ -937,22 +976,22 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
       <div class="foot-col">
         <h6>Sitemap</h6>
         <ul>
-          <li><a href="index.html">首頁 Home</a></li>
-          <li><a href="index.html#about">公司簡介 About</a></li>
-          <li><a href="products.html">產品介紹 Products</a></li>
-          <li><a href="index.html#capabilities">核心能力 Capabilities</a></li>
-          <li><a href="index.html#catalog">線上目錄 Catalogue</a></li>
-          <li><a href="index.html#news">最新消息 News</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html">首頁 Home</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#about">公司簡介 About</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html">產品介紹 Products</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#capabilities">核心能力 Capabilities</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#catalog">線上目錄 Catalogue</a></li>
+          <li><a href="/wp-content/uploads/zhentai/index.html#news">最新消息 News</a></li>
         </ul>
       </div>
 
       <div class="foot-col">
         <h6>Products</h6>
         <ul>
-          <li><a href="products.html">送料設備</a></li>
-          <li><a href="products.html">扣件相關設備</a></li>
-          <li><a href="products.html">零配件</a></li>
-          <li><a href="products.html">客製非標</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html">送料設備</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html">扣件相關設備</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html">零配件</a></li>
+          <li><a href="/wp-content/uploads/zhentai/products.html">客製非標</a></li>
         </ul>
       </div>
 
@@ -962,7 +1001,7 @@ footer{background:var(--black);color:var(--paper);padding:80px 0 30px;position:r
           <li><span class="mono">+886-7-6210108</span></li>
           <li><span class="mono">info@jenntai.com.tw</span></li>
           <li>高雄市岡山區岡山路 610 巷 23 號</li>
-          <li><a href="contact.html" style="color:var(--yellow)">前往詢價 →</a></li>
+          <li><a href="/wp-content/uploads/zhentai/contact.html" style="color:var(--yellow)">前往詢價 →</a></li>
         </ul>
       </div>
     </div>
@@ -1049,5 +1088,38 @@ setActive();
   </div>
 </div>
 
+<script src="/wp-content/uploads/zhentai/jt-data.js?v=2"></script>
+<script>window.addEventListener("DOMContentLoaded",()=>window.jtApplyI18n&&window.jtApplyI18n());</script>
+
+<script id="jt-mnav-js">
+/* 手機全屏選單：複製桌機導覽內容，單一資料源 */
+(function(){
+  var nav=document.querySelector('.nav'); if(!nav) return;
+  var toggle=nav.querySelector('.menu-toggle'); if(!toggle) return;
+  var panel=document.createElement('div'); panel.className='jt-mnav';
+  var srcUl=nav.querySelector('ul');
+  if(srcUl) panel.appendChild(srcUl.cloneNode(true));
+  var foot=document.createElement('div'); foot.className='jt-mnav-foot';
+  var lang=nav.querySelector('.lang-switch'); if(lang) foot.appendChild(lang.cloneNode(true));
+  var cta=nav.querySelector('.nav-cta .btn');
+  var a=document.createElement('a'); a.className='jt-mnav-cta';
+  a.href=cta?cta.getAttribute('href'):'/wp-content/uploads/zhentai/contact.html';
+  a.innerHTML='<span data-zh="\u8a62\u50f9" data-en="Inquiry" data-vi="B\u00e1o gi\u00e1">\u8a62\u50f9</span> <span>\u2192</span>';
+  foot.appendChild(a);
+  var tel=document.createElement('div'); tel.className='jt-mnav-tel';
+  tel.innerHTML='TEL <a href="tel:+88676210108">+886-7-6210108</a>';
+  foot.appendChild(tel);
+  panel.appendChild(foot);
+  document.body.appendChild(panel);
+  function setOpen(o){
+    panel.classList.toggle('open',o);
+    document.body.classList.toggle('jt-mnav-open',o);
+    toggle.textContent=o?'\u2715':'\u2261';
+  }
+  toggle.addEventListener('click',function(){setOpen(!panel.classList.contains('open'))});
+  panel.addEventListener('click',function(e){ if(e.target.closest('a')) setOpen(false); });
+  if(window.jtApplyI18n){ try{window.jtApplyI18n()}catch(e){} }
+})();
+</script>
 </body>
 </html>
