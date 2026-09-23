@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<title>木箱起飛 × 德妍思 提案補充頁</title>
+<style>
+@page { size: 13.333in 7.5in; margin: 0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --bg:#F4F6F6; --navy:#17364A; --grey:#838F97; --lightblue:#DFEBF0;
+  --accent:#AEC4D1; --footer:#C1C8CC; --line:#E4E8E9;
+}
+body{ font-family:"PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  -webkit-font-smoothing:antialiased; color:var(--navy); }
+.slide{ width:1280px; height:720px; background:var(--bg); position:relative;
+  padding:58px 60px 0 60px; page-break-after:always; overflow:hidden; }
+.slide:last-child{ page-break-after:auto; }
+h1{ font-size:39px; font-weight:700; letter-spacing:.5px; }
+.sub{ font-size:17px; color:var(--grey); margin-top:14px; letter-spacing:.3px; }
+.foot{ position:absolute; left:60px; bottom:26px; font-size:13px; color:var(--footer); letter-spacing:1px; }
+.pg{ position:absolute; right:60px; bottom:26px; font-size:13px; color:var(--footer); }
+.note{ position:absolute; left:60px; bottom:56px; font-size:13.5px; color:var(--grey); letter-spacing:.2px; }
+.card{ background:#fff; border-radius:12px; }
+
+/* ---- p11 作品 ---- */
+.works{ display:flex; gap:24px; margin-top:34px; }
+.work{ flex:1; background:#fff; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+.work .shot{ height:236px; background:#F3F0EE; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.work .shot img{ width:100%; height:100%; object-fit:cover; object-position:top center; }
+.work .body{ padding:20px 24px 22px; }
+.work .tag{ font-size:12px; color:var(--accent); letter-spacing:1.5px; font-weight:600; }
+.work h3{ font-size:22px; font-weight:700; margin-top:7px; }
+.work .role{ font-size:13.5px; color:var(--grey); line-height:1.85; margin-top:11px; }
+.work .role b{ color:var(--navy); font-weight:600; }
+
+/* ---- p12 交付 ---- */
+.deliv{ display:flex; gap:20px; margin-top:32px; }
+.dcol{ flex:1; background:#fff; border-radius:12px; padding:24px 24px 22px; display:flex; flex-direction:column; }
+.dcol .no{ font-size:13px; color:var(--accent); font-weight:700; letter-spacing:1.5px; }
+.dcol h3{ font-size:21px; font-weight:700; margin-top:8px; }
+.dcol .spec{ font-size:13px; color:var(--grey); margin-top:5px; }
+.dcol ul{ list-style:none; margin-top:15px; flex:1; }
+.dcol li{ font-size:13.5px; line-height:1.55; padding-left:15px; position:relative; margin-bottom:9px; color:#2F4A5C; }
+.dcol li:before{ content:""; position:absolute; left:0; top:8px; width:5px; height:5px;
+  border-radius:50%; background:var(--accent); }
+.dcol .wk{ margin-top:14px; padding-top:13px; border-top:1px solid var(--line);
+  font-size:13px; color:var(--grey); }
+.dcol .wk b{ color:var(--navy); font-weight:600; font-size:14.5px; }
+.quotebar{ margin-top:22px; background:var(--navy); color:#fff; border-radius:12px;
+  padding:17px 26px; display:flex; align-items:center; justify-content:space-between; }
+.quotebar .q{ font-size:16px; font-weight:600; letter-spacing:.3px; }
+.quotebar .r{ font-size:13px; color:#AEC4D1; }
+
+/* ---- p13 藍圖 ---- */
+.phases{ display:flex; gap:20px; margin-top:34px; align-items:stretch; min-height:400px; }
+.ph{ flex:1; border-radius:12px; padding:26px 26px 24px; display:flex; flex-direction:column; }
+.ph.now{ background:var(--navy); color:#fff; }
+.ph.next{ background:var(--lightblue); }
+.ph.later{ background:#fff; }
+.ph .stage{ font-size:12.5px; letter-spacing:1.5px; font-weight:700; }
+.ph.now .stage{ color:#AEC4D1; } .ph.next .stage,.ph.later .stage{ color:var(--accent); }
+.ph h3{ font-size:23px; font-weight:700; margin-top:10px; }
+.ph .who{ align-self:flex-start; margin-top:13px; font-size:12.5px; font-weight:600;
+  padding:5px 14px; border-radius:20px; }
+.ph ul{ flex:1; }
+.ph .out{ margin-top:16px; padding-top:14px; font-size:13px; line-height:1.55; }
+.ph.now .out{ border-top:1px solid rgba(255,255,255,.18); color:#AEC4D1; }
+.ph.next .out{ border-top:1px solid #C7D8E1; color:#5B7488; }
+.ph.later .out{ border-top:1px solid var(--line); color:var(--grey); }
+.ph .out b{ font-weight:600; }
+.ph.now .out b{ color:#fff; } .ph.next .out b{ color:var(--navy); } .ph.later .out b{ color:#5B7488; }
+.ph.now .who{ background:rgba(255,255,255,.16); color:#fff; }
+.ph.next .who{ background:#fff; color:var(--navy); }
+.ph.later .who{ background:#F1F4F5; color:var(--grey); }
+.ph ul{ list-style:none; margin-top:17px; }
+.ph li{ font-size:14px; line-height:1.6; margin-bottom:10px; padding-left:15px; position:relative; }
+.ph.now li{ color:#DCE6EC; } .ph.next li{ color:#2F4A5C; } .ph.later li{ color:var(--grey); }
+.ph li:before{ content:""; position:absolute; left:0; top:8px; width:5px; height:5px; border-radius:50%; }
+.ph.now li:before{ background:#6E8C9E; }
+.ph.next li:before{ background:var(--accent); }
+.ph.later li:before{ background:#D6DDE0; }
+
+/* ---- p12 教育訓練 ---- */
+.edu{ display:flex; gap:22px; margin-top:30px; }
+.edu-now{ width:352px; background:var(--navy); color:#fff; border-radius:12px; padding:24px 26px 22px; }
+.edu-now .lbl{ font-size:12.5px; letter-spacing:1.5px; color:#AEC4D1; font-weight:700; }
+.edu-now h3{ font-size:19px; font-weight:700; margin-top:9px; }
+.edu-now .rows{ margin-top:17px; }
+.edu-now .r{ display:flex; align-items:baseline; gap:11px; padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,.13); }
+.edu-now .r:last-child{ border-bottom:none; }
+.edu-now .v{ font-size:23px; font-weight:700; min-width:62px; letter-spacing:-.5px; }
+.edu-now .k{ font-size:12.5px; color:#C3D2DB; line-height:1.5; }
+.edu-right{ flex:1; display:flex; flex-direction:column; }
+.edu-right .lbl{ font-size:12.5px; letter-spacing:1.5px; color:var(--accent); font-weight:700; }
+.edu-right h3{ font-size:19px; font-weight:700; margin-top:9px; color:var(--navy); }
+.chips{ display:flex; gap:11px; margin-top:15px; }
+.chip{ flex:1; background:#fff; border-radius:10px; padding:14px 15px; }
+.chip .ch{ font-size:11px; color:var(--accent); font-weight:700; letter-spacing:.8px; }
+.chip .cn{ font-size:14.5px; font-weight:700; margin-top:6px; line-height:1.35; }
+.chip .cd{ font-size:11.5px; color:var(--grey); margin-top:6px; line-height:1.5; }
+.gains{ display:flex; gap:11px; margin-top:16px; }
+.gain{ flex:1; background:var(--lightblue); border-radius:10px; padding:15px 16px; }
+.gain .gt{ font-size:14.5px; font-weight:700; color:var(--navy); }
+.gain .gd{ font-size:11.5px; color:#5B7488; line-height:1.6; margin-top:6px; }
+</style></head><body>
+
+<!-- ============ 11 作品實證 ============ -->
+<section class="slide">
+  <h1>我們做過的：3D 動畫與官網</h1>
+  <p class="sub">同一套製作方法，可直接套用在 DMS 層狀結構與屏障修復的說明上。</p>
+  <div class="works">
+    <div class="work">
+      <div class="shot" style="background:#F3F0EE"><img src="thumb_heiwei.png" style="object-fit:contain;padding:10px"></div>
+      <div class="body">
+        <div class="tag">3D 動畫 ・ 產品結構</div>
+        <h3>何謂美 HEIWEI｜捲軸驅動 3D 動畫</h3>
+        <p class="role"><b>我方負責：</b>3D 建模與算圖、101 張影格序列輸出、<br>捲軸驅動前端開發、電商頁面整合上線</p>
+      </div>
+    </div>
+    <div class="work">
+      <div class="shot"><img src="thumb_zhentai.png"></div>
+      <div class="body">
+        <div class="tag">官網 ・ 品牌形象</div>
+        <h3>振太機械 JENN TAI｜品牌官網</h3>
+        <p class="role"><b>我方負責：</b>網站架構規劃、前端開發、CMS 後台、<br>產品資料庫、多語系與行動版</p>
+      </div>
+    </div>
+  </div>
+  <p class="note">影格序列由捲軸控制播放，使用者往下滑即逐格推進 —— 抽象的技術結構，可以被「看見」而不只是被讀到。</p>
+  <div class="foot">木箱起飛 × 德妍思</div><div class="pg">11</div>
+</section>
+
+<!-- ============ 12 教育訓練 ============ -->
+<section class="slide">
+  <h1>教育訓練，是這個品牌最重的資產</h1>
+  <p class="sub">專業線的銷售發生在課堂上 —— 講師怎麼講，經銷商就怎麼賣。</p>
+  <div class="edu">
+    <div class="edu-now">
+      <div class="lbl">現況</div>
+      <h3>《角質層重建療法》教材</h3>
+      <div class="rows">
+        <div class="r"><div class="v">73</div><div class="k">頁簡報，10 個章節，<br>檔案 187 MB</div></div>
+        <div class="r"><div class="v">21</div><div class="k">頁幾乎沒有文字，<br>完全仰賴講師口述</div></div>
+        <div class="r"><div class="v">117</div><div class="k">張靜態圖，用來說明<br>本質上是動態的過程</div></div>
+        <div class="r"><div class="v">2</div><div class="k">支影片（74 MB），已分別<br>放在第 14 頁與第 58 頁</div></div>
+      </div>
+    </div>
+    <div class="edu-right">
+      <div class="lbl">我們讀過這份教材</div>
+      <h3>最該被動畫化的，是這四段</h3>
+      <div class="chips">
+        <div class="chip"><div class="ch">CH 01</div><div class="cn">磚牆結構</div><div class="cd">角質細胞與細胞間脂質如何組成屏障</div></div>
+        <div class="chip"><div class="ch">CH 02</div><div class="cn">乳化劑洗脫</div><div class="cd">層狀結構被沖散的過程</div></div>
+        <div class="chip"><div class="ch">CH 05</div><div class="cn">發炎惡性循環</div><div class="cd">缺水到斑、痘、衰的連鎖反應</div></div>
+        <div class="chip"><div class="ch">CH 08</div><div class="cn">微脂囊穿透</div><div class="cd">精華如何通過屏障抵達深層</div></div>
+      </div>
+      <p class="sub" style="font-size:12.5px;margin-top:14px">貴司已經在第 14 頁與第 58 頁用影片補救最難講的兩段 —— 方向是對的，只是素材還沒有被當成資產來管理。</p>
+      <div class="gains">
+        <div class="gain"><div class="gt">每一場課，品質一致</div><div class="gd">講得最好的那一次，被固定下來，不再因講師而異</div></div>
+        <div class="gain"><div class="gt">新經銷商可自學</div><div class="gd">縮短上手時間，總公司的課用來解決問題而非從頭講起</div></div>
+        <div class="gain"><div class="gt">訊息往下一層延伸</div><div class="gd">經銷商拿同一套素材對客人講，品牌說法才真正統一</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">木箱起飛 × 德妍思</div><div class="pg">12</div>
+</section>
+
+<!-- ============ 13 交付範圍 ============ -->
+<section class="slide">
+  <h1>第一階段的交付範圍</h1>
+  <p class="sub">先界定我們負責什麼、什麼時候交 —— 規格確認後才談數字。</p>
+  <div class="deliv">
+    <div class="dcol">
+      <div class="no">01</div>
+      <h3>品牌官網</h3>
+      <p class="spec">響應式網站・中文為主</p>
+      <ul>
+        <li>網站架構與資訊規劃</li>
+        <li>視覺設計稿（首頁＋內頁模板）</li>
+        <li>前端開發與行動版適配</li>
+        <li>CMS 後台，內容可自行維護</li>
+        <li>預約諮詢與據點查詢模組</li>
+        <li>專業線合作／招商表單</li>
+        <li>網域、主機與上線設定</li>
+      </ul>
+      <div class="wk">預估工期　<b>8–10 週</b></div>
+    </div>
+    <div class="dcol">
+      <div class="no">02</div>
+      <h3>3D 動畫資產</h3>
+      <p class="spec">一次建模・長期重複調用</p>
+      <ul>
+        <li>DMS 層狀結構 3D 模型建置</li>
+        <li>角質層磚牆結構示意動畫</li>
+        <li>層狀 vs 油滴狀對比動畫</li>
+        <li>微脂囊穿透過程動畫</li>
+        <li>輸出格式：影片／影格序列／<br>官網嵌入版</li>
+        <li>模型檔保留，後續新片可沿用</li>
+      </ul>
+      <div class="wk">預估工期　<b>6–8 週</b></div>
+    </div>
+    <div class="dcol">
+      <div class="no">03</div>
+      <h3>品牌影片</h3>
+      <p class="spec">一支主片・三支短版</p>
+      <ul>
+        <li>腳本與分鏡（含品牌訪談）</li>
+        <li>主影片 30 秒｜建立核心概念</li>
+        <li>短版 15 秒 ×3｜問題／技術／品牌</li>
+        <li>實拍、剪輯、調色、配樂</li>
+        <li>字幕與比例版本（16:9／9:16）</li>
+        <li>可用於官網、社群、展場、業務簡報</li>
+      </ul>
+      <div class="wk">預估工期　<b>6–8 週</b></div>
+    </div>
+  </div>
+  <div class="quotebar">
+    <div class="q">報價將於需求與規格確認後，2 個工作日內提出</div>
+    <div class="r">三個項目可分開委製，亦可整包進行</div>
+  </div>
+  <div class="foot">木箱起飛 × 德妍思</div><div class="pg">13</div>
+</section>
+
+<!-- ============ 14 第二階段藍圖 ============ -->
+<section class="slide">
+  <h1>第一階段之後</h1>
+  <p class="sub">官網上線不是終點，是內容與搜尋的起點。我們也誠實說明能力邊界。</p>
+  <div class="phases">
+    <div class="ph now">
+      <div class="stage">PHASE 1</div>
+      <h3>官網與素材</h3>
+      <div class="who">木箱起飛承接</div>
+      <ul>
+        <li>品牌官網建置</li>
+        <li>3D 動畫資產庫</li>
+        <li>品牌主影片與短版</li>
+        <li>攝影與圖像素材</li>
+      </ul>
+      <div class="out"><b>成果</b>　一組對外可用、且長期重複調用的品牌資產</div>
+    </div>
+    <div class="ph next">
+      <div class="stage">PHASE 2</div>
+      <h3>搜尋與內容</h3>
+      <div class="who">木箱起飛承接</div>
+      <ul>
+        <li>SEO：技術優化與關鍵字佈局</li>
+        <li>GEO：讓 AI 問答正確引用品牌</li>
+        <li>衛教內容持續產出</li>
+        <li>直營店在地搜尋與地圖曝光</li>
+        <li>每月成效數據報告</li>
+      </ul>
+      <div class="out"><b>成果</b>　搜尋與 AI 問答中，品牌說法由你自己定義</div>
+    </div>
+    <div class="ph later">
+      <div class="stage">PHASE 3</div>
+      <h3>投放與活動</h3>
+      <div class="who">我方媒合外部夥伴</div>
+      <ul>
+        <li>KOL 與社群操作</li>
+        <li>數位廣告投放</li>
+        <li>實體活動與展場執行</li>
+        <li>我方協助素材供應與品質控管</li>
+      </ul>
+      <div class="out"><b>成果</b>　由德妍思直接發包，我方不抽成、只顧品質</div>
+    </div>
+  </div>
+  <p class="note">我們不承接全方位行銷。能做的做到最好，不能做的推薦合作過、品質確認過的夥伴。</p>
+  <div class="foot">木箱起飛 × 德妍思</div><div class="pg">14</div>
+</section>
+
+</body></html>

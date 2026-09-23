@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<title>dermaviduals.com.tw 官網現況健檢</title>
+<style>
+@page { size:A4; margin:0; }
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{ --red:#D4462F; --ink:#1B2430; --grey:#6B7580; --line:#E2E4E5;
+       --hi:#FDF3F1; --hired:#A8321F; --soft:#F7F8F9; }
+body{ font-family:"PingFang TC","Microsoft JhengHei",sans-serif; color:var(--ink);
+  -webkit-font-smoothing:antialiased; }
+.page{ width:794px; height:1123px; background:#fff; padding:48px 54px 44px;
+  position:relative; page-break-after:always; }
+.page:last-child{ page-break-after:auto; }
+.eyebrow{ font-size:9.5px; letter-spacing:3.4px; color:var(--grey); font-weight:600; }
+.rule{ width:34px; height:3px; background:var(--red); margin:9px 0 22px; }
+h1{ font-size:30px; font-weight:400; letter-spacing:.5px; }
+.dom{ font-size:13px; margin-top:11px; color:var(--ink); font-weight:600; letter-spacing:.3px; }
+.dom span{ color:var(--grey); font-weight:400; }
+.intro{ font-size:11.5px; line-height:1.8; color:#3D4854; margin-top:16px; }
+.intro code{ font-family:"SF Mono",Menlo,monospace; font-size:10.5px; color:var(--grey); }
+.hibox{ background:var(--hi); border-left:3px solid var(--red); padding:13px 18px;
+  margin-top:17px; font-size:11.5px; line-height:1.85; }
+.hibox b{ color:var(--hired); }
+.kpis{ display:flex; gap:11px; margin-top:17px; }
+.kpi{ flex:1; border:1px solid var(--line); border-radius:5px; padding:13px 8px; text-align:center; }
+.kpi .n{ font-size:25px; font-weight:700; letter-spacing:-.5px; }
+.kpi .n i{ font-style:normal; font-size:12px; font-weight:600; }
+.kpi .l{ font-size:9px; color:var(--grey); margin-top:6px; letter-spacing:.6px; }
+.kpi.bad .n{ color:var(--red); } .kpi.bad{ border-color:#F0C8BF; }
+.sechead{ display:flex; align-items:baseline; gap:11px; margin-top:24px;
+  padding-bottom:9px; border-bottom:1px solid var(--line); }
+.sechead .tag{ font-size:10px; font-weight:700; color:#fff; background:var(--red);
+  padding:3px 8px; border-radius:3px; letter-spacing:1px; }
+.sechead .tag.p1{ background:#E08A3C; } .sechead .tag.p2{ background:#8C97A2; }
+.sechead .t{ font-size:12px; color:var(--grey); letter-spacing:.4px; }
+.find{ margin-top:16px; }
+.find h3{ font-size:14.5px; font-weight:700; }
+.find h3 em{ font-style:normal; color:var(--red); margin-right:7px; }
+.find p{ font-size:11.5px; line-height:1.8; color:#3D4854; margin-top:7px; }
+.find p b{ color:var(--ink); }
+pre{ background:#1B2430; color:#D7DDE3; font-family:"SF Mono",Menlo,monospace;
+  font-size:9px; line-height:1.68; padding:11px 13px; border-radius:5px;
+  margin-top:10px; white-space:pre-wrap; word-break:break-all; }
+pre .c{ color:#7E8B99; } pre .r{ color:#F0836C; } pre .g{ color:#8FC7A0; }
+.impact{ background:var(--soft); border-radius:5px; padding:10px 14px; margin-top:9px;
+  font-size:11px; line-height:1.75; color:#3D4854; }
+.impact b{ color:var(--hired); }
+table{ width:100%; border-collapse:collapse; margin-top:12px; font-size:10.5px; }
+th{ text-align:left; font-size:9.5px; letter-spacing:.8px; color:var(--grey);
+  font-weight:600; padding:7px 9px; border-bottom:1.5px solid var(--line); }
+td{ padding:8px 9px; border-bottom:1px solid #EFF1F2; line-height:1.65; vertical-align:top; }
+td.x{ color:var(--red); font-weight:600; white-space:nowrap; }
+.foot{ position:absolute; left:54px; right:54px; bottom:30px;
+  border-top:1px solid var(--line); padding-top:11px;
+  display:flex; justify-content:space-between; font-size:9.5px; color:#A8B0B8; letter-spacing:.5px; }
+.act{ margin-top:14px; }
+.act li{ list-style:none; font-size:11.5px; line-height:1.75; padding:9px 0 9px 26px;
+  border-bottom:1px solid #EFF1F2; position:relative; }
+.act li:before{ content:counter(a,decimal-leading-zero); counter-increment:a;
+  position:absolute; left:0; top:9px; font-size:10px; font-weight:700; color:var(--red); }
+.act{ counter-reset:a; }
+.act li b{ font-weight:600; }
+.note{ font-size:10px; color:var(--grey); line-height:1.8; margin-top:14px;
+  padding:11px 14px; background:var(--soft); border-radius:5px; }
+.runhead{ font-size:9.5px; letter-spacing:2.2px; color:#A8B0B8; font-weight:600;
+  padding-bottom:10px; border-bottom:1px solid var(--line); margin-bottom:22px; }
+</style></head><body>
+
+<!-- ================= PAGE 1 ================= -->
+<div class="page">
+  <div class="eyebrow">WEBSITE AUDIT REPORT</div>
+  <div class="rule"></div>
+  <h1>dermaviduals.com.tw 官網現況健檢</h1>
+  <div class="dom">德妍思台灣官網 <span>｜ 新代理接手前的基準報告</span></div>
+
+  <p class="intro">本報告以實際 HTTP 請求（<code>curl</code>，模擬 Chrome 桌機瀏覽器）逐一量測台灣網域的回應碼、轉址路徑、TLS 憑證與 DNS 指向，並實測搜尋結果頁的品牌能見度。所有結論均有可重現的指令輸出為依據，非目視推測。</p>
+
+  <div class="hibox">
+    <b>總結一句話：</b>台灣官網目前等於不存在。<b>dermaviduals.com.tw 的每一個網址都被 301 永久轉址到德國英文站</b>，而 HTTPS 因憑證不符完全無法連線。台灣消費者搜尋品牌後，實際能抵達的只剩購物平台與通路商 —— 品牌在自己的市場裡，沒有任何一個由自己控制的著陸點。
+  </div>
+
+  <div class="kpis">
+    <div class="kpi bad"><div class="n">301</div><div class="l">全站永久轉址</div></div>
+    <div class="kpi bad"><div class="n">0</div><div class="l">可索引的繁中頁面</div></div>
+    <div class="kpi bad"><div class="n"><i>憑證失效</i></div><div class="l">HTTPS 無法連線</div></div>
+    <div class="kpi"><div class="n">8<i>＋</i></div><div class="l">通路商在替你排名</div></div>
+  </div>
+
+  <div class="sechead"><span class="tag">P0</span><span class="t">致命問題 ── 在此之前，任何行銷投放都是把流量送給別人</span></div>
+
+  <div class="find">
+    <h3><em>01</em>全站被 301 永久轉址到德國站</h3>
+    <p>台灣網域下的<b>任意路徑</b>（含首頁、產品頁、據點查詢頁，甚至不存在的網址）都回應 301，經兩次轉址後一律落在德國英文站首頁。舊有的查詢字串被原封不動帶過去，在德國站上形成無意義的重複網址。</p>
+<pre><span class="c">$ curl -sSI http://dermaviduals.com.tw/product.php?lang=tw&tb=2&cid=22</span>
+<span class="r">HTTP/1.1 301 Moved Permanently</span>
+Location: https://dermaviduals.com/product.php?lang=tw&tb=2&cid=22
+Server: UD Webspace 3.2
+<span class="c">最終落點（追完整條轉址鏈）</span>
+最終網址: <span class="r">https://dermaviduals.de/english/?lang=tw&tb=2&cid=22</span>
+最終狀態: 200　　轉址次數: 2</pre>
+    <div class="impact"><b>影響：</b>台灣消費者從 Google 點進品牌官網，看到的是一個<b>全英文、寫給德國藥師與配方師看的專業網站</b>，沒有繁體中文、沒有台灣據點、沒有任何購買或預約路徑。同時，過去累積的台灣搜尋權重正透過 301 被永久讓渡給德國網域。</div>
+  </div>
+
+  <div class="find">
+    <h3><em>02</em>HTTPS 完全無法連線，瀏覽器會擋下</h3>
+    <p>以 <code>https://</code> 連線台灣網域（含 www 與裸網域）時，伺服器回傳 TLS 警告 <code>unrecognized name</code>，代表該主機<b>沒有對應這個網域的憑證</b>。使用者不會看到轉址，而是直接看到連線安全性錯誤。</p>
+<pre><span class="c">$ curl -sSI https://www.dermaviduals.com.tw/</span>
+<span class="r">curl: (35) error:1404B458:SSL routines:ST_CONNECT:tlsv1 unrecognized name</span></pre>
+    <div class="impact"><b>影響：</b>任何以 https 形式流通的舊連結 —— 名片、DM、社群簡介、診所網站的外連、Google 既有索引 —— 全部失效。<b>這比轉址更糟：使用者看到的不是網站，而是「無法建立安全連線」的錯誤畫面。</b></div>
+  </div>
+
+  <div class="find">
+    <h3><em>03</em>網域 DNS 指向德國主機，控制權需釐清</h3>
+    <p>台灣網域的 A 記錄指向 <code>89.31.143.90</code>，回應標頭為 <code>Server: UD Webspace 3.2</code>（德國虛擬主機服務）。也就是說，<b>.com.tw 這個台灣網域目前是由德國端在操作</b>。</p>
+    <div class="impact"><b>待確認：</b>新任大中華總代理是否握有 <code>dermaviduals.com.tw</code> 的註冊與 DNS 管理權？這一題的答案會直接決定新官網要沿用舊網域（承接既有權重），還是必須啟用新網域（從零開始）。<b>建議在啟動製作前先確認，這是唯一會影響整體策略的前置條件。</b></div>
+  </div>
+
+  <div class="foot"><span>檢測日期：2026-09-22</span><span>木箱起飛影像有限公司　｜　1 / 3</span></div>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+  <div class="runhead">DERMAVIDUALS.COM.TW 官網現況健檢</div>
+  <div class="sechead" style="margin-top:0"><span class="tag p1">P1</span><span class="t">影響品牌話語權與轉單</span></div>
+
+  <div class="find">
+    <h3><em>04</em>品牌搜尋結果，已經被第三方通路整碗端走</h3>
+    <p>以「德妍思 哪裡買」「dermaviduals 台灣」等購買意圖關鍵字實測，首頁結果幾乎全由購物平台與通路商佔據。品牌自己的網站因第 01、02 項問題，實質缺席。</p>
+    <table>
+      <tr><th style="width:38%">目前替品牌排名的是誰</th><th>問題</th></tr>
+      <tr><td>PChome 24h 購物</td><td class="x">被歸類於「開架保養」 ── 專業線定位直接崩解</td></tr>
+      <tr><td>樂天市場（元康藥局）、ETMall、博客來</td><td>售價與陳列不受品牌控制</td></tr>
+      <tr><td>美麗999、富山、唯新健康購、Miss Fabulous</td><td>來源與新鮮度無法驗證</td></tr>
+      <tr><td>德國代購網站（ameliebeauty.de 等）</td><td>水貨平行輸入，與總代理直接衝突</td></tr>
+    </table>
+    <div class="impact"><b>對「不做電商、走直營店」策略的直接衝突：</b>品牌可以決定自己不賣，<b>但無法阻止別人替你賣</b>。在沒有官網的情況下，消費者搜尋品牌後的每一次點擊，都流向價格與形象都不受控的通路。官網不是為了賣東西 —— 官網是把「品牌該怎麼被理解、產品該去哪裡買」這件事，重新拿回自己手上。</div>
+  </div>
+
+  <div class="find">
+    <h3><em>05</em>品牌基本事實不一致，搜尋引擎與 AI 都無法定錨</h3>
+    <p>現有素材中，關於品牌年資出現四種版本：會議說明的 <b>25 年</b>、教育訓練簡報第 33 頁的 <b>KOKO 成立於 1994 年</b>、第 32 頁的 <b>1998 年創立 KOKO</b>、品牌總結的 <b>DMS 發明至今 30 年</b>。</p>
+    <div class="impact"><b>影響：</b>搜尋引擎與生成式 AI 判斷品牌時，依賴的是跨來源的「實體一致性」。同一個品牌出現四種年份，等於沒有任何一個版本具有權威性。<b>官網上線前需由原廠確認唯一版本，並在所有素材統一。</b></div>
+  </div>
+
+  <div class="find">
+    <h3><em>06</em>專利狀態需查證後才可對外宣稱</h3>
+    <p>核心文件引用的三項德國專利 <code>DE 19857490 / 491 / 492</code>，其編號格式顯示為 <b>1998 年申請</b>；德國發明專利保護期自申請日起最長 20 年，據此推算<b>應已於 2018 年前後屆滿</b>。文件所附編號亦為 <code>A1</code>（公開說明書），而非核准公告。</p>
+    <div class="impact"><b>建議：</b>本項為依編號推算，<b>務必請原廠提供專利現況證明後再定案</b>。若專利已失效仍在官網宣稱「全球唯一專利」「至今無人能超越」，除公平交易法上的不實廣告風險外，同業亦可能以此作為攻擊點。</div>
+  </div>
+
+  <div class="foot"><span>檢測日期：2026-09-22</span><span>木箱起飛影像有限公司　｜　2 / 3</span></div>
+</div>
+
+<div class="page">
+  <div class="runhead">DERMAVIDUALS.COM.TW 官網現況健檢</div>
+  <div class="sechead" style="margin-top:0"><span class="tag p1">P1</span><span class="t">內容合規 ── 現有素材不可直接轉繁體上線</span></div>
+  <p class="intro" style="margin-top:14px">現有技術與訓練素材均由上海端為中國專業線內訓所整理，其宣稱標準與台灣法令落差極大。依《化粧品衛生安全管理法》第 10 條，化粧品廣告不得虛偽誇大，<b>亦不得宣稱醫療效能</b>，違者罰鍰最高可達數百萬元（實際級距以主管機關公告為準）。</p>
+  <table>
+    <tr><th style="width:52%">現有素材中的表述</th><th>在台灣的風險</th></tr>
+    <tr><td>輔助治療黃褐斑、玫瑰痤瘡、濕疹、脂溢性皮炎、銀屑病、激素依賴性皮炎</td><td class="x">宣稱醫療效能</td></tr>
+    <tr><td>修復屏障、抗炎、「安全到可在傷口上使用」</td><td class="x">傷口用途屬醫材／藥品範疇</td></tr>
+    <tr><td>「醫學功效護膚品」「醫療級同等療效」</td><td class="x">台灣無此法定類別</td></tr>
+    <tr><td>引用醫院教授、皮膚科主任具名背書</td><td class="x">不得以醫藥專業人士名義推薦</td></tr>
+    <tr><td>2015 年塵爆傷患使用案例</td><td class="x">醫療效能＋事件消費雙重風險</td></tr>
+  </table>
+  <div class="impact" style="margin-top:12px"><b>這不是把文案改軟就能解決的問題，而是網站架構問題。</b>建議官網採雙層結構：對外公開層走合規文案，專業線內容（學術文獻、專利文件、臨床數據、調配處方）置於<b>需登入、且不被搜尋引擎索引的專業區</b>。該講的科學一句都不會少，只是放在對的地方 —— 這同時也是專業線品牌對診所與沙龍的價值感所在。</div>
+
+  <div class="sechead"><span class="tag p2">GEO</span><span class="t">生成式引擎基準線 ── 為什麼 AI 現在無法正確回答你的品牌</span></div>
+  <p class="intro" style="margin-top:14px">當消費者改以 ChatGPT、Perplexity 或 Google AI 摘要詢問「台灣哪裡買得到德妍思」「敏感肌屏障修護推薦什麼品牌」時，AI 只能引用它抓得到的內容。以本次量測的結構性事實為基準，目前的答案品質必然是失真的：<b>官方繁中內容為零、品牌事實有四種版本、專利狀態未經證實、可被引用的權威來源全是通路商頁面。</b>在官網上線前，這四項會持續決定 AI 的回答內容。</p>
+
+  <div class="sechead"><span class="tag p2">NEXT</span><span class="t">建議的處理順序</span></div>
+  <ol class="act">
+    <li><b>釐清 dermaviduals.com.tw 的網域控制權</b> ── 決定沿用舊網域或啟用新網域，這是所有後續工作的前置條件。</li>
+    <li><b>向原廠取得三份確認</b> ── 品牌年份的唯一版本、專利現況證明、繁中市場的內容授權範圍。</li>
+    <li><b>建立官網雙層架構</b> ── 公開層（合規・SEO/GEO）＋ 專業線登入層（學術・不索引）。</li>
+    <li><b>以直營店為轉換終點</b> ── 官網 KPI 設定為預約諮詢數與專業線招商數，而非線上成交。</li>
+    <li><b>同步處理在地搜尋</b> ── 直營店開幕前完成 Google 商家、地圖與據點頁，承接「品牌＋地區」的搜尋需求。</li>
+    <li><b>上線後啟動內容引擎</b> ── 以台灣實際搜尋用語（酒糟肌、肝斑、醫美術後保養）建立衛教內容，逐步把品牌詞從通路商手上拿回來。</li>
+  </ol>
+
+  <div class="note"><b>量測方法說明：</b>本報告所有 HTTP 狀態碼、轉址鏈、TLS 回應與 DNS 記錄，均以 curl 與 dig 於 2026-09-22 實際發出請求取得，可完整重現。搜尋結果能見度以公開搜尋引擎實測。第 06 項專利狀態為依專利編號推算之待查證項目，非結論。法規級距請以衛生福利部食品藥物管理署現行公告為準。</div>
+
+  <div class="foot"><span>檢測日期：2026-09-22</span><span>木箱起飛影像有限公司　｜　3 / 3</span></div>
+</div>
+</body></html>

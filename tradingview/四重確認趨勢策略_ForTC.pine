@@ -1,0 +1,149 @@
+//@version=5
+strategy(title='[四重確認]趨勢策略 For TC', shorttitle='四重確認趨勢', overlay=true, initial_capital=100000, default_qty_type=strategy.fixed, default_qty_value=1, slippage=5)
+
+// ─────── TC4 下單設定 ───────
+var string G0 = 'TC4 下單設定'
+tcId      = input.string('三7K',    '識別碼', group=G0)
+tcAccount = input.string('0542346', '帳號',   group=G0)
+tcSym     = input.string('微台',    '商品',   group=G0, options=['微台','大台'])
+
+// ─────── ① Supertrend ───────
+var string G1 = '① Supertrend（主趨勢方向）'
+stLen  = input.int  (10,  'ATR 週期', group=G1, minval=1)
+stMult = input.float(3.0, 'ATR 乘數', group=G1, step=0.1, minval=0.1)
+
+// ─────── ② EMA 三線 ───────
+var string G2 = '② EMA 三線排列（趨勢強度）'
+emaF = input.int(9,  '快線週期', group=G2, minval=1)
+emaM = input.int(21, '中線週期', group=G2, minval=1)
+emaS = input.int(55, '慢線週期', group=G2, minval=1)
+
+// ─────── ③ MACD ───────
+var string G3 = '③ MACD（動量方向）'
+macdFast = input.int(12, '快線',   group=G3, minval=1)
+macdSlow = input.int(26, '慢線',   group=G3, minval=1)
+macdSig  = input.int(9,  '信號線', group=G3, minval=1)
+
+// ─────── ④ RSI ───────
+var string G4 = '④ RSI（超買超賣過濾）'
+rsiLen = input.int  (14, 'RSI 週期',      group=G4, minval=1)
+rsiMid = input.float(50, '多空門檻',      group=G4, minval=1,  maxval=99)
+rsiOB  = input.float(78, '極端超買（平多）', group=G4, minval=50, maxval=99)
+rsiOS  = input.float(22, '極端超賣（平空）', group=G4, minval=1,  maxval=50)
+
+// ─────── ⑤ 成交量 ───────
+var string G5 = '⑤ 成交量過濾'
+volLen = input.int(20, '量均線週期', group=G5, minval=1)
+
+// ─────── 風控設定 ───────
+var string G6 = '風控設定'
+stopPts  = input.int(150, '停損點數',               group=G6, minval=10)
+minScore = input.int(4,   '最少對齊指標數（4 或 5）', group=G6, minval=3, maxval=5)
+
+// ═══════ 指標計算 ═══════
+
+// ① Supertrend（內建函數，dir=-1 多頭，dir=1 空頭）
+[stLine, stDir] = ta.supertrend(stMult, stLen)
+stBull = stDir == -1
+stBear = stDir == 1
+
+// ② EMA 三線
+e1 = ta.ema(close, emaF)
+e2 = ta.ema(close, emaM)
+e3 = ta.ema(close, emaS)
+emaBull = e1 > e2 and e2 > e3
+emaBear = e1 < e2 and e2 < e3
+
+// ③ MACD Histogram
+[macdLine, sigLine, hist] = ta.macd(close, macdFast, macdSlow, macdSig)
+macdBull = hist > 0
+macdBear = hist < 0
+
+// ④ RSI
+rsi = ta.rsi(close, rsiLen)
+rsiBull = rsi > rsiMid
+rsiBear = rsi < rsiMid
+
+// ⑤ Volume
+volAvg = ta.sma(volume, volLen)
+volOk  = volume > volAvg
+
+// ═══════ 評分系統（5 指標，滿足 minScore 根才進場）═══════
+longScore  = (stBull ? 1 : 0) + (emaBull ? 1 : 0) + (macdBull ? 1 : 0) + (rsiBull ? 1 : 0) + (volOk ? 1 : 0)
+shortScore = (stBear ? 1 : 0) + (emaBear ? 1 : 0) + (macdBear ? 1 : 0) + (rsiBear ? 1 : 0) + (volOk ? 1 : 0)
+
+longReady  = longScore  >= minScore
+shortReady = shortScore >= minScore
+
+// 邊緣觸發：剛滿足門檻的那根 K 線才進場
+buySignal  = longReady  and not longReady[1]
+sellSignal = shortReady and not shortReady[1]
+
+// ═══════ TC4 TOTC 訊息格式 ═══════
+buyMsg  = 'side=buy,qty=1,p='  + str.tostring(close, '#') + ',ordertype=25,tif=2'
+sellMsg = 'side=sell,qty=1,p=' + str.tostring(close, '#') + ',ordertype=25,tif=2'
+
+// ═══════ 下單執行 ═══════
+
+// 進場（position_size 判斷避免重複進場）
+if buySignal and strategy.position_size <= 0
+    strategy.entry('Long',  strategy.long,  comment=buyMsg)
+if sellSignal and strategy.position_size >= 0
+    strategy.entry('Short', strategy.short, comment=sellMsg)
+
+// Supertrend 翻向出場
+if strategy.position_size > 0 and stBear
+    strategy.close('Long',  comment=sellMsg)
+if strategy.position_size < 0 and stBull
+    strategy.close('Short', comment=buyMsg)
+
+// RSI 極端出場
+if strategy.position_size > 0 and rsi > rsiOB
+    strategy.close('Long',  comment=sellMsg)
+if strategy.position_size < 0 and rsi < rsiOS
+    strategy.close('Short', comment=buyMsg)
+
+// 固定停損
+strategy.exit('Long-SL',  from_entry='Long',  loss=stopPts)
+strategy.exit('Short-SL', from_entry='Short', loss=stopPts)
+
+// ═══════ 視覺化 ═══════
+
+// Supertrend 線
+plot(stLine, 'Supertrend', color=stBull ? color.new(color.green, 20) : color.new(color.red, 20), linewidth=2)
+
+// EMA 三線
+plot(e1, 'EMA 快', color=color.new(color.yellow, 10), linewidth=1)
+plot(e2, 'EMA 中', color=color.new(color.orange, 10), linewidth=1)
+plot(e3, 'EMA 慢', color=color.new(color.red,    10), linewidth=2)
+
+// 背景（就緒狀態）
+bgcolor(longReady  ? color.new(color.green, 92) : na, title='多方就緒')
+bgcolor(shortReady ? color.new(color.red,   92) : na, title='空方就緒')
+
+// 進場標籤
+plotshape(buySignal,  title='做多訊號', text='多方進場\n+1', location=location.belowbar, style=shape.labelup,   size=size.small, color=color.new(color.blue,  10), textcolor=color.white)
+plotshape(sellSignal, title='做空訊號', text='空方進場\n-1', location=location.abovebar, style=shape.labeldown, size=size.small, color=color.new(color.red,   10), textcolor=color.white)
+
+// 右上角即時狀態表格
+var table t = table.new(position.top_right, 2, 7, bgcolor=color.new(color.black, 65), border_color=color.new(color.gray, 50), border_width=1)
+if barstate.islast
+    table.cell(t, 0, 0, '指標',        text_color=color.new(color.white, 0), text_size=size.small, bgcolor=color.new(color.navy, 30))
+    table.cell(t, 1, 0, '狀態',        text_color=color.new(color.white, 0), text_size=size.small, bgcolor=color.new(color.navy, 30))
+    table.cell(t, 0, 1, 'Supertrend', text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 1, stBull ? '多▲' : '空▼', text_color=stBull ? color.green : color.red, text_size=size.small)
+    table.cell(t, 0, 2, 'EMA 排列',   text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 2, emaBull ? '多▲' : emaBear ? '空▼' : '中性', text_color=emaBull ? color.green : emaBear ? color.red : color.gray, text_size=size.small)
+    table.cell(t, 0, 3, 'MACD',       text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 3, macdBull ? '多▲' : '空▼', text_color=macdBull ? color.green : color.red, text_size=size.small)
+    table.cell(t, 0, 4, 'RSI',        text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 4, str.tostring(math.round(rsi, 1)), text_color=rsi > rsiMid ? color.green : color.red, text_size=size.small)
+    table.cell(t, 0, 5, '成交量',     text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 5, volOk ? '放量▲' : '縮量', text_color=volOk ? color.green : color.gray, text_size=size.small)
+    table.cell(t, 0, 6, '多 / 空 分數', text_color=color.yellow, text_size=size.small)
+    table.cell(t, 1, 6, str.tostring(longScore) + ' / ' + str.tostring(shortScore), text_color=color.yellow, text_size=size.small)
+
+// ─────────────────────────────────────────────────
+// TC4 警報訊息模板（建立警報時貼到訊息欄）：
+// TOTC.{{timenow}}@account=000-0542346,sym=TC.F.TWF.TMF.HOT_TVSD,{{strategy.order.comment}},ts={{timenow}},tvorderID=三7K
+// ─────────────────────────────────────────────────

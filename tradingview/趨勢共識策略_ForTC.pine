@@ -1,0 +1,145 @@
+//@version=5
+strategy(title='[自建版]趨勢共識策略 For TC', shorttitle='趨勢共識', overlay=true, initial_capital=100000, default_qty_type=strategy.fixed, default_qty_value=1, slippage=5)
+
+// ─────── 基本設定 ───────
+var string G0 = '基本設定'
+tcId      = input.string('三7K',    '識別碼', group=G0)
+tcAccount = input.string('0542346', '帳號',   group=G0)
+tcSym     = input.string('微台',    '商品',   group=G0, options=['微台','大台'])
+
+// ─────── 工具設定 ───────
+var string G1 = '工具設定(範例程式，勿以此為依據)'
+trendStr  = input.int  (3,     '趨勢強弱',     group=G1, minval=1)
+consPer   = input.int  (45,    '市場共識',     group=G1, minval=5)
+consThres = input.float(0.45,  '市場共識強弱', group=G1, step=0.005, minval=0.01, maxval=0.99)
+rtThres   = input.float(0.625, '即時強弱',     group=G1, step=0.005, minval=0.01, maxval=0.99)
+tDelay    = input.int  (0,     '趨勢遲延',     group=G1, minval=0)
+bufSpc    = input.int  (0,     '緩衝空間',     group=G1, minval=0)
+
+// ─────── 判斷設定 ───────
+var string G2 = '判斷設定(範例程式，勿以此為依據)'
+useWick    = input.bool(true,  '觸發條件：含引線', group=G2)
+altConvert = input.bool(false, '多空輪替轉換',     group=G2)
+
+// ─────── 風控(多方) ───────
+var string G3 = '風控設定(多方)(範例程式，勿以此為依據)'
+lStopEn  = input.bool(true,  '多方-啟用最大停損', group=G3)
+lStopPts = input.int (300,   '多方-最大停損點數', group=G3, minval=1)
+lProfEn  = input.bool(false, '多方-啟用停利',     group=G3)
+lProfPts = input.int (0,     '多方-停利點數',     group=G3, minval=0)
+
+// ─────── 風控(空方) ───────
+var string G4 = '風控設定(空方)(範例程式，勿以此為依據)'
+sStopEn  = input.bool(true,  '空方-啟用最大停損', group=G4)
+sStopPts = input.int (300,   '空方-最大停損點數', group=G4, minval=1)
+sProfEn  = input.bool(false, '空方-啟用停利',     group=G4)
+sProfPts = input.int (0,     '空方-停利點數',     group=G4, minval=0)
+
+// ─────── 風控(均線出場) ───────
+var string G5 = '風控設定(均線)(範例程式，勿以此為依據)'
+maExitEn = input.bool  (true,  '啟用均線出場',     group=G5)
+maThres  = input.int   (100,   '均線出場啟動門檻', group=G5, minval=0)
+maLen    = input.int   (20,    '均線長度',         group=G5, minval=1)
+maType   = input.string('SMA', '均線算法',         group=G5, options=['SMA','EMA','WMA','HMA'])
+
+// ─────── 風控(嚴格進場) ───────
+var string G6 = '風控設定(嚴格進場)(範例程式，勿以此為依據)'
+strictEn = input.bool(true, '啟用嚴格進場', group=G6)
+lStrict  = input.int (12,   '多方嚴格程度', group=G6, minval=1)
+sStrict  = input.int (15,   '空方嚴格程度', group=G6, minval=1)
+
+// ─────── 交易時段 ───────
+var string G7 = '交易時段設定'
+sessEn    = input.bool(false, '啟用交易時段限制', group=G7)
+sessStart = input.int (845,   '開始時間(HHMM)',   group=G7)
+sessEnd   = input.int (1345,  '結束時間(HHMM)',   group=G7)
+
+// ═══════ 核心計算 ═══════
+
+// 短期週期 = 市場共識 / 趨勢強弱（預設 45/3=15）
+rtPer = math.max(math.round(consPer / trendStr), 3)
+
+// 每根 K 線是否為上漲根（含引線 → 用 high；不含 → 用 close）
+isUp = useWick ? high > high[1] : close > close[1]
+
+// 市場共識比例：最近 consPer 根中，上漲根佔比（ta.sma 比 for 迴圈穩定）
+bullRatio = ta.sma(isUp ? 1.0 : 0.0, consPer)
+
+// 即時強弱比例：短期上漲佔比
+rtRatio = ta.sma(isUp ? 1.0 : 0.0, rtPer)
+
+// 緩衝空間
+buf = bufSpc / 1000.0
+
+// 多空基本條件
+longBase  = bullRatio > (consThres + buf) and rtRatio > rtThres
+shortBase = bullRatio < (consThres - buf) and rtRatio < (1.0 - rtThres)
+
+// 嚴格進場：連續 N 根滿足才觸發
+var int longCnt  = 0
+var int shortCnt = 0
+longCnt  := longBase  ? longCnt  + 1 : 0
+shortCnt := shortBase ? shortCnt + 1 : 0
+
+// 趨勢遲延
+effLong  = longCnt  - tDelay
+effShort = shortCnt - tDelay
+
+// 交易時段
+curT      = hour * 100 + minute
+inSess    = not sessEn or (curT >= sessStart and curT <= sessEnd)
+
+// 進場訊號
+buySignal  = (strictEn ? effLong  == lStrict : (longBase  and not longBase[1]))  and inSess
+sellSignal = (strictEn ? effShort == sStrict : (shortBase and not shortBase[1])) and inSess
+
+// ═══════ 均線出場 ═══════
+maVal = maType == 'EMA' ? ta.ema(close, maLen) : maType == 'WMA' ? ta.wma(close, maLen) : maType == 'HMA' ? ta.hma(close, maLen) : ta.sma(close, maLen)
+
+entryPx    = strategy.position_avg_price
+lProfit    = strategy.position_size > 0 ? close - entryPx    : 0.0
+sProfit    = strategy.position_size < 0 ? entryPx - close    : 0.0
+
+maLongTrig  = useWick ? low  < maVal : ta.crossunder(close, maVal)
+maShortTrig = useWick ? high > maVal : ta.crossover(close,  maVal)
+
+longExit  = maExitEn and strategy.position_size > 0 and lProfit > maThres and maLongTrig
+shortExit = maExitEn and strategy.position_size < 0 and sProfit > maThres and maShortTrig
+
+// ═══════ TC4 訊息 ═══════
+buyMsg  = 'side=buy,qty=1,p='  + str.tostring(close, '#') + ',ordertype=25,tif=2'
+sellMsg = 'side=sell,qty=1,p=' + str.tostring(close, '#') + ',ordertype=25,tif=2'
+
+// ═══════ 下單 ═══════
+if buySignal
+    strategy.entry('Long',  strategy.long,  comment=buyMsg)
+if sellSignal
+    strategy.entry('Short', strategy.short, comment=sellMsg)
+if longExit
+    strategy.close('Long',  comment=sellMsg)
+if shortExit
+    strategy.close('Short', comment=buyMsg)
+
+if lStopEn
+    strategy.exit('Long-SL',  from_entry='Long',  loss=lStopPts)
+if lProfEn
+    strategy.exit('Long-TP',  from_entry='Long',  profit=lProfPts)
+if sStopEn
+    strategy.exit('Short-SL', from_entry='Short', loss=sStopPts)
+if sProfEn
+    strategy.exit('Short-TP', from_entry='Short', profit=sProfPts)
+
+// ═══════ 視覺化 ═══════
+plot(maVal,                    '均線停利參考線', color=color.blue,   linewidth=2)
+plot(ta.sma(close, consPer),   '市場共識線',     color=color.orange, linewidth=1)
+
+bgcolor(longBase  ? color.new(color.green, 88) : na, title='多方背景')
+bgcolor(shortBase ? color.new(color.red,   88) : na, title='空方背景')
+
+plotshape(buySignal,  title='多方條件符合', text='多方條件符合\n+1', location=location.belowbar, style=shape.labelup,   size=size.small, color=color.new(color.blue,   10), textcolor=color.white)
+plotshape(sellSignal, title='空方條件符合', text='空方條件符合\n-1', location=location.abovebar, style=shape.labeldown, size=size.small, color=color.new(color.red,    10), textcolor=color.white)
+plotshape(longExit,   title='多方移動出場', text='多方移動出場\n-1', location=location.abovebar, style=shape.labeldown, size=size.small, color=color.new(color.purple, 10), textcolor=color.white)
+plotshape(shortExit,  title='空方移動出場', text='空方移動出場\n+1', location=location.belowbar, style=shape.labelup,   size=size.small, color=color.new(color.purple, 10), textcolor=color.white)
+
+// TC4 警報訊息模板（建立警報時貼到訊息欄）：
+// TOTC.{{timenow}}@account=000-0542346,sym=TC.F.TWF.TMF.HOT_TVSD,{{strategy.order.comment}},ts={{timenow}},tvorderID=三7K

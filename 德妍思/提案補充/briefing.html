@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<title>德妍思提案作戰手冊</title>
+<style>
+@page{ size:A4; margin:0; }
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{ --navy:#17364A; --red:#C0392B; --grey:#6B7580; --line:#E2E4E5;
+  --soft:#F5F7F8; --hi:#EEF4F7; --warn:#FDF3F1; --ink:#1B2430; }
+body{ font-family:"PingFang TC","Microsoft JhengHei",sans-serif; color:var(--ink);
+  -webkit-font-smoothing:antialiased; }
+.page{ width:794px; min-height:1123px; padding:44px 54px 40px; position:relative;
+  page-break-after:always; background:#fff; }
+.page:last-child{ page-break-after:auto; }
+.rh{ font-size:9px; letter-spacing:2.2px; color:#A8B0B8; font-weight:600;
+  padding-bottom:9px; border-bottom:1px solid var(--line); margin-bottom:20px;
+  display:flex; justify-content:space-between; }
+h1{ font-size:30px; font-weight:700; letter-spacing:.5px; line-height:1.22; }
+h2{ font-size:17px; font-weight:700; color:var(--navy); margin-top:18px;
+  padding-bottom:8px; border-bottom:2px solid var(--navy); display:flex; gap:10px; align-items:baseline;}
+h2 .n{ font-size:12px; color:#A8B8C4; font-weight:700; letter-spacing:1px; }
+h3{ font-size:13.5px; font-weight:700; margin-top:16px; color:var(--navy); }
+p{ font-size:11.5px; line-height:1.9; color:#33404D; margin-top:7px; }
+b{ color:var(--ink); }
+ul{ margin-top:8px; list-style:none; }
+li{ font-size:11.5px; line-height:1.8; color:#33404D; padding-left:16px;
+  position:relative; margin-bottom:6px; }
+li:before{ content:""; position:absolute; left:2px; top:8px; width:5px; height:5px;
+  border-radius:50%; background:#B8C7D1; }
+.say{ background:var(--hi); border-left:3px solid var(--navy); padding:12px 16px;
+  margin-top:10px; font-size:11.5px; line-height:1.85; }
+.say .tag{ font-size:9px; letter-spacing:1.5px; color:var(--navy); font-weight:700;
+  display:block; margin-bottom:5px; }
+.say i{ font-style:normal; color:var(--navy); font-weight:600; }
+.warn{ background:var(--warn); border-left:3px solid var(--red); padding:12px 16px;
+  margin-top:10px; font-size:11.5px; line-height:1.85; }
+.warn .tag{ font-size:9px; letter-spacing:1.5px; color:var(--red); font-weight:700;
+  display:block; margin-bottom:5px; }
+.warn b{ color:var(--red); }
+table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:10.5px; }
+th{ text-align:left; font-size:9.5px; letter-spacing:.7px; color:var(--grey);
+  font-weight:600; padding:7px 9px; border-bottom:1.5px solid var(--line); }
+td{ padding:7px 9px; border-bottom:1px solid #EFF1F2; line-height:1.6; vertical-align:top; }
+td.no{ color:var(--red); font-weight:600; }
+.cover .meta{ margin-top:18px; font-size:11.5px; line-height:1.85; color:#33404D; }
+.cover .meta b{ display:inline-block; width:74px; color:var(--grey); font-weight:600; }
+.conf{ display:inline-block; font-size:9.5px; letter-spacing:2px; color:var(--red);
+  border:1px solid var(--red); padding:4px 10px; border-radius:3px; font-weight:700; }
+.goal{ display:flex; gap:12px; margin-top:14px; }
+.goal div{ flex:1; border-radius:8px; padding:13px 15px; }
+.goal .a{ background:var(--navy); color:#fff; }
+.goal .b{ background:var(--soft); }
+.goal .t{ font-size:10px; letter-spacing:1.5px; font-weight:700; }
+.goal .a .t{ color:#AEC4D1; } .goal .b .t{ color:var(--grey); }
+.goal .d{ font-size:14px; font-weight:700; margin-top:7px; line-height:1.5; }
+.goal .b .d{ color:var(--navy); }
+.goal .s{ font-size:10.5px; margin-top:6px; line-height:1.6; }
+.goal .a .s{ color:#C3D2DB; } .goal .b .s{ color:var(--grey); }
+.ace{ border:1px solid var(--line); border-radius:8px; padding:11px 15px; margin-top:6px; }
+.ace .h{ display:flex; align-items:baseline; gap:9px; }
+.ace .num{ font-size:11px; font-weight:700; color:#fff; background:var(--navy);
+  width:19px; height:19px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center; flex-shrink:0; font-size:10px; }
+.ace .ht{ font-size:14px; font-weight:700; color:var(--navy); }
+.ace .hd{ font-size:11px; line-height:1.7; color:#33404D; margin-top:5px; }
+.qa{ margin-top:12px; }
+.qa .q{ font-size:12px; font-weight:700; color:var(--navy); margin-top:13px; }
+.qa .a{ font-size:11.5px; line-height:1.85; color:#33404D; margin-top:5px;
+  padding-left:13px; border-left:2px solid var(--line); }
+.ask{ counter-reset:q; margin-top:10px; }
+.ask li{ padding:5px 0 5px 30px; border-bottom:1px solid #EFF1F2; margin:0; font-size:11.5px; }
+.ask li:before{ content:counter(q,decimal-leading-zero); counter-increment:q;
+  background:none; width:auto; height:auto; left:0; top:5px;
+  font-size:10.5px; font-weight:700; color:var(--navy); }
+.ask li:last-child{ border-bottom:none; }
+.ask li b{ display:block; font-size:12px; margin-bottom:2px; line-height:1.4; }
+.ask li span{ line-height:1.4; display:block; }
+.ask li span{ color:var(--grey); font-size:10.5px; }
+.foot{ position:absolute; left:54px; right:54px; bottom:26px; border-top:1px solid var(--line);
+  padding-top:10px; display:flex; justify-content:space-between;
+  font-size:9px; color:#A8B0B8; letter-spacing:.5px; }
+</style></head><body>
+
+<!-- ========== P1 封面／速查 ========== -->
+<div class="page cover">
+  <span class="conf">內部文件・請勿外流</span>
+  <h1 style="margin-top:12px">德妍思提案<br>作戰手冊</h1>
+  <div class="meta">
+    <div><b>會議</b>2026-09-23（二）15:00　德妍思總公司</div>
+    <div><b>對方</b>陳董、陳藥師、企劃部人員</div>
+    <div><b>議題</b>品牌歷程與未來發展、社群推廣、短影音、官網、SEO／GEO</div>
+  </div>
+
+  <div class="goal">
+    <div class="a">
+      <div class="t">今天的目標（主管定調）</div>
+      <div class="d">拿下官網 ＋ 影片素材</div>
+      <div class="s">其餘項目誠實說明能力邊界、推薦外包。不要在會議上推翻定調。</div>
+    </div>
+    <div class="b">
+      <div class="t">你自己的目標</div>
+      <div class="d">把 SEO／GEO 卡進第二階段</div>
+      <div class="s">不另外開口爭取，靠補充頁第 14 頁 Phase 2 自然帶出。</div>
+    </div>
+  </div>
+
+  <h2><span class="n">速查</span>三張王牌 —— 只要打出一張，你就不是「拍片的」</h2>
+
+  <div class="ace">
+    <div class="h"><div class="num">1</div><div class="ht">法規落差（對藥師最有效）</div></div>
+    <div class="hd">他們的素材是上海端為中國內訓寫的，充滿療效宣稱，直接轉繁體上官網＝廣告違規。陳藥師是藥師，法規是他的母語 —— 他會立刻意識到「找不懂法規的廠商做官網＝買罰單」。</div>
+  </div>
+  <div class="ace">
+    <div class="h"><div class="num">2</div><div class="ht">官網現況健檢（手上那份 3 頁報告）</div></div>
+    <div class="hd">com.tw 全站 301 轉去德國英文站、HTTPS 憑證失效、品牌搜尋被九家通路商吃光。實測數據不是意見，對方無法反駁，而且幾乎確定他們不知道。</div>
+  </div>
+  <div class="ace">
+    <div class="h"><div class="num">3</div><div class="ht">教育訓練切角（補充頁第 12 頁）</div></div>
+    <div class="hd">那份 73 頁教材裡，講師已自行在第 14、58 頁塞影片補救最難講的兩段。你讀到這個細節，本身就是說服力。</div>
+  </div>
+
+  <h2><span class="n">速查</span>離場前一定要問到的六件事</h2>
+  <ul class="ask">
+    <li><b>dermaviduals.com.tw 這個網域，控制權在誰手上？</b><span>決定沿用舊網域還是開新的 —— 這是所有後續工作的前置條件</span></li>
+    <li><b>品牌年份以哪個為準？25 年／1994／1998／30 年？</b><span>他們自己的資料有四種說法</span></li>
+    <li><b>三項德國專利目前的法律狀態，原廠有沒有最新證明？</b><span>推算應已到期，不要當場斷言</span></li>
+    <li><b>簡體素材在繁中市場的使用，需不需要另外授權？</b><span>那批資料的版權頁寫的是上海公司</span></li>
+    <li><b>直營店開幾家、開在哪、什麼時候？</b><span>決定在地搜尋與據點頁怎麼做</span></li>
+    <li><b>官網的成功定義是什麼：預約數？招商數？還是形象？</b><span>逼出 KPI，後面才有第二階段</span></li>
+  </ul>
+
+  <div class="foot"><span>德妍思提案作戰手冊</span><span>木箱起飛　｜　1 / 7</span></div>
+</div>
+
+<!-- ========== P2 客戶判讀 ========== -->
+<div class="page">
+  <div class="rh"><span>德妍思提案作戰手冊</span><span>2026-09-23</span></div>
+
+  <h2><span class="n">01</span>對方是誰、手上有什麼</h2>
+  <p>dermaviduals 是德國 KOKO GmbH 的品牌，專業線（診所、沙龍、藥局）老牌。台灣代理權先前出過狀況，現由陳董父子取得<b>大中華區代理權</b>，台灣總代理即為他們。<b>要開直營店、目前不做電商、但要曝光。</b></p>
+  <table>
+    <tr><th style="width:42%">他們給的資料</th><th>性質與用途</th></tr>
+    <tr><td>角質層重建療法-Tyler.pptx（73 頁）</td><td>經銷商教育訓練教材，最有料的一份</td></tr>
+    <tr><td>三大專利介紹／核心製造技術／技術對比</td><td>DMS 層狀結構、丹麥 APV 高壓低溫均質</td></tr>
+    <tr><td>德妍思產品一覽／特色總結</td><td>約 20 支產品、四大賣點</td></tr>
+    <tr><td>木箱起飛_德妍思_素材策略提案</td><td>我方同事已完成的 10 頁提案</td></tr>
+  </table>
+  <div class="warn"><span class="tag">關鍵認知</span>全部原廠素材都標著「上海德妍思國際貿易有限公司整理・內部機密・嚴禁對外流傳」。<b>這批東西不能直接轉繁體變成台灣官網文案</b> —— 這是版權問題，更是法規問題。</div>
+
+  <h2><span class="n">02</span>三個判斷（決定你整場怎麼講）</h2>
+
+  <h3>判斷一：他們不是要「行銷」，是要把專業線的信任搬到看得懂的地方</h3>
+  <p>dermaviduals 的商業模式是「一人一方＋每月回診調配」，客人<b>必須到店</b>才成立。所以不做電商是正確決定。官網的 KPI 不是成交，是<b>預約諮詢數＋門市導流＋專業線招商</b>。</p>
+  <div class="say"><span class="tag">建議這樣講</span>「官網對你們來說不是賣場，是<i>把人帶進門市的入口</i>。所以我們會把成效定義在預約數跟招商數，不是線上營業額。」</div>
+
+  <h3>判斷二：品牌基本事實互相打架</h3>
+  <p>年份出現四個版本：會議邀請說 <b>25 年</b>、教材第 33 頁 <b>KOKO 成立於 1994</b>、第 32 頁 <b>1998 年創立 KOKO</b>、特色總結 <b>DMS 至今 30 年</b>。搜尋引擎與 AI 判斷品牌靠的是跨來源一致性，四個版本等於沒有版本。</p>
+
+  <h3>判斷三：三項專利很可能已經失效</h3>
+  <p>DE 19857490／491／492 的編號顯示為 <b>1998 年申請</b>，德國發明專利自申請日起最長 20 年，推算<b>約 2018 年屆滿</b>；文件標的是 A1（公開說明書）而非核准公告。</p>
+  <div class="warn"><span class="tag">現場紀律</span><b>絕對不要斷言「你們專利過期了」。</b>這會變成打臉。只問一句：「這三項專利目前的法律狀態，原廠有沒有最新的證明文件？因為官網寫法我們想先確認。」—— 效果一樣，姿態完全不同。</div>
+
+  <div class="foot"><span>德妍思提案作戰手冊</span><span>木箱起飛　｜　2 / 7</span></div>
+</div>
+
+<!-- ========== P3 法規 ========== -->
+<div class="page">
+  <div class="rh"><span>德妍思提案作戰手冊</span><span>王牌一・法規落差</span></div>
+
+  <h2><span class="n">03</span>王牌一：法規落差</h2>
+  <p>依《化粧品衛生安全管理法》第 10 條，化粧品廣告<b>不得虛偽誇大，亦不得宣稱醫療效能</b>，違者罰鍰最高可達數百萬元（實際級距以食藥署現行公告為準）。現有素材照搬會踩的雷：</p>
+  <table>
+    <tr><th style="width:55%">原素材的寫法</th><th>台灣的風險</th></tr>
+    <tr><td>輔助治療黃褐斑、玫瑰痤瘡、濕疹、脂溢性皮炎、銀屑病、激素依賴性皮炎</td><td class="no">宣稱醫療效能</td></tr>
+    <tr><td>修復屏障、抗炎、「安全到可在傷口上使用」</td><td class="no">傷口用途屬醫材／藥品</td></tr>
+    <tr><td>「醫學功效護膚品」「醫療級同等療效」</td><td class="no">台灣無此法定類別</td></tr>
+    <tr><td>引用華山醫院教授、台大蔡主任等具名背書</td><td class="no">不得以醫藥人士名義推薦</td></tr>
+    <tr><td>2015 年塵爆傷患使用案例</td><td class="no">醫療效能＋事件消費</td></tr>
+    <tr><td>「全球唯一專利」（若已失效）</td><td class="no">公平交易法不實廣告</td></tr>
+  </table>
+
+  <h3>怎麼把風險講成生意</h3>
+  <div class="say"><span class="tag">建議原話</span>「原廠這套內容的科學強度非常夠，問題是它是<i>為中國專業線內訓</i>寫的。直接落地台灣官網，等於把一個 25 年品牌的信用押在廣告違規上。<br><br>我們建議官網做<i>雙層內容架構</i>：對外消費者層走合規文案，專業線、診所端走登入制的專業資料區 —— 該講的科學一句都不會少，只是放在對的地方。」</div>
+  <p>這個說法有三個好處：① 不是在挑他們毛病，是在保護他們 ② 順勢把官網規格與報價拉高 ③「專業區」本身就是專業線品牌對診所的價值感所在，他們會認同。</p>
+
+  <h3>如果陳藥師反問「那你們懂法規嗎？」</h3>
+  <div class="say"><span class="tag">建議原話</span>「我們不是法規顧問，最終文案一定要過你們這邊跟主管機關的標準。但我們做過保養品官網，知道<i>哪些句子會讓整頁下不了架</i>，所以我們的做法是：文案先分層、敏感詞先標記，送你們審的時候就是已經整理過的版本，不是讓你們從頭抓。」</div>
+
+  <div class="warn"><span class="tag">別說錯</span>不要說「你們現在這樣會被罰」（他們還沒上線，無事可罰，而且像在威脅）。要說「<b>如果直接把這批素材轉繁體上線</b>，會有這些風險」—— 講的是未來的動作，不是現在的錯。</div>
+
+  <div class="foot"><span>德妍思提案作戰手冊</span><span>木箱起飛　｜　3 / 7</span></div>
+</div>
+
+<!-- ========== P4 健檢＋官網 ========== -->
+<div class="page">
+  <div class="rh"><span>德妍思提案作戰手冊</span><span>王牌二・官網現況</span></div>
+
+  <h2><span class="n">04</span>王牌二：官網健檢報告怎麼遞</h2>
+  <p>報告 3 頁，全部是 2026-09-22 實測數據。核心三句：</p>
+  <ul>
+    <li><b>台灣官網等於不存在</b> —— dermaviduals.com.tw 任意路徑都 301 永久轉址，兩跳後落在 dermaviduals.de/english/，全英文、寫給德國藥師看的站</li>
+    <li><b>HTTPS 完全連不上</b> —— 憑證不符，使用者看到的是連線錯誤畫面，所有 https 舊連結全失效</li>
+    <li><b>品牌搜尋被通路商吃光</b> —— PChome（還被歸類在「開架保養」）、樂天元康藥局、ETMall、博客來、美麗999、富山、唯新健康購、Miss Fabulous、德國代購站</li>
+  </ul>
+  <div class="say"><span class="tag">最有力的一句</span>「你們可以決定自己不賣，<i>但擋不住別人替你們賣</i>。現在市場上已經有九家在替品牌做電商，價格跟形象一個都管不到。官網不是為了賣東西 —— 官網是把『品牌怎麼被理解、產品該去哪買』這件事拿回自己手上。」</div>
+  <div class="warn"><span class="tag">遞出的時機與分寸</span>這份報告內容很直接，等於指出前手留下的爛攤子。<b>建議先給陳藥師，或在談完官網架構、氣氛已經建立之後再拿出來</b>，不要一開場就丟。另外 DNS 指向德國主機這件事，代表網域可能還在原廠或前代理手上 —— 這是他們的痛點，講的時候語氣要中性。</div>
+
+  <h2><span class="n">05</span>官網架構怎麼提</h2>
+  <p><b>公開層（合規文案・SEO/GEO 主戰場）：</b>首頁／品牌故事／DMS 技術（嵌 3D 動畫）／一人一方流程頁（轉換主力）／產品總覽（合規描述）／衛教專欄（SEO 內容引擎）／門市與預約／專業線招商表單</p>
+  <p><b>登入層（不被搜尋引擎索引）：</b>原廠學術文獻、專利文件、臨床數據、調配處方表、教育訓練影片、經銷訂貨資料</p>
+  <div class="say"><span class="tag">收尾金句</span>「官網是唯一你 100% 能控制的資產，社群跟 KOL 都是租來的。」</div>
+
+  <div class="foot"><span>德妍思提案作戰手冊</span><span>木箱起飛　｜　4 / 7</span></div>
+</div>
+
+<!-- ========== P5 影片題材＋教育 ========== -->
+<div class="page">
+  <div class="rh"><span>德妍思提案作戰手冊</span><span>王牌三・教育訓練</span></div>
+
+  <h2><span class="n">06</span>3D／影片：這案子的題材密度極高</h2>
+  <p>原廠資料裡<b>完全沒有任何動態素材</b>，而它的核心概念全部是「肉眼看不到、靜態圖講不清楚」的結構 —— 這正是我們的甜蜜點。可直接提的六個題目：</p>
+  <ul>
+    <li><b>磚牆結構</b> —— 角質細胞（磚）＋細胞間脂質（灰漿）＋六種生理性脂質拆解</li>
+    <li><b>乳化劑洗脫效應</b> —— 層狀結構被沖散、屏障斷裂（解釋「擦了很保濕，久了反而更乾」）</li>
+    <li><b>DMS 層狀 vs 傳統油滴狀</b> —— 左右對比動畫，最好的一支，可單獨當廣告用</li>
+    <li><b>微脂囊穿透</b> —— 磷脂質包覆精華、被屏障當自己人放行（教材第 49 頁已有現成比喻）</li>
+    <li><b>發炎惡性循環</b> —— 缺水→鈣流失→pH 上升→PA 酶原→發炎→斑／痘／衰</li>
+    <li><b>一人一方調配</b> —— 44ml 乳＋6ml 精華的實拍＋圖形化，接「每月回訪」概念</li>
+  </ul>
+  <div class="say"><span class="tag">撐住報價的核心說法</span>「這是<i>做一次、用五年</i>的東西。3D 資產建好之後，官網、廣告、展場、業務簡報、教育訓練全部重複調用，不用每次重做。」</div>
+
+  <h2><span class="n">07</span>王牌三：教育訓練（補充頁第 12 頁）</h2>
+  <p>他們有在做經銷商教育，未來都會在總公司上課。我拆了那份 73 頁教材，實際數據：</p>
+  <table>
+    <tr><th style="width:20%">數字</th><th>事實</th></tr>
+    <tr><td><b>73 頁</b></td><td>10 個章節，檔案 187 MB</td></tr>
+    <tr><td><b>21 頁</b></td><td>幾乎沒有文字，完全仰賴講師口述</td></tr>
+    <tr><td><b>117 張</b></td><td>靜態圖，用來說明本質上是動態的過程</td></tr>
+    <tr><td><b>2 支</b></td><td>影片（74 MB），分別在第 14 頁與第 58 頁</td></tr>
+  </table>
+  <p>去追那兩支影片的位置：<b>第 14 頁是「什麼是乳化劑」那章的結尾，第 58 頁是處方式定制的配方體系</b> —— 正好是全場最難講的兩段。講師早就自己在用影片補救了。</p>
+  <div class="say"><span class="tag">建議原話</span>「你們已經在做了。第 14 頁跟第 58 頁那兩支，就是講師在最講不清楚的地方自己找的解法。方向完全正確 —— 只是那兩支是臨時素材，塞在一個 187MB 的檔案裡，<i>沒有被當成資產管理</i>。」</div>
+  <p><b>三個效益由淺到深：</b>① 每場課品質一致，講得最好的那次被固定下來 ② 新經銷商可自學，總公司的課用來解決問題而非從頭講起 ③ <b>訊息往下一層延伸</b> —— 經銷商拿同一套素材對他自己的客人講。</p>
+  <div class="say"><span class="tag">為什麼第三點最值錢</span>dermaviduals 是「一人一方」，成交發生在門市人員能不能講清楚。<i>教材動畫下放到經銷商手上，等於品牌訊息自動複製到每一個終端接觸點</i> —— 這是教育素材跟廣告素材最大的差別，也是要 3D 預算時最站得住腳的理由。</div>
+
+  <div class="foot"><span>德妍思提案作戰手冊</span><span>木箱起飛　｜　5 / 7</span></div>
+</div>
+
+<!-- ========== P6 SEO/GEO ========== -->
+<div class="page">
+  <div class="rh"><span>德妍思提案作戰手冊</span><span>SEO／GEO</span></div>
+
+  <h2><span class="n">08</span>SEO／GEO 要接案，需要具備什麼</h2>
+
+  <h3>A. 技術 SEO（你的電子背景最快上手）</h3>
+  <ul>
+    <li>索引控制：robots.txt、sitemap.xml、canonical、noindex（登入層一定要擋）</li>
+    <li>Core Web Vitals：LCP／INP／CLS；圖片 WebP/AVIF、lazy load、字型與 JS 瘦身</li>
+    <li>結構化資料 Schema.org：Organization、Brand、Product、FAQPage、Article、<b>LocalBusiness（直營店必備）</b></li>
+    <li>工具鏈：Google Search Console、GA4、Screaming Frog、Ahrefs 或 Semrush（擇一）、Looker Studio 月報</li>
+    <li><b>現成優勢：</b>公司那份官網健檢報告的方法論（逐檔量測 HTTP content-length，不靠目測）已是成品等級，格式可直接複用</li>
+  </ul>
+
+  <h3>B. 內容與關鍵字（這案子最大的坑）</h3>
+  <p>中國用語 ≠ 台灣搜尋詞。簡體文案轉繁體後<b>打不到任何台灣人在搜的字</b>：</p>
+  <table>
+    <tr><th style="width:38%">原素材用語</th><th>台灣人實際會搜</th></tr>
+    <tr><td>玫瑰痤瘡</td><td><b>酒糟肌</b>、酒糟性皮膚炎</td></tr>
+    <tr><td>黃褐斑</td><td><b>肝斑</b></td></tr>
+    <tr><td>激素依賴性皮炎</td><td><b>類固醇皮膚炎</b>、爛臉</td></tr>
+    <tr><td>屏障受損</td><td>敏感肌、皮膚屏障受損、爛臉修復</td></tr>
+    <tr><td>光電項目後</td><td><b>醫美術後保養</b>、雷射後保養</td></tr>
+    <tr><td>處方式定制</td><td>客製化保養、<b>一人一方</b>（可自創詞搶品牌詞）</td></tr>
+  </table>
+  <p>另外 dermaviduals 很難拼，錯字變體（dermavidual／derma viduals）要一起佈。台灣中文名確定是<b>德妍思</b>（既有官網與通路都用這個），這點不用再問。</p>
+
+  <h3>C. GEO 生成式引擎最佳化</h3>
+  <ul>
+    <li>目標從「排第一」變成<b>「被 AI 引用」</b>：ChatGPT、Perplexity、Google AI 摘要、Gemini</li>
+    <li>核心是<b>實體一致性</b>：品牌名、創辦人、年份、技術名全網說法必須一致（所以年份那題才重要）</li>
+    <li>內容寫成「可被摘錄的事實塊」：明確定義句、問答式標題、可引用的數據與出處</li>
+    <li>llms.txt、語意化 HTML、FAQ Schema</li>
+    <li><b>第三方提及權重極高</b>：AI 更信外部來源 —— 媒體報導、Dcard／PTT 討論、維基、皮膚科內容</li>
+    <li>監測：固定題組定期問各家 AI（「台灣有哪些修護屏障的專業線品牌」），記錄品牌出現率</li>
+  </ul>
+  <div class="say"><span class="tag">最容易拿到案子的一招</span>先<i>免費做一份 GEO 基準線報告</i>，下個月拿改善數字回來。這件事現在幾乎沒人在做，而且成本只有你的時間。</div>
+
+  <h3>D. 法規合規 —— 這案子的門票，不是加分</h3>
+  <p>衛教文章＝最容易踩線的內容類型。<b>能講清楚這塊，SEO/GEO 的信任門檻就跨過了</b>，因為客戶會意識到：找不懂法規的 SEO 公司寫衛教文，等於買罰單。</p>
+  <p><b>最小可行配置：</b>你（技術＋策略＋合規）＋一位懂醫美／皮膚領域的中文寫手（外包按篇計）。工具月費抓 NT$5,000–8,000。<b>計價走月費顧問制</b>（技術維運＋內容產出＋月報）；GEO 因無業界標準，用「基準線→月度提及率報告」綁定，<b>不要承諾排名</b>。</p>
+
+  <div class="foot"><span>德妍思提案作戰手冊</span><span>木箱起飛　｜　6 / 7</span></div>
+</div>
+
+<!-- ========== P7 卡位＋應對 ========== -->
+<div class="page">
+  <div class="rh"><span>德妍思提案作戰手冊</span><span>收尾</span></div>
+
+  <h2><span class="n">09</span>怎麼把行銷專案卡進來（不推翻主管）</h2>
+  <p>今天照主管定調走，<b>但補充頁第 14 頁的三階段藍圖已經替你鋪好路</b>：</p>
+  <table>
+    <tr><th style="width:26%">階段</th><th>內容</th><th style="width:26%">誰做</th></tr>
+    <tr><td><b>Phase 1</b></td><td>官網建置、3D 動畫資產庫、品牌主影片與短版</td><td>木箱起飛承接</td></tr>
+    <tr><td><b>Phase 2</b></td><td>SEO、GEO、衛教內容、在地搜尋、月報</td><td><b>木箱起飛承接</b></td></tr>
+    <tr><td><b>Phase 3</b></td><td>KOL、廣告投放、實體活動</td><td>我方媒合外部夥伴</td></tr>
+  </table>
+  <p>這個排法的三個好處：不越權、坦承能力邊界反而加分、<b>SEO/GEO 天然接在官網後面</b>，客戶會覺得本來就該同一家做。主管也不會反對 —— 你沒有承諾全方位行銷，只是把官網的價值延長了。</p>
+  <div class="say"><span class="tag">翻到那頁時這樣講</span>「我們不承接全方位行銷。<i>能做的做到最好，不能做的推薦合作過、品質確認過的夥伴</i>，而且由你們直接發包，我們不抽成、只顧品質。」</div>
+
+  <h2><span class="n">10</span>可能被問到的問題</h2>
+  <div class="qa">
+    <div class="q">「你們能不能連社群、KOL 一起做？」</div>
+    <div class="a">照主管定調誠實回答做不了全案，但補一句：<b>「素材我們供應，品質我們控管，執行推薦夥伴。」</b>不要為了留住客戶而承諾做不到的事。</div>
+    <div class="q">「報價多少？」</div>
+    <div class="a">補充頁第 13 頁寫的是「規格確認後 2 個工作日內提出」。現場被追問就說<b>「三個項目可以分開委製，也可以整包」</b>，先問清楚他們想先動哪一塊，回來再報。</div>
+    <div class="q">「官網你們多久可以做好？」</div>
+    <div class="a">官網 8–10 週、3D 6–8 週、影片 6–8 週，可並行。<b>但要先講前置條件：網域控制權沒釐清之前，時程無法起算。</b></div>
+    <div class="q">「德國原廠有沒有現成的素材可以用？」</div>
+    <div class="a">有，但都是德文／英文、專業線取向，而且是為歐洲法規寫的。<b>可以當技術依據，不能當台灣文案。</b>這正好帶回雙層架構。</div>
+  </div>
+
+  <h2><span class="n">11</span>今天的紀律</h2>
+  <ul>
+    <li><b>不斷言專利過期</b> —— 只問原廠有沒有最新證明</li>
+    <li><b>不說「你們網站掛了」</b> —— 說「目前台灣網域是全站轉址到德國站」</li>
+    <li><b>不承諾 SEO 排名</b> —— 承諾的是流程、報告與可量測的基準線</li>
+    <li><b>不當場報價</b> —— 規格沒確認前報的價，之後都得自己吞</li>
+    <li><b>健檢報告看氣氛再遞</b> —— 那是前手留下的問題，語氣保持中性</li>
+    <li><b>離場前把六個問題問完</b> —— 尤其第一題網域控制權，沒這個答案整案無法起跑</li>
+  </ul>
+
+  <div class="foot"><span>德妍思提案作戰手冊　｜　內部文件・請勿外流</span><span>木箱起飛　｜　7 / 7</span></div>
+</div>
+</body></html>

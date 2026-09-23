@@ -1,0 +1,73 @@
+//@version=5
+strategy('Chandelier Exit 下單版 For TC', shorttitle='CE下單策略', overlay=true, initial_capital=100000, default_qty_type=strategy.fixed, default_qty_value=1)
+
+// ─────── TC4 基本設定 ───────
+var string tcGroup = 'TC4 下單設定'
+tcId      = input.string('三7K',    '識別碼',  group=tcGroup)
+tcAccount = input.string('0542346', '帳號',    group=tcGroup)
+tcSym     = input.string('微台',    '商品',    group=tcGroup, options=['微台','大台'])
+symCode   = tcSym == '大台' ? 'TC.F.TWF.TXF.HOT_TVSD' : 'TC.F.TWF.TMF.HOT_TVSD'
+
+// ─────── Chandelier Exit 計算參數 ───────
+var string calcGroup = '計算設定'
+length   = input.int  (title='ATR週期',           defval=22,  group=calcGroup)
+mult     = input.float(title='ATR倍數', step=0.1, defval=3.0, group=calcGroup)
+useClose = input.bool (title='使用收盤價計算高低點', defval=true, group=calcGroup)
+
+// ─────── 自動下單設定 ───────
+var string tradeGroup = '自動下單設定'
+onlyOneOrder = input.bool(title='過濾重複訊號 (一邊僅一口)', defval=true, group=tradeGroup)
+
+// ─────── 核心運算 ───────
+atr = mult * ta.atr(length)
+
+longStop     = (useClose ? ta.highest(close, length) : ta.highest(length)) - atr
+longStopPrev = nz(longStop[1], longStop)
+longStop    := close[1] > longStopPrev ? math.max(longStop, longStopPrev) : longStop
+
+shortStop     = (useClose ? ta.lowest(close, length) : ta.lowest(length)) + atr
+shortStopPrev = nz(shortStop[1], shortStop)
+shortStop    := close[1] < shortStopPrev ? math.min(shortStop, shortStopPrev) : shortStop
+
+var int dir = 1
+dir := close > shortStopPrev ? 1 : close < longStopPrev ? -1 : dir
+
+// ─────── 買賣訊號 ───────
+buySignal  = dir == 1 and dir[1] == -1
+sellSignal = dir == -1 and dir[1] == 1
+
+// ─────── onlyOneOrder 實際生效（修正原本未使用的問題）───────
+// 已持多單時不重複買；已持空單時不重複賣
+canBuy  = not onlyOneOrder or strategy.position_size <= 0
+canSell = not onlyOneOrder or strategy.position_size >= 0
+
+// ─────── TC4 TOTC 訊息格式 ───────
+// 最終送出格式：TOTC.{時間}@account=帳號,sym=商品代碼,side=buy/sell,qty=1,p=價格,ordertype=25,tif=2,ts={時間},tvorderID=識別碼
+// 警報訊息欄請填入：
+// TOTC.{{timenow}}@account=000-0542346,sym=TC.F.TWF.TMF.HOT_TVSD,{{strategy.order.comment}},ts={{timenow}},tvorderID=三7K
+
+buyMsg  = 'side=buy,qty=1,p='  + str.tostring(close, '#') + ',ordertype=25,tif=2'
+sellMsg = 'side=sell,qty=1,p=' + str.tostring(close, '#') + ',ordertype=25,tif=2'
+
+// ─────── 執行下單 ───────
+if buySignal and canBuy
+    strategy.entry('Long',  strategy.long,  comment=buyMsg)
+
+if sellSignal and canSell
+    strategy.entry('Short', strategy.short, comment=sellMsg)
+
+// ─────── 視覺化 ───────
+longColor  = color.green
+shortColor = color.red
+textColor  = color.white
+
+longStopPlot  = plot(dir == 1 ? longStop  : na, title='多方止損線', style=plot.style_linebr, linewidth=2, color=longColor)
+shortStopPlot = plot(dir == 1 ? na : shortStop, title='空方止損線', style=plot.style_linebr, linewidth=2, color=shortColor)
+midPricePlot  = plot(ohlc4, title='中間價', display=display.none)
+
+fill(midPricePlot, longStopPlot,  title='多方區域', color=color.new(longColor,  90))
+fill(midPricePlot, shortStopPlot, title='空方區域', color=color.new(shortColor, 90))
+
+// 訊號標籤（中文）
+plotshape(buySignal  and canBuy,  title='做多訊號', text='多方進場\n↑',  location=location.belowbar, style=shape.labelup,   size=size.small, color=longColor,  textcolor=textColor)
+plotshape(sellSignal and canSell, title='做空訊號', text='空方進場\n↓',  location=location.abovebar, style=shape.labeldown, size=size.small, color=shortColor, textcolor=textColor)
