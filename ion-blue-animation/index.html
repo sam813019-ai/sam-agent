@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GHK-Cu Cellular Drop</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Bebas+Neue&display=swap">
+<style>
+  /* ============================================================
+     全片 20 秒、9:16 直式，三段場景：
+       Scene 1  0–10s  GHK-Cu 藍色分子穿過皮膚屏障、進入細胞
+       Scene 2 10–15s  深藍「TIRED OF SKINCARE PROMISES?」
+       Scene 3 15–20s  淺色「THANK YOU FOR WATCHING」
+     改文案：直接改下面 HTML 裡的文字；改品牌色：改 :root 變數。
+     ============================================================ */
+  :root {
+    --T: 20s;                 /* 一輪總長 */
+    --navy: #17469c;          /* 品牌深藍（文字、logo） */
+    --blue: #1f7be6;          /* 主藍 */
+    --sky:  #8fd0ff;          /* 淺藍高光 */
+    --ink:  #5b6b80;          /* 灰藍說明文字 */
+    --copper-a: #f2c48a;      /* logo 銅環 */
+    --copper-b: #b5651d;
+    --bg-page: #0a1220;
+    color-scheme: light;
+  }
+  /* 外框：寬度跟著容器走（最大 405px），高度由 JS 依 9:16 算出，不碰 html/body 所以不會鎖住頁面捲動 */
+  .gk-viewport { width: 100%; max-width: 405px; height: 720px; position: relative; margin: 0 auto; }
+  .gk-stage {
+    width: 405px; height: 720px; position: absolute; inset: 0;
+    transform-origin: top left;
+    border-radius: 22px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    cursor: pointer; user-select: none;
+    font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif; line-height: 1.2; color: var(--navy);
+    text-align: left; font-size: 14px;
+  }
+  .gk-stage, .gk-stage * { box-sizing: border-box; }
+  .gk-stage h1, .gk-stage h2 { font-family: inherit; line-height: 1; }
+  .gk-scene { position: absolute; inset: 0; opacity: 0; animation: var(--T) linear infinite; animation-delay: calc(0s - var(--seek, 0s)); }
+  .gk-stage.gk-paused, .gk-stage.gk-paused * { animation-play-state: paused !important; }
+
+  /* 三段場景的交叉淡入淡出（1% = 0.2s） */
+  #gk-s1 { animation-name: sc1; }
+  #gk-s2 { animation-name: sc2; }
+  #gk-s3 { animation-name: sc3; }
+  @keyframes sc1 { 0%,49% { opacity: 1 } 52%,96.5% { opacity: 0 } 100% { opacity: 1 } }
+  @keyframes sc2 { 0%,49% { opacity: 0 } 52%,72% { opacity: 1 } 75%,100% { opacity: 0 } }
+  @keyframes sc3 { 0%,72% { opacity: 0 } 75%,96.5% { opacity: 1 } 100% { opacity: 0 } }
+
+  /* ---------- 共用：logo ---------- */
+  .gk-logo { display: inline-flex; align-items: center; gap: 8px; color: var(--navy); font-weight: 800; letter-spacing: .04em; }
+  .gk-logo .gk-ring {
+    width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box;
+    background: conic-gradient(from 210deg, var(--copper-b), var(--copper-a), #fff3e0, var(--copper-a), var(--copper-b), #7a3e0e, var(--copper-b));
+    -webkit-mask: radial-gradient(circle, transparent 54%, #000 56%);
+            mask: radial-gradient(circle, transparent 54%, #000 56%);
+  }
+  .gk-rule { width: 26px; height: 1px; background: currentColor; opacity: .45; margin: 0 auto; }
+
+  /* ---------- Scene 1 ---------- */
+  #gk-s1 {
+    background:
+      radial-gradient(60% 40% at 50% 42%, rgba(140,200,255,.45), transparent 70%),
+      linear-gradient(#ffffff 0%, #f3f8fe 30%, #dfeefb 60%, #eef5fc 100%);
+  }
+  .gk-s1-top { position: absolute; top: 34px; left: 0; right: 0; text-align: center; color: var(--navy); }
+  .gk-s1-top .gk-logo { font-size: 17px; }
+  .gk-s1-top h1 { margin: 12px 0 2px; font-size: 24px; font-weight: 600; letter-spacing: .01em; }
+  .gk-s1-top .gk-sub { font-size: 8.5px; font-weight: 500; letter-spacing: .22em; color: var(--ink); margin-bottom: 8px; }
+  .gk-s1-bottom { position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; color: var(--navy); }
+  .gk-s1-bottom .gk-tag { font-size: 11.5px; font-weight: 600; letter-spacing: .16em; margin-bottom: 7px; }
+  .gk-s1-bottom .gk-copy { font-size: 7.5px; letter-spacing: .14em; color: var(--ink); line-height: 1.8; margin-top: 7px; font-weight: 500; }
+
+  /* 細胞：兩排白色球體，中央那顆會「收下」藍色分子 */
+  .gk-cells { position: absolute; inset: 0; pointer-events: none; }
+  .gk-cell {
+    position: absolute; width: 190px; height: 190px; border-radius: 50%;
+    background:
+      radial-gradient(circle at 38% 30%, #ffffff 0%, #f6faff 30%, #dbe9f7 62%, #b9d3ec 88%, #a9c7e6 100%);
+    box-shadow: inset -14px -18px 30px rgba(120,160,210,.35), 0 18px 30px rgba(60,110,180,.22);
+  }
+  .gk-cell.gk-back { width: 160px; height: 160px; filter: blur(1.5px); opacity: .85; }
+  .gk-cell.gk-center { z-index: 2; }
+  /* 細胞被啟動時的內凹環 */
+  .gk-cell.gk-center::after {
+    content: ""; position: absolute; inset: 34px; border-radius: 50%; opacity: var(--ring, 0);
+    background: radial-gradient(circle at 50% 46%, #d5e7fb 0%, #eaf3fc 35%, rgba(255,255,255,0) 52%);
+    box-shadow: inset 0 10px 22px rgba(90,140,200,.45), inset 0 -6px 14px rgba(255,255,255,.9), 0 0 0 6px rgba(255,255,255,.55);
+  }
+  .gk-membrane { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+  /* 藍色分子（玻璃珠） */
+  .gk-bead {
+    position: absolute; left: 0; top: 0; width: 64px; height: 64px; border-radius: 50%; z-index: 3;
+    margin: -32px 0 0 -32px;
+    background:
+      radial-gradient(circle at 34% 28%, rgba(255,255,255,.95) 0 6%, rgba(255,255,255,0) 22%),
+      radial-gradient(circle at 60% 72%, #9fdcff 0%, rgba(159,220,255,0) 38%),
+      radial-gradient(circle at 50% 45%, #46a6ff 0%, #1c7cf0 45%, #0b4fc9 78%, #0a3fa6 100%);
+    box-shadow: inset 0 -8px 14px rgba(255,255,255,.35), inset 0 6px 10px rgba(5,40,120,.35), 0 12px 22px rgba(20,90,200,.35);
+  }
+  .gk-bead::after { /* 底部折射亮邊 */
+    content: ""; position: absolute; inset: 6px 8px 3px; border-radius: 50%;
+    border-bottom: 3px solid rgba(255,255,255,.55); border-left: 1px solid rgba(255,255,255,.25);
+  }
+  /* 懸在屏障下方的水滴 */
+  .gk-drop {
+    position: absolute; left: 0; top: 0; width: 30px; height: 44px; margin: -6px 0 0 -15px; z-index: 3;
+    border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+    background:
+      radial-gradient(circle at 40% 30%, rgba(255,255,255,.9) 0 8%, rgba(255,255,255,0) 26%),
+      radial-gradient(circle at 50% 70%, #7ec2ff 0%, #2f8cf0 55%, #1660c8 100%);
+    box-shadow: inset 0 -4px 8px rgba(255,255,255,.45), 0 8px 14px rgba(20,90,200,.25);
+    transform-origin: 50% 0;
+  }
+
+  /* ---------- Scene 2 ---------- */
+  #gk-s2 {
+    background:
+      radial-gradient(70% 45% at 50% 0%, rgba(90,160,255,.35), transparent 70%),
+      radial-gradient(60% 40% at 50% 100%, rgba(40,110,220,.3), transparent 70%),
+      linear-gradient(#0f3e8f 0%, #0a2d6f 35%, #061f4f 70%, #04173c 100%);
+    color: #fff;
+  }
+  .gk-s2-copy { position: absolute; left: 0; right: 0; top: 178px; text-align: center; }
+  .gk-s2-copy .gk-big {
+    font-family: "Bebas Neue", "Oswald", Impact, "Arial Narrow", sans-serif;
+    font-size: 96px; line-height: .9; letter-spacing: .01em;
+    text-shadow: 0 6px 30px rgba(0,30,90,.6), 0 0 40px rgba(120,190,255,.25);
+  }
+  .gk-s2-copy .gk-big .gk-grad {
+    background: linear-gradient(180deg, #ffffff 0%, #bfe6ff 45%, #3b96ff 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 6px 24px rgba(50,140,255,.45));
+  }
+  .gk-s2-copy .gk-line { width: 120px; height: 1px; margin: 14px auto 16px; background: linear-gradient(90deg, transparent, #8fd0ff, transparent); }
+  .gk-s2-copy .gk-small { font-size: 13px; font-weight: 500; letter-spacing: .12em; line-height: 1.55; }
+  .gk-s2-copy .gk-small b { color: #9fd6ff; font-weight: 700; }
+  /* 文案進場：整段 20s 週期裡 52–56% 由下方淡入 */
+  .gk-s2-copy { animation: s2in var(--T) linear infinite; animation-delay: calc(0s - var(--seek, 0s)); }
+  @keyframes s2in { 0%,50% { transform: translateY(18px) scale(.97); } 56%,100% { transform: none; } }
+
+  .gk-dropper { position: absolute; top: -30px; right: -20px; width: 190px; height: 300px; }
+  .gk-bubbles { position: absolute; inset: 0; overflow: hidden; }
+  .gk-bubble {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), rgba(255,255,255,.05) 40%, rgba(255,255,255,0) 60%);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.35), inset -6px -8px 16px rgba(120,190,255,.35);
+    animation: rise var(--rt, 9s) linear infinite; animation-delay: var(--rd, 0s);
+  }
+  @keyframes rise { from { transform: translateY(0) } to { transform: translateY(-160px) } }
+  .gk-bigbubble {
+    position: absolute; right: -150px; bottom: -190px; width: 420px; height: 420px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, rgba(255,255,255,.12), rgba(255,255,255,.02) 50%, rgba(255,255,255,0) 62%);
+    box-shadow: inset 0 0 0 2px rgba(200,230,255,.55), inset -20px -30px 60px rgba(120,190,255,.35), inset 30px 40px 60px rgba(255,255,255,.08);
+  }
+
+  /* ---------- Scene 3 ---------- */
+  #gk-s3 {
+    background:
+      linear-gradient(115deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0) 60%, rgba(255,255,255,.35) 100%),
+      linear-gradient(#eef3fa 0%, #dde6f1 45%, #c4d1e0 100%);
+    color: var(--navy); text-align: center;
+  }
+  .gk-leaves { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
+  .gk-s3-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding-top: 30px; }
+  .gk-s3-content .gk-logo { font-size: 16px; }
+  .gk-heart { margin: 16px 0; display: flex; align-items: center; gap: 10px; color: var(--navy); font-size: 12px; opacity: .8; }
+  .gk-heart i { display: block; width: 18px; height: 1px; background: currentColor; }
+  .gk-s3-content h2 { margin: 0; font-size: 34px; font-weight: 800; letter-spacing: .02em; line-height: 1; }
+  .gk-s3-content .gk-fw { font-size: 13px; letter-spacing: .3em; font-weight: 500; margin: 6px 0 14px; padding-left: .3em; }
+  .gk-s3-content .gk-mission { font-size: 9.5px; line-height: 1.75; color: var(--ink); font-weight: 500; letter-spacing: .03em; margin: 12px 0 18px; }
+  .gk-card {
+    display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px 12px 14px;
+    background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.9); border-radius: 10px;
+    box-shadow: 0 10px 26px rgba(60,90,130,.14); text-align: left; backdrop-filter: blur(6px);
+  }
+  .gk-card svg { width: 30px; height: 26px; flex: none; }
+  .gk-card .gk-t1 { font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+  .gk-card .gk-t2 { font-size: 8.5px; color: var(--ink); margin-top: 2px; letter-spacing: .04em; }
+  .gk-s3-content .gk-real { margin-top: 30px; font-size: 8.5px; letter-spacing: .2em; line-height: 1.8; color: var(--ink); font-weight: 600; }
+  .gk-s3-content .gk-site { margin-top: 20px; display: inline-flex; align-items: center; gap: 6px; font-size: 9.5px; color: var(--ink); letter-spacing: .06em; font-weight: 500; }
+  .gk-s3-content .gk-site svg { width: 12px; height: 12px; }
+  /* 元素依序淡入（75% 開始） */
+  .gk-s3-content > * { animation: s3in var(--T) linear infinite; animation-delay: calc(var(--d, 0s) - var(--seek, 0s)); }
+  @keyframes s3in { 0%,74% { opacity: 0; transform: translateY(8px) } 78%,100% { opacity: 1; transform: none } }
+
+  /* 底部提示 */
+  .gk-hint { margin: 10px auto 0; text-align: center; color: #8a94a6; font-size: 11px; letter-spacing: .08em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gk-bubble { animation: none; }
+  }
+</style>
+<style id="gk-standalone-only">
+  html, body { margin: 0; min-height: 100%; }
+  body { background: var(--bg-page); padding: 24px 16px; }
+  .gk-hint { color: rgba(255,255,255,.4); }
+</style>
+</head>
+<body>
+<div class="gk-viewport">
+<div class="gk-stage" id="gk-stage" title="點一下：暫停 / 繼續">
+
+  <!-- ================= Scene 1：GHK-Cu 穿透皮膚屏障 ================= -->
+  <section class="gk-scene" id="gk-s1">
+    <div class="gk-s1-top">
+      <div class="gk-logo"><span class="gk-ring"></span>ION BLUE</div>
+      <h1>GHK-Cu</h1>
+      <div class="gk-sub">COPPER TRIPEPTIDE-1</div>
+      <div class="gk-rule"></div>
+    </div>
+
+    <div class="gk-cells" id="gk-cells"></div>
+    <svg class="gk-membrane" viewBox="0 0 405 720" id="gk-membrane" aria-hidden="true">
+      <defs>
+        <linearGradient id="bandFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff" stop-opacity=".85"/>
+          <stop offset=".35" stop-color="#cfe6fb" stop-opacity=".75"/>
+          <stop offset=".7" stop-color="#8ec3f3" stop-opacity=".7"/>
+          <stop offset="1" stop-color="#5ea6ea" stop-opacity=".8"/>
+        </linearGradient>
+        <filter id="soft" x="-10%" y="-40%" width="120%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+      </defs>
+      <path id="gk-mShadow" fill="rgba(40,90,170,.32)" filter="url(#soft)"/>
+      <path id="gk-mBand" fill="url(#bandFill)"/>
+      <path id="gk-mBricks" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/>
+      <path id="gk-mRows" fill="none" stroke="rgba(30,110,210,.45)" stroke-width="2.5"/>
+      <path id="gk-mRows2" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/>
+      <path id="gk-mTop" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity=".95"/>
+      <path id="gk-mBottom" fill="none" stroke="rgba(20,90,190,.55)" stroke-width="2"/>
+    </svg>
+    <div class="gk-drop" id="gk-drop"></div>
+    <div class="gk-bead" id="gk-bead"></div>
+
+    <div class="gk-s1-bottom">
+      <div class="gk-tag">CELLULAR-LEVEL SKINCARE</div>
+      <div class="gk-rule"></div>
+      <div class="gk-copy">SUPPORTS SKIN HEALTH AT THE SOURCE.<br>SCIENCE-BACKED. VISIBLE RESULTS.</div>
+    </div>
+  </section>
+
+  <!-- ================= Scene 2：TIRED OF SKINCARE PROMISES? ================= -->
+  <section class="gk-scene" id="gk-s2">
+    <div class="gk-bubbles" id="gk-bubbles"></div>
+    <div class="gk-bigbubble"></div>
+    <svg class="gk-dropper" viewBox="0 0 190 300" aria-hidden="true">
+      <defs>
+        <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/>
+          <stop offset=".35" stop-color="#cfe8ff" stop-opacity=".18"/>
+          <stop offset=".7" stop-color="#7fc0ff" stop-opacity=".22"/>
+          <stop offset="1" stop-color="#ffffff" stop-opacity=".6"/>
+        </linearGradient>
+        <radialGradient id="dropG" cx=".4" cy=".35" r=".7">
+          <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+          <stop offset=".35" stop-color="#bfe3ff" stop-opacity=".7"/>
+          <stop offset="1" stop-color="#3c93ff" stop-opacity=".85"/>
+        </radialGradient>
+      </defs>
+      <g transform="rotate(22 120 60)">
+        <!-- 玻璃管身 -->
+        <rect x="104" y="-40" width="32" height="150" rx="6" fill="url(#glass)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/>
+        <rect x="109" y="-40" width="5" height="150" fill="rgba(255,255,255,.55)"/>
+        <!-- 管內液體 -->
+        <rect x="112" y="40" width="16" height="66" rx="3" fill="rgba(120,190,255,.45)"/>
+        <!-- 收口 -->
+        <path d="M104 110 L136 110 L128 140 L112 140 Z" fill="url(#glass)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/>
+        <rect x="112" y="140" width="16" height="30" fill="url(#glass)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/>
+        <!-- 滴頭水珠 -->
+        <path d="M120 168 C132 182 134 192 134 200 A14 14 0 0 1 106 200 C106 192 108 182 120 168 Z" fill="url(#dropG)" stroke="rgba(255,255,255,.8)" stroke-width="1"/>
+        <ellipse cx="114" cy="194" rx="3" ry="5" fill="#fff" opacity=".85"/>
+      </g>
+    </svg>
+    <div class="gk-s2-copy">
+      <div class="gk-big">TIRED OF<br><span class="gk-grad">SKINCARE</span><br>PROMISES?</div>
+      <div class="gk-line"></div>
+      <div class="gk-small">LET'S GET TO THE<br><b>TRUTH ABOUT</b><br>YOUR SKIN.</div>
+    </div>
+  </section>
+
+  <!-- ================= Scene 3：THANK YOU ================= -->
+  <section class="gk-scene" id="gk-s3">
+    <svg class="gk-leaves" viewBox="0 0 405 720" aria-hidden="true">
+      <defs><filter id="lb"><feGaussianBlur stdDeviation="5"/></filter></defs>
+      <g fill="#4d6b8a" opacity=".35" filter="url(#lb)">
+        <ellipse cx="18" cy="470" rx="34" ry="14" transform="rotate(-30 18 470)"/>
+        <ellipse cx="46" cy="520" rx="38" ry="14" transform="rotate(-10 46 520)"/>
+        <ellipse cx="22" cy="575" rx="30" ry="12" transform="rotate(20 22 575)"/>
+        <ellipse cx="66" cy="600" rx="36" ry="13" transform="rotate(-38 66 600)"/>
+        <ellipse cx="378" cy="500" rx="34" ry="13" transform="rotate(35 378 500)"/>
+        <ellipse cx="352" cy="560" rx="38" ry="14" transform="rotate(8 352 560)"/>
+        <ellipse cx="390" cy="615" rx="30" ry="12" transform="rotate(-25 390 615)"/>
+        <ellipse cx="200" cy="700" rx="230" ry="30"/>
+      </g>
+      <g fill="#4d6b8a" opacity=".45">
+        <ellipse cx="26" cy="486" rx="22" ry="8" transform="rotate(-30 26 486)"/>
+        <ellipse cx="54" cy="530" rx="24" ry="8" transform="rotate(-8 54 530)"/>
+        <ellipse cx="372" cy="512" rx="22" ry="8" transform="rotate(35 372 512)"/>
+        <ellipse cx="360" cy="572" rx="24" ry="8" transform="rotate(8 360 572)"/>
+      </g>
+    </svg>
+    <div class="gk-s3-content">
+      <div class="gk-logo" style="--d:0s"><span class="gk-ring"></span>ION BLUE</div>
+      <div class="gk-heart" style="--d:.15s"><i></i>♡<i></i></div>
+      <h2 style="--d:.3s">THANK YOU</h2>
+      <div class="gk-fw" style="--d:.4s">FOR WATCHING</div>
+      <div class="gk-rule" style="--d:.5s"></div>
+      <div class="gk-mission" style="--d:.6s">Your skin. Your journey.<br>Our mission is to educate,<br>empower, and elevate.</div>
+      <div class="gk-card" style="--d:.75s">
+        <svg viewBox="0 0 30 26" fill="none" stroke="#17469c" stroke-width="1.6" stroke-linejoin="round">
+          <path d="M15 5 C11 2 6 2 2 3.5 V22 C6 20.5 11 20.5 15 23.5 C19 20.5 24 20.5 28 22 V3.5 C24 2 19 2 15 5 Z"/>
+          <path d="M15 5 V23.5"/>
+        </svg>
+        <div><div class="gk-t1">FREE EDUCATION.</div><div class="gk-t2">Always. For everyone.</div></div>
+      </div>
+      <div class="gk-real" style="--d:.9s">REAL EDUCATION.<br>BETTER SKIN DECISIONS.</div>
+      <div class="gk-site" style="--d:1.05s">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1"><circle cx="6" cy="6" r="5"/><path d="M1 6h10M6 1c2 2 2 8 0 10M6 1c-2 2-2 8 0 10"/></svg>
+        ion-blue.com
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<div class="gk-hint">點擊畫面 暫停 / 繼續</div>
+
+<script>
+(() => {
+  const W = 405, H = 720, CX = 202, T = 20;      // 舞台尺寸、分子 x 座標、週期秒數
+  const stage = document.getElementById('gk-stage');
+  const bead = document.getElementById('gk-bead');
+  const drop = document.getElementById('gk-drop');
+  const cells = document.getElementById('gk-cells');
+
+  /* ---- 等比縮放舞台 ---- */
+  const vp = stage.parentElement;
+  function fit() {
+    const s = Math.min(vp.clientWidth / W, 1.6) || 1;
+    stage.style.transform = `scale(${s})`;
+    vp.style.height = Math.round(H * s) + 'px';
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(vp);
+  addEventListener('resize', fit); fit();
+
+  /* ---- 細胞排列：後排 4 顆、前排 3 顆（中央那顆負責接住分子） ---- */
+  const CELL_Y = 445;                    // 前排細胞中心 y
+  [[-95, 395], [95, 395], [-285, 395], [285, 395]].forEach(([dx, y]) => {
+    const c = document.createElement('div'); c.className = 'gk-cell gk-back';
+    c.style.left = (CX + dx - 80) + 'px'; c.style.top = (y - 80) + 'px'; cells.appendChild(c);
+  });
+  let centerCell;
+  [-195, 195, 0].forEach(dx => {
+    const c = document.createElement('div'); c.className = 'gk-cell' + (dx === 0 ? ' gk-center' : '');
+    c.style.left = (CX + dx - 95) + 'px'; c.style.top = (CELL_Y - 95) + 'px'; cells.appendChild(c);
+    if (dx === 0) centerCell = c;
+  });
+
+  /* ---- Scene 2 氣泡 ---- */
+  const bubbles = document.getElementById('gk-bubbles');
+  for (let i = 0; i < 14; i++) {
+    const b = document.createElement('div'); b.className = 'gk-bubble';
+    const r = 4 + Math.random() * 16;
+    b.style.width = b.style.height = r * 2 + 'px';
+    b.style.left = Math.random() * W + 'px';
+    b.style.top = 380 + Math.random() * 380 + 'px';
+    b.style.setProperty('--rt', 8 + Math.random() * 8 + 's');
+    b.style.setProperty('--rd', -Math.random() * 10 + 's');
+    b.style.opacity = .35 + Math.random() * .5;
+    bubbles.appendChild(b);
+  }
+
+  /* ---- 緩動 ---- */
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;         // inOutQuad
+  const easeIn = t => t * t * t;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const seg = (t, a, b, fn = ease) => fn(clamp((t - a) / (b - a), 0, 1));
+
+  /* ---- 皮膚屏障：波浪帶，t 秒時中央下陷 dip px ---- */
+  const BASE = 236, AMP = 15, LAMBDA = 180, THICK = 96;
+  function topY(x, t, dip) {
+    const wave = -AMP * Math.cos((x - CX) * 2 * Math.PI / LAMBDA) + 4 * Math.sin(x / 55 + t * 1.1);
+    const sag = dip * Math.exp(-Math.pow((x - CX) / 62, 2));
+    return BASE + wave + sag;
+  }
+  const paths = {
+    shadow: document.getElementById('gk-mShadow'), band: document.getElementById('gk-mBand'),
+    bricks: document.getElementById('gk-mBricks'), rows: document.getElementById('gk-mRows'),
+    rows2: document.getElementById('gk-mRows2'), top: document.getElementById('gk-mTop'), bottom: document.getElementById('gk-mBottom'),
+  };
+  function drawMembrane(t, dip) {
+    const pts = []; for (let x = -10; x <= W + 10; x += 5) pts.push([x, topY(x, t, dip)]);
+    const line = off => pts.map(([x, y], i) => (i ? 'L' : 'M') + x + ' ' + (y + off).toFixed(1)).join('');
+    const rev = off => pts.slice().reverse().map(([x, y]) => 'L' + x + ' ' + (y + off).toFixed(1)).join('');
+    paths.band.setAttribute('d', line(0) + rev(THICK) + 'Z');
+    paths.shadow.setAttribute('d', line(THICK + 6) + rev(THICK + 30) + 'Z');
+    paths.top.setAttribute('d', line(0));
+    paths.bottom.setAttribute('d', line(THICK));
+    paths.rows.setAttribute('d', line(30) + line(62));
+    paths.rows2.setAttribute('d', line(10) + line(42) + line(74));
+    // 玻璃磚的直向分隔線，兩排交錯
+    let d = '';
+    for (let x = 6; x < W; x += 36) { const y = topY(x, t, dip); d += `M${x} ${(y + 12).toFixed(1)}L${x} ${(y + 30).toFixed(1)}`; }
+    for (let x = 24; x < W; x += 36) { const y = topY(x, t, dip); d += `M${x} ${(y + 32).toFixed(1)}L${x} ${(y + 62).toFixed(1)}`; }
+    for (let x = 6; x < W; x += 36) { const y = topY(x, t, dip); d += `M${x} ${(y + 64).toFixed(1)}L${x} ${(y + 92).toFixed(1)}`; }
+    paths.bricks.setAttribute('d', d);
+  }
+
+  /* ---- Scene 1 動作時間軸（秒） ----
+     0–5    分子在屏障上輕輕呼吸浮動
+     5–7.5  屏障被壓出凹陷，分子往下沉
+     7.5–8.6 分子脫離屏障、落入細胞中心，屏障回彈
+     8.6–10 細胞出現內凹環，分子安定
+  */
+  function scene1(t) {
+    const dip = 92 * seg(t, 5, 7.4) * (1 - seg(t, 7.5, 9.2, easeOut));
+    drawMembrane(t, dip);
+
+    const crest = topY(CX, t, dip);
+    let by, bs = 1;
+    if (t < 7.5) {
+      by = crest - 24 + Math.sin(t * 2.2) * 3 * (1 - seg(t, 5, 6));
+      bs = 1 - .06 * Math.sin(t * 2.2) * (1 - seg(t, 5, 6));
+    } else {
+      const from = crest - 24 + 0, to = CELL_Y - 4;
+      const k = seg(t, 7.5, 8.6, easeIn);
+      by = topY(CX, t, 92 * (1 - seg(t, 7.5, 9.2, easeOut))) - 24 + (to - (topY(CX, t, 0) - 24)) * k;
+      by = k >= 1 ? to + Math.sin(t * 3) * 1.2 : by;
+      bs = 1 - .08 * Math.sin(k * Math.PI);
+    }
+    bead.style.transform = `translate(${CX}px, ${by.toFixed(1)}px) scale(${bs.toFixed(3)})`;
+    bead.style.filter = t > 8.4 ? 'saturate(1.25) brightness(1.05)' : '';
+
+    // 懸掛水滴：8 秒前一直吊在屏障下方，屏障凹陷時被擠下去
+    const bottom = crest + THICK;
+    let dy, ds = 1, dop = 1;
+    if (t < 6.6) { dy = bottom - 2; ds = 1 + .05 * Math.sin(t * 1.7); }
+    else { const k = seg(t, 6.6, 7.4, easeIn); dy = bottom - 2 + (CELL_Y - 95 - bottom) * k; ds = 1 - .35 * k; dop = 1 - seg(t, 7.1, 7.4); }
+    drop.style.transform = `translate(${CX}px, ${dy.toFixed(1)}px) scale(${ds.toFixed(3)})`;
+    drop.style.opacity = dop;
+
+    // 中央細胞：內凹環淡入、輕微鼓起
+    const ring = seg(t, 8.3, 9.4, easeOut);
+    centerCell.style.setProperty('--ring', ring);
+    centerCell.style.transform = `scale(${(1 + .05 * ring).toFixed(3)})`;
+  }
+
+  /* ---- 主時鐘：CSS 動畫與 JS 共用同一個起點 ---- */
+  const seek = parseFloat(new URLSearchParams(location.search).get('t')) || 0;   // ?t=8 從第 8 秒開始
+  stage.style.setProperty('--seek', seek + 's');
+  let paused = false, pauseAt = 0, t0 = performance.now() - seek * 1000;
+  stage.addEventListener('click', () => {
+    if (!paused) { pauseAt = performance.now(); stage.classList.add('gk-paused'); }
+    else { t0 += performance.now() - pauseAt; stage.classList.remove('gk-paused'); }
+    paused = !paused;
+  });
+  function frame(now) {
+    if (!paused) {
+      const t = ((now - t0) / 1000) % T;
+      if (t < 10.6 || t > 19.2) scene1(t < 10.6 ? t : 0);   // 場景 1 顯示期間才更新；回圈前先歸零避免閃爍
+    }
+    requestAnimationFrame(frame);
+  }
+  scene1(0);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

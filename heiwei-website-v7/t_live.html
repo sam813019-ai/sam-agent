@@ -1,0 +1,684 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>final</title><link rel="stylesheet" href="theme_common.css"><style>
+html{overflow-x:hidden;overflow-y:auto}body{margin:0;background:#fff;overflow-x:hidden;overflow-y:auto}
+.fake-header{position:sticky;top:0;z-index:100;background:#F2EDE7;padding:16px;text-align:center;font:13px sans-serif}
+.CustomPage{max-width:1200px;margin:0 auto}
+.before{height:700px;background:#fff;padding:40px;font:16px sans-serif}</style></head><body class="home index">
+<div class="fake-header">商店 HEADER</div>
+<div class="before">橫幅上方的商店內容（模擬首頁其他區塊）</div>
+<div id="Content"><div class="CustomPage"><div class="shopline-section"><!-- ═══════════════════════════════════════════════════════════
+     HEIWEI v7 — 頂部橫幅（捲軸驅動旋轉動畫）獨立版
+     從 shopline_v7.html 抽出，只保留 #stage / #pin 這一段。
+     貼進 Shopline「客製化語法」元件（不是商品描述，那邊會砍 CSS 變數與 JS）。
+     ═══════════════════════════════════════════════════════════ -->
+<style>
+/* ══════════════════════════════════════════════════════════════
+   撞名歸零｜Shopline 主題是 Bootstrap 底，這 5 個 class 名跟 v7 撞車：
+     .progress → 灰底圓角條（底部時間軸變白膠囊的元兇）
+     .label    → 深灰藥丸＋白字＋1px 黑框
+     .mark     → 黃色螢光筆底
+     .badge    → 灰圓標
+     .nav      → list-style / padding
+   v7 這幾條規則本身沒宣告 background 等屬性，光提高權重沒用（沒有競爭對手），
+   必須明確歸零。這段刻意放在最前面，後面 v7 自己的宣告仍會覆蓋回來。
+   ══════════════════════════════════════════════════════════════ */
+.hw-v7 .progress,.hw-v7 .label,.hw-v7 .mark,.hw-v7 .badge,.hw-v7 .nav{
+  background:none;background-color:transparent;
+  border:0;border-radius:0;box-shadow:none;
+  padding:0;margin:0;min-width:0;height:auto;overflow:visible;
+  color:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;
+  text-align:inherit;white-space:normal;vertical-align:baseline;list-style:none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   v7 — 產品開蓋後停靠左側定位 ＋ 併入 v4 的四項互動
+   ══════════════════════════════════════════════════════════ */
+:root{
+  --night:#131011; --night-2:#1B1618; --night-3:#231D1F;
+  --paper:#F6F2EE; --paper-2:#EDE7E1;
+  --ink:#1A1614; --ink-soft:#5B534E; --ink-mute:#9A918B;
+  --on-night:#F2ECE8; --on-night-soft:#B4A8A3; --on-night-mute:#786C69;
+  --blush:#EFC4D2; --blush-deep:#C4657F; --balm:#F0DCB8; --sun:#E8A45C;
+  --line-dark:rgba(242,236,232,.13); --line-light:#DFD8D1;
+
+  --disp:"Italiana",serif;
+  --serif:"Noto Serif TC",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+
+  --pad:clamp(20px,5vw,64px);
+  --maxw:1200px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+.hw-v7 *{box-sizing:border-box}
+/* ── Shopline 嵌入用容器（原本掛在 body 的樣式全部移到這裡）── */
+.hw-v7{
+  position:relative;
+  width:100vw;margin-left:calc(50% - 50vw);   /* 破出 .CustomPage 的邊界，深底滿版 */
+  background:var(--night);color:var(--on-night);
+  font-family:var(--sans);font-weight:300;line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+  /* ⚠️ 這裡只能用 clip 不能用 hidden：hidden 會讓另一軸變成 auto，
+     .hw-v7 就成了 sticky 的捲動容器，#pin 會完全失效（原本掛在 body 上沒事，
+     因為 body/html 的 overflow 會傳播到視窗）。clip 不建立捲動容器。 */
+  overflow-x:clip;
+}
+/* ⚠️ 關鍵：Shopline 的 .CustomPage 有 overflow:hidden，會讓 #pin 的 sticky 完全失效 */
+.CustomPage{overflow:visible !important;}
+.hw-v7 img{max-width:100%;display:block}
+.hw-v7 a{color:inherit;text-decoration:none}
+/* Shopline 主題會給 button 白底、邊框、圓角、自己的字色，權重壓過裸 button{}，
+   所以底部時間軸才會出現一條白色膠囊。這裡 scope 進 .hw-v7 並強制歸零。 */
+.hw-v7 button{
+  font:inherit !important;color:inherit !important;
+  background:none !important;background-color:transparent !important;
+  border:0 !important;border-radius:0 !important;box-shadow:none !important;
+  padding:0 !important;margin:0;min-width:0 !important;min-height:0 !important;
+  width:auto;height:auto;line-height:inherit !important;text-transform:none !important;
+  -webkit-appearance:none;appearance:none;cursor:pointer;
+}
+.hw-v7 button:hover, .hw-v7 button:focus, .hw-v7 button:active{
+  background:none !important;background-color:transparent !important;box-shadow:none !important;
+}
+.hw-v7 :focus-visible{outline:2px solid var(--blush);outline-offset:3px}
+
+.hw-v7 .label{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--on-night-mute);font-weight:400}
+.hw-v7 .shell{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+
+/* ══════════ LOADER ══════════ */
+.hw-v7 #loader{
+  position:absolute;inset:0;z-index:5;background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  transition:opacity .7s ease,visibility .7s ease;
+}
+.hw-v7 #loader.done{opacity:0;visibility:hidden}
+.hw-v7 #loader .mark{font-family:var(--disp);font-size:clamp(28px,6vw,44px);letter-spacing:.34em;color:var(--on-night);text-indent:.34em}
+.hw-v7 #loader .bar{width:min(220px,50vw);height:1px;background:var(--line-dark);position:relative;overflow:hidden}
+.hw-v7 #loader .bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--blush);transition:width .25s ease}
+.hw-v7 #loader .pct{font-size:11px;letter-spacing:.24em;color:var(--on-night-mute);font-variant-numeric:tabular-nums}
+
+/* ══════════ SCROLL STAGE ══════════ */
+.hw-v7 #stage{position:relative;height:600vh}
+/* height 一定要有 vh fallback：svh 需要 iOS 15.4+，LINE 內建瀏覽器等舊 WebView 不支援，
+   宣告被丟掉後 #pin 會變成 height:auto —— 高度就等於裡面那張正在縮放的畫布，
+   貼底的文案於是跟著產品縮放上下跑（就是手機上看到的抖動）。 */
+.hw-v7 #pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:grid;place-items:center;
+  will-change:transform;backface-visibility:hidden}
+.hw-v7 #halo{
+  position:absolute;inset:-25%;pointer-events:none;
+  background:radial-gradient(circle at var(--hx,20%) var(--hy,78%),
+    var(--hc1,#E8A45C) 0%, var(--hc2,rgba(232,164,92,.20)) 26%, rgba(19,16,17,0) 62%);
+  opacity:var(--ho,.5);transition:opacity .3s linear;will-change:background,opacity;
+}
+.hw-v7 #grain{
+  position:absolute;inset:0;pointer-events:none;opacity:.32;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+/* 產品：由 JS 逐格改 transform。開蓋段一次移到左側，之後固定不動 */
+.hw-v7 #seq{
+  position:relative;z-index:2;height:min(78vh,720px);height:min(78svh,720px);width:auto;
+  filter:drop-shadow(0 30px 60px rgba(0,0,0,.55));
+  will-change:transform;transform-origin:50% 50%;
+}
+
+/* 文字節拍：產品開蓋後停在左邊不再移動，文案固定成右側單一直欄。
+   固定左邊界比左右交替好讀 —— 眼睛每換一段都回到同一個起點。 */
+/* iOS 抖動處理：canvas 每格重繪會讓整個 sticky 區塊重新光柵化，
+   產品是柔邊看不出來、白色銳利文字就很明顯。把文案推到自己的合成層，
+   跟 canvas 的重繪脫鉤；font-smoothing 改 antialiased 可避免次像素抗鋸齒在合成時閃動。 */
+/* 文案獨立圖層：iOS 的 sticky 位移是主執行緒套用的，捲動時內容會落後一兩幀再補回，
+   影片逐幀比對確認畫面像素會抖 ±1~4px（版面位置卻是 0）。canvas 柔邊看不出來、
+   銳利文字很明顯。把 .beats 搬到 <body> 底下改用 fixed，由合成器處理就不會抖。
+   外層仍掛 .hw-v7 讓既有的 .hw-v7 .beat 樣式繼續生效，但要把滿版深底整組歸零。 */
+.hw-v7.hw-v7-beatlayer{
+  position:fixed;inset:0;width:auto;max-width:none;margin:0;
+  background:none;overflow:visible;pointer-events:none;
+  z-index:2;transform:translateZ(0);
+}
+/* 產品層：產品與光暈同樣在 sticky 裡，實機錄影量到 49.5% 的相鄰幀有 ±1~4px 位移。
+   整個 #pin 搬到 <body> 底下改用 fixed，由合成器處理就不抖。
+   高度用 100svh（含 vh fallback）而不是 inset:0，才不會跟著 iOS 工具列變。
+   z-index 只用 1 —— 要留在商店 header（sticky z-index 100）底下。 */
+.hw-v7.hw-v7-pinlayer{
+  position:fixed;top:0;left:0;right:0;height:100vh;height:100svh;
+  width:auto;max-width:none;margin:0;background:var(--night);
+  overflow:hidden;pointer-events:none;z-index:1;transform:translateZ(0);
+}
+.hw-v7.hw-v7-pinlayer #pin{position:static;height:100%;will-change:auto}
+.hw-v7 .beats{position:absolute;inset:0;z-index:3;pointer-events:none;
+  transform:translateZ(0);will-change:transform;backface-visibility:hidden}
+.hw-v7 .beat,.hw-v7 #opening{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.hw-v7 .beat{position:absolute;opacity:0;transition:opacity .5s ease,transform .6s var(--ease)}
+.hw-v7 .beat .time{font-family:var(--disp);font-size:13px;letter-spacing:.3em;color:var(--blush);display:block;margin-bottom:14px}
+.hw-v7 .beat h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.4vw,36px);line-height:1.42;margin:0 0 12px;letter-spacing:.04em;text-wrap:balance}
+.hw-v7 .beat p{margin:0;font-size:14.5px;line-height:2;color:var(--on-night-soft)}
+@media(min-width:861px){
+  .hw-v7 .beat{
+    left:52%;width:min(430px,42vw);top:50%;text-align:left;
+    transform:translateY(calc(-50% + 18px));
+  }
+  .hw-v7 .beat.in{opacity:1;transform:translateY(-50%)}
+}
+@media(max-width:860px){
+  /* 不放大之後構圖是靜態的，可以直接把產品往上移，讓出底部文案區。
+     #pin 是 grid place-items:center，margin-bottom 會讓它往上位移一半（168/2=84px）。
+     不動 #pin 的盒模型 —— 動它會弄壞 sticky（已證實）。 */
+  .hw-v7 #seq{height:min(58vh,520px);height:min(58svh,520px);margin-bottom:168px}
+  /* 手機文案改 position:fixed —— 直接釘在視窗上，完全不依賴 #pin 的高度、
+     不受 iOS 工具列收合與 sticky 重新光柵化影響，這是「固定不動」最直接的做法。
+     顯示與否由 JS 依 stage 是否在視窗內切換 visibility（見 4c）。
+     不可用 env(safe-area-inset-bottom)：iOS 捲動時它會在 0↔34px 之間跳動。 */
+  /* 從「頂端」定位，距離由 JS 在載入時量一次寫進 --beat-top，之後不再變。
+     不可以用 bottom：#pin 高度會跟著 iOS 工具列收合在 100svh↔100lvh 之間變動
+     （實機 714↔754），貼底的文案就會整整跑 40px —— 那就是抖動的來源。
+     產品是置中的只位移一半、又是柔邊，所以看起來正常。 */
+  .hw-v7 .beat{
+    position:absolute;left:var(--pad);right:var(--pad);max-width:none;text-align:center;
+    top:var(--beat-top,calc(100svh - 168px));bottom:auto;transform:translateY(16px);
+  }
+  /* 手機不做 16px 位移進場：實機量到文案擺動 13.3~14.0px，就是這個 transform。
+     只留 opacity 淡入，文字位置從頭到尾不會移動。 */
+  .hw-v7 .beat{transform:none;transition:opacity .35s ease}
+  .hw-v7 .beat.in{opacity:1;transform:none}
+  .hw-v7 .beat h2{font-size:21px}
+  .hw-v7 .beat p{font-size:13.5px}
+}
+
+/* Hero 標題 */
+.hw-v7 #opening{
+  position:absolute;z-index:4;inset:0;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+  text-align:center;pointer-events:none;transition:opacity .5s ease;
+  padding:clamp(72px,11vh,118px) var(--pad) clamp(50px,7.5vh,84px);
+  padding:clamp(72px,11svh,118px) var(--pad) clamp(50px,7.5svh,84px);
+}
+.hw-v7 #opening .op-top, .hw-v7 #opening .op-bot{display:flex;flex-direction:column;align-items:center}
+.hw-v7 #opening .kicker{font-size:11px;letter-spacing:.34em;color:var(--on-night-mute);margin-bottom:18px}
+.hw-v7 #opening h1{font-family:var(--disp);font-weight:400;margin:0;font-size:clamp(32px,min(11vw,8.2vh),92px);font-size:clamp(32px,min(11vw,8.2svh),92px);line-height:.95;letter-spacing:.07em;text-indent:.07em}
+.hw-v7 #opening .zh{font-family:var(--serif);font-size:clamp(13px,2.2vw,18px);letter-spacing:.5em;text-indent:.5em;color:var(--blush);margin-top:16px;font-weight:300}
+.hw-v7 #opening .spec{margin-top:12px;font-size:11.5px;letter-spacing:.2em;color:var(--on-night-soft)}
+
+/* 章節進度／跳段：放底部置中，才不會跟左右兩側的文案搶位置 */
+.hw-v7 .progress{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;
+  display:flex;gap:clamp(14px,2vw,26px);align-items:flex-end;
+  transition:opacity .4s ease;
+}
+.hw-v7 .progress button{display:flex;flex-direction:column;align-items:center;gap:9px;pointer-events:auto}
+.hw-v7 .progress .dot{width:26px;height:1px;background:var(--on-night-mute);transition:width .35s var(--ease),background .35s ease}
+.hw-v7 .progress button.on .dot{width:48px;background:var(--blush)}
+.hw-v7 .progress .t{
+  font-family:var(--disp);font-size:11px;letter-spacing:.2em;color:var(--on-night-mute);
+  opacity:.45;transition:opacity .3s,color .3s;
+}
+.hw-v7 .progress button.on .t, .hw-v7 .progress button:hover .t{opacity:1;color:var(--blush)}
+@media(max-width:860px){.hw-v7 .progress{display:none}}
+
+/* 減少動態效果：把動畫攤平成靜態版面（原檔 390-400 行，之前漏抽）*/
+@media(prefers-reduced-motion:reduce){
+  .hw-v7 *, .hw-v7 *::before, .hw-v7 *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .hw-v7 #stage{height:auto}
+  .hw-v7 #pin{position:relative;height:auto;padding:100px 0 60px}
+  .hw-v7 #seq{transform:none!important}
+  .hw-v7 .beat{position:static;opacity:1;transform:none;max-width:none;text-align:center;margin:26px auto 0}
+  .hw-v7 .beats{position:static;display:flex;flex-direction:column;gap:8px}
+  .hw-v7 #opening{position:static;padding-bottom:40px}
+  .hw-v7 .progress{display:none}
+  .hw-v7 .rise{opacity:1;transform:none}
+}
+</style>
+
+<div class="hw-v7">
+<div id="loader">
+  <div class="mark">HEIWEI</div>
+  <div class="bar"><i id="lbar"></i></div>
+  <div class="pct" id="lpct">0%</div>
+</div>
+
+<!-- ═══════════ 捲軸主舞台（產品左右位移） ═══════════ -->
+<div id="stage">
+  <div id="pin">
+    <div id="halo"></div>
+    <div id="grain"></div>
+    <canvas id="seq" width="440" height="1524" aria-label="爆白潤色防曬棒開啟動畫"></canvas>
+
+    <div id="opening">
+      <div class="op-top">
+        <div class="kicker">HEIWEI 何謂美 ・ 新品上市</div>
+        <h1>A Day</h1>
+      </div>
+      <div class="op-bot">
+        <h1>of Light</h1>
+        <div class="zh">光 的 一 天</div>
+        <div class="spec">爆白潤色防曬棒 ・ SPF50+ ★★★★ ・ NET 15g</div>
+      </div>
+    </div>
+
+    <div class="beats" id="beats">
+      <!-- 四段文案共用右側同一欄，只做淡入淡出 -->
+      <div class="beat" data-from=".14" data-to=".35">
+        <span class="time">06:00 — 晨光</span>
+        <h2>一天，從一抹開始</h2>
+        <p>出門前的最後一個動作。不沾手、不沾妝，三秒完成，然後你就可以出門了。</p>
+      </div>
+      <div class="beat" data-from=".36" data-to=".58">
+        <span class="time">09:00 — 通勤</span>
+        <h2>旋開，就是全部</h2>
+        <p>不用鏡子、不用手指、不用另一層底妝。防曬、潤色、保養，一支收掉三個步驟。</p>
+      </div>
+      <div class="beat" data-from=".59" data-to=".80">
+        <span class="time">12:00 — 正午</span>
+        <h2>紫外線最強的兩小時</h2>
+        <p>SPF50+ ★★★★ 廣效防護。膏體貼合成膜，流汗不融、不斑駁、不泛白。</p>
+      </div>
+      <div class="beat" data-from=".81" data-to="1.01">
+        <span class="time">16:00 — 補擦</span>
+        <h2>底部收著一塊海綿</h2>
+        <p>補完直接推勻，妝面不糊、不留痕。這是它跟其他防曬棒最不一樣的地方。</p>
+      </div>
+    </div>
+
+    <div class="progress" id="progress"></div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ───────── 0. sticky 祖先解鎖（Shopline 專用） ─────────
+   只要 #pin 的任一祖先 overflow 不是 visible/clip，它就會變成 sticky 的捲動容器，
+   而它自己不捲動 → #pin 完全失效，畫面只剩 600vh 的深色底一路捲過去。
+   .CustomPage 是已知的一個，CSS 已處理；但不同頁型／版位的外框名稱不一樣，
+   所以這裡從 #pin 往上逐層檢查，遇到就地解鎖，並把改動印在 console 供追查。
+   註：clip 不建立捲動容器，是安全值，略過不動。 */
+let unlockedList = [];
+function unlockAncestors(){
+  const pin = document.getElementById("pin");
+  if (!pin || !pin.isConnected) return 0;      // 還沒掛進文件就走訪不到 body
+  const BAD = ["hidden","auto","scroll"];
+  let n = 0;
+  for (let el = pin.parentElement; el && el !== document.documentElement; el = el.parentElement){
+    // 自己建立的 fixed 圖層不要動：它的 overflow:hidden 是用來裁切產品的，
+    // 而且那條路徑已經不靠 sticky 了
+    if (el.classList && el.classList.contains("hw-v7-pinlayer")) continue;
+    const cs = getComputedStyle(el);
+    const xBad = BAD.includes(cs.overflowX), yBad = BAD.includes(cs.overflowY);
+    if (!xBad && !yBad) continue;
+    // 真的在捲動的容器不要動，硬改會弄壞商店版面；那種情況交給 JS 後備
+    if (el.scrollHeight > el.clientHeight + 4 && cs.overflowY !== "hidden") continue;
+    // x 用 clip：一樣擋橫向捲動，但 clip 不建立捲動容器（visible 會讓 y 變成 auto）
+    if (xBad) el.style.setProperty("overflow-x", "clip", "important");
+    if (yBad) el.style.setProperty("overflow-y", "visible", "important");
+    n++;
+    unlockedList.push(el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") +
+      (el.className && typeof el.className === "string" && el.className.trim()
+        ? "." + el.className.trim().split(/\s+/)[0] : "") +
+      " [" + cs.overflowX + "/" + cs.overflowY + "]");
+  }
+  if (n) console.log("[hw-v7] 已解鎖擋住 sticky 的祖先：", unlockedList);
+  return n;
+}
+(function(){
+  const pin = document.getElementById("pin");
+  if (!pin) return;
+  unlockAncestors();
+  // 記錄整條祖先鏈（含 transform/filter/contain），診斷面板要用
+  const chain = [];
+  for (let el = pin.parentElement; el && el !== document.documentElement; el = el.parentElement){
+    const cs = getComputedStyle(el);
+    chain.push({
+      tag: el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") +
+           (el.className && typeof el.className === "string" && el.className.trim()
+             ? "." + el.className.trim().split(/\s+/).slice(0,2).join(".") : ""),
+      of: cs.overflow + "/" + cs.overflowX + "/" + cs.overflowY,
+      tr: cs.transform === "none" ? "" : "transform",
+      fi: cs.filter === "none" ? "" : "filter",
+      co: cs.contain === "none" ? "" : "contain:" + cs.contain,
+      scrollable: el.scrollHeight > el.clientHeight + 4
+    });
+  }
+  window.__hwv7 = { unlocked: unlockedList, chain: chain };
+})();
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const lerp = (a,b,t) => a + (b - a) * t;
+const smooth = t => t * t * (3 - 2 * t);          // smoothstep，讓位移不會生硬
+
+/* ───────── 1. 影格序列 ───────── */
+/* ⚠️ 影格圖的公開網址（結尾要有斜線）。
+   Shopline 讀不到本機的 assets/，101×2 張影格必須放在外部靜態空間。 */
+const FRAME_BASE = "https://heiwei-v7-frames.vercel.app/stick/";
+
+const FRAMES = 101;
+const mobile = matchMedia("(max-width:860px)").matches || (window.devicePixelRatio < 1.5 && innerWidth < 1100);
+const SET = mobile ? {p:"m", w:264, h:914} : {p:"d", w:440, h:1524};
+const canvas = document.getElementById("seq");
+const ctx = canvas.getContext("2d", {alpha:true});
+canvas.width = SET.w; canvas.height = SET.h;
+
+const imgs = new Array(FRAMES);
+let loaded = 0, ready = false;
+const lbar = document.getElementById("lbar"), lpct = document.getElementById("lpct"),
+      loader = document.getElementById("loader");
+function finishLoad(){
+  if (ready) return;
+  ready = true; loader.classList.add("done"); draw(0); onScroll();
+}
+for (let i = 0; i < FRAMES; i++){
+  const im = new Image(); im.decoding = "async";
+  im.onload = im.onerror = () => {
+    loaded++;
+    const pc = Math.round(loaded / FRAMES * 100);
+    lbar.style.width = pc + "%"; lpct.textContent = pc + "%";
+    if (loaded === FRAMES) finishLoad();
+  };
+  im.src = FRAME_BASE + `${SET.p}_${String(i).padStart(4,"0")}.webp`;
+  imgs[i] = im;
+}
+setTimeout(finishLoad, 4000);
+
+let curFrame = -1;
+function draw(n){
+  n = Math.max(0, Math.min(FRAMES - 1, n | 0));
+  if (n === curFrame) return;
+  const im = imgs[n];
+  if (!im || !im.complete || !im.naturalWidth) return;
+  curFrame = n;
+  ctx.clearRect(0, 0, SET.w, SET.h);
+  ctx.drawImage(im, 0, 0, SET.w, SET.h);
+}
+
+/* ───────── 2. 產品運鏡路徑 ─────────
+   x = 相對畫面寬的位移(vw)，s = 縮放，r = 傾角(deg)
+   只在開蓋段移動一次到左側，之後全程固定，避免來回擺動造成暈眩 */
+/* 影格 26–86 是產品本體轉一整圈（同時膏體升起），放大就掛在這一段。
+   安全上限實測：旋轉段內容只佔畫布高 80% → 可放到 1.5x；
+   但最終影格佔 97% → 只能到 1.29x，所以收尾一定要降回來。
+   向下補償位移交給下面的 yFix() 依實際畫布尺寸算。 */
+const PATH = [
+  {p:0,    x:  0, s:1.00, r: 0},   // 開場：正中
+  {p:.26,  x:-19, s:1.06, r:-4},   // 開蓋段移到左側定位，旋轉正要開始
+  {p:.42,  x:-19, s:1.26, r:-4},   // 旋轉起手 → 推近
+  {p:.70,  x:-19, s:1.26, r:-4},   // 整圈轉完都維持在最近，不忽大忽小
+  {p:.86,  x:-19, s:1.10, r:-4},   // 膏體開始完全伸出 → 拉遠讓位
+  {p:1,    x:-19, s:1.04, r:-4}    // 收尾：產品最高，縮到最小才不會切到
+];
+// 手機沒有側欄可放文案（文字在下方），位移只會讓構圖失衡 → 完全不位移
+const XF = mobile ? 0 : 1;
+/* 手機完全不放大、不傾斜（2026-09-01）：
+   放大會讓 canvas 的 transform 每格都變，而 iOS 捲動時 transform 更新走主執行緒、
+   會落後一兩幀 → 產品看起來在游移。而且 yFix() 依賴 innerHeight，
+   那個值會隨 iOS 工具列在 714↔754 之間跳，等於工具列一動產品就被推一次。
+   ZF=0 之後 s 恆為 1、yFix(1) 回傳 0、r 恆為 0 → transform 完全靜止，
+   所有動態都交給 101 張影格本身（產品照樣轉一整圈）。 */
+const ZF = mobile ? 0 : 1;
+const RF = mobile ? 0 : 1;
+function poseAt(p){
+  let i = 0;
+  while (i < PATH.length - 2 && p > PATH[i+1].p) i++;
+  const a = PATH[i], b = PATH[i+1];
+  const t = smooth(Math.max(0, Math.min(1, (p - a.p) / (b.p - a.p || 1))));
+  const s = 1 + (lerp(a.s, b.s, t) - 1) * ZF;
+  return { x: lerp(a.x, b.x, t) * XF, y: yFix(s), s, r: lerp(a.r, b.r, t) * RF };
+}
+/* 放大時的向下補償（px）。
+   內容在畫布裡是靠上的（約從 1.3% 起算），純放大會讓瓶蓋鑽到導覽列底下。
+   導覽列高度是固定 px、不隨視窗高度縮放，所以補償不能用 vh —— 必須依實際
+   畫布尺寸即時算，矮視窗才不會補不夠。s=1 時結果為 0，不影響原本構圖。 */
+const TOP_MIN = 80;
+function yFix(s){
+  const C = canvas.offsetHeight;                 // 版面高度，不受 transform 影響
+  if (!C) return 0;
+  return Math.max(0, TOP_MIN - innerHeight / 2 + (C * s / 2) * 0.974);
+}
+
+/* ───────── 3. 光位 ───────── */
+const KEY = [
+  {p:0,  x:18, y:82, c1:"#E8A45C", c2:"rgba(232,164,92,.18)",  o:.45},
+  {p:.5, x:50, y:12, c1:"#FBEBCB", c2:"rgba(251,235,203,.22)", o:.85},
+  {p:1,  x:82, y:80, c1:"#C98098", c2:"rgba(201,128,152,.18)", o:.50}
+];
+function mixHex(h1, h2, t){
+  const n = h => [1,3,5].map(i => parseInt(h.substr(i,2),16));
+  const [r1,g1,b1] = n(h1), [r2,g2,b2] = n(h2);
+  return `rgb(${Math.round(lerp(r1,r2,t))},${Math.round(lerp(g1,g2,t))},${Math.round(lerp(b1,b2,t))})`;
+}
+const halo = document.getElementById("halo");
+function setHalo(p){
+  let a = KEY[0], b = KEY[1];
+  if (p > .5){ a = KEY[1]; b = KEY[2]; }
+  const t = (p - a.p) / (b.p - a.p || 1);
+  const s = halo.style;
+  s.setProperty("--hx", lerp(a.x,b.x,t).toFixed(1) + "%");
+  s.setProperty("--hy", lerp(a.y,b.y,t).toFixed(1) + "%");
+  s.setProperty("--hc1", mixHex(a.c1, b.c1, t));
+  s.setProperty("--hc2", t < .5 ? a.c2 : b.c2);
+  s.setProperty("--ho", lerp(a.o,b.o,t).toFixed(2));
+}
+
+/* ───────── 4. 捲軸驅動 ───────── */
+const stage = document.getElementById("stage");
+const opening = document.getElementById("opening");
+const beatsBox = document.getElementById("beats");
+let layer = null;                     // 文案 fixed 圖層
+/* 文案距頂距離只量一次就凍結：之後 iOS 工具列怎麼收放都不會動到它。
+   只有寬度改變（轉向）才重算。 */
+function freezeBeatTop(){
+  const el = document.getElementById("pin");
+  if (!el || !el.offsetHeight) return;
+  document.documentElement.style.setProperty("--beat-top", Math.round(el.offsetHeight - 168) + "px");
+}
+freezeBeatTop();
+addEventListener("load", freezeBeatTop);
+if (mobile && beatsBox && document.body) {
+  layer = document.createElement("div");
+  layer.className = "hw-v7 hw-v7-beatlayer";
+  layer.appendChild(beatsBox);                 // 從 #pin 裡搬出來
+  document.body.appendChild(layer);
+  beatsBox.style.position = "absolute";        // 相對 layer（= 視窗）定位
+  console.log("[hw-v7] 手機文案已移到獨立 fixed 圖層，脫離 sticky 主執行緒更新");
+}
+let beatVW = innerWidth;
+addEventListener("orientationchange", () => setTimeout(freezeBeatTop, 300));
+addEventListener("resize", () => {
+  if (innerWidth === beatVW) return;      // 只有轉向/改變寬度才重算
+  beatVW = innerWidth; freezeBeatTop();
+}, {passive:true});
+const beats = [...document.querySelectorAll(".beat")].map(el => ({
+  el, from: parseFloat(el.dataset.from), to: parseFloat(el.dataset.to)
+}));
+/* 原本四段之間各有 0.01 的空隙（.35→.36、.58→.59、.80→.81），落在空隙時
+   四段都不是 .in，文字會整個淡出再淡入。0.01 換算約 38px 捲動距離，
+   手機慢慢滑會在那裡停留，看起來就是文字在抖。補成連續區間。 */
+for (let i = 0; i < beats.length - 1; i++) beats[i].to = beats[i + 1].from;
+if (beats.length) beats[beats.length - 1].to = 1.01;
+
+/* 進度指示器兼章節導覽 */
+const progress = document.getElementById("progress");
+const CHAPTERS = ["06:00","09:00","12:00","16:00"];
+progress.innerHTML = CHAPTERS.map((t,i) =>
+  `<button type="button" data-i="${i}" aria-label="跳到 ${t} 這一段"><span class="dot"></span><span class="t">${t}</span></button>`
+).join("");
+const pBtns = [...progress.querySelectorAll("button")];
+progress.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const i = +b.dataset.i;
+  const mid = (beats[i].from + beats[i].to) / 2;
+  const total = stage.offsetHeight - document.getElementById("pin").offsetHeight;
+  scrollTo({ top: stage.offsetTop + mid * total, behavior: reduce ? "auto" : "smooth" });
+});
+
+/* ───────── 4b. 釘住機制自我檢查 ＋ 後備方案 ─────────
+   sticky 只要被任一祖先擋掉，畫面就只剩 600vh 深底一路捲過去。
+   overflow 已經在第 0 段解鎖，但可能還有別的原因（例如真正捲動的是內層容器）。
+   這裡直接「量」有沒有釘住，沒有就改用 JS 算位置，完全不依賴 sticky。 */
+const pinEl = document.getElementById("pin");
+let pinMode = "sticky", pinChecked = false;
+let pinLayer = null;
+if (mobile && pinEl && document.body) {
+  pinLayer = document.createElement("div");
+  pinLayer.className = "hw-v7 hw-v7-pinlayer";
+  pinLayer.appendChild(pinEl);              // 從 #stage 裡搬出來
+  document.body.appendChild(pinLayer);
+  pinChecked = true;                        // 已不靠 sticky，不需要後備偵測
+  console.log("[hw-v7] 手機產品層已移到獨立 fixed 圖層");
+}
+function pinSync(){
+  if (pinMode !== "fallback") return;
+  const r = stage.getBoundingClientRect();
+  const max = stage.offsetHeight - pinEl.offsetHeight;
+  pinEl.style.top = Math.max(0, Math.min(max, -r.top)) + "px";
+}
+function pinToFallback(why){
+  if (pinMode === "fallback") return;
+  pinMode = "fallback";
+  pinEl.style.setProperty("position", "absolute", "important");
+  pinEl.style.setProperty("left", "0", "important");
+  pinEl.style.setProperty("right", "0", "important");
+  pinSync();
+  console.log("[hw-v7] sticky 沒生效，改用 JS 釘住（" + why + "）");
+}
+function pinToSticky(){
+  if (pinMode !== "fallback") return;
+  pinMode = "sticky"; pinChecked = false;
+  ["position","top","left","right"].forEach(k => pinEl.style.removeProperty(k));
+  console.log("[hw-v7] 祖先已解鎖，切回原生 sticky（不再顫抖）");
+}
+/* Shopline 是 Angular 動態注入，這段 script 執行時 #pin 可能還沒掛進文件，
+   走訪不到 body —— 實測 body 是 overflow-x:hidden / overflow-y:auto，
+   html 的 overflow 傳播給視窗後 body 自己變成「不會捲的捲動容器」，sticky 因此永遠不觸發。
+   所以解鎖要延後重試幾次；成功的話把已經啟動的 JS 後備切回原生 sticky。 */
+[0, 300, 1000, 2500].forEach(t => setTimeout(() => {
+  if (unlockAncestors()) pinToSticky();
+}, t));
+addEventListener("load", () => { if (unlockAncestors()) pinToSticky(); });
+
+function pinCheck(){
+  if (pinChecked || pinMode === "fallback") return;
+  const s = stage.getBoundingClientRect();
+  if (s.top > -80 || s.bottom < innerHeight + 80) return;   // 還沒捲進中段，量不準
+  pinChecked = true;
+  const t = pinEl.getBoundingClientRect().top;
+  if (Math.abs(t) > 4) pinToFallback("pin.top=" + Math.round(t));
+}
+
+let ticking = false, lastP = -1;
+function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(apply); } }
+function apply(){
+  ticking = false;
+  pinCheck(); pinSync();
+
+
+  const r = stage.getBoundingClientRect();
+  /* 4c. 手機文案是 position:fixed，捲出舞台後不會自己消失 —— 這裡負責收掉。
+         必須放在 early-return 之前，否則 p 飽和後就不再更新。 */
+  /* 圖層是 fixed，不會自己跟著舞台進場，所以要手動模擬 sticky：
+     舞台還沒捲到頂 → 貼在舞台頂端跟著走；到頂 → 鎖在 0；離場 → 跟著舞台上移。
+     只要舞台有進到視窗就顯示，否則一開始會看到一整個螢幕高的純深底。
+     完全釘住時 off 恆為 0，transform 不變，不會把抖動帶回來。 */
+  const pinH = pinEl.offsetHeight;
+  const visible = r.bottom > 0 && r.top < innerHeight;
+  let off = 0;
+  if (r.top > 0) off = r.top;
+  else if (r.bottom < pinH) off = r.bottom - pinH;
+  const tf = "translate3d(0," + off.toFixed(1) + "px,0)";
+  if (pinLayer) { pinLayer.style.visibility = visible ? "" : "hidden"; pinLayer.style.transform = tf; }
+  beatsBox.style.visibility = visible ? "" : "hidden";
+  if (layer) layer.style.transform = tf;
+  /* 分母不可以用 innerHeight：iOS 工具列一收一放，innerHeight 會在
+     100svh↔100lvh 之間跳（實機量到 714↔754，差 40px），p 就跟著抖。
+     改用 #pin 的高度（= 100svh，靜態值），捲動範圍才穩定。 */
+  const total = stage.offsetHeight - pinEl.offsetHeight;
+  const p = total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
+  if (Math.abs(p - lastP) < .0004) return;
+  lastP = p;
+
+  draw(Math.round(p * (FRAMES - 1)));
+  setHalo(p);
+
+  if (!mobile) {
+    const q = poseAt(p);
+    // translate 在最外層 → 位移量不受 scale 影響，y 才能穩定用 vh 計算
+    canvas.style.transform =
+      `translate(${q.x.toFixed(2)}vw, ${q.y.toFixed(1)}px) scale(${q.s.toFixed(3)}) rotate(${q.r.toFixed(2)}deg)`;
+  }
+
+  const oFade = 1 - Math.min(1, p / .11);
+  opening.style.opacity = oFade;
+  progress.style.opacity = Math.min(1, Math.max(0, (p - .10) / .06));
+
+  let active = -1;
+  beats.forEach((b, i) => {
+    const on = p >= b.from && p < b.to;
+    b.el.classList.toggle("in", on);
+    if (on) active = i;
+  });
+  pBtns.forEach((b, i) => b.classList.toggle("on", i === active));
+}
+if (!reduce){
+  addEventListener("scroll", onScroll, {passive:true});
+  // 真正捲動的若是內層容器，window 的 scroll 不會觸發；捕獲階段可以攔到任何元素的捲動
+  document.addEventListener("scroll", onScroll, {passive:true, capture:true});
+  /* iOS 工具列收合會連續丟出 resize，只有寬度變或高度大幅變（轉向）才重算 */
+  let lastVW = innerWidth, lastVH = innerHeight;
+  addEventListener("resize", () => {
+    if (innerWidth === lastVW && Math.abs(innerHeight - lastVH) < 80) return;
+    lastVW = innerWidth; lastVH = innerHeight;
+    lastP = -1; onScroll();
+  }, {passive:true});
+} else {
+  const show = () => { draw(FRAMES - 1); beats.forEach(b => b.el.classList.add("in")); };
+  imgs[FRAMES-1].complete ? show() : imgs[FRAMES-1].addEventListener("load", show);
+}
+
+
+/* ───────── 9. 診斷面板（網址加 #hwdebug 才出現） ───────── */
+if (location.hash.indexOf("hwdebug") >= 0) {
+  const box = document.createElement("div");
+  box.style.cssText = "position:fixed;left:6px;top:6px;z-index:2147483647;max-width:calc(100vw - 12px);" +
+    "background:rgba(0,0,0,.88);color:#0f0;font:11px/1.5 ui-monospace,monospace;padding:8px 10px;" +
+    "border:1px solid #0f0;border-radius:6px;white-space:pre-wrap;pointer-events:none;max-height:60vh;overflow:auto";
+  document.body.appendChild(box);
+  const info = window.__hwv7 || { unlocked: [], chain: [] };
+  const supports = (p, v) => { try { return CSS.supports(p, v); } catch (e) { return "?"; } };
+  let scrollSrc = "（尚未捲動）";
+  document.addEventListener("scroll", e => {
+    const t = e.target;
+    scrollSrc = (t === document || t === document.documentElement || t === document.body)
+      ? "視窗/document" : (t.tagName ? t.tagName.toLowerCase() + "." + (t.className || "").toString().trim().split(/\s+/)[0] : "?");
+  }, { passive: true, capture: true });
+  const hist = [];
+  function paint(){
+    const sr = stage.getBoundingClientRect(), pr = pinEl.getBoundingClientRect();
+    // 直接量文案在畫面上的位置，最近 90 幀的最大擺動幅度
+    const bi = document.querySelector(".beat.in");
+    if (bi) { hist.push(bi.getBoundingClientRect().bottom); if (hist.length > 90) hist.shift(); }
+    const spread = hist.length > 5 ? (Math.max.apply(null, hist) - Math.min.apply(null, hist)) : 0;
+    box.textContent =
+      "【hw-v7 診斷】\n" +
+      "釘住模式 : " + pinMode + (pinMode === "sticky" ? "（原生 sticky）" : "（JS 後備）") + "\n" +
+      "pin.top  : " + Math.round(pr.top) + "  ← 捲到中段時應為 0\n" +
+      "stage.top: " + Math.round(sr.top) + "  高 " + stage.offsetHeight + "\n" +
+      "捲動來源 : " + scrollSrc + "\n" +
+      "視窗     : " + innerWidth + "×" + innerHeight + "  DPR " + devicePixelRatio + "\n" +
+      "svh 支援 : " + supports("height", "100svh") + "   減少動態 : " + reduce + "\n" +
+      "pin 高度 : " + Math.round(pr.height) + "（100svh，應恆定）  視窗 " + innerHeight + "\n" +
+      "文案擺動 : " + spread.toFixed(1) + "px（最近90幀）" +
+        (spread > 2 ? "  ⚠️版面真的在動" : "  ✅版面沒動→是繪製層問題") + "\n" +
+      "影格     : " + loaded + "/" + FRAMES + "  行動版排版 : " + mobile + "\n" +
+      "已解鎖   : " + (info.unlocked.length ? info.unlocked.join(" ; ") : "無") + "\n" +
+      "祖先鏈   :\n" +
+      info.chain.map(c => "  " + c.tag + "\n    overflow " + c.of +
+        (c.tr ? " ⚠" + c.tr : "") + (c.fi ? " ⚠" + c.fi : "") + (c.co ? " ⚠" + c.co : "") +
+        (c.scrollable ? " ⚠可捲動" : "")).join("\n");
+    requestAnimationFrame(paint);
+  }
+  paint();
+}
+
+})();
+</script>
+</div></div></div>
+<div style="height:1000px;background:#fff;padding:40px;font:16px sans-serif">橫幅下方的商店內容</div></body></html>

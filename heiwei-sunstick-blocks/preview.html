@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HEIWEI 爆白潤色防曬棒 — 本機預覽</title>
+<style>body{margin:0;background:#fff;}</style>
+</head><body>
+<!-- ============================================================
+     HEIWEI 爆白潤色防曬棒 SPF50+ ★★★★  商品描述互動區塊
+     Bright Tone-Up Sunscreen Stick
+     貼上位置：Shopline 後台 → 商品 → 描述 → 切換原始碼 <> → 貼上全部
+     圖片：先把 assets/ 內的圖上傳到 Shopline 圖庫，再把 ./assets/xxx.jpg
+           全部取代成 Shopline 圖片網址（README.md 有對照表）
+     ============================================================ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap');
+
+.hw-ss{
+  --sky-deep:#0E5C7A; --sky:#2E9FC9; --sky-light:#9BD9EE; --sky-mist:#E8F6FB;
+  --pink:#F09BB4; --pink-soft:#FBDDE5; --pink-mist:#FDF1F4; --pink-deep:#C0456B;
+  --sun:#FFC85C; --ink:#143845; --ink-soft:#4A6B78; --line:#DCE9EF; --paper:#fff;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  max-width:780px; margin:0 auto; padding:0 16px 8px;
+  color:var(--ink); font-size:16px; line-height:1.75;
+  -webkit-font-smoothing:antialiased; text-align:left;
+}
+.hw-ss *{box-sizing:border-box;}
+.hw-ss img{max-width:100%; height:auto; display:block;}
+.hw-ss p{margin:0 0 12px;}
+.hw-ss h2,.hw-ss h3,.hw-ss h4{margin:0; font-weight:700; line-height:1.35;}
+.hw-ss :focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px;}
+.hw-ss-sr{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;}
+
+/* ── 共用：區塊標題 ── */
+.hw-ss-sec{margin:56px 0 0;}
+.hw-ss-eyebrow{
+  font-family:'Outfit',sans-serif; font-size:11px; font-weight:600;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--sky);
+  margin:0 0 8px;
+}
+.hw-ss-h2{font-size:25px; letter-spacing:.02em; margin-bottom:10px;}
+.hw-ss-h2 em{font-style:normal; color:var(--pink-deep);}
+.hw-ss-lead{font-size:15px; color:var(--ink-soft); margin-bottom:24px;}
+.hw-ss-center{text-align:center;}
+.hw-ss-center .hw-ss-lead{max-width:34em; margin-left:auto; margin-right:auto;}
+
+/* 進場動畫（JS 才啟用，避免無 JS 時內容消失） */
+.hw-ss-js .hw-ss-rv{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s cubic-bezier(.22,.8,.3,1);}
+.hw-ss-js .hw-ss-rv.is-in{opacity:1; transform:none;}
+
+/* ── 1. HERO ── */
+.hw-ss-hero{
+  position:relative; overflow:hidden; border-radius:24px; margin-top:8px;
+  background:linear-gradient(170deg,#BEE6F5 0%,#DCF1F9 38%,#FBEAF0 76%,#FDF6F8 100%);
+  padding:32px 22px 0;
+}
+.hw-ss-sun{
+  position:absolute; top:-70px; right:-60px; width:230px; height:230px; border-radius:50%;
+  background:radial-gradient(circle,rgba(255,238,190,.95) 0%,rgba(255,214,140,.5) 40%,rgba(255,214,140,0) 72%);
+  animation:hw-ss-breathe 6s ease-in-out infinite; pointer-events:none;
+}
+.hw-ss-ray{
+  position:absolute; top:-120px; left:-40px; width:120%; height:280px; pointer-events:none;
+  background:linear-gradient(105deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 58%);
+  animation:hw-ss-sweep 9s ease-in-out infinite;
+}
+@keyframes hw-ss-breathe{0%,100%{transform:scale(1); opacity:.9;} 50%{transform:scale(1.12); opacity:1;}}
+@keyframes hw-ss-sweep{0%,100%{transform:translateX(-8%);} 50%{transform:translateX(8%);}}
+.hw-ss-hero-in{position:relative; z-index:2;}
+.hw-ss-brand{
+  font-family:'Outfit',sans-serif; font-size:12px; font-weight:600;
+  letter-spacing:.34em; color:var(--sky-deep); margin-bottom:14px;
+}
+.hw-ss-hero h2{font-size:38px; font-weight:900; letter-spacing:.04em; color:#0C3A4C;}
+.hw-ss-hero-sub{
+  display:inline-block; margin:12px 0 0; padding:7px 18px; border-radius:30px;
+  background:rgba(255,255,255,.85); color:var(--sky-deep);
+  font-size:15px; font-weight:700; letter-spacing:.06em;
+}
+.hw-ss-script{
+  font-family:'Outfit',sans-serif; font-weight:300; font-style:italic;
+  font-size:20px; color:#5E93A8; margin:10px 0 0; letter-spacing:.04em;
+}
+.hw-ss-spf{display:flex; align-items:center; gap:14px; margin:20px 0 4px;}
+.hw-ss-spf-num{font-family:'Outfit',sans-serif; font-size:44px; font-weight:700; line-height:1; color:var(--sky-deep);}
+.hw-ss-spf-num small{font-size:17px; font-weight:600; letter-spacing:.06em; vertical-align:super;}
+.hw-ss-stars{display:flex; gap:3px;}
+.hw-ss-stars svg{width:15px; height:15px; fill:var(--sky);}
+.hw-ss-spf-cap{font-size:12px; color:var(--ink-soft); letter-spacing:.1em; line-height:1.5;}
+.hw-ss-hero-img{margin:6px -22px 0; }
+.hw-ss-hero-img img{width:100%; border-radius:0 0 24px 24px;}
+
+/* HERO 下方四點 */
+.hw-ss-facts{
+  display:grid; grid-template-columns:repeat(2,1fr); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:16px;
+  overflow:hidden; margin:14px 0 0;
+}
+.hw-ss-fact{background:var(--paper); padding:16px 12px; text-align:center;}
+.hw-ss-fact svg{width:26px; height:26px; stroke:var(--sky); fill:none; stroke-width:1.6; margin:0 auto 6px;}
+.hw-ss-fact b{display:block; font-size:14px; font-weight:700;}
+.hw-ss-fact span{display:block; font-size:12px; color:var(--ink-soft); line-height:1.5;}
+
+/* ── 2. 痛點 ── */
+.hw-ss-pain{display:grid; gap:12px;}
+.hw-ss-pain-card{
+  display:flex; gap:14px; align-items:flex-start;
+  background:var(--sky-mist); border-radius:16px; padding:18px 18px 16px;
+}
+.hw-ss-pain-card svg{flex:0 0 30px; width:30px; height:30px; stroke:var(--sky-deep); fill:none; stroke-width:1.5;}
+.hw-ss-pain-card b{display:block; font-size:16px; margin-bottom:2px;}
+.hw-ss-pain-card p{font-size:14px; color:var(--ink-soft); margin:0;}
+.hw-ss-answer{
+  margin-top:18px; text-align:center; font-size:17px; font-weight:700;
+  background:linear-gradient(100deg,var(--pink-mist),var(--sky-mist));
+  border-radius:16px; padding:20px 18px; line-height:1.8;
+}
+.hw-ss-answer em{font-style:normal; color:var(--pink-deep);}
+
+/* ── 3. UV 時光機 ── */
+.hw-ss-uv{
+  border-radius:22px; overflow:hidden; border:1px solid var(--line); background:var(--paper);
+}
+.hw-ss-uv-sky{
+  padding:26px 20px 22px; transition:background 700ms ease; position:relative; overflow:hidden;
+  background:linear-gradient(170deg,#63B8DE,#BDE4F2 70%,#F2E4D6);
+}
+.hw-ss-uv-orb{
+  position:absolute; width:64px; height:64px; border-radius:50%;
+  background:radial-gradient(circle,#FFF6D8 0%,#FFD066 55%,rgba(255,208,102,0) 72%);
+  top:16px; left:8%; transition:left 700ms ease, top 700ms ease, opacity 700ms ease;
+}
+.hw-ss-uv-head{position:relative; z-index:2; display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+.hw-ss-uv-time{font-family:'Outfit',sans-serif; font-size:40px; font-weight:700; line-height:1; color:#0C3A4C;}
+.hw-ss-uv-badge{
+  display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.9);
+  border-radius:30px; padding:7px 16px; font-size:14px; font-weight:700; color:var(--ink);
+}
+.hw-ss-uv-dot{width:11px; height:11px; border-radius:50%; background:#4CAF50; transition:background 400ms ease;}
+.hw-ss-uv-body{padding:20px;}
+.hw-ss-uv-meter{height:10px; border-radius:10px; background:var(--sky-mist); overflow:hidden;}
+.hw-ss-uv-fill{height:100%; width:8%; border-radius:10px; background:#4CAF50; transition:width 600ms cubic-bezier(.22,.8,.3,1), background 400ms ease;}
+.hw-ss-uv-scale{display:flex; justify-content:space-between; font-family:'Outfit',sans-serif; font-size:11px; color:var(--ink-soft); margin-top:6px; letter-spacing:.06em;}
+.hw-ss-uv-val{font-family:'Outfit',sans-serif; font-size:15px; font-weight:600; color:var(--ink);}
+.hw-ss-uv-tip{
+  margin-top:16px; background:var(--pink-mist); border-left:4px solid var(--pink);
+  border-radius:0 12px 12px 0; padding:14px 16px; font-size:14px; line-height:1.7; min-height:76px;
+}
+.hw-ss-uv-tip b{display:block; margin-bottom:2px; color:var(--pink-deep);}
+.hw-ss-uv-ctrl{margin-top:18px;}
+.hw-ss-uv-ctrl label{display:block; font-size:13px; color:var(--ink-soft); margin-bottom:10px;}
+.hw-ss-uv-range{
+  -webkit-appearance:none; appearance:none; width:100%; height:44px; background:transparent; cursor:pointer; margin:0;
+}
+.hw-ss-uv-range::-webkit-slider-runnable-track{height:8px; border-radius:8px; background:linear-gradient(90deg,#9BD9EE,#FFC85C,#F0708F);}
+.hw-ss-uv-range::-moz-range-track{height:8px; border-radius:8px; background:linear-gradient(90deg,#9BD9EE,#FFC85C,#F0708F);}
+.hw-ss-uv-range::-webkit-slider-thumb{
+  -webkit-appearance:none; width:30px; height:30px; border-radius:50%; background:#fff;
+  border:3px solid var(--sky); box-shadow:0 3px 10px rgba(20,56,69,.22); margin-top:-11px;
+}
+.hw-ss-uv-range::-moz-range-thumb{
+  width:30px; height:30px; border:3px solid var(--sky); border-radius:50%; background:#fff;
+  box-shadow:0 3px 10px rgba(20,56,69,.22);
+}
+.hw-ss-note{font-size:12px; color:var(--ink-soft); margin-top:10px; line-height:1.6;}
+
+/* ── 4. 三效合一 Tabs（純 CSS） ── */
+.hw-ss-tabs input{position:absolute; opacity:0; width:0; height:0;}
+.hw-ss-tablist{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px;}
+.hw-ss-tablist label{
+  display:flex; align-items:center; justify-content:center; gap:6px; min-height:46px;
+  border:1.5px solid var(--line); border-radius:30px; cursor:pointer; font-size:15px; font-weight:700;
+  color:var(--ink-soft); background:var(--paper);
+  transition:background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.hw-ss-tablist label:hover{border-color:var(--sky-light); color:var(--sky-deep);}
+.hw-ss-panel{display:none; background:var(--sky-mist); border-radius:20px; overflow:hidden;}
+.hw-ss-panel-img img{width:100%; max-height:340px; object-fit:cover;}
+.hw-ss-panel-txt{padding:20px;}
+.hw-ss-panel-txt h3{font-size:20px; margin-bottom:8px;}
+.hw-ss-panel-txt p{font-size:14.5px; color:var(--ink-soft); margin-bottom:14px;}
+.hw-ss-chips{display:flex; flex-wrap:wrap; gap:8px;}
+.hw-ss-chip{
+  background:var(--paper); border-radius:20px; padding:6px 14px; font-size:13px; font-weight:500; color:var(--sky-deep);
+}
+#hw-ss-t1:checked~.hw-ss-tablist label[for="hw-ss-t1"],
+#hw-ss-t2:checked~.hw-ss-tablist label[for="hw-ss-t2"],
+#hw-ss-t3:checked~.hw-ss-tablist label[for="hw-ss-t3"]{
+  background:linear-gradient(120deg,var(--sky),#38B4D8); border-color:transparent; color:#fff;
+}
+#hw-ss-t1:checked~#hw-ss-p1,
+#hw-ss-t2:checked~#hw-ss-p2,
+#hw-ss-t3:checked~#hw-ss-p3{display:block;}
+.hw-ss-tabs input:focus-visible~.hw-ss-tablist label[for]{outline:none;}
+#hw-ss-t1:focus-visible~.hw-ss-tablist label[for="hw-ss-t1"],
+#hw-ss-t2:focus-visible~.hw-ss-tablist label[for="hw-ss-t2"],
+#hw-ss-t3:focus-visible~.hw-ss-tablist label[for="hw-ss-t3"]{outline:3px solid var(--sky-deep); outline-offset:2px;}
+
+/* ── 5. 成分 ── */
+.hw-ss-ing{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+.hw-ss-ing details{
+  background:var(--paper); border:1px solid var(--line); border-radius:18px; overflow:hidden;
+  transition:border-color 200ms ease, box-shadow 200ms ease;
+}
+.hw-ss-ing details[open]{border-color:var(--pink); box-shadow:0 6px 20px rgba(240,155,180,.18);}
+.hw-ss-ing summary{
+  list-style:none; cursor:pointer; padding:18px 14px; text-align:center; min-height:44px;
+}
+.hw-ss-ing summary::-webkit-details-marker{display:none;}
+.hw-ss-ing-icon{
+  width:46px; height:46px; margin:0 auto 10px; border-radius:50%;
+  background:linear-gradient(140deg,var(--pink-soft),var(--sky-mist));
+  display:flex; align-items:center; justify-content:center;
+}
+.hw-ss-ing-icon svg{width:24px; height:24px; stroke:var(--pink-deep); fill:none; stroke-width:1.5;}
+.hw-ss-ing summary b{display:block; font-size:14.5px; line-height:1.5;}
+.hw-ss-ing summary i{
+  display:block; font-style:normal; font-family:'Outfit',sans-serif; font-size:9.5px;
+  letter-spacing:.1em; color:var(--ink-soft); margin-top:4px; text-transform:uppercase;
+}
+.hw-ss-ing-more{
+  display:inline-flex; align-items:center; gap:4px; margin-top:10px;
+  font-size:12px; color:var(--sky); font-weight:500;
+}
+.hw-ss-ing details[open] .hw-ss-ing-more{display:none;}
+.hw-ss-ing-txt{padding:0 16px 18px; font-size:13.5px; color:var(--ink-soft); line-height:1.8;}
+
+/* ── 6. 對比表 ── */
+.hw-ss-table{width:100%; border-collapse:separate; border-spacing:0; font-size:14px; border-radius:18px; overflow:hidden; border:1px solid var(--line);}
+.hw-ss-table th,.hw-ss-table td{padding:14px 10px; text-align:center; border-bottom:1px solid var(--line); vertical-align:middle;}
+.hw-ss-table thead th{font-size:13.5px; font-weight:700;}
+.hw-ss-table thead th:nth-child(1){background:var(--paper); width:22%;}
+.hw-ss-table thead th:nth-child(2){background:#F1F4F5; color:var(--ink-soft);}
+.hw-ss-table thead th:nth-child(3){background:linear-gradient(120deg,var(--pink),#E9819F); color:#fff;}
+.hw-ss-table tbody th{background:var(--paper); font-weight:700; font-size:13.5px; text-align:center;}
+.hw-ss-table td:nth-child(2){color:var(--ink-soft); background:#FAFBFB; font-size:13px;}
+.hw-ss-table td:nth-child(3){background:var(--pink-mist); text-align:left;}
+.hw-ss-table tr:last-child th,.hw-ss-table tr:last-child td{border-bottom:none;}
+.hw-ss-yes{display:flex; gap:8px; align-items:flex-start;}
+.hw-ss-yes svg{flex:0 0 18px; width:18px; height:18px; fill:var(--pink-deep); margin-top:3px;}
+.hw-ss-yes b{display:block; font-size:14px; font-weight:700;}
+.hw-ss-yes span{display:block; font-size:12px; color:var(--ink-soft); line-height:1.5;}
+
+/* ── 7. 使用步驟 ── */
+.hw-ss-steps{display:grid; gap:12px;}
+.hw-ss-step{display:flex; gap:16px; background:var(--paper); border:1px solid var(--line); border-radius:18px; padding:18px;}
+.hw-ss-step-n{
+  flex:0 0 38px; width:38px; height:38px; border-radius:50%;
+  background:linear-gradient(140deg,var(--sky),#41B7DA); color:#fff;
+  font-family:'Outfit',sans-serif; font-weight:700; font-size:17px;
+  display:flex; align-items:center; justify-content:center;
+}
+.hw-ss-step b{display:block; font-size:16px; margin-bottom:2px;}
+.hw-ss-step p{font-size:14px; color:var(--ink-soft); margin:0;}
+
+/* ── 8. 情境 ── */
+.hw-ss-scene-hero{margin:0 0 12px; border-radius:20px; overflow:hidden; background:var(--sky-mist);}
+.hw-ss-scene3{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+.hw-ss-scene-card{background:var(--sky-mist); border-radius:16px; padding:18px 8px 16px; text-align:center;}
+.hw-ss-scene-card svg{width:26px; height:26px; stroke:var(--sky); fill:none; stroke-width:1.5; margin:0 auto 8px;}
+.hw-ss-scene-card b{display:block; font-size:14px; margin-bottom:2px;}
+.hw-ss-scene-card span{display:block; font-size:11.5px; color:var(--ink-soft); line-height:1.6;}
+
+/* ── 9. 規格 ── */
+.hw-ss-spec{border:1px solid var(--line); border-radius:18px; overflow:hidden;}
+.hw-ss-spec dl{display:grid; grid-template-columns:96px 1fr; margin:0; font-size:14px;}
+.hw-ss-spec dt{background:var(--sky-mist); padding:12px 14px; font-weight:700; border-bottom:1px solid var(--line);}
+.hw-ss-spec dd{margin:0; padding:12px 14px; border-bottom:1px solid var(--line); color:var(--ink-soft);}
+.hw-ss-spec dl>:nth-last-child(1),.hw-ss-spec dl>:nth-last-child(2){border-bottom:none;}
+
+/* ── 10. FAQ ── */
+.hw-ss-faq details{border-bottom:1px solid var(--line);}
+.hw-ss-faq summary{
+  list-style:none; cursor:pointer; padding:16px 34px 16px 4px; position:relative;
+  font-size:15px; font-weight:700; min-height:44px;
+}
+.hw-ss-faq summary::-webkit-details-marker{display:none;}
+.hw-ss-faq summary::after{
+  content:""; position:absolute; right:8px; top:50%; width:9px; height:9px;
+  border-right:2px solid var(--sky); border-bottom:2px solid var(--sky);
+  transform:translateY(-70%) rotate(45deg); transition:transform 200ms ease;
+}
+.hw-ss-faq details[open] summary::after{transform:translateY(-30%) rotate(-135deg);}
+.hw-ss-faq p{padding:0 4px 18px; font-size:14px; color:var(--ink-soft); margin:0;}
+
+/* ── 11. CTA ── */
+.hw-ss-cta{
+  position:relative; overflow:hidden; border-radius:24px; margin-top:56px;
+  background:linear-gradient(160deg,#BEE6F5,#E4F3FA 55%,#FBE4EB); padding:34px 22px; text-align:center;
+}
+.hw-ss-cta h2{font-size:24px; margin-bottom:8px; color:#0C3A4C;}
+.hw-ss-cta p{font-size:14.5px; color:#3C6675; margin-bottom:20px;}
+.hw-ss-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  min-height:52px; padding:0 34px; border-radius:30px; text-decoration:none;
+  background:linear-gradient(120deg,#C0456B,#9E3457); color:#fff;
+  font-size:17px; font-weight:700; letter-spacing:.04em;
+  box-shadow:0 8px 22px rgba(158,52,87,.28);
+  transition:box-shadow 220ms ease, filter 220ms ease;
+}
+.hw-ss-btn:hover{filter:brightness(1.08); box-shadow:0 10px 26px rgba(158,52,87,.36);}
+.hw-ss-btn svg{width:19px; height:19px; fill:#fff;}
+.hw-ss-cta-sub{font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.22em; color:#5E93A8; margin:18px 0 0; text-transform:uppercase;}
+
+/* ── 注意事項 ── */
+.hw-ss-notice{background:var(--sky-mist); border-radius:18px; padding:20px; margin-top:22px;}
+.hw-ss-notice b{display:block; font-size:15px; margin-bottom:8px;}
+.hw-ss-notice ul{margin:0; padding-left:18px; font-size:13.5px; color:var(--ink-soft); line-height:1.9;}
+
+/* ── 桌機 ── */
+@media (min-width:721px){
+  .hw-ss{font-size:17px;}
+  .hw-ss-hero{padding:44px 40px 0;}
+  .hw-ss-hero h2{font-size:52px;}
+  .hw-ss-hero-img{margin:10px -40px 0;}
+  .hw-ss-h2{font-size:30px;}
+  .hw-ss-facts{grid-template-columns:repeat(4,1fr);}
+  .hw-ss-pain{grid-template-columns:repeat(3,1fr);}
+  .hw-ss-pain-card{flex-direction:column; gap:10px;}
+  .hw-ss-panel{display:none; grid-template-columns:1fr 1fr; align-items:center;}
+  #hw-ss-t1:checked~#hw-ss-p1,
+  #hw-ss-t2:checked~#hw-ss-p2,
+  #hw-ss-t3:checked~#hw-ss-p3{display:grid;}
+  .hw-ss-panel-img img{height:100%; max-height:none; object-fit:cover;}
+  .hw-ss-ing{grid-template-columns:repeat(4,1fr);}
+  .hw-ss-steps{grid-template-columns:repeat(3,1fr);}
+  .hw-ss-openbox{grid-template-columns:1.1fr 1fr; gap:20px;}
+  .hw-ss-step{flex-direction:column;}
+  .hw-ss-uv-body{padding:26px;}
+  .hw-ss-cta h2{font-size:28px;}
+}
+
+/* ── 動效偏好 ── */
+@media (prefers-reduced-motion:reduce){
+  .hw-ss *,.hw-ss *::before,.hw-ss *::after{
+    animation-duration:.001ms !important; animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+</style>
+
+<div class="hw-ss">
+
+  <!-- ══════════ 1. HERO ══════════ -->
+  <section class="hw-ss-hero">
+    <span class="hw-ss-sun" aria-hidden="true"></span>
+    <span class="hw-ss-ray" aria-hidden="true"></span>
+    <div class="hw-ss-hero-in">
+      <p class="hw-ss-brand">HEIWEI</p>
+      <h2>一抹勻亮</h2>
+      <p class="hw-ss-hero-sub">偽素顏的終極秘密</p>
+      <p class="hw-ss-script">Sunlit glow</p>
+
+      <div class="hw-ss-spf">
+        <div>
+          <div class="hw-ss-spf-num"><small>SPF</small>50<small>+</small></div>
+          <div class="hw-ss-stars" role="img" aria-label="PA 四顆星">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+          </div>
+        </div>
+        <p class="hw-ss-spf-cap">高效防護基準<br>防曬 × 底妝 × 保養，一支到位</p>
+      </div>
+
+      <p class="hw-ss-script" style="font-size:15px;margin:2px 0 22px;color:#3C6675;letter-spacing:.14em;">BRIGHT TONE-UP SUNSCREEN STICK</p>
+    </div>
+    <div class="hw-ss-hero-img">
+      <img src="./assets/hero_stick.jpg" alt="HEIWEI 爆白潤色防曬棒 SPF50+ 粉色棒身外觀" loading="lazy">
+    </div>
+  </section>
+
+  <div class="hw-ss-facts hw-ss-rv">
+    <div class="hw-ss-fact">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V7a5 5 0 0110 0v4"/><rect x="4" y="11" width="16" height="9" rx="2"/></svg>
+      <b>免沾手</b><span>推開即用</span>
+    </div>
+    <div class="hw-ss-fact">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18 12h3M16.3 7.7l2.1-2.1"/><circle cx="12" cy="14" r="4"/></svg>
+      <b>控油不黏膩</b><span>長時清爽</span>
+    </div>
+    <div class="hw-ss-fact">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="8" ry="5.6"/><path d="M6.4 10.2c1.4 1 3.2 1.5 5.6 1.5s4.2-.5 5.6-1.5"/></svg>
+      <b>自帶化妝海綿</b><span>隨手勻開</span>
+    </div>
+    <div class="hw-ss-fact">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.6-7-9.6A4.4 4.4 0 0112 8a4.4 4.4 0 017 3.4c0 5-7 9.6-7 9.6z"/></svg>
+      <b>不致粉刺配方</b><span>溫和好上臉</span>
+    </div>
+  </div>
+
+  <!-- ══════════ 2. 痛點 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">Why you skip it</p>
+    <h2 class="hw-ss-h2">夏天不想擦防曬的<em>三個理由</em></h2>
+    <p class="hw-ss-lead">不是你懶，是以前的防曬真的很難搞。</p>
+
+    <div class="hw-ss-pain">
+      <div class="hw-ss-pain-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 5.4 5 9a5 5 0 01-10 0c0-3.6 5-9 5-9z"/><path d="M9.5 13.5c.4 1 1.4 1.7 2.5 1.7"/></svg>
+        <div><b>黏、厚、悶</b><p>一出門就一層油膜，脫妝比上妝快。</p></div>
+      </div>
+      <div class="hw-ss-pain-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 12.4V6.2a1.6 1.6 0 013.2 0v5M12 11.2V4.8a1.6 1.6 0 013.2 0v6.4M15.2 11.4a1.6 1.6 0 013.2 0V15a6 6 0 01-6 6h-.6a6 6 0 01-6-6v-2.6a1.6 1.6 0 013.2 0"/></svg>
+        <div><b>補防曬要弄髒手</b><p>妝也毀了、手也黏了，乾脆不補。</p></div>
+      </div>
+      <div class="hw-ss-pain-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 15.2h6"/><path d="M9.2 9.8h.02M14.8 9.8h.02"/></svg>
+        <div><b>擦完臉色死白</b><p>白到不自然，還得再蓋一層底妝。</p></div>
+      </div>
+    </div>
+
+    <p class="hw-ss-answer">所以我們把它做成一支<em>推開就好</em>的棒狀防曬<br>擋紫外線、順手修飾膚色、同時養著肌膚</p>
+  </section>
+
+  <!-- ══════════ 3. UV 時光機 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">UV Timeline</p>
+    <h2 class="hw-ss-h2">拉一下，看看<em>你的一天曬多少</em></h2>
+    <p class="hw-ss-lead">台灣夏季典型的紫外線強度變化。拖曳滑桿，看看什麼時候該補防曬。</p>
+
+    <div class="hw-ss-uv">
+      <div class="hw-ss-uv-sky" data-uv-sky>
+        <span class="hw-ss-uv-orb" data-uv-orb aria-hidden="true"></span>
+        <div class="hw-ss-uv-head">
+          <div>
+            <div class="hw-ss-uv-time" data-uv-time>12:00</div>
+            <p style="margin:4px 0 0;font-size:13px;color:#2A5D70;" data-uv-scene>正中午，紫外線直射</p>
+          </div>
+          <div class="hw-ss-uv-badge">
+            <span class="hw-ss-uv-dot" data-uv-dot></span>
+            <span data-uv-level>危險級</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-ss-uv-body">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+          <span style="font-size:13px;color:#4A6B78;">紫外線指數 UVI</span>
+          <span class="hw-ss-uv-val" data-uv-val>11</span>
+        </div>
+        <div class="hw-ss-uv-meter">
+          <div class="hw-ss-uv-fill" data-uv-fill style="width:92%"></div>
+        </div>
+        <div class="hw-ss-uv-scale"><span>0</span><span>3</span><span>6</span><span>8</span><span>11+</span></div>
+
+        <div class="hw-ss-uv-tip">
+          <b data-uv-tip-title>務必補擦</b>
+          <span data-uv-tip-text>皮膚曬紅只要 15 分鐘。出門前擦一次，中午前後再補一次，是最省事的做法。</span>
+        </div>
+
+        <div class="hw-ss-uv-ctrl">
+          <label for="hw-ss-uv-range">拖曳查看一天的紫外線變化（06:00 – 18:00）</label>
+          <input class="hw-ss-uv-range" id="hw-ss-uv-range" type="range" min="6" max="18" step="1" value="12"
+                 aria-describedby="hw-ss-uv-desc">
+        </div>
+        <p class="hw-ss-note" id="hw-ss-uv-desc">＊ 數值為台灣夏季晴天的典型參考值，實際請以中央氣象署即時發布為準。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 4. 三效合一 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">3 in 1 Formula</p>
+    <h2 class="hw-ss-h2">一支，做完<em>三件事</em></h2>
+    <p class="hw-ss-lead">點選下方切換，看看每一項各自負責什麼。</p>
+
+    <div class="hw-ss-tabs">
+      <input type="radio" name="hw-ss-tab" id="hw-ss-t1" checked>
+      <input type="radio" name="hw-ss-tab" id="hw-ss-t2">
+      <input type="radio" name="hw-ss-tab" id="hw-ss-t3">
+
+      <div class="hw-ss-tablist">
+        <label for="hw-ss-t1">防曬</label>
+        <label for="hw-ss-t2">潤色</label>
+        <label for="hw-ss-t3">保養</label>
+      </div>
+
+      <div class="hw-ss-panel" id="hw-ss-p1">
+        <div class="hw-ss-panel-img"><img src="./assets/product_solo.jpg" alt="防曬棒在陽光光影中的單品照" loading="lazy"></div>
+        <div class="hw-ss-panel-txt">
+          <h3>SPF50<sup>+</sup> ★★★★ 廣效防護</h3>
+          <p>抵禦 UVA / UVB 雙重紫外線，達到高效防曬基準。防水抗汗配方，海邊、球場、通勤都撐得住。</p>
+          <div class="hw-ss-chips">
+            <span class="hw-ss-chip">Broad Spectrum</span>
+            <span class="hw-ss-chip">Water Resistant</span>
+            <span class="hw-ss-chip">免沾手補擦</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-ss-panel" id="hw-ss-p2">
+        <div class="hw-ss-panel-img"><img src="./assets/product_flat.jpg" alt="防曬棒平拍，旁為潤色膏體質地與腮紅粉" loading="lazy"></div>
+        <div class="hw-ss-panel-txt">
+          <h3>自帶潤色，直接當底妝</h3>
+          <p>膏體帶自然潤色，推開後修飾暗沉與不勻，做出「偽素顏」的乾淨膚感。趕時間的早上，這一支就夠了。</p>
+          <div class="hw-ss-chips">
+            <span class="hw-ss-chip">勻亮膚色</span>
+            <span class="hw-ss-chip">柔焦毛孔</span>
+            <span class="hw-ss-chip">補防曬不毀妝</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hw-ss-panel" id="hw-ss-p3">
+        <div class="hw-ss-panel-img"><img src="./assets/product_detail.jpg" alt="防曬棒棒身細節照" loading="lazy"></div>
+        <div class="hw-ss-panel-txt">
+          <h3>擦防曬的同時，也在保養</h3>
+          <p>添加專利植萃美白勻亮因子與保濕成分，一整天維持舒適膚感，不緊繃、不乾裂。</p>
+          <div class="hw-ss-chips">
+            <span class="hw-ss-chip">專利植萃</span>
+            <span class="hw-ss-chip">保濕舒緩</span>
+            <span class="hw-ss-chip">不致粉刺</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 5. 成分 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">Protection Formula</p>
+    <h2 class="hw-ss-h2">專利植萃防護<em>三效合一配方</em></h2>
+    <p class="hw-ss-lead">點開每一格，看看它們在做什麼。</p>
+
+    <div class="hw-ss-ing">
+      <details>
+        <summary>
+          <span class="hw-ss-ing-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span>
+          <b>專利植萃<br>美白勻亮因子</b>
+          <i>Brightening Factor</i>
+          <span class="hw-ss-ing-more">看說明 ＋</span>
+        </summary>
+        <p class="hw-ss-ing-txt">萃取棉花糖根、米糠與甘草根，能有效改善暗沉並勻亮膚色，並提升肌膚防禦力與透亮感。</p>
+      </details>
+
+      <details>
+        <summary>
+          <span class="hw-ss-ing-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 4 5.5 6.5 5.5 9.5A5.5 5.5 0 016.5 12.5C6.5 9.5 8.5 7 12 3z"/></svg></span>
+          <b>天然發酵<br>紅沒藥醇</b>
+          <i>Bisabolol</i>
+          <span class="hw-ss-ing-more">看說明 ＋</span>
+        </summary>
+        <p class="hw-ss-ing-txt">高純度植萃發酵成分，具優異舒緩與潤澤效果，可提升肌膚穩定度，打造健康溫和的護膚體驗。</p>
+      </details>
+
+      <details>
+        <summary>
+          <span class="hw-ss-ing-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15c4-1 6-3 8-7 2 4 4 6 8 7"/><path d="M4 19h16"/></svg></span>
+          <b>超進化<br>控油因子</b>
+          <i>Oil-Control</i>
+          <span class="hw-ss-ing-more">看說明 ＋</span>
+        </summary>
+        <p class="hw-ss-ing-txt">運用特殊塗覆技術吸收多餘油脂，產生柔焦肌膚紋理效果，長時間妝感清爽不易泛油光。</p>
+      </details>
+
+      <details>
+        <summary>
+          <span class="hw-ss-ing-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9"/><path d="M12 12c-3 0-5-2-5-5 3 0 5 2 5 5zM12 12c3 0 5-2 5-5-3 0-5 2-5 5z"/></svg></span>
+          <b>澳洲天然<br>茶樹精油</b>
+          <i>Tea Tree Oil</i>
+          <span class="hw-ss-ing-more">看說明 ＋</span>
+        </summary>
+        <p class="hw-ss-ing-txt">100% 純天然萃取，富含活性成分 Terpinen-4-ol，能平衡油脂分泌淨化毛孔並舒緩乾燥。</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ══════════ 6. 對比表 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">Comparison</p>
+    <h2 class="hw-ss-h2">和一般防曬棒，<em>差在哪裡</em></h2>
+
+    <p class="hw-ss-lead">同樣是防曬棒，差別在防曬之後還剩下什麼。</p>
+
+    <table class="hw-ss-table">
+      <thead>
+        <tr><th scope="col"><span class="hw-ss-sr">項目</span></th><th scope="col">一般防曬棒</th><th scope="col">爆白潤色防曬棒</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">防曬效果</th><td>基礎防曬</td>
+          <td><span class="hw-ss-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14l-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z"/></svg><span><b>高效防曬</b><span>SPF50<sup>+</sup> ★★★★</span></span></span></td>
+        </tr>
+        <tr>
+          <th scope="row">潤色效果</th><td>無色，多數以透明為主</td>
+          <td><span class="hw-ss-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14l-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z"/></svg><span><b>潤色底妝</b><span>自帶潤色，可作為日常底妝</span></span></span></td>
+        </tr>
+        <tr>
+          <th scope="row">便利性</th><td>免沾手，方便補防曬</td>
+          <td><span class="hw-ss-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14l-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z"/></svg><span><b>免沾手設計</b><span>補防曬同時兼顧妝感</span></span></span></td>
+        </tr>
+        <tr>
+          <th scope="row">使用體驗</th><td>—</td>
+          <td><span class="hw-ss-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14l-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z"/></svg><span><b>控油不黏膩</b><span>不致粉刺配方</span></span></span></td>
+        </tr>
+        <tr>
+          <th scope="row">保養成分</th><td>—</td>
+          <td><span class="hw-ss-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14l-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z"/></svg><span><b>亮白保養</b><span>添加專利植萃美白成分</span></span></span></td>
+        </tr>
+        <tr>
+          <th scope="row">附屬設計</th><td>—</td>
+          <td><span class="hw-ss-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14l-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z"/></svg><span><b>自帶化妝海綿</b><span>推開後隨手勻開</span></span></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══════════ 7. 使用步驟 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">How to use</p>
+    <h2 class="hw-ss-h2">三步驟，<em>十秒完成</em></h2>
+
+    <div class="hw-ss-steps">
+      <div class="hw-ss-step">
+        <span class="hw-ss-step-n">1</span>
+        <div><b>旋出膏體</b><p>保養完成後，於臉部乾爽狀態下旋出適量膏體。</p></div>
+      </div>
+      <div class="hw-ss-step">
+        <span class="hw-ss-step-n">2</span>
+        <div><b>直接推塗</b><p>沿額頭、雙頰、鼻樑、下巴輕輕推開，全程不沾手。</p></div>
+      </div>
+      <div class="hw-ss-step">
+        <span class="hw-ss-step-n">3</span>
+        <div><b>海綿勻開</b><p>用隨附化妝海綿按壓推勻，讓潤色更服貼自然。</p></div>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:14px;margin-top:14px;align-items:center;" class="hw-ss-openbox">
+      <img src="./assets/product_open.jpg" alt="防曬棒旋開後露出膏體，旁為隨附化妝海綿" loading="lazy" style="border-radius:18px;">
+      <p class="hw-ss-note" style="font-size:13.5px;">外出補防曬時直接推塗於妝面上，再以海綿輕壓即可，不會把妝推花。建議每 2–3 小時、或大量流汗、擦拭後補擦一次。</p>
+    </div>
+  </section>
+
+  <!-- ══════════ 8. 情境 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">Daily scenes</p>
+    <h2 class="hw-ss-h2">放包包裡，<em>整個夏天都安心</em></h2>
+    <p class="hw-ss-lead">「新的日常，從防曬開始。」適合日常外出、通勤、旅行使用。</p>
+
+    <figure class="hw-ss-scene-hero">
+      <img src="./assets/model_1.jpg" alt="女性手持 HEIWEI 爆白潤色防曬棒的日常情境照" loading="lazy">
+    </figure>
+
+    <div class="hw-ss-scene3">
+      <div class="hw-ss-scene-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 7V5.5A1.5 1.5 0 0110.5 4h3A1.5 1.5 0 0115 5.5V7"/></svg>
+        <b>通勤上班</b><span>出門前十秒<br>不用等吸收</span>
+      </div>
+      <div class="hw-ss-scene-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="3.4"/><path d="M12 2.4v1.6M12 14v1.6M5.6 9H4M20 9h-1.6M7.4 4.4L6.3 3.3M17.7 3.3l-1.1 1.1"/><path d="M3 20h18"/></svg>
+        <b>戶外活動</b><span>流汗擦拭後<br>隨手就補</span>
+      </div>
+      <div class="hw-ss-scene-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3.2a1.5 1.5 0 013 0V9l7.5 4.4v2.2L13.5 13v4.7l2.5 1.8v1.7L12 20l-4 1.2v-1.7l2.5-1.8V13L3 15.6v-2.2L10.5 9z"/></svg>
+        <b>出國旅行</b><span>固體不受<br>液體限制</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 9. 規格 ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">Specification</p>
+    <h2 class="hw-ss-h2">商品資訊</h2>
+
+    <div class="hw-ss-spec">
+      <dl>
+        <dt>品名</dt><dd>HEIWEI 爆白潤色防曬棒（Bright Tone-Up Sunscreen Stick）</dd>
+        <dt>容量</dt><dd>NET 15g / 0.53oz</dd>
+        <dt>防曬係數</dt><dd>SPF50<sup>+</sup> ★★★★（廣效防護 Broad Spectrum）</dd>
+        <dt>質地</dt><dd>棒狀膏體，自帶潤色，防水抗汗、不黏膩</dd>
+        <dt>適用</dt><dd>各種膚質，日常外出、通勤、旅行、戶外活動</dd>
+        <dt>附屬</dt><dd>隨貨附化妝海綿</dd>
+      </dl>
+    </div>
+
+    <div class="hw-ss-notice">
+      <b>使用注意事項</b>
+      <ul>
+        <li>請避開眼周與傷口、濕疹等異常部位使用。</li>
+        <li>初次使用建議先於手臂內側試用，確認無不適再用於臉部。</li>
+        <li>使用後如有紅、腫、癢等不適情形，請立即停用並諮詢皮膚科醫師。</li>
+        <li>請放置於陰涼處，避免高溫、陽光直射；並置於孩童無法取得處。</li>
+        <li>本產品為化粧品，非藥品，不具療效。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════ 10. FAQ ══════════ -->
+  <section class="hw-ss-sec hw-ss-rv">
+    <p class="hw-ss-eyebrow">FAQ</p>
+    <h2 class="hw-ss-h2">常見問題</h2>
+
+    <div class="hw-ss-faq">
+      <details>
+        <summary>會不會很油、很悶？</summary>
+        <p>配方加入超進化控油因子，會吸附多餘油脂並做出柔焦效果，推開後是乾爽的膚感，不會有厚重油膜。</p>
+      </details>
+      <details>
+        <summary>潤色會不會太白或有色差？</summary>
+        <p>膏體是自然潤色，推開後會與膚色融合，做的是「勻亮」而不是「刷白」，不會有死白感。</p>
+      </details>
+      <details>
+        <summary>化妝之後可以直接補嗎？</summary>
+        <p>可以。直接推塗於妝面，再用隨附海綿輕壓推勻即可，不需卸妝重上。</p>
+      </details>
+      <details>
+        <summary>多久要補一次？</summary>
+        <p>建議每 2–3 小時補擦一次；長時間待在戶外、大量流汗或用毛巾擦拭後，請立即補擦。</p>
+      </details>
+      <details>
+        <summary>敏弱肌可以用嗎？</summary>
+        <p>採不致粉刺配方，並添加紅沒藥醇與茶樹精油幫助舒緩。仍建議初次使用前先於手臂內側試用。</p>
+      </details>
+      <details>
+        <summary>身體也可以擦嗎？</summary>
+        <p>可以。頸部、手背、肩線等容易曬到的部位都適用，棒狀設計補擦特別方便。</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ══════════ 11. CTA ══════════ -->
+  <section class="hw-ss-cta hw-ss-rv">
+    <span class="hw-ss-sun" aria-hidden="true" style="top:-90px;left:-60px;right:auto;"></span>
+    <div style="position:relative;z-index:2;">
+      <h2>今年夏天，把防曬變成一件<br>不用下決心的事</h2>
+      <p>SPF50<sup>+</sup> ★★★★｜防曬 × 底妝 × 保養｜NET 15g</p>
+      <a class="hw-ss-btn" href="#" aria-label="回到頁面上方選購爆白潤色防曬棒">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h-2l-1 2h2l2.6 7.6-1 1.8c-.6 1 .2 2.6 1.4 2.6h10v-2H9.4l1-2h7.4c.7 0 1.3-.4 1.6-1l3-6H6.2zM9 20a1.6 1.6 0 100 3.2A1.6 1.6 0 009 20zm9 0a1.6 1.6 0 100 3.2A1.6 1.6 0 0018 20z"/></svg>
+        立即選購
+      </a>
+      <p class="hw-ss-cta-sub">HEIWEI · Bright Tone-Up Sunscreen Stick</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var root = document.querySelector('.hw-ss');
+  if (!root) return;
+  root.classList.add('hw-ss-js');
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── 捲動進場 ── */
+  var items = root.querySelectorAll('.hw-ss-rv');
+  if (!('IntersectionObserver' in window) || reduce) {
+    for (var i = 0; i < items.length; i++) items[i].classList.add('is-in');
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+    for (var j = 0; j < items.length; j++) io.observe(items[j]);
+  }
+
+  /* ── UV 時光機 ── */
+  var range = root.querySelector('#hw-ss-uv-range');
+  if (!range) return;
+
+  var sky   = root.querySelector('[data-uv-sky]');
+  var orb   = root.querySelector('[data-uv-orb]');
+  var elT   = root.querySelector('[data-uv-time]');
+  var elS   = root.querySelector('[data-uv-scene]');
+  var elLv  = root.querySelector('[data-uv-level]');
+  var elDot = root.querySelector('[data-uv-dot]');
+  var elVal = root.querySelector('[data-uv-val]');
+  var elFil = root.querySelector('[data-uv-fill]');
+  var elTt  = root.querySelector('[data-uv-tip-title]');
+  var elTx  = root.querySelector('[data-uv-tip-text]');
+  var tipBox = root.querySelector('.hw-ss-uv-tip');
+  if (tipBox) tipBox.setAttribute('aria-live', 'polite');
+
+  /* 台灣夏季晴天典型 UVI（06:00 – 18:00） */
+  var UVI   = [1, 2, 4, 6, 8, 10, 11, 11, 10, 8, 5, 3, 1];
+  var SCENE = [
+    '天剛亮，紫外線還很溫和',
+    '通勤出門，UV 開始爬升',
+    '早晨外出，該擦第一次了',
+    '上午外勤，紫外線明顯變強',
+    '接近正午，防曬進入戰鬥狀態',
+    '午餐時段，曬得最兇的前奏',
+    '正中午，紫外線直射',
+    '下午一點，強度仍在高峰',
+    '午後外出，別以為過中午就沒事',
+    '下午茶時間，UV 還沒退場',
+    '接近傍晚，強度開始下降',
+    '夕陽時分，仍有殘餘紫外線',
+    '天色轉暗，一天的防曬結束'
+  ];
+
+  var SKY = {
+    dawn:  'linear-gradient(170deg,#F3C79C,#F8DDC2 55%,#EAF0F3)',
+    morn:  'linear-gradient(170deg,#8FCDE8,#CDE9F5 60%,#F7E9DC)',
+    noon:  'linear-gradient(170deg,#3E9FD4,#93D4EC 55%,#DCF0F8)',
+    eve:   'linear-gradient(170deg,#7FB8D9,#F3D0B4 65%,#F8E3D4)',
+    dusk:  'linear-gradient(170deg,#5B7FA8,#E9A97E 60%,#F6D9C4)'
+  };
+
+  function level(uv) {
+    if (uv <= 2) return {
+      name: '低量級', color: '#3E9349',
+      title: '這時候最舒服',
+      text: '紫外線偏弱，但只要出門就建議先擦一層，養成習慣比補救容易。'
+    };
+    if (uv <= 5) return {
+      name: '中量級', color: '#C98A00',
+      title: '出門前擦一次',
+      text: '通勤、走路買午餐這種零碎曝曬最容易被忽略，一支放包包就能隨時補。'
+    };
+    if (uv <= 7) return {
+      name: '高量級', color: '#D96B12',
+      title: '兩小時補一次',
+      text: '紫外線已足以造成曬黑與曬傷累積，建議每 2–3 小時補擦一次。'
+    };
+    if (uv <= 10) return {
+      name: '過量級', color: '#C6382E',
+      title: '務必補擦',
+      text: '皮膚曬紅只要 20 分鐘左右。棒狀設計可直接推在妝上，補防曬不用毀妝。'
+    };
+    return {
+      name: '危險級', color: '#8E44AD',
+      title: '盡量避開直曬',
+      text: '皮膚曬紅只要 15 分鐘。出門前擦一次，中午前後再補一次，是最省事的做法。'
+    };
+  }
+
+  function skyFor(h) {
+    if (h <= 7) return SKY.dawn;
+    if (h <= 9) return SKY.morn;
+    if (h <= 15) return SKY.noon;
+    if (h <= 17) return SKY.eve;
+    return SKY.dusk;
+  }
+
+  function render() {
+    var h = parseInt(range.value, 10);
+    var idx = h - 6;
+    var uv = UVI[idx];
+    var lv = level(uv);
+
+    elT.textContent  = (h < 10 ? '0' + h : h) + ':00';
+    elS.textContent  = SCENE[idx];
+    elLv.textContent = lv.name;
+    elVal.textContent = uv;
+    elDot.style.background = lv.color;
+    elFil.style.width = Math.round(uv / 12 * 100) + '%';
+    elFil.style.background = lv.color;
+    elTt.textContent = lv.title;
+    elTx.textContent = lv.text;
+    sky.style.background = skyFor(h);
+
+    var p = (h - 6) / 12;
+    orb.style.left = (4 + p * 84) + '%';
+    orb.style.top  = (12 + 58 * Math.pow((h - 12) / 6, 2)) + 'px';
+    orb.style.opacity = (h <= 6 || h >= 18) ? '0.45' : '1';
+
+    range.setAttribute('aria-valuetext', h + ' 點，紫外線指數 ' + uv + '，' + lv.name);
+  }
+
+  /* ── CTA：捲回頁面上方的購買區 ── */
+  var cta = root.querySelector('.hw-ss-btn');
+  if (cta) {
+    cta.addEventListener('click', function (e) {
+      if (cta.getAttribute('href') !== '#') return;
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  }
+
+  range.addEventListener('input', render);
+  range.addEventListener('change', render);
+  render();
+})();
+</script>
+</body></html>

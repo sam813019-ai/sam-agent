@@ -1,0 +1,10 @@
+# 把每一行 = 後面填上該圖在 Shopline 圖庫的網址，然後跑：bash make_shopline.sh
+# 網址取得方式：Shopline 後台 → 商品 → 描述 → 插入圖片 → 上傳 assets/ 裡的圖 → 複製圖片網址
+# 尚未填的行留空即可，工具會告訴你還缺哪幾張。
+
+hero_stick.jpg=
+product_solo.jpg=
+product_flat.jpg=
+product_detail.jpg=
+product_open.jpg=
+model_1.jpg=

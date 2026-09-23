@@ -1,0 +1,324 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="theme_common.css">
+<style>html,body{overflow-x:hidden}body{margin:0;background:#fff}
+.CustomPage{overflow:hidden;max-width:1200px;margin:0 auto;padding:0 15px}
+.hdr{background:#fff;padding:20px;text-align:center;letter-spacing:.3em;border-bottom:1px solid #eee}</style>
+</head><body><div class="hdr">HEIWEI</div><div class="CustomPage"><style>
+/* ⚠️ Shopline 的 .CustomPage 有 overflow:hidden，會裁掉滿版底色 */
+.CustomPage{overflow:visible !important;}
+
+.hw-faq{
+  --f-bg1:#C0A3B5;   /* 取自原圖上緣 */
+  --f-bg2:#CDB5C3;   /* 取自原圖下緣 */
+  --f-card:#FFFFFD;  /* 答案卡片底，取自原圖 */
+  --f-ink:#4A3542;   /* 主文：深紫墨（原圖用白字，在此底色上只有 1.9:1，讀不清楚）*/
+  --f-soft:#6B5B64;  /* 次要文字 */
+  --f-key:#AE5069;   /* 重點色，用店內 --blush-deep */
+  --f-line:rgba(74,53,66,.14);
+
+  width:100vw;margin-left:calc(50% - 50vw);
+  background:linear-gradient(180deg,var(--f-bg1) 0%,var(--f-bg2) 38%,var(--f-bg2) 100%);
+  padding:clamp(48px,7vw,86px) 0 clamp(56px,8vw,96px);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  color:var(--f-ink);-webkit-font-smoothing:antialiased;
+}
+.hw-faq *{box-sizing:border-box}
+.hw-faq-in{max-width:760px;margin:0 auto;padding:0 20px}
+
+.hw-faq-h{text-align:center;margin:0 0 clamp(32px,5vw,52px)}
+.hw-faq-h h2{
+  font-family:"Noto Serif TC",serif;font-weight:500;
+  font-size:clamp(26px,5vw,36px);letter-spacing:.22em;text-indent:.22em;
+  margin:0;color:#3A2833;   /* 白字在此紫底只有 2.30:1，改深紫墨 5.97:1 */
+}
+.hw-faq-h p{
+  margin:12px 0 0;font-size:clamp(11px,2.4vw,13px);
+  letter-spacing:.2em;color:rgba(58,40,51,.72);
+}
+
+.hw-faq-item{
+  background:var(--f-card);border-radius:14px;
+  margin-bottom:12px;overflow:hidden;
+  box-shadow:0 2px 10px rgba(74,53,66,.10);
+}
+.hw-faq-sum{
+  cursor:pointer;user-select:none;
+  display:flex;align-items:flex-start;gap:12px;
+  padding:17px 18px;
+  font-size:clamp(14.5px,2.9vw,16px);line-height:1.65;font-weight:500;
+  color:var(--f-ink);
+}
+
+.hw-faq-sum:focus-visible{outline:2px solid var(--f-key);outline-offset:-3px}
+.hw-faq-no{
+  flex:0 0 auto;font-weight:600;letter-spacing:.04em;color:var(--f-key);
+  font-variant-numeric:tabular-nums;
+}
+.hw-faq-q{flex:1 1 auto}
+/* 開合圖示：一條橫線 + 一條直線，開啟時直線消失變成減號 */
+.hw-faq-ic{
+  flex:0 0 16px;width:16px;height:16px;margin-top:5px;position:relative;
+}
+.hw-faq-ic::before,.hw-faq-ic::after{
+  content:"";position:absolute;left:50%;top:50%;background:var(--f-key);
+  transform:translate(-50%,-50%);transition:transform .28s ease,opacity .28s ease;
+}
+.hw-faq-ic::before{width:14px;height:1.6px}
+.hw-faq-ic::after{width:1.6px;height:14px}
+.hw-faq-item.is-open .hw-faq-ic::after{transform:translate(-50%,-50%) rotate(90deg);opacity:0}
+
+/* 沒有 JS 的話全部維持展開（保底），JS 就緒後才收合 —— 這樣萬一腳本被擋，
+   使用者至少看得到全部內容，而不是一片空白。 */
+.hw-faq-a{display:grid;grid-template-rows:1fr;transition:grid-template-rows .32s ease}
+.hw-faq.js-ready .hw-faq-a{grid-template-rows:0fr}
+.hw-faq.js-ready .hw-faq-item.is-open .hw-faq-a{grid-template-rows:1fr}
+/* min-height:0 一定要加：grid 項目預設 min-height:auto，會讓 0fr 收不到 0
+   （實測會卡在 18px = 下內距 + 框線）。 */
+.hw-faq-a-in{min-height:0;overflow:hidden;padding:0 18px 20px;border-top:1px solid var(--f-line);
+  transition:padding-bottom .32s ease}
+/* 只加 min-height:0 還不夠：grid 列的最小尺寸仍會算進內距與框線（實測卡在 18px）。
+   收合時要把下內距與框線一起歸零，列才會真的收到 0。 */
+.hw-faq.js-ready .hw-faq-item:not(.is-open) .hw-faq-a-in{padding-bottom:0;border-top-color:transparent}
+.hw-faq-a-in p{
+  margin:14px 0 0;font-size:clamp(13.5px,2.7vw,14.5px);line-height:2;
+  color:var(--f-soft);font-weight:300;
+}
+.hw-faq-a-in p b{color:var(--f-key);font-weight:500}
+.hw-faq-a-in p sup{font-size:.7em;vertical-align:super}
+.hw-faq-note{
+  font-size:clamp(11.5px,2.3vw,12.5px)!important;line-height:1.9!important;
+  color:#7A6A73!important;margin-top:14px!important;
+  padding-top:12px;border-top:1px dashed var(--f-line);
+}
+@keyframes hw-faq-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .hw-faq-a{transition:none}
+  .hw-faq-ic::before,.hw-faq-ic::after{transition:none}
+}
+@media(max-width:520px){
+  .hw-faq-sum{padding:15px 15px;gap:9px}
+  .hw-faq-a-in{padding:0 15px 17px}
+}
+</style>
+
+<div class="hw-faq">
+  <div class="hw-faq-in">
+    <div class="hw-faq-h">
+      <h2>常見問答</h2>
+      <p>FREQUENTLY ASKED QUESTIONS</p>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q1</span>
+        <span class="hw-faq-q">覺得擦起來有點偏乾？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>爆白潤色防曬棒本身走的是清爽、控油、服貼路線，不是油潤型的防曬棒喔！</p>
+        <p>如果本身是乾肌，或當天肌膚比較缺水，建議就跟平常上底妝一樣，先把保濕做好。洗臉後可以依序使用：</p>
+        <p><b>B群噴霧 → 精華液 → 乳液 → 防曬棒</b></p>
+        <p>肌膚底子水潤，後面的妝感也會更漂亮、更服貼。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q2</span>
+        <span class="hw-faq-q">需要卸妝嗎？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>需要喔！爆白潤色防曬棒<b>除了防曬之外還有潤色底妝效果</b>，建議使用卸妝產品完整卸除再正常洗臉，肌膚清潔乾淨就可以囉！</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q3</span>
+        <span class="hw-faq-q">防曬棒是擦臉還是身體？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>這支主要是設計給臉部使用的，可以把它想成有<b>高效防曬力的潤色底妝</b>。</p>
+        <p class="hw-faq-note">※ 如果是手腳、身體大面積防曬，會更推薦使用爆白防曬噴霧，使用速度更快、更方便。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q4</span>
+        <span class="hw-faq-q">用了防曬棒，還需要上粉底嗎？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>日常妝感可以不用！爆白潤色防曬棒本身就有潤色、修飾膚色的效果，所以<b>一支就可以完成防曬和日常底妝</b>。</p>
+        <p class="hw-faq-note">※ 如果今天要比較完整或遮瑕度更高的妝容，也可以再依自己的需求搭配粉底或遮瑕。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q5</span>
+        <span class="hw-faq-q">使用防曬棒前還需要擦妝前乳嗎？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>一般日常使用不一定需要。洗臉、完成基礎保養後，就可以直接使用爆白潤色防曬棒。</p>
+        <p class="hw-faq-note">※ 如果平常有特別的妝前需求，例如局部保濕或修飾毛孔，也可依上妝習慣搭配。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q6</span>
+        <span class="hw-faq-q">擦完防曬棒還要上蜜粉嗎？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>可以不上，看個人妝感習慣。</p>
+        <p>爆白本身就是<b>偏清爽、控油的妝感</b>，加上防曬棒另一面還有補妝海綿，<b>外出補妝、補防曬不用沾手</b>。</p>
+        <p class="hw-faq-note">※ 如果本身非常容易出油，也可以在容易出油的位置少量定妝就好。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q7</span>
+        <span class="hw-faq-q">一支防曬棒可以用多久？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>會依每個人的使用量、補擦次數和使用範圍不同而有差異。</p>
+        <p>如果每天早上臉部使用一次，<b>大約可以使用一個月左右</b>；如果一天補擦多次，使用速度就會比較快喔！</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q8</span>
+        <span class="hw-faq-q">只有一個色號嗎？會不會太白或太黑？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>目前是一個色號。爆白不是厚重粉底或很強烈的死白感，而是以不同色調粉體搭配，呈現<b>自然的潤色效果</b>。</p>
+        <p>喜歡自然妝感可以薄擦一層；想讓修飾感更明顯，可以少量分次疊擦。</p>
+        <p class="hw-faq-note">※ 實際呈現還是會依每個人的原生膚色有所不同。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q9</span>
+        <span class="hw-faq-q">男生也可以使用嗎？擦起來會不會有明顯妝感？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>可以！如果只是想讓膚色看起來比較均勻、氣色更好，<b>建議薄薄上一層就好</b>，妝感會比較自然，不需要像粉底一樣上得很厚。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q10</span>
+        <span class="hw-faq-q">會黏膩嗎？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>爆白潤色防曬棒是特別針對台灣悶熱氣候設計的清爽控油膚感，<b>不是一般偏油、偏蠟感的防曬棒</b>。</p>
+        <p>擦完甚至可以不用再用蜜粉定妝，喜歡乾爽底妝的人會很有感！</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q11</span>
+        <span class="hw-faq-q">一直補擦，妝感會不會越來越厚？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>建議補擦時不要一次來回塗很多層，可以<b>少量補擦、海綿輕拍均勻</b>，妝感會比較自然。</p>
+        <p>如果臉上已經有很多汗或油脂，可以先用面紙輕壓，再補防曬，會更漂亮也更服貼。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q12</span>
+        <span class="hw-faq-q">它是防曬還是粉底？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>兩個都是！這也是爆白跟一般防曬棒最大的不同。</p>
+        <p>它本身有 <b>SPF50<sup>+</sup> ★★★★</b> 的防曬效果，同時加入潤色粉體，可以修飾膚色，</p>
+        <p>所以日常出門不用再「防曬一層 ＋ 粉底一層」，一支就能完成。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q13</span>
+        <span class="hw-faq-q">跟爆白防曬噴霧有什麼不同？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p><b>臉用防曬棒、身體用防曬噴霧會最方便。</b></p>
+        <p>防曬棒多了潤色底妝效果，適合臉部快速上妝、補妝；爆白防曬噴霧則更適合手腳、身體等大面積使用。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q14</span>
+        <span class="hw-faq-q">為什麼防曬棒要做控油？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>因為它是設計給臉部 ＋ 底妝使用的！尤其台灣天氣又熱又濕，如果防曬本身太油，再疊上底妝就很容易覺得厚重。</p>
+        <p>所以我們反而希望它擦完是清爽、服貼、有妝感但沒有負擔感。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q15</span>
+        <span class="hw-faq-q">運動流汗可以用嗎？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>很適合外出、運動前使用，而且棒狀設計放包包很方便，流汗後也比較好補擦。</p>
+        <p>建議大量流汗後先把汗水輕輕按乾，再重新補擦防曬，防護會比較完整。</p>
+      </div></div>
+    </div>
+    <div class="hw-faq-item">
+      <div class="hw-faq-sum" role="button" tabindex="0" aria-expanded="false">
+        <span class="hw-faq-no">Q16</span>
+        <span class="hw-faq-q">可以直接拿防曬棒在臉上來回擦嗎？</span>
+        <span class="hw-faq-ic" aria-hidden="true"></span>
+      </div>
+      <div class="hw-faq-a"><div class="hw-faq-a-in">
+        <p>可以，<b>建議分區均勻塗抹</b>，再使用另一面的海綿輕拍，把邊界和粉體拍均勻，妝感會比一直來回摩擦更自然。</p>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<script type="text/plain">
+(function(){
+  var root = document.querySelector(".hw-faq");
+  if (!root) return;
+  root.classList.add("js-ready");          // 腳本活著才收合，被擋掉就維持全展開
+  var items = root.querySelectorAll(".hw-faq-item");
+  function toggle(it){
+    var open = it.classList.contains("is-open");
+    for (var i = 0; i < items.length; i++){    // 同時只開一題
+      items[i].classList.remove("is-open");
+      var s = items[i].querySelector(".hw-faq-sum");
+      if (s) s.setAttribute("aria-expanded", "false");
+    }
+    if (!open){
+      it.classList.add("is-open");
+      var s2 = it.querySelector(".hw-faq-sum");
+      if (s2) s2.setAttribute("aria-expanded", "true");
+    }
+  }
+  for (var i = 0; i < items.length; i++){
+    (function(it){
+      var sum = it.querySelector(".hw-faq-sum");
+      if (!sum) return;
+      sum.addEventListener("click", function(){ toggle(it); });
+      sum.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(it); }
+      });
+    })(items[i]);
+  }
+  console.log("[hw-faq] 已啟用，共 " + items.length + " 題");
+})();
+</script>
+</div></body></html>

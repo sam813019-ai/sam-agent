@@ -1,0 +1,73 @@
+<!-- ═══ Shopline 客製化語法元件｜能力探針（測完就刪，不要留在正式頁）═══
+     貼進「客製化語法」元件 → 儲存 → 看預覽畫面上的四張卡各自寫什麼。
+     所有結果都用寫死色碼呈現，不依賴任何會被過濾的東西。 ═══ -->
+<style>
+  .probe{font-family:'Noto Sans TC','PingFang TC',sans-serif;max-width:760px;margin:0 auto;padding:20px 16px;color:#1F2220;}
+  .probe h3{margin:0 0 14px;font-size:18px;font-weight:700;}
+  .probe .card{border:2px solid #1F2220;background:#FFFFFF;padding:14px 16px;margin-bottom:10px;font-size:15px;line-height:1.7;}
+  .probe .t{font-size:11px;font-weight:700;letter-spacing:.16em;color:#8C948F;margin-bottom:4px;}
+  .probe .yes{color:#0B7A3B;font-weight:700;}
+  .probe .no{color:#C0392B;font-weight:700;}
+  .probe code{background:#EDF0EE;padding:1px 5px;font-size:13px;}
+  /* 測試 2：CSS 變數。若變數被過濾，這塊會是白底（fallback 不生效代表變數被砍） */
+  .probe-vars{--probe-color:#0B7A3B;}
+  .probe-vars .swatch{background:var(--probe-color);color:#FFFFFF;padding:10px 12px;font-weight:700;}
+  /* 測試 4：sticky */
+  .probe-scroll{height:240px;overflow-y:auto;border:2px solid #1F2220;background:#FCFCFB;}
+  .probe-sticky{position:sticky;top:0;background:#1F2220;color:#FFFFFF;padding:10px 12px;font-weight:700;}
+  .probe-tall{height:600px;padding:12px;font-size:14px;color:#6B7370;}
+</style>
+
+<div class="probe">
+  <h3>Shopline 客製化語法元件 — 能力探針</h3>
+
+  <div class="card">
+    <div class="t">測試 1／CSS 基本樣式</div>
+    你如果看得到這個<b>黑框白底</b>的方塊，代表 <code>&lt;style&gt;</code> 有生效。
+  </div>
+
+  <div class="card probe-vars">
+    <div class="t">測試 2／CSS 變數（v7 的關鍵）</div>
+    <div class="swatch">這一條是綠底白字 ＝ CSS 變數活著 ✅　／　白底黑字或沒顏色 ＝ 變數被砍 ❌</div>
+  </div>
+
+  <div class="card">
+    <div class="t">測試 3／JavaScript</div>
+    <div id="probe-js"><span class="no">JS 沒有執行 ❌</span>（這行字沒被換掉就代表 script 被擋）</div>
+    <div id="probe-env" style="margin-top:8px;font-size:13px;color:#6B7370;"></div>
+  </div>
+
+  <div class="card">
+    <div class="t">測試 4／position:sticky（產品釘住效果的關鍵）</div>
+    <div class="probe-scroll">
+      <div class="probe-sticky">往下捲，這條黑帶有黏在上面 ＝ sticky 可用 ✅</div>
+      <div class="probe-tall">捲動看看…<br><br>如果黑帶跟著捲走不見了，代表父層有 <code>overflow</code> 把 sticky 破壞掉，v7 的產品釘住效果會失效。</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var el = document.getElementById('probe-js');
+  if (!el) return;
+  el.innerHTML = '<span class="yes">JS 有執行 ✅</span>';
+
+  // 往上找哪一層祖先有 overflow（sticky 的頭號殺手）
+  var node = document.getElementById('probe-js'), killers = [], depth = 0;
+  while (node && node !== document.body && depth < 40) {
+    var cs = getComputedStyle(node);
+    if (cs.overflow !== 'visible' && cs.overflow !== '') {
+      killers.push((node.tagName.toLowerCase()) + (node.id ? '#' + node.id : '') +
+                   (node.className && typeof node.className === 'string' ? '.' + node.className.trim().split(/\s+/).slice(0,2).join('.') : '') +
+                   ' → overflow:' + cs.overflow);
+    }
+    node = node.parentElement; depth++;
+  }
+  var env = document.getElementById('probe-env');
+  env.innerHTML =
+    '視窗寬度：' + window.innerWidth + 'px　／　' +
+    '頁面總高：' + document.documentElement.scrollHeight + 'px<br>' +
+    '祖先層 overflow 狀況：' +
+    (killers.length ? '<br>' + killers.join('<br>') : '乾淨，沒有會破壞 sticky 的容器 ✅');
+})();
+</script>

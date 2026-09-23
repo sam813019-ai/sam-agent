@@ -1,0 +1,166 @@
+<!-- ═══════════════════════════════════════════════════════════
+     HEIWEI 首頁 — 品牌數字 count-up（10 年／14 天／2000 萬）
+     上線版存檔 2026-09-15，來源：Shopline 首頁客製化區塊
+     ═══════════════════════════════════════════════════════════ -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@200;400&display=swap" rel="stylesheet">
+
+<section class="stat-outer-container">
+  <div class="stat-inner-card">
+    <div class="stat-wrapper">
+
+      <div class="stat-box">
+        <div class="stat-number">
+          <span class="count-up" data-target="10" data-prefix=" " data-suffix="年">0</span>
+        </div>
+        <div class="stat-label">專業美容師經驗</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-number">
+          <span class="count-up" data-target="14" data-prefix="" data-suffix="天">0</span>
+        </div>
+        <div class="stat-label">有感實測</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-number">
+          <span class="count-up" data-target="2000" data-suffix="萬">0</span>
+        </div>
+        <div class="stat-label">產品安全責任險</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 最外層留白區 */
+  .stat-outer-container {
+    padding: 60px 40px;
+    background-color: #ffffff;
+  }
+
+  /* 獨立色塊卡片 */
+  .stat-inner-card {
+    background-color: #F3F0ED;
+    padding: 80px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+
+  .stat-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+  }
+
+  .stat-box {
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 5.5rem;
+    font-weight: 400;
+    color: #1a1a1a;
+    line-height: 1;
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+    display: flex;
+    justify-content: center;
+    align-items: baseline; /* 讓數字與單位對齊基線 */
+  }
+
+  /* 單位量詞專屬樣式 */
+  .stat-suffix {
+    font-size: 1.8rem; /* 縮小字體 */
+    font-weight: 200; /* 使用細字體 */
+    margin-left: 5px;
+    color: #4a4a4a; /* 稍微減輕顏色深度，增加層次 */
+  }
+
+  .stat-label {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.55rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #b09c85;
+    line-height: 1.7;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  /* 行動裝置適配 */
+  @media (max-width: 992px) {
+    .stat-outer-container {
+      padding: 40px 20px;
+    }
+    .stat-inner-card {
+      padding: 60px 20px;
+    }
+    .stat-wrapper {
+      flex-direction: column;
+      align-items: center;
+      gap: 60px;
+    }
+    .stat-number {
+      font-size: 4.5rem;
+    }
+    .stat-suffix {
+      font-size: 1.4rem;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const startCountAnimation = (el) => {
+      const target = parseFloat(el.getAttribute('data-target'));
+      const prefix = el.getAttribute('data-prefix') || '';
+      const suffix = el.getAttribute('data-suffix') || '';
+      const duration = 2500;
+      const frameRate = 1000 / 60;
+      const totalFrames = Math.round(duration / frameRate);
+      let currentFrame = 0;
+
+      const easeOutQuart = (t) => 1 - (--t) * t * t * t;
+
+      // 封裝渲染函數，將 suffix 包裹在 span 中
+      const renderValue = (val) => {
+        el.innerHTML = `${prefix}${val}<span class="stat-suffix">${suffix}</span>`;
+      };
+
+      const counter = setInterval(() => {
+        currentFrame++;
+        const progress = easeOutQuart(currentFrame / totalFrames);
+        const currentValue = Math.round(target * progress);
+
+        if (currentValue <= target) {
+          renderValue(currentValue);
+        }
+
+        if (currentFrame === totalFrames) {
+          renderValue(target);
+          clearInterval(counter);
+        }
+      }, frameRate);
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          startCountAnimation(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.count-up').forEach(item => {
+      observer.observe(item);
+    });
+  })();
+</script>

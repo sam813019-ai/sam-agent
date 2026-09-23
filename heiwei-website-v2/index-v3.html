@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>何謂美 HEIWEI｜和你為肌膚之美而生</title>
+<meta name="description" content="何謂美 HEIWEI 黑微美容 — 專業美容師研製，為你的肌膚之美而生。熱銷排行、依肌膚問題選購。">
+<meta name="google-site-verification" content="VlT1xwLi4ZHZjHgzYnRB8_3qVjkXoZ_LZxgbL4B3QeE" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  /* ===================================================================
+     何謂美 v3 — 冷瓷白 × 深炭墨・編輯感精品
+     與 v2 的差異：明暗段落節奏／不對稱排行榜／輪廓大數字／跑馬燈品牌帶
+     =================================================================== */
+  :root{
+    --porcelain:#F7F5F1;     /* 冷瓷白（主底） */
+    --porcelain-2:#EFECE6;   /* 瓷灰（次底） */
+    --charcoal:#1C1A17;      /* 深炭墨（暗段底） */
+    --charcoal-2:#26231F;
+    --ink:#211E1A;           /* 文字主色 */
+    --ink-soft:#57524A;
+    --muted:#98928A;
+    --line:#DED9D0;          /* 亮段髮絲線 */
+    --line-dark:rgba(247,245,241,.14);  /* 暗段髮絲線 */
+    --bronze:#9C8563;        /* 青銅金：僅點綴 */
+    --paper-on-dark:#F2EFE9; /* 暗段上的文字 */
+    --disp:"Marcellus",serif;
+    --serif-tc:"Noto Serif TC",serif;
+    --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);font-weight:300;color:var(--ink);background:var(--porcelain);line-height:1.9;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+  img{display:block;max-width:100%}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 48px}
+  .eyebrow{font-family:var(--disp);font-size:13px;letter-spacing:.5em;text-transform:uppercase;color:var(--bronze)}
+  .sec-title{font-family:var(--serif-tc);font-weight:400;font-size:clamp(2rem,4.4vw,3.2rem);letter-spacing:.16em;line-height:1.35;margin-top:18px}
+  .u-link{font-family:var(--disp);font-size:14px;letter-spacing:.3em;text-transform:uppercase;position:relative;padding-bottom:5px;display:inline-block}
+  .u-link::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(.35);transform-origin:left;opacity:.5;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s}
+  a:hover .u-link::after,.u-link:hover::after{transform:scaleX(1);opacity:1}
+
+  /* 進場顯影 */
+  .rv{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1)}
+  .rv.in{opacity:1;transform:none}
+
+  /* ===== 導覽列 ===== */
+  .nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:28px 0;transition:background .5s,box-shadow .5s,padding .5s}
+  .nav.solid{background:rgba(247,245,241,.92);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line);padding:14px 0}
+  .nav-in{display:flex;align-items:center;justify-content:space-between}
+  .brand{font-family:var(--serif-tc);font-weight:500;font-size:22px;letter-spacing:.42em;color:#fff;transition:color .5s;line-height:1}
+  .brand small{font-family:var(--disp);font-size:10px;letter-spacing:.6em;display:block;opacity:.75;margin-top:6px}
+  .nav.solid .brand{color:var(--ink)}
+  .nav-links{display:flex;gap:44px;align-items:center}
+  .nav-links a{font-size:13.5px;letter-spacing:.22em;color:rgba(255,255,255,.88);transition:color .3s,opacity .3s}
+  .nav.solid .nav-links a{color:var(--ink-soft)}
+  .nav-links a:hover{opacity:.6}
+  .nav-links a.shop{font-family:var(--disp);font-size:13px;letter-spacing:.32em;text-transform:uppercase;border:1px solid rgba(255,255,255,.55);padding:10px 26px;transition:.4s}
+  .nav.solid .nav-links a.shop{border-color:var(--ink)}
+  .nav-links a.shop:hover{background:var(--charcoal);border-color:var(--charcoal);color:#fff!important;opacity:1}
+  .nav-toggle{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer}
+  .nav.solid .nav-toggle{color:var(--ink)}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;height:100vh;min-height:620px;overflow:hidden;background:#0d0c0a;display:flex;align-items:flex-end}
+  .hero iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.77vh;transform:translate(-50%,-50%);pointer-events:none}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,12,10,.34) 0%,rgba(13,12,10,.18) 45%,rgba(13,12,10,.66) 100%);z-index:1}
+  .hero-inner{position:relative;z-index:2;color:#fff;width:100%;padding:0 48px 96px;max-width:1280px;margin:0 auto}
+  .hero .eyebrow{color:rgba(255,255,255,.75)}
+  .hero h1{font-family:var(--serif-tc);font-weight:500;font-size:clamp(3.4rem,10vw,7rem);letter-spacing:.3em;line-height:1.1;margin-top:22px;text-shadow:0 6px 40px rgba(0,0,0,.35)}
+  .hero .tagline{font-size:clamp(.95rem,2vw,1.15rem);letter-spacing:.46em;margin-top:26px;color:rgba(255,255,255,.85)}
+  .hero-cta{margin-top:46px;display:flex;gap:36px;align-items:center;flex-wrap:wrap}
+  .btn-line{display:inline-block;font-family:var(--disp);font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,.6);padding:16px 44px;transition:.45s}
+  .btn-line:hover{background:#fff;color:var(--ink);border-color:#fff}
+  .hero .u-link{color:#fff}
+  .hero-meta{position:absolute;right:48px;bottom:96px;z-index:2;color:rgba(255,255,255,.6);font-family:var(--disp);font-size:11px;letter-spacing:.4em;writing-mode:vertical-rl;display:flex;gap:18px}
+  @media(max-width:900px){.hero-meta{display:none}}
+
+  /* ===== 跑馬燈品牌帶 ===== */
+  .marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--porcelain);padding:26px 0}
+  .marquee-track{display:flex;gap:0;white-space:nowrap;animation:mq 36s linear infinite;width:max-content}
+  .marquee span{font-family:var(--disp);font-size:15px;letter-spacing:.5em;text-transform:uppercase;color:var(--muted);padding:0 42px;position:relative}
+  .marquee span::after{content:"·";position:absolute;right:-6px;color:var(--bronze)}
+  @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ===== 排行榜（不對稱編輯版式） ===== */
+  .ranking{padding:170px 0 150px}
+  .rank-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:80px}
+  .rank-head .u-link{color:var(--ink-soft)}
+  .rank-layout{display:grid;grid-template-columns:7fr 5fr;gap:64px;align-items:stretch}
+  .rank-feature{position:relative;display:block}
+  .rank-feature .no{position:absolute;top:-58px;left:-14px;z-index:3;font-family:var(--disp);font-size:clamp(6rem,11vw,9.5rem);line-height:1;color:transparent;-webkit-text-stroke:1px var(--bronze);opacity:.85;pointer-events:none}
+  .rank-feature .best{position:absolute;top:26px;right:26px;z-index:3;font-family:var(--disp);font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:#fff;background:var(--charcoal);padding:10px 18px 10px 22px}
+  .rank-feature .ph{aspect-ratio:4/4.6;background:var(--porcelain-2);overflow:hidden}
+  .rank-feature .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.16,.84,.24,1)}
+  .rank-feature:hover .ph img{transform:scale(1.05)}
+  .rank-feature .info{display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding-top:26px;border-top:1px solid var(--ink);margin-top:0}
+  .rank-feature .ph{border-bottom:none}
+  .p-name{font-family:var(--serif-tc);font-weight:400;font-size:22px;letter-spacing:.1em;color:var(--ink)}
+  .p-eng{font-family:var(--disp);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .p-price{font-family:var(--disp);font-size:16px;letter-spacing:.1em;color:var(--ink-soft);white-space:nowrap}
+  .rank-side{display:flex;flex-direction:column;gap:44px;justify-content:space-between}
+  .rank-item{display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:center;position:relative}
+  .rank-item .ph{aspect-ratio:1/1;background:var(--porcelain-2);overflow:hidden}
+  .rank-item .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.16,.84,.24,1)}
+  .rank-item:hover .ph img{transform:scale(1.07)}
+  .rank-item .no{font-family:var(--disp);font-size:15px;letter-spacing:.3em;color:var(--bronze)}
+  .rank-item .p-name{font-size:19px;margin-top:8px}
+  .rank-item .p-price{margin-top:10px;display:block}
+  .rank-item .body{border-bottom:1px solid var(--line);padding-bottom:26px}
+  .rank-side .rank-item:last-child .body{border-bottom:none}
+
+  /* ===== 肌膚問題（左目錄／右結果 編輯版式） ===== */
+  .concerns{background:var(--porcelain-2);padding:150px 0}
+  .concern-layout{display:grid;grid-template-columns:4fr 8fr;gap:80px;align-items:start}
+  .concern-sticky{position:sticky;top:120px}
+  .concern-list{margin-top:52px;display:flex;flex-direction:column}
+  .chip{background:none;border:none;cursor:pointer;text-align:left;font-family:var(--serif-tc);font-weight:400;font-size:clamp(1.2rem,2vw,1.55rem);letter-spacing:.14em;color:var(--muted);padding:16px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;transition:color .4s,padding-left .4s}
+  .chip .idx{font-family:var(--disp);font-size:12px;letter-spacing:.2em;color:var(--muted);opacity:.7;transition:color .4s}
+  .chip:hover{color:var(--ink-soft)}
+  .chip.active{color:var(--ink);padding-left:14px}
+  .chip.active .idx{color:var(--bronze);opacity:1}
+  .concern-result{display:grid;grid-template-columns:repeat(2,1fr);gap:56px 40px;transition:opacity .35s}
+  .cr-card{display:block;animation:fadeUp .7s cubic-bezier(.2,.8,.2,1) both}
+  .cr-img{aspect-ratio:1/1.08;background:var(--porcelain);overflow:hidden;margin-bottom:22px}
+  .cr-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.16,.84,.24,1)}
+  .cr-card:hover .cr-img img{transform:scale(1.06)}
+  .cr-card .p-name{font-size:19px}
+  .cr-card .p-price{display:block;margin-top:10px}
+  .cr-card .u-link{color:var(--ink-soft);font-size:12px;margin-top:14px}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+  /* ===== 全系列（錯落九宮格） ===== */
+  .catalog{padding:170px 0}
+  .cat-head{text-align:center;margin-bottom:90px}
+  .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:80px 44px}
+  .cat-item{display:block}
+  .cat-item:nth-child(3n+2){transform:translateY(56px)}   /* 中欄下沉，編輯節奏 */
+  .cat-img{position:relative;aspect-ratio:1/1.12;overflow:hidden;background:var(--porcelain-2)}
+  .cat-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1s,transform 1.3s cubic-bezier(.16,.84,.24,1)}
+  .cat-img .img2{opacity:0}
+  .cat-item:hover .img1{opacity:0}
+  .cat-item:hover .img2{opacity:1;transform:scale(1.05)}
+  .cat-body{padding-top:24px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:0}
+  .cat-img{border-bottom:none}
+  .cat-body .p-name{font-size:19px}
+  .cat-tail{margin-top:150px;text-align:center}
+  .cat-tail .u-link{color:var(--ink)}
+
+  /* ===== 品牌數字（深炭墨暗段） ===== */
+  .stats{background:var(--charcoal);color:var(--paper-on-dark);padding:150px 48px}
+  .stats-wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .stat-box{text-align:center;padding:10px 30px;position:relative}
+  .stat-box:not(:first-child)::before{content:"";position:absolute;left:0;top:8%;height:84%;width:1px;background:var(--line-dark)}
+  .stat-num{font-family:var(--disp);font-size:clamp(3.6rem,7vw,5.8rem);font-weight:400;line-height:1;display:flex;justify-content:center;align-items:baseline;color:var(--paper-on-dark)}
+  .stat-suffix{font-size:1.4rem;margin-left:8px;color:var(--bronze)}
+  .stat-label{font-size:13.5px;letter-spacing:.3em;color:rgba(242,239,233,.55);margin-top:26px}
+  .stats-eyebrow{text-align:center;margin-bottom:80px}
+  .stats-eyebrow .sec-title{color:var(--paper-on-dark);font-size:clamp(1.5rem,2.6vw,2rem)}
+
+  /* ===== 頁尾（延續暗段） ===== */
+  footer{background:var(--charcoal-2);color:#B5AEA3;padding:100px 48px 44px;border-top:1px solid var(--line-dark)}
+  .foot-in{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:56px;justify-content:space-between}
+  .foot-brand .brand{color:#fff;letter-spacing:.4em;font-size:21px}
+  .foot-brand p{font-size:13px;color:#8E877B;margin-top:22px;max-width:300px;line-height:2.1}
+  .foot-col h5{font-family:var(--disp);font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:#F2EFE9;margin-bottom:22px;font-weight:400}
+  .foot-col a{display:block;font-size:13px;color:#9B9488;margin-bottom:14px;letter-spacing:.08em;transition:color .3s}
+  .foot-col a:hover{color:#fff}
+  .foot-bottom{max-width:1180px;margin:64px auto 0;padding-top:30px;border-top:1px solid var(--line-dark);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--disp);font-size:12px;color:#77705F;letter-spacing:.22em}
+
+  /* ===== RWD ===== */
+  @media(max-width:1024px){
+    .rank-layout{grid-template-columns:1fr;gap:70px}
+    .rank-feature .no{top:-44px}
+    .concern-layout{grid-template-columns:1fr;gap:56px}
+    .concern-sticky{position:static}
+  }
+  @media(max-width:900px){
+    .wrap{padding:0 24px}
+    .hero-inner{padding:0 24px 80px}
+    .nav-links{position:fixed;top:0;right:0;height:100vh;width:78%;max-width:330px;background:var(--porcelain);flex-direction:column;justify-content:center;gap:36px;transform:translateX(100%);transition:transform .5s cubic-bezier(.2,.8,.2,1);box-shadow:-20px 0 60px rgba(0,0,0,.18)}
+    .nav-links.open{transform:translateX(0)}
+    .nav-links a{color:var(--ink)!important;font-family:var(--serif-tc);font-size:18px}
+    .nav-links a.shop{border-color:var(--ink)}
+    .nav-toggle{display:block;z-index:110}
+    .ranking,.catalog{padding:110px 0}
+    .concerns{padding:110px 0}
+    .rank-head{flex-direction:column;align-items:flex-start;margin-bottom:64px}
+    .rank-item{grid-template-columns:120px 1fr;gap:20px}
+    .concern-result{grid-template-columns:repeat(2,1fr);gap:40px 20px}
+    .cat-grid{grid-template-columns:repeat(2,1fr);gap:56px 20px}
+    .cat-item:nth-child(3n+2){transform:none}
+    .cat-item:nth-child(2n){transform:translateY(40px)}
+    .stats{padding:100px 24px}
+    .stats-wrap{grid-template-columns:1fr;gap:64px}
+    .stat-box:not(:first-child)::before{left:20%;right:20%;top:-32px;width:60%;height:1px}
+    footer{padding:80px 24px 36px}
+    .foot-bottom{justify-content:center;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<!-- 導覽列 -->
+<nav class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand">何謂美<small>HEIWEI</small></a>
+    <button class="nav-toggle" id="navToggle" aria-label="選單">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#ranking">熱銷排行</a>
+      <a href="#concerns">肌膚保養</a>
+      <a href="#catalog">全系列</a>
+      <a href="#about">品牌故事</a>
+      <a href="https://www.heiweibeauty.com" class="shop" target="_blank">Shop</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero：左下角編輯式標題 -->
+<header class="hero" id="top">
+  <iframe src="https://www.youtube.com/embed/oFZMAJbdEkM?autoplay=1&loop=1&mute=1&controls=0&playsinline=1&playlist=oFZMAJbdEkM&modestbranding=1&rel=0" frameborder="0" allow="autoplay; fullscreen; encrypted-media" title="何謂美品牌影片"></iframe>
+  <div class="hero-inner">
+    <span class="eyebrow">HEIWEI Beauty — Est. Kaohsiung</span>
+    <h1>何謂美</h1>
+    <div class="tagline">和你為肌膚之美而生</div>
+    <div class="hero-cta">
+      <a href="#ranking" class="btn-line">熱銷精選</a>
+      <a href="#concerns" class="u-link">找到你的保養</a>
+    </div>
+  </div>
+  <div class="hero-meta"><span>SCROLL</span></div>
+</header>
+
+<!-- 跑馬燈品牌帶 -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- 熱銷排行：左大 No.1／右 No.2、No.3 -->
+<section class="ranking" id="ranking">
+  <div class="wrap">
+    <div class="rank-head rv">
+      <div>
+        <span class="eyebrow">Bestsellers</span>
+        <h2 class="sec-title">熱銷排行</h2>
+      </div>
+      <a href="https://www.heiweibeauty.com" target="_blank"><span class="u-link">View All</span></a>
+    </div>
+    <div class="rank-layout">
+      <a class="rank-feature rv" id="rankFeature" href="#" target="_blank"></a>
+      <div class="rank-side" id="rankSide"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 肌膚問題：左目錄右結果 -->
+<section class="concerns" id="concerns">
+  <div class="wrap">
+    <div class="concern-layout">
+      <div class="concern-sticky rv">
+        <span class="eyebrow">Skin Concerns</span>
+        <h2 class="sec-title">你想解決<br>哪種肌膚問題</h2>
+        <div class="concern-list" id="concernChips"></div>
+      </div>
+      <div class="concern-result" id="concernResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 全系列：錯落網格 -->
+<section class="catalog" id="catalog">
+  <div class="wrap">
+    <div class="cat-head rv">
+      <span class="eyebrow">The Collection</span>
+      <h2 class="sec-title">全系列</h2>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+    <div class="cat-tail rv">
+      <a href="https://www.heiweibeauty.com" target="_blank"><span class="u-link">前往線上商店</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 品牌數字：深炭墨暗段 -->
+<section class="stats" id="about">
+  <div class="stats-eyebrow rv">
+    <span class="eyebrow">Philosophy</span>
+    <h2 class="sec-title">專業，是溫柔的底氣</h2>
+  </div>
+  <div class="stats-wrap">
+    <div class="stat-box rv"><div class="stat-num"><span class="count" data-target="10" data-suffix="年">0</span></div><div class="stat-label">專業美容師經驗</div></div>
+    <div class="stat-box rv"><div class="stat-num"><span class="count" data-target="14" data-suffix="天">0</span></div><div class="stat-label">有感實測</div></div>
+    <div class="stat-box rv"><div class="stat-num"><span class="count" data-target="2000" data-suffix="萬">0</span></div><div class="stat-label">產品安全責任險</div></div>
+  </div>
+</section>
+
+<!-- 頁尾 -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-brand">
+      <div class="brand">何謂美 HEIWEI</div>
+      <p>黑微美容 · 由專業美容師研製，和你為肌膚之美而生。溫和有效，讓保養成為每日的儀式。</p>
+    </div>
+    <div class="foot-col">
+      <h5>Shop</h5>
+      <a href="#ranking">熱銷排行</a>
+      <a href="#concerns">依肌膚問題</a>
+      <a href="#catalog">全系列產品</a>
+      <a href="https://www.heiweibeauty.com" target="_blank">線上商店</a>
+    </div>
+    <div class="foot-col">
+      <h5>About</h5>
+      <a href="#about">品牌故事</a>
+      <a href="https://www.heiweibeauty.com" target="_blank">會員專區</a>
+      <a href="https://www.heiweibeauty.com" target="_blank">聯絡我們</a>
+    </div>
+  </div>
+  <div class="foot-bottom"><span>© 2026 HEIWEI Beauty</span><span>Kaohsiung, Taiwan</span></div>
+</footer>
+
+<script>
+  /* ============ 產品資料（改這裡即可） ============ */
+  const OWNER='648be21890a1b5008d602f77';
+  const img=id=>`https://img.shoplineapp.com/media/image_clips/${id}/original.png?owner_id=${OWNER}`;
+  const SHOP='https://www.heiweibeauty.com/products/';
+
+  const PRODUCTS=[
+    {id:'toner',   name:'魚子亮白保濕化妝水', eng:'Dazzling Toner',        price:2730, url:SHOP+'dazzling-brightening-toner',                     img1:img('6981ad0f7b72c9b3b091d6f4'), img2:img('698d901d4ac2a303fd23afb5'), concerns:['dry','dull']},
+    {id:'ampoule', name:'高端精華水安瓶',     eng:'A Plus Ampoule Essence',price:2290, url:SHOP+'a-plus-ampoule-essence',                        img1:img('6981ad0e492669fa02b64aad'), img2:img('698d901e01d855dcd94bc4fe'), concerns:['aging']},
+    {id:'mask5d',  name:'光透波5D養膚面膜',   eng:'5D Revitalizing Mask',  price:1490, url:SHOP+'%E5%85%89%E9%80%8F%E6%B3%A25d%E9%A4%8A%E8%86%9A%E9%9D%A2%E8%86%9C', img1:img('6981ad0ea235e06fc83d6d13'), img2:img('698d9026328659ee70d6a918'), concerns:['dull']},
+    {id:'cream',   name:'亮顏保濕蜜蜜霜',     eng:'Honey Honey Cream',     price:2290, url:SHOP+'honey-honey-cream',                             img1:img('6981ad0cccc31123f0e4a489'), img2:img('698d901e18b9c326964f1732'), concerns:['dry','aging']},
+    {id:'cleanser',name:'潔淨舒壓洗面乳',     eng:'Perfect Facial Cleanser',price:1080,url:SHOP+'perfect-facial-cleanser',                        img1:img('6981ad0f9c236f3b3ec54609'), img2:img('698d901f099a485560d884fd'), concerns:['pores']},
+    {id:'exfo',    name:'白膜淨去角質泥膜',   eng:'Exfoliating Mask',      price:2050, url:SHOP+'clarifyingoil-absorbing-exfoliating-mask',      img1:img('6981ad0fb829d7deedffc981'), img2:img('698d901fa6581a3eea116405'), concerns:['pores']},
+    {id:'capsule', name:'妝前智能5GF柔敏膠囊', eng:'5GF Soothing Capsules', price:1160, url:SHOP+'revitalizing-5gf-soothing-capsules',            img1:img('6981ad0fce8301b97b8f4b66'), img2:img('698d90208656d62acc721d4a'), concerns:['sensitive']},
+    {id:'bspray',  name:'活氧B群保濕噴霧',     eng:'Vitamin B Spray',       price:1190, url:SHOP+'vitamin-b-water',                               img1:img('6981ad0f04a901c8c352248c'), img2:img('699ebb3b32b1bac734237200'), concerns:['dry','sensitive']},
+    {id:'suncare', name:'爆白防曬隔離噴霧',     eng:'Physical Sun Spray',    price:840,  url:SHOP+'suncare',                                       img1:img('6981ad0f230253b0be850216'), img2:img('698d901ea78ddc41e777d910'), concerns:['sun']},
+  ];
+
+  /* 熱銷 TOP 3：改 id 順序即換名次（範例值，待確認實際銷售） */
+  const TOP3=['toner','ampoule','mask5d'];
+
+  /* 肌膚問題 6 分類 */
+  const CONCERNS=[
+    {id:'dry',      label:'乾燥缺水'},
+    {id:'dull',     label:'暗沉蠟黃'},
+    {id:'pores',    label:'毛孔油光'},
+    {id:'sensitive',label:'敏感泛紅'},
+    {id:'aging',    label:'初老緊緻'},
+    {id:'sun',      label:'防曬隔離'},
+  ];
+
+  const P=id=>PRODUCTS.find(p=>p.id===id);
+  const nt=n=>'NT$ '+n.toLocaleString();
+
+  /* 跑馬燈（內容 x2 以無縫循環） */
+  const mq=document.getElementById('marqueeTrack');
+  const mqItems='<span>HEIWEI</span><span>和你為肌膚之美而生</span><span>Professional Skincare</span><span>何謂美</span>';
+  mq.innerHTML=mqItems+mqItems+mqItems+mqItems;
+
+  /* 排行榜：No.1 大圖 feature ＋ 右側 No.2/No.3 */
+  const feature=document.getElementById('rankFeature');
+  const p1=P(TOP3[0]);
+  feature.href=p1.url;
+  feature.innerHTML=`
+    <div class="no">01</div>
+    <div class="best">Bestseller</div>
+    <div class="ph"><img src="${p1.img1}" alt="${p1.name}" loading="lazy"></div>
+    <div class="info">
+      <div>
+        <div class="p-name">${p1.name}</div>
+        <div class="p-eng">${p1.eng}</div>
+      </div>
+      <div class="p-price">${nt(p1.price)}</div>
+    </div>`;
+  const side=document.getElementById('rankSide');
+  [TOP3[1],TOP3[2]].forEach((pid,i)=>{
+    const p=P(pid);
+    side.insertAdjacentHTML('beforeend',`
+      <a class="rank-item rv" href="${p.url}" target="_blank">
+        <div class="ph"><img src="${p.img1}" alt="${p.name}" loading="lazy"></div>
+        <div class="body">
+          <div class="no">No. 0${i+2}</div>
+          <div class="p-name">${p.name}</div>
+          <div class="p-eng">${p.eng}</div>
+          <span class="p-price">${nt(p.price)}</span>
+        </div>
+      </a>`);
+  });
+
+  /* 肌膚問題：左目錄／右結果 */
+  const chips=document.getElementById('concernChips');
+  const result=document.getElementById('concernResult');
+  CONCERNS.forEach((c,i)=>{
+    chips.insertAdjacentHTML('beforeend',
+      `<button class="chip${i===0?' active':''}" data-c="${c.id}"><span>${c.label}</span><span class="idx">0${i+1}</span></button>`);
+  });
+  function renderConcern(cid){
+    const list=PRODUCTS.filter(p=>p.concerns.includes(cid));
+    result.style.opacity=0;
+    setTimeout(()=>{
+      result.innerHTML=list.map((p,i)=>`
+        <a class="cr-card" style="animation-delay:${i*90}ms" href="${p.url}" target="_blank">
+          <div class="cr-img"><img src="${p.img1}" alt="${p.name}" loading="lazy"></div>
+          <div class="p-name">${p.name}</div>
+          <div class="p-eng">${p.eng}</div>
+          <span class="p-price">${nt(p.price)}</span><br>
+          <span class="u-link">View</span>
+        </a>`).join('');
+      result.style.opacity=1;
+    },180);
+  }
+  chips.addEventListener('click',e=>{
+    const b=e.target.closest('.chip'); if(!b)return;
+    chips.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    renderConcern(b.dataset.c);
+  });
+  renderConcern(CONCERNS[0].id);
+
+  /* 全系列：hover 換圖 */
+  const catGrid=document.getElementById('catGrid');
+  PRODUCTS.forEach(p=>{
+    catGrid.insertAdjacentHTML('beforeend',`
+      <a class="cat-item rv" href="${p.url}" target="_blank">
+        <div class="cat-img">
+          <img class="img1" src="${p.img1}" alt="${p.name}" loading="lazy">
+          <img class="img2" src="${p.img2}" alt="${p.name}" loading="lazy">
+        </div>
+        <div class="cat-body">
+          <div>
+            <div class="p-name">${p.name}</div>
+            <div class="p-eng">${p.eng}</div>
+          </div>
+          <div class="p-price">${nt(p.price)}</div>
+        </div>
+      </a>`);
+  });
+
+  /* 導覽列捲動變色 */
+  const nav=document.getElementById('nav');
+  const onScroll=()=>nav.classList.toggle('solid',window.scrollY>70);
+  onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
+
+  /* 手機選單 */
+  const navLinks=document.getElementById('navLinks');
+  document.getElementById('navToggle').addEventListener('click',()=>navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+
+  /* 進場顯影 */
+  const rvIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvIO.unobserve(e.target);}}),{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>rvIO.observe(el));
+
+  /* 數字動畫 */
+  const animate=el=>{
+    const target=+el.dataset.target,suf=el.dataset.suffix||'',dur=2200;let s=null;
+    const ease=t=>1-(--t)*t*t*t;
+    const step=ts=>{if(!s)s=ts;const pr=Math.min((ts-s)/dur,1);el.innerHTML=Math.round(target*ease(pr))+`<span class="stat-suffix">${suf}</span>`;if(pr<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step);
+  };
+  const io=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){animate(e.target);o.unobserve(e.target);}}),{threshold:.3});
+  document.querySelectorAll('.count').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

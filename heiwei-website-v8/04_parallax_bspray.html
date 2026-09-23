@@ -1,0 +1,205 @@
+<!-- ═══════════════════════════════════════════════════════════
+     HEIWEI 首頁 — 視差大圖（何謂美／和你為肌膚之美而生）＋ 活氧B群保濕噴霧 單品滑入區
+     上線版存檔 2026-09-15，來源：Shopline 首頁客製化區塊（此前電腦上沒有原稿）
+     ═══════════════════════════════════════════════════════════ -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>產品介紹 - 活氧B群保濕噴霧</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: "PingFang TC", "Microsoft JhengHei", 'Noto Sans TC', sans-serif;
+            background-color: #fff;
+        }
+
+        /* --- 視覺差大圖區域 --- */
+        .parallax-bg {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* 建立裁切區域，讓背景只顯示在此容器內 */
+            clip-path: inset(0 0 0 0);
+            z-index: 1;
+        }
+
+        .parallax-bg::before {
+            content: "";
+            position: fixed; /* 固定效果 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 遮罩漸層 + 背景圖 */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)),
+                              url('https://img.shoplineapp.com/media/image_clips/6970948b43f1a6080816819e/original.jpg?1768985737=&owner_id=648be21890a1b5008d602f77');
+            background-position: center center;
+            background-repeat: no-repeat;
+            /* 核心修改：確保圖片始終覆蓋整個遮罩範圍 */
+            background-size: cover;
+            z-index: -1;
+            will-change: transform;
+        }
+
+        .parallax-text-box {
+            color: #ffffff;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .parallax-text-box h1 {
+            font-size: clamp(3rem, 10vw, 5rem);
+            letter-spacing: 20px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            margin-left: 20px;
+        }
+
+        .parallax-text-box p {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            letter-spacing: 8px;
+            font-weight: 400;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            display: inline-block;
+            padding-top: 20px;
+            margin-left: 8px;
+        }
+
+        /* --- 產品區塊樣式 --- */
+        .sl-transparent-reveal-section {
+            padding: 120px 0;
+            background-color: #f9f9f7;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sl-reveal-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            gap: 40px;
+            padding: 0 40px;
+        }
+
+        .sl-reveal-img-transparent {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));
+        }
+
+        .sl-floating-effect {
+            animation: sl-float 4s ease-in-out infinite;
+        }
+
+        @keyframes sl-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .sl-reveal-box, .sl-reveal-content {
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .left-slide { transform: translateX(-150px); }
+        .right-slide { transform: translateX(150px); }
+
+        .active {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+        }
+
+        .sl-reveal-content { flex: 1; color: #3d3d3d; }
+        .sl-subtitle { font-size: 13px; letter-spacing: 4px; color: #b09c85; display: block; margin-bottom: 15px; font-weight: 700; }
+        .sl-reveal-content h2 { font-size: 2.2rem; margin-bottom: 25px; letter-spacing: 5px; font-weight: 600; }
+        .sl-reveal-content p { line-height: 2; color: #555; margin-bottom: 40px; font-size: 1.5rem; }
+
+        .sl-link-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3d3d3d;
+            padding: 15px 45px;
+            transition: 0.3s;
+            letter-spacing: 3px;
+        }
+
+        /* --- 手機版 RWD 調整 --- */
+        @media (max-width: 768px) {
+            .parallax-bg::before {
+                /* 強制放大圖片至覆蓋整個遮罩範圍 */
+                background-size: cover;
+                background-position: center center;
+            }
+
+            .parallax-bg {
+                /* 手機版遮罩高度 */
+                height: 80vh;
+            }
+
+            .sl-reveal-wrapper { flex-direction: column; text-align: center; }
+            .sl-reveal-img-transparent { max-width: 280px; margin: 0 auto; }
+            .left-slide, .right-slide { transform: translateY(80px); }
+            .parallax-text-box h1 { font-size: 2.5rem; letter-spacing: 10px; }
+            .parallax-text-box p { font-size: 1.1rem; letter-spacing: 4px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="parallax-bg">
+        <div class="parallax-text-box">
+            <h1>何謂美</h1>
+            <p>和你為肌膚之美而生</p>
+        </div>
+    </div>
+
+    <section class="sl-transparent-reveal-section">
+        <div class="sl-reveal-wrapper">
+            <div class="sl-reveal-box left-slide">
+                <div class="sl-floating-effect">
+                    <img src="https://img.shoplineapp.com/media/image_clips/695f550855382c4dcb7aa6f3/original.png?1767855365=&owner_id=648be21890a1b5008d602f77" alt="產品" class="sl-reveal-img-transparent">
+                </div>
+            </div>
+
+            <div class="sl-reveal-content right-slide">
+                <span class="sl-subtitle">VITAMIN B SPRAY</span>
+                <h2>活氧B群保濕噴霧</h2>
+                <p>富含多種維生素B，用於保濕和舒緩皮膚，隨手噴灑快速滲透。<br>可作定妝使用，讓妝容更持久亮麗。</p>
+                <a href="https://www.heiweibeauty.com/products/vitamin-b-water" class="sl-link-btn">立即擁有</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        (function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('.sl-reveal-box, .sl-reveal-content').forEach(el => observer.observe(el));
+            });
+        })();
+    </script>
+</body>
+</html>

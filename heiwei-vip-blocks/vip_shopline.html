@@ -1,0 +1,359 @@
+<!-- ══════════════════════════════════════════════════════════════
+     HEIWEI 何謂美 ／ 會員制度與福利  ── Shopline 自訂頁面專用版
+     ──────────────────────────────────────────────────────────────
+     依 heiwei-sunstick-blocks/README.md 實測的 Shopline 過濾規則撰寫：
+       ✗ CSS 變數  ✗ svg  ✗ details/summary  ✗ script  ✗ 字型 at-import
+       ✓ style 標籤、@media、@keyframes、::before/::after、table、行內 style
+     版面以 table / table-cell 為主，不用 flex / grid，避免被主題 CSS 干擾。
+     等級對照表在窄螢幕可左右捲動，第一欄標題固定不動。
+     全頁純文字，沒有任何圖片，貼上即可用。
+     ══════════════════════════════════════════════════════════════ -->
+<style>
+.hw-vip{
+  font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei','Helvetica Neue',Arial,sans-serif;
+  max-width:880px; margin:0 auto; padding:0 16px 24px;
+  color:#1F2220; font-size:16px; line-height:1.8; text-align:left;
+  -webkit-font-smoothing:antialiased;
+}
+.hw-vip *{box-sizing:border-box;}
+.hw-vip p{margin:0 0 14px;}
+.hw-vip h1,.hw-vip h2,.hw-vip h3,.hw-vip h4{margin:0; font-weight:700; line-height:1.35;}
+.hw-vip strong{font-weight:700;}
+
+/* ── 通用區塊標題 ── */
+.hw-vip-sec{margin:64px 0 0;}
+.hw-vip-eyebrow{
+  font-size:11px; font-weight:700; letter-spacing:.26em; text-transform:uppercase;
+  color:#8C948F; margin:0 0 10px;
+}
+.hw-vip-h2{font-size:26px; letter-spacing:.02em; margin-bottom:10px;}
+.hw-vip-lead{font-size:15px; color:#6B7370; margin-bottom:26px; max-width:34em;}
+
+/* ── 1. 首屏 ── */
+.hw-vip-hero{padding:8px 0 0;}
+.hw-vip-hero h1{
+  font-size:42px; font-weight:700; letter-spacing:.06em; line-height:1.2; margin-bottom:16px;
+}
+.hw-vip-hero h1 span{display:block; font-size:13px; font-weight:600; letter-spacing:.3em; color:#8C948F; margin-top:12px;}
+.hw-vip-hero-lead{font-size:16px; color:#4A524E; max-width:32em; margin-bottom:22px;}
+.hw-vip-gift{
+  display:inline-block; padding:12px 22px; border-radius:2px;
+  background:#1F2220; color:#F4F5F3; font-size:15px; font-weight:700; letter-spacing:.04em;
+}
+.hw-vip-gift em{font-style:normal; color:#C8CFC9; font-weight:500; font-size:13px; letter-spacing:.1em; margin-right:10px;}
+
+/* ── 2. 會員等級對照表 ── */
+.hw-vip-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 0 14px;}
+.hw-vip-matrix{
+  min-width:640px; width:100%; border-collapse:separate; border-spacing:0;
+  font-size:14px; background:#FCFCFB;
+}
+.hw-vip-matrix th,.hw-vip-matrix td{
+  border-bottom:1px solid #E6EAE7; padding:14px 10px; text-align:center; vertical-align:middle;
+}
+.hw-vip-matrix tr:last-child th,.hw-vip-matrix tr:last-child td{border-bottom:0;}
+.hw-vip-matrix .hw-vip-rowhead{
+  position:sticky; left:0; z-index:2; width:96px; min-width:96px;
+  background:#F4F5F3; border-right:1px solid #DDE1DE;
+  text-align:left; font-size:12px; font-weight:700; letter-spacing:.1em; color:#1F2220;
+  padding-left:14px; padding-right:12px; white-space:nowrap;
+}
+.hw-vip-matrix .hw-vip-cardcell{padding:16px 8px 18px; border-bottom:1px solid #DDE1DE;}
+.hw-vip-matrix .hw-vip-amt{
+  font-size:19px; font-weight:700; letter-spacing:.01em; color:#1F2220;
+  font-variant-numeric:tabular-nums; display:block;
+}
+.hw-vip-matrix .hw-vip-cap{
+  display:block; font-size:11.5px; color:#8C948F; letter-spacing:.04em; margin-top:2px; line-height:1.5;
+}
+.hw-vip-matrix .hw-vip-or{
+  display:block; font-size:13px; color:#4A524E; line-height:1.6; font-variant-numeric:tabular-nums;
+}
+.hw-vip-matrix .hw-vip-or b{font-weight:700; color:#1F2220;}
+.hw-vip-matrix .hw-vip-span{
+  font-size:13.5px; color:#4A524E; letter-spacing:.02em; background:#F7F8F7;
+}
+.hw-vip-matrix .hw-vip-span b{color:#1F2220;}
+
+/* 卡面（純 CSS，無圖片） */
+.hw-vip-plate{
+  width:100%; max-width:150px; margin:0 auto; border-radius:6px; padding:11px 11px 10px;
+  text-align:left; box-shadow:0 1px 3px rgba(31,34,32,.16);
+}
+.hw-vip-plate-s{background:linear-gradient(135deg,#F4F7F8 0%,#C3CBCF 44%,#EFF2F3 60%,#A6B1B6 100%); color:#3C464B;}
+.hw-vip-plate-g{background:linear-gradient(135deg,#F9EFD9 0%,#DCC08A 44%,#F5E9CD 60%,#B8944E 100%); color:#5C4715;}
+.hw-vip-plate-p{background:linear-gradient(135deg,#F2F5F6 0%,#C6D2D7 44%,#E9EFF1 60%,#8FA3AB 100%); color:#33434B;}
+.hw-vip-plate-d{background:linear-gradient(135deg,#333B41 0%,#1D2427 44%,#3E4950 60%,#12181A 100%); color:#C4DCE8;}
+.hw-vip-plate-top{
+  font-size:8px; font-weight:700; letter-spacing:.16em; opacity:.85; margin-bottom:16px;
+}
+.hw-vip-plate-name{font-size:13px; font-weight:700; letter-spacing:.08em; line-height:1.2;}
+.hw-vip-plate-en{font-size:8px; font-weight:700; letter-spacing:.22em; opacity:.75; margin-top:3px;}
+
+/* ── 3. 購物金 ── */
+.hw-vip-credit{
+  background:#1F2220; color:#F4F5F3; padding:32px 26px; margin-top:8px;
+}
+.hw-vip-credit .hw-vip-eyebrow{color:#8F978F;}
+.hw-vip-credit h3{font-size:22px; letter-spacing:.03em; margin-bottom:6px; color:#F4F5F3;}
+.hw-vip-credit-amt{font-size:46px; font-weight:700; letter-spacing:-.01em; line-height:1.1; margin:14px 0 20px; font-variant-numeric:tabular-nums;}
+.hw-vip-credit-amt em{font-size:16px; font-weight:600; font-style:normal; color:#B3BAB4; margin-right:5px; letter-spacing:.06em;}
+.hw-vip-credit ul{margin:0; padding:0; list-style:none; border-top:1px solid #3A3E3B;}
+.hw-vip-credit ul li{font-size:14px; color:#CFD5CF; padding:12px 0; border-bottom:1px solid #3A3E3B; line-height:1.65;}
+.hw-vip-credit ul li b{color:#F4F5F3; font-weight:700;}
+
+/* ── 4. 生日禮金時間軸 ── */
+.hw-vip-steps{font-size:0; margin:0 -8px 6px;}
+.hw-vip-step-wrap{display:inline-block; width:33.33%; padding:8px; vertical-align:top;}
+.hw-vip-step{
+  font-size:16px; border-top:2px solid #1F2220; padding:14px 0 0; height:100%;
+}
+.hw-vip-step-n{font-size:10px; font-weight:700; letter-spacing:.2em; color:#9AA29D; margin-bottom:8px;}
+.hw-vip-step h4{font-size:16px; letter-spacing:.02em; margin-bottom:6px;}
+.hw-vip-step p{font-size:13.5px; color:#6B7370; line-height:1.65; margin:0;}
+.hw-vip-example{
+  background:#EDF0EE; padding:18px 20px; font-size:14px; color:#4A524E; line-height:1.75; margin-top:18px;
+}
+.hw-vip-example b{color:#1F2220;}
+.hw-vip-example span{
+  display:block; font-size:10px; font-weight:700; letter-spacing:.2em; color:#8C948F; margin-bottom:6px;
+}
+
+/* ── 5. 紅利點數 ── */
+.hw-vip-two{display:table; width:100%; table-layout:fixed; border-spacing:10px; margin:0 -10px;}
+.hw-vip-half{display:table-cell; vertical-align:top; width:50%;}
+.hw-vip-box{border:1px solid #DDE1DE; background:#FCFCFB; padding:22px 22px 24px; height:100%;}
+.hw-vip-box h4{
+  font-size:11px; font-weight:700; letter-spacing:.2em; color:#8C948F;
+  padding-bottom:12px; margin-bottom:14px; border-bottom:1px solid #E6EAE7;
+}
+.hw-vip-box ul{margin:0; padding:0; list-style:none;}
+.hw-vip-box ul li{font-size:14px; color:#4A524E; line-height:1.7; padding:0 0 12px;}
+.hw-vip-box ul li:last-child{padding-bottom:0;}
+.hw-vip-box ul li b{color:#1F2220; font-weight:700;}
+.hw-vip-ratio{
+  display:block; font-size:24px; font-weight:700; color:#1F2220; letter-spacing:.02em;
+  font-variant-numeric:tabular-nums; line-height:1.3; margin-bottom:4px;
+}
+
+/* ── 6. 注意事項 ── */
+.hw-vip-notes{margin:0; padding:0; list-style:none; border-top:1px solid #DDE1DE;}
+.hw-vip-notes li{
+  font-size:14px; color:#6B7370; line-height:1.7; padding:12px 0 12px 20px;
+  border-bottom:1px solid #E6EAE7; position:relative;
+}
+.hw-vip-notes li::before{
+  content:""; position:absolute; left:2px; top:20px; width:5px; height:5px;
+  background:#B7BEB9; border-radius:50%;
+}
+.hw-vip-notes li b{color:#1F2220; font-weight:700;}
+.hw-vip-foot{
+  font-size:12.5px; color:#8C948F; line-height:1.75; margin:22px 0 0;
+}
+
+/* ── 手機 ── */
+@media (max-width:640px){
+  .hw-vip{font-size:15.5px; padding:0 14px 20px;}
+  .hw-vip-hero h1{font-size:32px;}
+  .hw-vip-matrix{font-size:13px;}
+  .hw-vip-matrix th,.hw-vip-matrix td{padding:12px 8px;}
+  .hw-vip-matrix .hw-vip-rowhead{width:80px; min-width:80px; font-size:11.5px; padding-left:12px; padding-right:8px;}
+  .hw-vip-matrix .hw-vip-amt{font-size:17px;}
+  .hw-vip-step-wrap{width:100%;}
+  .hw-vip-h2{font-size:22px;}
+  .hw-vip-sec{margin-top:52px;}
+  .hw-vip-two{display:block; border-spacing:0; margin:0;}
+  .hw-vip-half{display:block; width:100%; margin-bottom:14px;}
+  .hw-vip-credit{padding:26px 20px;}
+  .hw-vip-credit-amt{font-size:38px;}
+}
+</style>
+
+<div class="hw-vip">
+
+  <!-- 1. 首屏 -->
+  <div class="hw-vip-hero">
+    <h1>會員制度與福利<span>MEMBERSHIP PROGRAM</span></h1>
+    <p class="hw-vip-hero-lead">
+      從第一次下單開始累積。四階會員資格皆為期一年，每年生日當月領取專屬禮金，
+      消費達標即自動升級或延用，不需另外申請。
+    </p>
+    <div class="hw-vip-gift"><em>新會員禮</em>加入即贈 NT$100 購物金</div>
+  </div>
+
+  <!-- 2. 會員等級對照表 -->
+  <div class="hw-vip-sec">
+    <div class="hw-vip-eyebrow">Member level</div>
+    <h2 class="hw-vip-h2">會員等級一覽</h2>
+    <p class="hw-vip-lead">同一帳號計算。單筆消費或一年內累計消費達門檻皆可取得，系統於訂單完成後自動判定，不需另外申請。每筆消費依所屬階級回饋紅利點數，階級越高回饋越多。</p>
+
+    <div class="hw-vip-scroll">
+      <table class="hw-vip-matrix">
+        <tr>
+          <th class="hw-vip-rowhead">會員等級</th>
+          <td class="hw-vip-cardcell"><div class="hw-vip-plate hw-vip-plate-s">
+            <div class="hw-vip-plate-top">HEIWEI 何謂美</div>
+            <div class="hw-vip-plate-name">銀卡會員</div>
+            <div class="hw-vip-plate-en">SILVER</div>
+          </div></td>
+          <td class="hw-vip-cardcell"><div class="hw-vip-plate hw-vip-plate-g">
+            <div class="hw-vip-plate-top">HEIWEI 何謂美</div>
+            <div class="hw-vip-plate-name">金卡會員</div>
+            <div class="hw-vip-plate-en">GOLD</div>
+          </div></td>
+          <td class="hw-vip-cardcell"><div class="hw-vip-plate hw-vip-plate-p">
+            <div class="hw-vip-plate-top">HEIWEI 何謂美</div>
+            <div class="hw-vip-plate-name">白金卡會員</div>
+            <div class="hw-vip-plate-en">PLATINUM</div>
+          </div></td>
+          <td class="hw-vip-cardcell"><div class="hw-vip-plate hw-vip-plate-d">
+            <div class="hw-vip-plate-top">HEIWEI 何謂美</div>
+            <div class="hw-vip-plate-name">鑽石卡會員</div>
+            <div class="hw-vip-plate-en">DIAMOND</div>
+          </div></td>
+        </tr>
+        <tr>
+          <th class="hw-vip-rowhead">取得方式</th>
+          <td><span class="hw-vip-or">單筆消費滿 <b>1,000</b><br>或一年累計滿 <b>1,000</b></span></td>
+          <td><span class="hw-vip-or">單筆消費滿 <b>3,000</b><br>或一年累計滿 <b>3,000</b></span></td>
+          <td><span class="hw-vip-or">單筆消費滿 <b>10,000</b><br>或一年累計滿 <b>10,000</b></span></td>
+          <td><span class="hw-vip-or">單筆消費滿 <b>80,000</b><br>或一年累計滿 <b>80,000</b></span></td>
+        </tr>
+        <tr>
+          <th class="hw-vip-rowhead">升等方式</th>
+          <td><span class="hw-vip-or">一年累計滿 <b>1,000</b><span class="hw-vip-cap">正式會員升銀卡</span></span></td>
+          <td><span class="hw-vip-or">一年累計滿 <b>3,000</b><span class="hw-vip-cap">銀卡升金卡</span></span></td>
+          <td><span class="hw-vip-or">一年累計滿 <b>10,000</b><span class="hw-vip-cap">金卡升白金卡</span></span></td>
+          <td><span class="hw-vip-or">一年累計滿 <b>80,000</b><span class="hw-vip-cap">白金卡升鑽石卡</span></span></td>
+        </tr>
+        <tr>
+          <th class="hw-vip-rowhead">紅利回饋</th>
+          <td><span class="hw-vip-amt">2%</span><span class="hw-vip-cap">消費金額回饋</span></td>
+          <td><span class="hw-vip-amt">3%</span><span class="hw-vip-cap">消費金額回饋</span></td>
+          <td><span class="hw-vip-amt">4%</span><span class="hw-vip-cap">消費金額回饋</span></td>
+          <td><span class="hw-vip-amt">5%</span><span class="hw-vip-cap">消費金額回饋</span></td>
+        </tr>
+        <tr>
+          <th class="hw-vip-rowhead">生日禮金</th>
+          <td><span class="hw-vip-amt">NT$300</span><span class="hw-vip-cap">生日當月發放</span></td>
+          <td><span class="hw-vip-amt">NT$500</span><span class="hw-vip-cap">生日當月發放</span></td>
+          <td><span class="hw-vip-amt">NT$800</span><span class="hw-vip-cap">生日當月發放</span></td>
+          <td><span class="hw-vip-amt">NT$1,200</span><span class="hw-vip-cap">生日當月發放</span></td>
+        </tr>
+        <tr>
+          <th class="hw-vip-rowhead">續會方式</th>
+          <td><span class="hw-vip-or">一年累計滿 <b>1,000</b></span></td>
+          <td><span class="hw-vip-or">一年累計滿 <b>3,000</b></span></td>
+          <td><span class="hw-vip-or">一年累計滿 <b>10,000</b></span></td>
+          <td><span class="hw-vip-or">一年累計滿 <b>80,000</b></span></td>
+        </tr>
+        <tr>
+          <th class="hw-vip-rowhead">會籍時間</th>
+          <td class="hw-vip-span" colspan="4">取得或升級會員後<b>起算一年</b>，期間內再次達標即自動延用一年</td>
+        </tr>
+        <tr>
+          <th class="hw-vip-rowhead">新會員禮</th>
+          <td class="hw-vip-span" colspan="4">加入會員即贈 <b>NT$100 購物金</b>，自動加值至會員帳戶</td>
+        </tr>
+      </table>
+    </div>
+    <p class="hw-vip-foot" style="margin-top:0;">
+      表格金額單位為新台幣。手機請左右滑動檢視完整表格。
+    </p>
+  </div>
+
+  <!-- 3. 新會員購物金 -->
+  <div class="hw-vip-sec">
+    <div class="hw-vip-credit">
+      <div class="hw-vip-eyebrow">Welcome credit</div>
+      <h3>新加入會員購物金</h3>
+      <div class="hw-vip-credit-amt"><em>NT$</em>100</div>
+      <ul>
+        <li>加入會員後<b>自動加值至會員帳戶</b>，無需輸入折扣碼。</li>
+        <li>需於<b>加入會員起 30 天內</b>使用完畢，逾期失效。</li>
+        <li>單筆訂單滿 <b>NT$1,000</b> 方可一次性折抵。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. 生日禮金 -->
+  <div class="hw-vip-sec">
+    <div class="hw-vip-eyebrow">Birthday gift</div>
+    <h2 class="hw-vip-h2">生日禮金怎麼拿</h2>
+    <p class="hw-vip-lead">金額依<b>發放當月的會員階級</b>計算：銀卡 300 元、金卡 500 元、白金卡 800 元、鑽石卡 1,200 元。生日當月若剛好升等，即以升等後的階級發放。</p>
+
+    <div class="hw-vip-steps">
+      <div class="hw-vip-step-wrap"><div class="hw-vip-step">
+        <div class="hw-vip-step-n">生日前一個月 25 日前</div>
+        <h4>成為有效會員</h4>
+        <p>於生日前一個月的 25 日前完成入會，即符合當年度發放資格。</p>
+      </div></div>
+      <div class="hw-vip-step-wrap"><div class="hw-vip-step">
+        <div class="hw-vip-step-n">生日當月 1 日</div>
+        <h4>禮金自動入帳</h4>
+        <p>當月 1 日直接加值至會員帳戶，不需申請或客服通知。</p>
+      </div></div>
+      <div class="hw-vip-step-wrap"><div class="hw-vip-step">
+        <div class="hw-vip-step-n">生日當月月底</div>
+        <h4>使用期限截止</h4>
+        <p>限生日當月使用完畢，恕無法提前或延後，逾期不補發。</p>
+      </div></div>
+    </div>
+
+    <div class="hw-vip-example">
+      <span>舉例說明</span>
+      陳小姐生日為 <b>1991/3/11</b>，並於 <b>2/25</b> 前成為有效會員，
+      即可於 <b>3/1</b> 獲得生日禮金，並於 <b>3/31</b> 前使用完畢。
+    </div>
+  </div>
+
+  <!-- 5. 紅利點數 -->
+  <div class="hw-vip-sec">
+    <div class="hw-vip-eyebrow">Reward points</div>
+    <h2 class="hw-vip-h2">紅利點數</h2>
+    <p class="hw-vip-lead">每筆消費依所屬階級回饋點數，<b>1 點折抵 1 元</b>，永久有效不過期。</p>
+
+    <div class="hw-vip-two">
+      <div class="hw-vip-half"><div class="hw-vip-box">
+        <h4>怎麼累積</h4>
+        <ul>
+          <li><span class="hw-vip-ratio">2% / 3% / 4% / 5%</span>依銀卡、金卡、白金卡、鑽石卡回饋，以<b>下單當下的會員階級</b>計算。</li>
+          <li>回饋金額以<b>商品金額扣除優惠折扣與購物金後</b>計算，不含運費及附加費。</li>
+          <li>點數於<b>訂單狀態轉為「已完成」時</b>發放至會員帳戶。</li>
+          <li>需於下單<b>當下已登入會員</b>，結帳時才勾選加入會員者無法累積。</li>
+        </ul>
+      </div></div>
+
+      <div class="hw-vip-half"><div class="hw-vip-box">
+        <h4>怎麼使用</h4>
+        <ul>
+          <li><span class="hw-vip-ratio">1 點 ＝ NT$1</span>結帳時於購物車輸入欲折抵的點數即可。</li>
+          <li>訂單滿 <b>NT$1,000</b> 方可折抵，門檻以扣除優惠折扣與購物金後的金額判定。</li>
+          <li>折抵<b>無上限</b>，可一次用完帳戶內全部點數。</li>
+          <li>點數<b>永久有效</b>，不設到期日。</li>
+        </ul>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 6. 注意事項 -->
+  <div class="hw-vip-sec">
+    <div class="hw-vip-eyebrow">Terms</div>
+    <h2 class="hw-vip-h2">使用規則與注意事項</h2>
+    <ul class="hw-vip-notes">
+      <li>生日禮金與新會員購物金，皆需<b>單筆訂單滿 NT$1,000</b> 方可使用，為一次性折抵。</li>
+      <li>生日禮金<b>限生日當月為有效使用期限</b>，恕無法提前或延後使用。</li>
+      <li>生日禮金為<b>會員專屬獨享</b>，無法轉讓其他用戶。</li>
+      <li>生日禮金<b>恕無法兌現</b>，如遇退貨狀況恕無法退回。</li>
+      <li>申請註冊會員時，請正確填寫生日資訊（<b>年／月／日</b>），並不得任意修改，以保障獲取專屬生日禮金之權益。</li>
+      <li>紅利回饋依<b>下單當下的會員階級</b>計算，升等後之訂單即適用新階級的回饋比例。</li>
+      <li>訂單取消或退貨時，已發放之點數不會自動收回，將由客服人員個別調整。</li>
+      <li>生日禮金金額<b>以發放當月的會員階級</b>為準，升等後即依新階級發放。</li>
+      <li>會員資格與消費金額<b>以同一帳號計算</b>，不同帳號之消費不予合併。</li>
+    </ul>
+    <p class="hw-vip-foot">
+      HEIWEI 何謂美保留對購物金折抵方式、使用期限，解釋、修改、暫停、終止等相關權利，並有權停止所有點數折抵活動。
+    </p>
+  </div>
+
+</div>

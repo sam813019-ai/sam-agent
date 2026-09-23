@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>何謂美 HEIWEI｜爆白防曬棒 新品上市</title>
+<meta name="description" content="HEIWEI 何謂美 新品上市 — 爆白防曬棒 NT$790。一抹清爽、隨身防護，夏日光感肌的每日儀式。">
+<meta name="google-site-verification" content="VlT1xwLi4ZHZjHgzYnRB8_3qVjkXoZ_LZxgbL4B3QeE" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+TC:wght@300;400;500;600&family=Noto+Sans+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ===================================================================
+     何謂美 v4 — 新品上市・捲動敘事版（爆白防曬棒 NT$790）
+     夏日純淨調：晨光白 × 日光暖橘點綴 × 暖墨
+     =================================================================== */
+  :root{
+    --bg:#FDFCFA;          /* 晨光白 */
+    --bg-warm:#FAF5EC;     /* 暖陽白（漸層用） */
+    --ink:#2B2723;         /* 暖墨 */
+    --ink-soft:#5C554C;
+    --muted:#A29A8E;
+    --line:#EAE4D9;
+    --sun:#D89A4E;         /* 日光暖橘：僅點綴 */
+    --sun-soft:#F3E3C9;
+    --serif-la:"Cormorant Garamond",serif;
+    --serif-tc:"Noto Serif TC",serif;
+    --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);font-weight:300;color:var(--ink);background:var(--bg);line-height:1.85;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+  img{display:block;max-width:100%}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+  .eyebrow{font-family:var(--serif-la);font-size:13px;letter-spacing:.44em;text-transform:uppercase;color:var(--sun);font-weight:400}
+  .sec-title{font-family:var(--serif-tc);font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:.14em;color:var(--ink);margin-top:16px;line-height:1.35}
+  .sec-head{text-align:center;margin-bottom:64px}
+  .sec-head .rule{width:1px;height:36px;background:var(--line);margin:24px auto 0}
+  .p-cta{display:inline-block;font-family:var(--serif-la);font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);position:relative;padding-bottom:3px}
+  .p-cta::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+
+  /* ===== 導覽列（亮色系） ===== */
+  .nav{position:fixed;top:0;left:0;width:100%;z-index:100;transition:background .5s,box-shadow .5s,padding .5s;padding:24px 0}
+  .nav.solid{background:rgba(253,252,250,.92);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line);padding:14px 0}
+  .nav-in{display:flex;align-items:center;justify-content:space-between}
+  .brand{font-family:var(--serif-tc);font-weight:500;font-size:22px;letter-spacing:.38em;color:var(--ink);line-height:1}
+  .brand small{font-family:var(--serif-la);font-size:10px;letter-spacing:.5em;display:block;opacity:.7;margin-top:4px}
+  .nav-links{display:flex;gap:38px;align-items:center}
+  .nav-links a{font-size:13.5px;letter-spacing:.18em;color:var(--ink-soft);transition:opacity .3s}
+  .nav-links a:hover{opacity:.55}
+  .nav-links a.shop{font-family:var(--serif-la);font-size:13px;letter-spacing:.3em;text-transform:uppercase;border:1px solid var(--ink);padding:9px 24px;transition:.4s}
+  .nav-links a.shop:hover{background:var(--ink);color:#fff;opacity:1}
+  .nav-toggle{display:none;background:none;border:none;color:var(--ink);font-size:22px;cursor:pointer}
+
+  /* ===== 捲動敘事:新品上市 ===== */
+  .launch{height:340vh;position:relative}
+  .launch-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
+    background:radial-gradient(90% 70% at 50% 30%, #FFFEFB 0%, var(--bg) 46%, var(--bg-warm) 100%)}
+  .sunhalo{position:absolute;top:8%;left:50%;transform:translateX(-50%);width:min(72vw,680px);aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle, rgba(216,154,78,.16) 0%, rgba(216,154,78,.05) 45%, transparent 70%);pointer-events:none;transition:opacity .3s}
+  .launch-product{position:absolute;top:50%;left:50%;height:min(37vh,420px);width:auto;transform:translate(-50%,-50%);
+    will-change:transform;filter:drop-shadow(0 30px 50px rgba(90,70,40,.22));z-index:3}
+  .lp-phase{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:0 24px;opacity:0;transform:translateY(26px);pointer-events:none;z-index:4;
+    transition:opacity .5s ease,transform .5s ease}
+  .lp-phase.on{opacity:1;transform:none;pointer-events:auto}
+  /* Phase 1:開場 */
+  .ph1 .badge{font-family:var(--serif-la);font-size:13px;letter-spacing:.5em;text-transform:uppercase;color:var(--sun);
+    border:1px solid var(--sun-soft);background:rgba(255,255,255,.7);padding:9px 26px 9px 30px;border-radius:30px}
+  .ph1 h1{font-family:var(--serif-tc);font-weight:500;font-size:clamp(2.6rem,7.4vw,4.6rem);letter-spacing:.22em;margin-top:26px;margin-left:.22em}
+  .ph1 .sub{font-size:clamp(.95rem,2vw,1.1rem);letter-spacing:.34em;color:var(--ink-soft);margin-top:16px;margin-left:.34em}
+  /* Phase 2:特點（左右浮現） */
+  .ph2 .feat{position:absolute;max-width:240px;text-align:left}
+  .ph2 .feat .fh{font-family:var(--serif-tc);font-weight:500;font-size:20px;letter-spacing:.12em}
+  .ph2 .feat .fp{font-size:13px;color:var(--ink-soft);margin-top:8px;line-height:1.9}
+  .ph2 .feat .fn{font-family:var(--serif-la);font-size:12px;letter-spacing:.3em;color:var(--sun);margin-bottom:8px}
+  .ph2 .f1{left:max(6vw,calc(50% - 560px));top:26%}
+  .ph2 .f2{left:max(6vw,calc(50% - 560px));bottom:22%}
+  .ph2 .f3{right:max(6vw,calc(50% - 560px));top:26%;text-align:right}
+  .ph2 .f4{right:max(6vw,calc(50% - 560px));bottom:22%;text-align:right}
+  /* Phase 3:價格+CTA */
+  .ph3 .pname{font-family:var(--serif-tc);font-weight:500;font-size:clamp(1.25rem,2.3vw,1.6rem);letter-spacing:.18em}
+  .ph3 .peng{font-family:var(--serif-la);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+  .ph3 .price{font-family:var(--serif-la);font-size:clamp(2.2rem,4.6vw,3.2rem);font-weight:400;margin-top:12px;color:var(--ink)}
+  .ph3 .price small{font-size:.42em;letter-spacing:.1em;color:var(--sun);vertical-align:.5em;margin-right:8px}
+  .ph3 .btn-buy{display:inline-block;margin-top:18px;font-family:var(--serif-la);font-size:13.5px;letter-spacing:.28em;
+    text-transform:uppercase;background:var(--ink);color:#fff;padding:14px 42px;transition:.4s}
+  .ph3 .btn-buy:hover{background:var(--sun)}
+  .ph3 .note{font-size:11px;letter-spacing:.14em;color:var(--muted);margin-top:12px}
+  .ph3-inner{position:absolute;left:50%;transform:translateX(-50%);bottom:4vh;text-align:center;width:100%;padding:4vh 24px 0;
+    background:linear-gradient(to top, var(--bg) 40%, rgba(253,252,250,.6) 75%, transparent 100%)}
+
+  /* ===== 跑馬燈 ===== */
+  .marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;background:var(--bg)}
+  .marquee-track{display:flex;white-space:nowrap;animation:mq 34s linear infinite;width:max-content}
+  .marquee span{font-family:var(--serif-la);font-size:14px;letter-spacing:.46em;text-transform:uppercase;color:var(--muted);padding:0 38px;position:relative}
+  .marquee span::after{content:"·";position:absolute;right:-5px;color:var(--sun)}
+  @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ===== 排行榜 ===== */
+  .ranking{padding:140px 0}
+  .rank-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:52px;align-items:start}
+  .rank-card{text-align:center;display:block}
+  .rank-card.first{margin-top:-24px}
+  .rank-no{font-family:var(--serif-la);font-size:70px;font-weight:300;color:var(--line);line-height:.8}
+  .rank-card.first .rank-no{color:var(--sun);opacity:.85}
+  .rank-img{aspect-ratio:1/1;background:#F5F1E9;overflow:hidden;margin:16px 0 20px}
+  .rank-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+  .rank-card:hover .rank-img img{transform:scale(1.06)}
+  .rank-tag{font-family:var(--serif-la);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--sun)}
+  .p-name{font-family:var(--serif-tc);font-weight:400;font-size:20px;letter-spacing:.1em;color:var(--ink);margin-top:10px}
+  .p-eng{font-family:var(--serif-la);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .p-price{font-size:15px;letter-spacing:.08em;color:var(--ink-soft);margin-top:12px}
+  .rank-card .p-cta{margin-top:16px}
+  .rank-card:hover .p-cta::after{transform:scaleX(1)}
+
+  /* ===== 肌膚問題 ===== */
+  .concerns{padding:140px 0;background:#F7F3EB}
+  .concern-chips{display:flex;flex-wrap:wrap;gap:34px;justify-content:center;margin-bottom:58px}
+  .chip{background:none;border:none;cursor:pointer;font-family:var(--serif-tc);font-weight:400;font-size:17px;letter-spacing:.14em;color:var(--muted);position:relative;padding:0 0 8px;transition:color .35s}
+  .chip::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--ink);transform:scaleX(0);transition:transform .4s}
+  .chip:hover{color:var(--ink-soft)}
+  .chip.active{color:var(--ink)}
+  .chip.active::after{transform:scaleX(1)}
+  .concern-result{display:grid;grid-template-columns:repeat(4,1fr);gap:38px 32px;transition:opacity .3s}
+  .cr-card{text-align:center;display:block;animation:fadeUp .6s both}
+  .cr-img{aspect-ratio:1/1.05;background:var(--bg);overflow:hidden;margin-bottom:18px}
+  .cr-img img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+  .cr-card:hover .cr-img img{transform:scale(1.06)}
+  .cr-card .p-name{font-size:17px;margin-top:0}
+  .cr-card .p-cta{font-size:12px;margin-top:12px}
+  .cr-card:hover .p-cta::after{transform:scaleX(1)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+  /* ===== 全系列 ===== */
+  .catalog{padding:140px 0}
+  .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:64px 44px}
+  .cat-item{text-align:center;display:block;position:relative}
+  .new-badge{position:absolute;top:14px;left:14px;z-index:3;font-family:var(--serif-la);font-size:10.5px;letter-spacing:.34em;
+    text-transform:uppercase;background:var(--sun);color:#fff;padding:7px 14px 7px 17px}
+  .cat-img{position:relative;aspect-ratio:1/1.08;overflow:hidden;background:#F5F1E9}
+  .cat-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1s,transform 1.1s cubic-bezier(.2,.8,.2,1)}
+  .cat-img .img2{opacity:0}
+  .cat-item:hover .img1{opacity:0}
+  .cat-item:hover .img2{opacity:1;transform:scale(1.05)}
+  .cat-item.single:hover .img1{opacity:1;transform:scale(1.05)}
+  .cat-body{padding-top:22px}
+  .cat-body .p-name{margin-top:0}
+  .cat-body .p-cta{font-size:12px;margin-top:14px}
+  .cat-item:hover .p-cta::after{transform:scaleX(1)}
+
+  /* ===== 品牌數字 ===== */
+  .stats{padding:130px 40px;border-top:1px solid var(--line)}
+  .stats-wrap{max-width:1000px;margin:0 auto;display:flex;justify-content:center;gap:40px}
+  .stat-box{flex:1;text-align:center;padding:0 10px}
+  .stat-box:not(:last-child){border-right:1px solid var(--line)}
+  .stat-num{font-family:var(--serif-la);font-size:clamp(3.2rem,7vw,5rem);font-weight:300;color:var(--ink);line-height:1;display:flex;justify-content:center;align-items:baseline}
+  .stat-suffix{font-size:1.4rem;margin-left:6px;color:var(--sun)}
+  .stat-label{font-size:14px;letter-spacing:.22em;color:var(--muted);margin-top:20px}
+
+  /* ===== 頁尾 ===== */
+  footer{background:var(--ink);color:#CFC7BA;padding:84px 40px 40px}
+  .foot-in{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;justify-content:space-between}
+  .foot-brand .brand{color:#fff;letter-spacing:.34em}
+  .foot-brand p{font-size:13px;color:#9C9284;margin-top:18px;max-width:300px;line-height:2}
+  .foot-col h5{font-family:var(--serif-la);font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:#fff;margin-bottom:18px;font-weight:400}
+  .foot-col a{display:block;font-size:13px;color:#A89E90;margin-bottom:12px;letter-spacing:.06em;transition:color .3s}
+  .foot-col a:hover{color:#fff}
+  .foot-bottom{max-width:1100px;margin:52px auto 0;padding-top:26px;border-top:1px solid rgba(255,255,255,.12);text-align:center;font-family:var(--serif-la);font-size:12px;color:#7D7568;letter-spacing:.2em}
+
+  /* ===== 減少動態偏好:直接展示 ===== */
+  @media (prefers-reduced-motion: reduce){
+    .launch{height:auto}
+    .launch-sticky{position:static;height:auto;padding:140px 0 90px}
+    .launch-product{position:static;transform:none;margin:0 auto;width:min(70vw,340px)}
+    .lp-phase{position:static;opacity:1;transform:none;pointer-events:auto;padding:30px 24px}
+    .ph2 .feat{position:static;max-width:none;text-align:center;margin:14px 0}
+    .ph3-inner{position:static;transform:none}
+  }
+
+  /* ===== RWD ===== */
+  @media(max-width:900px){
+    .wrap{padding:0 24px}
+    .nav-links{position:fixed;top:0;right:0;height:100vh;width:76%;max-width:320px;background:var(--bg);flex-direction:column;justify-content:center;gap:32px;transform:translateX(100%);transition:transform .45s;box-shadow:-10px 0 50px rgba(0,0,0,.12)}
+    .nav-links.open{transform:translateX(0)}
+    .nav-links a{font-family:var(--serif-tc);font-size:18px}
+    .nav-toggle{display:block;z-index:110}
+    .launch{height:300vh}
+    .launch-product{height:min(34vh,360px)}
+    .ph2 .feat,.ph2 .f3,.ph2 .f4{position:static;max-width:none;text-align:center;margin:0}
+    .ph2{justify-content:flex-start;padding-top:9vh;gap:14px}
+    .ph2 .feat .fp{display:none}                 /* 手機只留標題,避免蓋住產品 */
+    .ph2 .feat .fh{font-size:16px}
+    .ph2 .feat .fn{display:none}
+    .ranking,.catalog{padding:100px 0}
+    .concerns{padding:100px 0}
+    .rank-grid{grid-template-columns:1fr;gap:56px;max-width:340px;margin:0 auto}
+    .rank-card.first{margin-top:0}
+    .concern-result{grid-template-columns:repeat(2,1fr);gap:32px 18px}
+    .cat-grid{grid-template-columns:repeat(2,1fr);gap:44px 18px}
+    .stats{padding:90px 24px}
+    .stats-wrap{flex-direction:column;gap:52px}
+    .stat-box:not(:last-child){border-right:none;border-bottom:1px solid var(--line);padding-bottom:52px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav solid" id="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand">何謂美<small>HEIWEI</small></a>
+    <button class="nav-toggle" id="navToggle" aria-label="選單">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#top">新品上市</a>
+      <a href="#ranking">熱銷排行</a>
+      <a href="#concerns">肌膚保養</a>
+      <a href="#catalog">全系列</a>
+      <a href="https://www.heiweibeauty.com" class="shop" target="_blank">Shop</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== 捲動敘事:爆白防曬棒 ===== -->
+<section class="launch" id="top">
+  <div class="launch-sticky">
+    <div class="sunhalo" id="sunhalo"></div>
+    <img class="launch-product" id="launchProduct"
+         src="assets/sunstick.png"
+         alt="爆白防曬棒">
+
+    <!-- Phase 1:開場 -->
+    <div class="lp-phase ph1 on" id="ph1">
+      <div style="position:absolute;top:12vh;left:0;right:0;display:flex;flex-direction:column;align-items:center">
+        <span class="badge">New Arrival · 2026</span>
+        <h1>爆白防曬棒</h1>
+        <div class="sub">一抹淨白 ・ 隨身防護</div>
+      </div>
+    </div>
+
+    <!-- Phase 2:特點 -->
+    <div class="lp-phase ph2" id="ph2">
+      <div class="feat f1"><div class="fn">01 — Glide</div><div class="fh">一抹順滑不黏膩</div><div class="fp">固體棒狀質地，輕輕一抹服貼成膜，清爽不泛油光。</div></div>
+      <div class="feat f2"><div class="fn">02 — Tone-up</div><div class="fh">瞬時提亮素顏光</div><div class="fp">爆白系同源潤色科技，上臉即刻透出自然白皙光感。</div></div>
+      <div class="feat f3"><div class="fn">03 — Portable</div><div class="fh">口袋尺寸隨時補</div><div class="fp">不沾手設計，通勤、外出、運動隨時補擦不脫妝。</div></div>
+      <div class="feat f4"><div class="fn">04 — Daily</div><div class="fh">妝前妝後皆可用</div><div class="fp">妝前打底、妝後加強，全天守護你的夏日肌。</div></div>
+    </div>
+
+    <!-- Phase 3:價格+CTA -->
+    <div class="lp-phase ph3" id="ph3">
+      <div class="ph3-inner">
+        <div class="pname">爆白防曬棒</div>
+        <div class="peng">Physical Sun Stick</div>
+        <div class="price"><small>NT$</small>790</div>
+        <a class="btn-buy" href="https://www.heiweibeauty.com" target="_blank">立 即 選 購</a>
+        <div class="note">新品上市 ・ 全台宅配</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 跑馬燈 -->
+<div class="marquee" aria-hidden="true"><div class="marquee-track" id="marqueeTrack"></div></div>
+
+<!-- 排行榜 -->
+<section class="ranking" id="ranking">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Bestsellers</span>
+      <h2 class="sec-title">熱銷排行</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="rank-grid" id="rankGrid"></div>
+  </div>
+</section>
+
+<!-- 肌膚問題 -->
+<section class="concerns" id="concerns">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Skin Concerns</span>
+      <h2 class="sec-title">你想解決哪種肌膚問題</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="concern-chips" id="concernChips"></div>
+    <div class="concern-result" id="concernResult"></div>
+  </div>
+</section>
+
+<!-- 全系列 -->
+<section class="catalog" id="catalog">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">The Collection</span>
+      <h2 class="sec-title">全系列</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<!-- 品牌數字 -->
+<section class="stats" id="about">
+  <div class="stats-wrap">
+    <div class="stat-box"><div class="stat-num"><span class="count" data-target="10" data-suffix="年">0</span></div><div class="stat-label">專業美容師經驗</div></div>
+    <div class="stat-box"><div class="stat-num"><span class="count" data-target="14" data-suffix="天">0</span></div><div class="stat-label">有感實測</div></div>
+    <div class="stat-box"><div class="stat-num"><span class="count" data-target="2000" data-suffix="萬">0</span></div><div class="stat-label">產品安全責任險</div></div>
+  </div>
+</section>
+
+<!-- 頁尾 -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-brand">
+      <div class="brand">何謂美 HEIWEI</div>
+      <p>黑微美容 · 由專業美容師研製，和你為肌膚之美而生。溫和有效，讓保養成為每日的儀式。</p>
+    </div>
+    <div class="foot-col">
+      <h5>Shop</h5>
+      <a href="#top">新品：爆白防曬棒</a>
+      <a href="#ranking">熱銷排行</a>
+      <a href="#concerns">依肌膚問題</a>
+      <a href="https://www.heiweibeauty.com" target="_blank">線上商店</a>
+    </div>
+    <div class="foot-col">
+      <h5>About</h5>
+      <a href="#about">品牌故事</a>
+      <a href="https://www.heiweibeauty.com" target="_blank">會員專區</a>
+      <a href="https://www.heiweibeauty.com" target="_blank">聯絡我們</a>
+    </div>
+  </div>
+  <div class="foot-bottom">© 2026 HEIWEI Beauty · Kaohsiung, Taiwan</div>
+</footer>
+
+<script>
+  /* ============ 產品資料（改這裡即可） ============ */
+  const OWNER='648be21890a1b5008d602f77';
+  const img=id=>`https://img.shoplineapp.com/media/image_clips/${id}/original.png?owner_id=${OWNER}`;
+  const SHOP='https://www.heiweibeauty.com/products/';
+
+  const PRODUCTS=[
+    /* 新品置頂:爆白防曬棒（商品頁上架後把 url 換成正式連結） */
+    {id:'sunstick', name:'爆白防曬棒', eng:'Physical Sun Stick', price:790, url:'https://www.heiweibeauty.com',
+     img1:img('6a5706f19cf13236e45b9203'), img2:null, concerns:['sun'], isNew:true},
+    {id:'toner',   name:'魚子亮白保濕化妝水', eng:'Dazzling Toner',        price:2730, url:SHOP+'dazzling-brightening-toner',                     img1:img('6981ad0f7b72c9b3b091d6f4'), img2:img('698d901d4ac2a303fd23afb5'), concerns:['dry','dull']},
+    {id:'ampoule', name:'高端精華水安瓶',     eng:'A Plus Ampoule Essence',price:2290, url:SHOP+'a-plus-ampoule-essence',                        img1:img('6981ad0e492669fa02b64aad'), img2:img('698d901e01d855dcd94bc4fe'), concerns:['aging']},
+    {id:'mask5d',  name:'光透波5D養膚面膜',   eng:'5D Revitalizing Mask',  price:1490, url:SHOP+'%E5%85%89%E9%80%8F%E6%B3%A25d%E9%A4%8A%E8%86%9A%E9%9D%A2%E8%86%9C', img1:img('6981ad0ea235e06fc83d6d13'), img2:img('698d9026328659ee70d6a918'), concerns:['dull']},
+    {id:'cream',   name:'亮顏保濕蜜蜜霜',     eng:'Honey Honey Cream',     price:2290, url:SHOP+'honey-honey-cream',                             img1:img('6981ad0cccc31123f0e4a489'), img2:img('698d901e18b9c326964f1732'), concerns:['dry','aging']},
+    {id:'cleanser',name:'潔淨舒壓洗面乳',     eng:'Perfect Facial Cleanser',price:1080,url:SHOP+'perfect-facial-cleanser',                        img1:img('6981ad0f9c236f3b3ec54609'), img2:img('698d901f099a485560d884fd'), concerns:['pores']},
+    {id:'exfo',    name:'白膜淨去角質泥膜',   eng:'Exfoliating Mask',      price:2050, url:SHOP+'clarifyingoil-absorbing-exfoliating-mask',      img1:img('6981ad0fb829d7deedffc981'), img2:img('698d901fa6581a3eea116405'), concerns:['pores']},
+    {id:'capsule', name:'妝前智能5GF柔敏膠囊', eng:'5GF Soothing Capsules', price:1160, url:SHOP+'revitalizing-5gf-soothing-capsules',            img1:img('6981ad0fce8301b97b8f4b66'), img2:img('698d90208656d62acc721d4a'), concerns:['sensitive']},
+    {id:'bspray',  name:'活氧B群保濕噴霧',     eng:'Vitamin B Spray',       price:1190, url:SHOP+'vitamin-b-water',                               img1:img('6981ad0f04a901c8c352248c'), img2:img('699ebb3b32b1bac734237200'), concerns:['dry','sensitive']},
+    {id:'sunspray',name:'爆白防曬隔離噴霧',    eng:'Physical Sun Spray',    price:840,  url:SHOP+'suncare',                                       img1:img('6981ad0f230253b0be850216'), img2:img('698d901ea78ddc41e777d910'), concerns:['sun']},
+  ];
+
+  const TOP3=['toner','ampoule','mask5d'];   // 改順序即換名次
+
+  const CONCERNS=[
+    {id:'sun',      label:'防曬隔離'},        /* 新品上市:防曬放第一 */
+    {id:'dry',      label:'乾燥缺水'},
+    {id:'dull',     label:'暗沉蠟黃'},
+    {id:'pores',    label:'毛孔油光'},
+    {id:'sensitive',label:'敏感泛紅'},
+    {id:'aging',    label:'初老緊緻'},
+  ];
+
+  const P=id=>PRODUCTS.find(p=>p.id===id);
+  const nt=n=>'NT$ '+n.toLocaleString();
+
+  /* ============ 捲動敘事引擎 ============ */
+  const launch=document.querySelector('.launch');
+  const product=document.getElementById('launchProduct');
+  const halo=document.getElementById('sunhalo');
+  const phases=[document.getElementById('ph1'),document.getElementById('ph2'),document.getElementById('ph3')];
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const S0=1.06, S1=1.42;      // 起訖縮放
+  const TY_END=-25;            // 結尾上移(vh),讓位給價格區、產品完整露出
+  let TY_START=10;             // 起始下移(vh),由 computeStart 依實際版面量測
+  // 動態量測:產品盒頂端 = 副標底部 + 32px,任何視窗尺寸都保證間距
+  function computeStart(){
+    const sub=document.querySelector('.ph1 .sub');
+    const sticky=document.querySelector('.launch-sticky');
+    if(!sub||!sticky||!product.offsetHeight) return;
+    const sRect=sticky.getBoundingClientRect();
+    const subBottomIn=sub.getBoundingClientRect().bottom - sRect.top; // 副標在 sticky 內的底部
+    const prodH=product.offsetHeight*S0;
+    const centerIn=subBottomIn + 32 + prodH/2;                        // 期望的產品中心位置
+    TY_START=(centerIn - sticky.offsetHeight/2)/innerHeight*100;      // 換算成相對 50% 的 vh 偏移
+  }
+  function onLaunchScroll(){
+    if(reduced) return;
+    const rect=launch.getBoundingClientRect();
+    const total=launch.offsetHeight-innerHeight;
+    const p=Math.min(1,Math.max(0,-rect.top/total));   // 0→1 捲動進度
+    const scale=S0+p*(S1-S0);
+    const rot=-10+p*16;
+    const ty=TY_START+p*(TY_END-TY_START);
+    product.style.transform=`translate(-50%,calc(-50% + ${ty}vh)) scale(${scale}) rotate(${rot}deg)`;
+    halo.style.opacity=String(0.6+p*0.4);
+    // 文字分幕:0–.3 開場 / .3–.62 特點 / .62–1 價格
+    phases[0].classList.toggle('on',p<0.3);
+    phases[1].classList.toggle('on',p>=0.3&&p<0.62);
+    phases[2].classList.toggle('on',p>=0.62);
+  }
+  addEventListener('scroll',onLaunchScroll,{passive:true});
+  addEventListener('resize',()=>{computeStart();onLaunchScroll();},{passive:true});
+  if(product.complete){computeStart();} else {product.addEventListener('load',()=>{computeStart();onLaunchScroll();});}
+  computeStart();
+  onLaunchScroll();
+
+  /* ============ 跑馬燈 ============ */
+  const mq=document.getElementById('marqueeTrack');
+  const mqItems='<span>New Arrival</span><span>爆白防曬棒</span><span>NT$790</span><span>HEIWEI</span><span>和你為肌膚之美而生</span>';
+  mq.innerHTML=mqItems+mqItems+mqItems;
+
+  /* ============ 排行榜 ============ */
+  const rankGrid=document.getElementById('rankGrid');
+  const layout=[{pid:TOP3[1],n:2},{pid:TOP3[0],n:1},{pid:TOP3[2],n:3}];
+  layout.forEach(({pid,n})=>{
+    const p=P(pid);
+    rankGrid.insertAdjacentHTML('beforeend',`
+      <a class="rank-card ${n===1?'first':''}" href="${p.url}" target="_blank">
+        <div class="rank-no">0${n}</div>
+        <div class="rank-img"><img src="${p.img1}" alt="${p.name}" loading="lazy"></div>
+        <div class="rank-tag">${n===1?'Bestseller':'No. '+n}</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-eng">${p.eng}</div>
+        <div class="p-price">${nt(p.price)}</div>
+        <span class="p-cta">選購</span>
+      </a>`);
+  });
+
+  /* ============ 肌膚問題 ============ */
+  const chips=document.getElementById('concernChips');
+  const result=document.getElementById('concernResult');
+  CONCERNS.forEach((c,i)=>{
+    chips.insertAdjacentHTML('beforeend',`<button class="chip${i===0?' active':''}" data-c="${c.id}">${c.label}</button>`);
+  });
+  function renderConcern(cid){
+    const list=PRODUCTS.filter(p=>p.concerns.includes(cid));
+    result.style.opacity=0;
+    setTimeout(()=>{
+      result.innerHTML=list.map((p,i)=>`
+        <a class="cr-card" style="animation-delay:${i*80}ms" href="${p.url}" target="_blank">
+          <div class="cr-img"><img src="${p.img1}" alt="${p.name}" loading="lazy"></div>
+          <div class="p-name">${p.name}${p.isNew?' <span style="color:var(--sun);font-size:11px;letter-spacing:.2em">NEW</span>':''}</div>
+          <div class="p-price">${nt(p.price)}</div>
+          <span class="p-cta">查看商品</span>
+        </a>`).join('');
+      result.style.opacity=1;
+    },160);
+  }
+  chips.addEventListener('click',e=>{
+    const b=e.target.closest('.chip'); if(!b)return;
+    chips.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    renderConcern(b.dataset.c);
+  });
+  renderConcern(CONCERNS[0].id);
+
+  /* ============ 全系列 ============ */
+  const catGrid=document.getElementById('catGrid');
+  PRODUCTS.forEach(p=>{
+    const hasSwap=!!p.img2;
+    catGrid.insertAdjacentHTML('beforeend',`
+      <a class="cat-item${hasSwap?'':' single'}" href="${p.url}" target="_blank">
+        ${p.isNew?'<span class="new-badge">New</span>':''}
+        <div class="cat-img">
+          <img class="img1" src="${p.img1}" alt="${p.name}" loading="lazy">
+          ${hasSwap?`<img class="img2" src="${p.img2}" alt="${p.name}" loading="lazy">`:''}
+        </div>
+        <div class="cat-body">
+          <div class="p-name">${p.name}</div>
+          <div class="p-eng">${p.eng}</div>
+          <div class="p-price">${nt(p.price)}</div>
+          <span class="p-cta">選購</span>
+        </div>
+      </a>`);
+  });
+
+  /* ============ 手機選單 ============ */
+  const navLinks=document.getElementById('navLinks');
+  document.getElementById('navToggle').addEventListener('click',()=>navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+
+  /* ============ 數字動畫 ============ */
+  const animate=el=>{
+    const target=+el.dataset.target,suf=el.dataset.suffix||'',dur=2200;let s=null;
+    const ease=t=>1-(--t)*t*t*t;
+    const step=ts=>{if(!s)s=ts;const pr=Math.min((ts-s)/dur,1);el.innerHTML=Math.round(target*ease(pr))+`<span class="stat-suffix">${suf}</span>`;if(pr<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step);
+  };
+  const io=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){animate(e.target);o.unobserve(e.target);}}),{threshold:.3});
+  document.querySelectorAll('.count').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

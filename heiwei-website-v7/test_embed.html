@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>模擬 Shopline 環境 — v7 嵌入測試</title>
+<link rel="stylesheet" href="theme_common.css">
+<style>
+  /* 盡量複製 Shopline varm 主題的外框條件 */
+  body{margin:0;background:#fff;font-family:'Noto Sans TC',sans-serif;}
+  .fake-header{position:sticky;top:0;z-index:100;background:#F2EDE7;border-bottom:1px solid #ddd;
+    padding:18px 24px;text-align:center;font-size:13px;letter-spacing:.3em;color:#3a3a3a;}
+  /* ★ 這就是探針抓到的兇手，原樣重現 */
+  .CustomPage{overflow:hidden;max-width:1200px;margin:0 auto;padding:0 15px;}
+    padding:8px 16px;min-width:80px;font-size:14px;box-shadow:0 1px 3px rgba(0,0,0,.1);}
+  .note{background:#1F2220;color:#fff;padding:10px 16px;font-size:13px;text-align:center;}
+</style></head><body>
+
+
+
+<div id="diag" style="position:relative;z-index:9999;background:#111;color:#0f0;font:12px/1.6 monospace;padding:12px;white-space:pre-wrap"></div>
+<script>
+window.addEventListener("load",function(){setTimeout(function(){
+  var out=[], checks=[
+    [".progress","backgroundColor,borderTopLeftRadius,height,overflowY"],
+    [".label","backgroundColor,display,color"],
+    [".mark","backgroundColor"],
+    [".progress button","backgroundColor,borderTopWidth"]
+  ];
+  checks.forEach(function(c){
+    var el=document.querySelector(".hw-v7 "+c[0]);
+    if(!el){out.push(c[0]+" → 找不到（可能在畫面外/未渲染）");return;}
+    var cs=getComputedStyle(el), line=c[0]+" → ";
+    line+=c[1].split(",").map(function(k){return k+":"+cs[k]}).join("  ");
+    out.push(line);
+  });
+  var pg=document.querySelector(".hw-v7 .progress");
+  if(pg){var cs=getComputedStyle(pg);
+    var clean=(cs.backgroundColor==="rgba(0, 0, 0, 0)"||cs.backgroundColor==="transparent")&&cs.borderTopLeftRadius==="0px";
+    out.push(clean?">>> 白膠囊已消除 ✅":">>> 白膠囊仍在 ❌");}
+  document.getElementById("diag").textContent=out.join("\n");
+},2500);});
+</script>
+<div class="fake-header">HEIWEI（模擬商店 header）　<a href="#" class="store-link" style="color:#3a3a3a">商店連結</a>　<button>商店按鈕</button></div>
+<div class="note">↓ 以下是 .CustomPage（overflow:hidden，1200px 置中）— 跟 Shopline 一樣的框</div>
+<div class="CustomPage">
+<!-- ══════════════════════════════════════════════════════════════
+     HEIWEI v7「光的一天」── Shopline 客製化語法元件專用版
+     由 index.html 轉換而來，改了四個地方：
+       1. 拆掉 doctype/html/head/body 外殼，內容包進 .hw-v7 容器
+       2. body 的樣式移到 .hw-v7，並破格成滿版（深底才不會只有中間一條）
+       3. 加 .CustomPage overflow:visible ← 沒有這行 sticky 會死，產品不會釘住
+       4. 影格改讀 FRAME_BASE 外部網址（Shopline 讀不到本機 assets/）
+     影格圖床：https://heiwei-v7-frames.vercel.app/stick/ （Vercel 專案 heiwei-v7-frames）
+     ══════════════════════════════════════════════════════════════ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Noto+Sans+TC:wght@200;300;400;500&family=Noto+Serif+TC:wght@300;400;500;600&display=swap">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   撞名歸零｜Shopline 主題是 Bootstrap 底，這 5 個 class 名跟 v7 撞車：
+     .progress → 灰底圓角條（底部時間軸變白膠囊的元兇）
+     .label    → 深灰藥丸＋白字＋1px 黑框
+     .mark     → 黃色螢光筆底
+     .badge    → 灰圓標
+     .nav      → list-style / padding
+   v7 這幾條規則本身沒宣告 background 等屬性，光提高權重沒用（沒有競爭對手），
+   必須明確歸零。這段刻意放在最前面，後面 v7 自己的宣告仍會覆蓋回來。
+   ══════════════════════════════════════════════════════════════ */
+.hw-v7 .progress,.hw-v7 .label,.hw-v7 .mark,.hw-v7 .badge,.hw-v7 .nav{
+  background:none;background-color:transparent;
+  border:0;border-radius:0;box-shadow:none;
+  padding:0;margin:0;min-width:0;height:auto;overflow:visible;
+  color:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;
+  text-align:inherit;white-space:normal;vertical-align:baseline;list-style:none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   v7 — 產品開蓋後停靠左側定位 ＋ 併入 v4 的四項互動
+   ══════════════════════════════════════════════════════════ */
+:root{
+  --night:#131011; --night-2:#1B1618; --night-3:#231D1F;
+  --paper:#F6F2EE; --paper-2:#EDE7E1;
+  --ink:#1A1614; --ink-soft:#5B534E; --ink-mute:#9A918B;
+  --on-night:#F2ECE8; --on-night-soft:#B4A8A3; --on-night-mute:#786C69;
+  --blush:#EFC4D2; --blush-deep:#C4657F; --balm:#F0DCB8; --sun:#E8A45C;
+  --line-dark:rgba(242,236,232,.13); --line-light:#DFD8D1;
+
+  --disp:"Italiana",serif;
+  --serif:"Noto Serif TC",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+
+  --pad:clamp(20px,5vw,64px);
+  --maxw:1200px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+.hw-v7 *{box-sizing:border-box}
+/* ── Shopline 嵌入用容器（原本掛在 body 的樣式全部移到這裡）── */
+.hw-v7{
+  position:relative;
+  width:100vw;margin-left:calc(50% - 50vw);   /* 破出 .CustomPage 的邊界，深底滿版 */
+  background:var(--night);color:var(--on-night);
+  font-family:var(--sans);font-weight:300;line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+  /* ⚠️ 這裡只能用 clip 不能用 hidden：hidden 會讓另一軸變成 auto，
+     .hw-v7 就成了 sticky 的捲動容器，#pin 會完全失效（原本掛在 body 上沒事，
+     因為 body/html 的 overflow 會傳播到視窗）。clip 不建立捲動容器。 */
+  overflow-x:clip;
+}
+/* ⚠️ 關鍵：Shopline 的 .CustomPage 有 overflow:hidden，會讓 #pin 的 sticky 完全失效 */
+.CustomPage{overflow:visible !important;}
+/* 商店本身已有導覽列，隱藏 v7 自己那條（DOM 保留，JS 還會操作它）*/
+.hw-v7 #nav{display:none !important;}
+.hw-v7 img{max-width:100%;display:block}
+.hw-v7 a{color:inherit;text-decoration:none}
+/* Shopline 主題會給 button 白底、邊框、圓角、自己的字色，權重壓過裸 button{}，
+   所以底部時間軸才會出現一條白色膠囊。這裡 scope 進 .hw-v7 並強制歸零。 */
+.hw-v7 button{
+  font:inherit !important;color:inherit !important;
+  background:none !important;background-color:transparent !important;
+  border:0 !important;border-radius:0 !important;box-shadow:none !important;
+  padding:0 !important;margin:0;min-width:0 !important;min-height:0 !important;
+  width:auto;height:auto;line-height:inherit !important;text-transform:none !important;
+  -webkit-appearance:none;appearance:none;cursor:pointer;
+}
+.hw-v7 button:hover, .hw-v7 button:focus, .hw-v7 button:active{
+  background:none !important;background-color:transparent !important;box-shadow:none !important;
+}
+.hw-v7 :focus-visible{outline:2px solid var(--blush);outline-offset:3px}
+
+.hw-v7 .label{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--on-night-mute);font-weight:400}
+.hw-v7 .shell{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+
+/* ══════════ LOADER ══════════ */
+.hw-v7 #loader{
+  position:absolute;inset:0;z-index:5;background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  transition:opacity .7s ease,visibility .7s ease;
+}
+.hw-v7 #loader.done{opacity:0;visibility:hidden}
+.hw-v7 #loader .mark{font-family:var(--disp);font-size:clamp(28px,6vw,44px);letter-spacing:.34em;color:var(--on-night);text-indent:.34em}
+.hw-v7 #loader .bar{width:min(220px,50vw);height:1px;background:var(--line-dark);position:relative;overflow:hidden}
+.hw-v7 #loader .bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--blush);transition:width .25s ease}
+.hw-v7 #loader .pct{font-size:11px;letter-spacing:.24em;color:var(--on-night-mute);font-variant-numeric:tabular-nums}
+
+/* ══════════ NAV ＋ 行動版選單 ══════════ */
+.hw-v7 .nav{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px var(--pad);
+  background:linear-gradient(to bottom,rgba(19,16,17,.88),rgba(19,16,17,0));
+  transition:background .4s ease;
+}
+.hw-v7 .nav a.brand{font-family:var(--disp);font-size:19px;letter-spacing:.3em;text-indent:.3em}
+.hw-v7 .nav .links{display:flex;gap:clamp(14px,2.6vw,30px);align-items:center}
+.hw-v7 .nav .links a{font-size:12px;letter-spacing:.16em;color:var(--on-night-soft);transition:color .3s}
+.hw-v7 .nav .links a:hover{color:var(--on-night)}
+.hw-v7 .nav .buy{border:1px solid var(--line-dark);padding:7px 18px;border-radius:100px;color:var(--on-night)!important}
+.hw-v7 .nav .buy:hover{background:var(--blush);color:var(--night)!important;border-color:var(--blush)}
+.hw-v7 .nav.on-light{background:linear-gradient(to bottom,rgba(246,242,238,.94),rgba(246,242,238,0))}
+.hw-v7 .nav.on-light a.brand, .hw-v7 .nav.on-light .links a:hover{color:var(--ink)}
+.hw-v7 .nav.on-light .links a{color:var(--ink-soft)}
+.hw-v7 .nav.on-light .buy{border-color:var(--line-light);color:var(--ink)!important}
+.hw-v7 .nav.on-light .buy:hover{background:var(--ink);color:var(--paper)!important;border-color:var(--ink)}
+.hw-v7 .nav-toggle{display:none;width:34px;height:34px;align-items:center;justify-content:center}
+.hw-v7 .nav-toggle i{display:block;width:19px;height:1px;background:currentColor;position:relative;transition:background .2s}
+.hw-v7 .nav-toggle i::before, .hw-v7 .nav-toggle i::after{content:"";position:absolute;left:0;width:19px;height:1px;background:currentColor;transition:transform .3s var(--ease)}
+.hw-v7 .nav-toggle i::before{top:-6px}
+.hw-v7 .nav-toggle i::after{top:6px}
+.hw-v7 .nav.menu-open .nav-toggle i{background:transparent}
+.hw-v7 .nav.menu-open .nav-toggle i::before{transform:translateY(6px) rotate(45deg)}
+.hw-v7 .nav.menu-open .nav-toggle i::after{transform:translateY(-6px) rotate(-45deg)}
+@media(max-width:760px){
+  .hw-v7 .nav-toggle{display:flex}
+  .hw-v7 .nav{color:var(--on-night)}
+  .hw-v7 .nav.on-light{color:var(--ink)}
+  .hw-v7 .nav .links{
+    position:fixed;inset:64px 0 auto;flex-direction:column;gap:0;
+    background:var(--night);border-bottom:1px solid var(--line-dark);
+    padding:8px 0 20px;
+    transform:translateY(-115%);transition:transform .45s var(--ease);
+  }
+  .hw-v7 .nav.menu-open .links{transform:none}
+  .hw-v7 .nav .links a{padding:14px var(--pad);width:100%;font-size:14px;letter-spacing:.2em;color:var(--on-night-soft)}
+  .hw-v7 .nav .links .buy{margin:12px var(--pad) 0;width:calc(100% - var(--pad)*2);text-align:center;border-radius:100px}
+  .hw-v7 .nav.on-light .links{background:var(--paper);border-color:var(--line-light)}
+}
+
+/* ══════════ SCROLL STAGE ══════════ */
+.hw-v7 #stage{position:relative;height:600vh}
+.hw-v7 #pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
+.hw-v7 #halo{
+  position:absolute;inset:-25%;pointer-events:none;
+  background:radial-gradient(circle at var(--hx,20%) var(--hy,78%),
+    var(--hc1,#E8A45C) 0%, var(--hc2,rgba(232,164,92,.20)) 26%, rgba(19,16,17,0) 62%);
+  opacity:var(--ho,.5);transition:opacity .3s linear;will-change:background,opacity;
+}
+.hw-v7 #grain{
+  position:absolute;inset:0;pointer-events:none;opacity:.32;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+/* 產品：由 JS 逐格改 transform。開蓋段一次移到左側，之後固定不動 */
+.hw-v7 #seq{
+  position:relative;z-index:2;height:min(78svh,720px);width:auto;
+  filter:drop-shadow(0 30px 60px rgba(0,0,0,.55));
+  will-change:transform;transform-origin:50% 50%;
+}
+
+/* 文字節拍：產品開蓋後停在左邊不再移動，文案固定成右側單一直欄。
+   固定左邊界比左右交替好讀 —— 眼睛每換一段都回到同一個起點。 */
+.hw-v7 .beats{position:absolute;inset:0;z-index:3;pointer-events:none}
+.hw-v7 .beat{position:absolute;opacity:0;transition:opacity .5s ease,transform .6s var(--ease)}
+.hw-v7 .beat .time{font-family:var(--disp);font-size:13px;letter-spacing:.3em;color:var(--blush);display:block;margin-bottom:14px}
+.hw-v7 .beat h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.4vw,36px);line-height:1.42;margin:0 0 12px;letter-spacing:.04em;text-wrap:balance}
+.hw-v7 .beat p{margin:0;font-size:14.5px;line-height:2;color:var(--on-night-soft)}
+@media(min-width:861px){
+  .hw-v7 .beat{
+    left:52%;width:min(430px,42vw);top:50%;text-align:left;
+    transform:translateY(calc(-50% + 18px));
+  }
+  .hw-v7 .beat.in{opacity:1;transform:translateY(-50%)}
+}
+@media(max-width:860px){
+  .hw-v7 #seq{height:min(58svh,520px)}
+  .hw-v7 .beat{
+    left:var(--pad);right:var(--pad);max-width:none;text-align:center;
+    bottom:calc(env(safe-area-inset-bottom,0px) + 30px);top:auto;transform:translateY(16px);
+  }
+  .hw-v7 .beat.in{opacity:1;transform:none}
+  .hw-v7 .beat h2{font-size:21px}
+  .hw-v7 .beat p{font-size:13.5px}
+}
+
+/* Hero 標題 */
+.hw-v7 #opening{
+  position:absolute;z-index:4;inset:0;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+  text-align:center;pointer-events:none;transition:opacity .5s ease;
+  padding:clamp(72px,11svh,118px) var(--pad) clamp(50px,7.5svh,84px);
+}
+.hw-v7 #opening .op-top, .hw-v7 #opening .op-bot{display:flex;flex-direction:column;align-items:center}
+.hw-v7 #opening .kicker{font-size:11px;letter-spacing:.34em;color:var(--on-night-mute);margin-bottom:18px}
+.hw-v7 #opening h1{font-family:var(--disp);font-weight:400;margin:0;font-size:clamp(32px,min(11vw,8.2svh),92px);line-height:.95;letter-spacing:.07em;text-indent:.07em}
+.hw-v7 #opening .zh{font-family:var(--serif);font-size:clamp(13px,2.2vw,18px);letter-spacing:.5em;text-indent:.5em;color:var(--blush);margin-top:16px;font-weight:300}
+.hw-v7 #opening .spec{margin-top:12px;font-size:11.5px;letter-spacing:.2em;color:var(--on-night-soft)}
+
+/* 章節進度／跳段：放底部置中，才不會跟左右兩側的文案搶位置 */
+.hw-v7 .progress{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;
+  display:flex;gap:clamp(14px,2vw,26px);align-items:flex-end;
+  transition:opacity .4s ease;
+}
+.hw-v7 .progress button{display:flex;flex-direction:column;align-items:center;gap:9px;pointer-events:auto}
+.hw-v7 .progress .dot{width:26px;height:1px;background:var(--on-night-mute);transition:width .35s var(--ease),background .35s ease}
+.hw-v7 .progress button.on .dot{width:48px;background:var(--blush)}
+.hw-v7 .progress .t{
+  font-family:var(--disp);font-size:11px;letter-spacing:.2em;color:var(--on-night-mute);
+  opacity:.45;transition:opacity .3s,color .3s;
+}
+.hw-v7 .progress button.on .t, .hw-v7 .progress button:hover .t{opacity:1;color:var(--blush)}
+@media(max-width:860px){.hw-v7 .progress{display:none}}
+
+/* ══════════ 跑馬燈 ══════════ */
+.hw-v7 .marquee{
+  overflow:hidden;border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);
+  background:var(--night-2);padding:16px 0;
+}
+.hw-v7 .mq-track{display:flex;gap:52px;width:max-content;animation:slide 34s linear infinite}
+.hw-v7 .mq-track span{
+  font-family:var(--disp);font-size:14px;letter-spacing:.26em;color:var(--on-night-soft);
+  white-space:nowrap;display:flex;align-items:center;gap:52px;
+}
+.hw-v7 .mq-track span::after{content:"";width:4px;height:4px;border-radius:50%;background:var(--blush);flex:0 0 4px}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-33.333%)}}
+.hw-v7 .marquee:hover .mq-track{animation-play-state:paused}
+
+/* ══════════ 通用區塊 ══════════ */
+.hw-v7 .sec{padding:clamp(78px,11vw,140px) 0}
+.hw-v7 .sec-dark{background:var(--night)}
+.hw-v7 .sec-dark-2{background:var(--night-2)}
+.hw-v7 .sec-light{background:var(--paper);color:var(--ink)}
+.hw-v7 .sec-head{max-width:640px;margin:0 auto clamp(46px,7vw,76px);text-align:center}
+.hw-v7 .sec-light .sec-head .label{color:var(--ink-mute)}
+.hw-v7 .sec-head h2{font-family:var(--serif);font-weight:400;letter-spacing:.06em;font-size:clamp(26px,4.4vw,42px);line-height:1.45;margin:16px 0 0;text-wrap:balance}
+.hw-v7 .sec-head p{margin:18px 0 0;font-size:14.5px;color:var(--on-night-soft);line-height:2.1}
+.hw-v7 .sec-light .sec-head p{color:var(--ink-soft)}
+
+/* ── 亮底段的元件覆寫（features／ingredients／ranking 跳色用）──
+   sec-light 只換了 section 底色與主文字，段落內部的格線、卡片底、次要文字
+   原本都吃深底專用色（--line-dark / --night / --on-night-*），在亮底上會消失，
+   所以要整組換到亮底家族。sec-light-2 是較深的紙色，給裡面已經是亮卡的段落用。 */
+.hw-v7 .sec-light-2{background:var(--paper-2)}
+.hw-v7 .sec-light .label{color:var(--ink-mute)}
+
+.hw-v7 .sec-light .feats,
+.hw-v7 .sec-light .ing{background:var(--line-light);border-color:var(--line-light)}
+.hw-v7 .sec-light .feats article,
+.hw-v7 .sec-light .ing article{background:var(--paper)}
+.hw-v7 .sec-light-2 .feats article,
+.hw-v7 .sec-light-2 .ing article{background:var(--paper-2)}
+.hw-v7 .sec-light .feats article:hover{background:#FFFFFF}
+.hw-v7 .sec-light .feats p,
+.hw-v7 .sec-light .ing p{color:var(--ink-soft)}
+.hw-v7 .sec-light .ing .en{color:var(--ink-mute)}
+/* 淺粉在亮底上只有 1.2:1，換成深粉才看得見 */
+.hw-v7 .sec-light .feats .en{color:var(--blush-deep)}
+.hw-v7 .sec-light .ing .mark{background:var(--blush-deep)}
+
+.hw-v7 .sec-light .spec-strip{border-top-color:var(--line-light);border-bottom-color:var(--line-light)}
+.hw-v7 .sec-light .spec-strip div{border-right-color:var(--line-light)}
+.hw-v7 .sec-light .spec-strip dt{color:var(--ink-mute)}
+
+
+/* ══════════ 四大特點（沿用 v4 的 Glide / Tone-up / Portable / Daily） ══════════ */
+.hw-v7 .feats{display:grid;gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);grid-template-columns:1fr}
+@media(min-width:640px){.hw-v7 .feats{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.hw-v7 .feats{grid-template-columns:repeat(4,1fr)}}
+.hw-v7 .feats article{background:var(--night);padding:clamp(26px,3.4vw,36px);display:flex;flex-direction:column;gap:11px;transition:background .4s ease}
+.hw-v7 .feats article:hover{background:var(--night-3)}
+.hw-v7 .feats .en{font-family:var(--disp);font-size:13px;letter-spacing:.24em;color:var(--blush)}
+.hw-v7 .feats h3{font-family:var(--serif);font-weight:400;font-size:17.5px;line-height:1.6;margin:0;letter-spacing:.03em}
+.hw-v7 .feats p{margin:0;font-size:13.5px;line-height:2;color:var(--on-night-soft)}
+
+/* ══════════ UV 時光機 ══════════ */
+.hw-v7 .uv-wrap{max-width:760px;margin:0 auto}
+.hw-v7 .uv-chart{display:grid;grid-template-columns:repeat(13,1fr);gap:clamp(3px,.8vw,8px);align-items:end;height:clamp(150px,26vw,220px);margin-bottom:18px}
+.hw-v7 .uv-bar{position:relative;border-radius:2px 2px 0 0;opacity:.42;transition:opacity .35s ease,transform .35s ease}
+.hw-v7 .uv-bar.act{opacity:1;transform:scaleX(1.12)}
+.hw-v7 .uv-scale{display:grid;grid-template-columns:repeat(13,1fr);gap:clamp(3px,.8vw,8px);font-size:9.5px;letter-spacing:.05em;color:var(--on-night-mute);text-align:center;font-variant-numeric:tabular-nums}
+.hw-v7 .uv-scale span{white-space:nowrap}
+@media(max-width:640px){.hw-v7 .uv-scale span:nth-child(even){visibility:hidden}}
+.hw-v7 .uv-readout{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:10px 22px;margin:34px 0 22px;text-align:center}
+.hw-v7 .uv-readout .hr{font-family:var(--disp);font-size:clamp(38px,8vw,64px);line-height:1;letter-spacing:.04em}
+.hw-v7 .uv-readout .idx{font-size:13px;letter-spacing:.2em;color:var(--on-night-soft)}
+.hw-v7 .uv-readout .idx b{font-weight:400;font-size:19px;font-variant-numeric:tabular-nums}
+.hw-v7 .uv-readout .lvl{font-size:11px;letter-spacing:.2em;padding:5px 14px;border-radius:100px;border:1px solid currentColor}
+.hw-v7 .uv-note{text-align:center;font-size:14px;color:var(--on-night-soft);line-height:2;min-height:3.5em;margin:0}
+.hw-v7 input[type=range].uv-range{-webkit-appearance:none;appearance:none;width:100%;height:1px;background:var(--line-dark);margin:30px 0 12px;cursor:pointer}
+.hw-v7 input[type=range].uv-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--blush);border:4px solid var(--night-2);cursor:grab;box-shadow:0 0 0 1px var(--blush)}
+.hw-v7 input[type=range].uv-range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--blush);border:4px solid var(--night-2);box-shadow:0 0 0 1px var(--blush);cursor:grab}
+
+/* ══════════ 成分 ══════════ */
+.hw-v7 .ing{display:grid;gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);grid-template-columns:1fr;max-width:1000px;margin:0 auto}
+@media(min-width:700px){.hw-v7 .ing{grid-template-columns:1fr 1fr}}
+.hw-v7 .ing article{background:var(--night);padding:clamp(28px,4vw,40px);display:flex;flex-direction:column;gap:12px}
+.hw-v7 .ing .mark{width:26px;height:1px;background:var(--blush);margin-bottom:4px}
+.hw-v7 .ing h3{font-family:var(--serif);font-weight:400;font-size:18px;line-height:1.6;margin:0;letter-spacing:.03em}
+.hw-v7 .ing .en{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--on-night-mute);margin-top:-6px}
+.hw-v7 .ing p{margin:0;font-size:13.5px;line-height:2;color:var(--on-night-soft)}
+.hw-v7 .spec-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);max-width:1000px;margin:clamp(52px,7vw,80px) auto 0}
+.hw-v7 .spec-strip div{padding:26px 20px;text-align:center;border-right:1px solid var(--line-dark)}
+.hw-v7 .spec-strip div:last-child{border-right:0}
+.hw-v7 .spec-strip dt{font-size:10.5px;letter-spacing:.22em;color:var(--on-night-mute);text-transform:uppercase}
+.hw-v7 .spec-strip dd{margin:10px 0 0;font-family:var(--serif);font-size:17px;letter-spacing:.05em;font-weight:400}
+
+/* ══════════ 購買 ══════════ */
+.hw-v7 .buybox{max-width:760px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hw-v7 .buybox .pname{font-family:var(--serif);font-size:clamp(24px,4vw,34px);font-weight:400;letter-spacing:.06em;margin:0}
+.hw-v7 .buybox .peng{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--on-night-mute)}
+.hw-v7 .buybox .pprice{font-family:var(--disp);font-size:clamp(40px,8vw,62px);line-height:1.2;margin-top:14px}
+.hw-v7 .buybox .pprice small{font-size:.3em;letter-spacing:.16em;vertical-align:.7em;margin-right:8px;color:var(--on-night-soft)}
+.hw-v7 .cta{
+  margin-top:30px;display:inline-block;padding:16px 54px;border-radius:100px;
+  background:var(--blush);color:var(--night);font-size:13px;letter-spacing:.26em;text-indent:.26em;
+  transition:transform .3s ease,box-shadow .3s ease,background .3s ease;
+}
+.hw-v7 .cta:hover{transform:translateY(-2px);box-shadow:0 14px 34px -12px rgba(239,196,210,.6);background:#F7D3DE}
+.hw-v7 .buybox .fine{margin-top:16px;font-size:11.5px;letter-spacing:.14em;color:var(--on-night-mute)}
+
+/* ══════════ 熱銷排行（頒獎台） ══════════ */
+.hw-v7 .rank{display:grid;gap:clamp(16px,2.4vw,28px);grid-template-columns:1fr;align-items:end;max-width:1000px;margin:0 auto}
+@media(min-width:760px){.hw-v7 .rank{grid-template-columns:1fr 1.24fr 1fr}}
+.hw-v7 .rank a{display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border:1px solid var(--line-light);transition:transform .45s var(--ease),box-shadow .45s ease}
+.hw-v7 .rank a:hover{transform:translateY(-6px);box-shadow:0 22px 46px -20px rgba(26,22,20,.32)}
+/* 名次用 serif 而非 Italiana —— Italiana 的舊體數字會把 02 畫得像 O2 */
+.hw-v7 .rank .no{font-family:var(--serif);font-weight:300;font-variant-numeric:tabular-nums;font-size:clamp(28px,3.6vw,40px);line-height:1;padding:22px 22px 0;color:var(--ink-mute)}
+.hw-v7 .rank .first .no{color:var(--blush-deep)}
+.hw-v7 .rank .im{aspect-ratio:1;background:#fff;overflow:hidden;margin:14px 0 0}
+.hw-v7 .rank .im img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.hw-v7 .rank a:hover .im img{transform:scale(1.05)}
+.hw-v7 .rank .body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:3px}
+.hw-v7 .rank .badge{align-self:flex-start;font-size:9.5px;letter-spacing:.2em;padding:4px 10px;border-radius:100px;background:var(--paper-2);color:var(--ink-soft);margin-bottom:9px}
+.hw-v7 .rank .first .badge{background:var(--ink);color:var(--paper)}
+.hw-v7 .rank h3{font-family:var(--serif);font-weight:400;font-size:16px;line-height:1.6;margin:0;letter-spacing:.03em}
+.hw-v7 .rank .en{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute)}
+.hw-v7 .rank .pr{margin-top:9px;font-size:14px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+
+/* ══════════ 肌膚問題篩選 ══════════ */
+.hw-v7 .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:clamp(36px,5vw,56px)}
+.hw-v7 .chip{
+  border:1px solid var(--line-dark);border-radius:100px;padding:9px 20px;
+  font-size:12.5px;letter-spacing:.14em;color:var(--on-night-soft);
+  transition:background .3s ease,color .3s ease,border-color .3s ease;
+}
+.hw-v7 .chip:hover{border-color:var(--on-night-soft);color:var(--on-night)}
+.hw-v7 .chip[aria-pressed=true]{background:var(--blush);color:var(--night);border-color:var(--blush)}
+.hw-v7 .chip .n{font-variant-numeric:tabular-nums;opacity:.6;margin-left:7px;font-size:11px}
+.hw-v7 .result{display:grid;gap:clamp(18px,2.5vw,30px);grid-template-columns:repeat(auto-fill,minmax(196px,1fr));transition:opacity .3s ease}
+.hw-v7 .result a{display:flex;flex-direction:column;gap:2px;animation:pop .5s var(--ease) both}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.hw-v7 .result .im{aspect-ratio:1;background:#fff;overflow:hidden;margin-bottom:14px;border:1px solid var(--line-dark)}
+.hw-v7 .result .im img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.hw-v7 .result a:hover .im img{transform:scale(1.05)}
+.hw-v7 .result h3{font-family:var(--serif);font-weight:400;font-size:15px;line-height:1.6;margin:0;letter-spacing:.03em}
+.hw-v7 .result .pr{margin-top:6px;font-size:13px;color:var(--on-night-soft);font-variant-numeric:tabular-nums}
+.hw-v7 .result .new{color:var(--blush);font-size:10px;letter-spacing:.2em;margin-left:6px}
+
+/* ══════════ 品牌數字 ══════════ */
+@media(min-width:700px){}
+@media(min-width:700px){
+  
+  
+}
+
+/* ══════════ 型錄 ══════════ */
+.hw-v7 .cat{display:grid;gap:clamp(18px,2.5vw,32px);grid-template-columns:repeat(auto-fill,minmax(212px,1fr))}
+.hw-v7 .cat a{display:flex;flex-direction:column;gap:2px}
+.hw-v7 .cat .thumb{position:relative;aspect-ratio:1;background:#fff;overflow:hidden;margin-bottom:16px;border:1px solid var(--line-light)}
+.hw-v7 .cat .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,transform .6s var(--ease)}
+.hw-v7 .cat .thumb .b{opacity:0}
+.hw-v7 .cat a:hover .a{opacity:0}
+.hw-v7 .cat a:hover .b{opacity:1;transform:scale(1.04)}
+.hw-v7 .cat a.single:hover .a{transform:scale(1.04)}
+.hw-v7 .cat .tag{position:absolute;top:10px;left:10px;z-index:2;background:var(--ink);color:var(--paper);font-size:9.5px;letter-spacing:.2em;padding:4px 10px;border-radius:100px}
+.hw-v7 .cat h3{font-family:var(--serif);font-weight:400;font-size:15.5px;line-height:1.6;margin:0;letter-spacing:.03em}
+.hw-v7 .cat .en{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute)}
+.hw-v7 .cat .pr{margin-top:8px;font-size:13.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+
+/* ══════════ FOOTER ══════════ */
+@media(max-width:760px){}
+
+.hw-v7 .rise{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.hw-v7 .rise.in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  .hw-v7 *, .hw-v7 *::before, .hw-v7 *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .hw-v7 #stage{height:auto}
+  .hw-v7 #pin{position:relative;height:auto;padding:100px 0 60px}
+  .hw-v7 #seq{transform:none!important}
+  .hw-v7 .beat{position:static;opacity:1;transform:none;max-width:none;text-align:center;margin:26px auto 0}
+  .hw-v7 .beats{position:static;display:flex;flex-direction:column;gap:8px}
+  .hw-v7 #opening{position:static;padding-bottom:40px}
+  .hw-v7 .progress{display:none}
+  .hw-v7 .rise{opacity:1;transform:none}
+}
+</style>
+
+<div class="hw-v7">
+<div id="loader">
+  <div class="mark">HEIWEI</div>
+  <div class="bar"><i id="lbar"></i></div>
+  <div class="pct" id="lpct">0%</div>
+</div>
+
+<nav class="nav" id="nav">
+  <a href="#top" class="brand">HEIWEI</a>
+  <button class="nav-toggle" id="navToggle" aria-label="開啟選單" aria-expanded="false" aria-controls="navLinks"><i></i></button>
+  <div class="links" id="navLinks">
+    <a href="#features">產品特點</a>
+    <a href="#uv">紫外線</a>
+    <a href="#ranking">熱銷排行</a>
+    <a href="#concerns">肌膚問題</a>
+    <a href="#catalog">全系列</a>
+    <a href="https://www.heiweibeauty.com" target="_blank" rel="noopener" class="buy">選 購</a>
+  </div>
+</nav>
+
+<!-- ═══════════ 捲軸主舞台（產品左右位移） ═══════════ -->
+<div id="stage">
+  <div id="pin">
+    <div id="halo"></div>
+    <div id="grain"></div>
+    <canvas id="seq" width="440" height="1524" aria-label="爆白潤色防曬棒開啟動畫"></canvas>
+
+    <div id="opening">
+      <div class="op-top">
+        <div class="kicker">HEIWEI 何謂美 ・ 新品上市</div>
+        <h1>A Day</h1>
+      </div>
+      <div class="op-bot">
+        <h1>of Light</h1>
+        <div class="zh">光 的 一 天</div>
+        <div class="spec">爆白潤色防曬棒 ・ SPF50+ ★★★★ ・ NET 15g</div>
+      </div>
+    </div>
+
+    <div class="beats" id="beats">
+      <!-- 四段文案共用右側同一欄，只做淡入淡出 -->
+      <div class="beat" data-from=".14" data-to=".35">
+        <span class="time">06:00 — 晨光</span>
+        <h2>一天，從一抹開始</h2>
+        <p>出門前的最後一個動作。不沾手、不沾妝，三秒完成，然後你就可以出門了。</p>
+      </div>
+      <div class="beat" data-from=".36" data-to=".58">
+        <span class="time">09:00 — 通勤</span>
+        <h2>旋開，就是全部</h2>
+        <p>不用鏡子、不用手指、不用另一層底妝。防曬、潤色、保養，一支收掉三個步驟。</p>
+      </div>
+      <div class="beat" data-from=".59" data-to=".80">
+        <span class="time">12:00 — 正午</span>
+        <h2>紫外線最強的兩小時</h2>
+        <p>SPF50+ ★★★★ 廣效防護。膏體貼合成膜，流汗不融、不斑駁、不泛白。</p>
+      </div>
+      <div class="beat" data-from=".81" data-to="1.01">
+        <span class="time">16:00 — 補擦</span>
+        <h2>底部收著一塊海綿</h2>
+        <p>補完直接推勻，妝面不糊、不留痕。這是它跟其他防曬棒最不一樣的地方。</p>
+      </div>
+    </div>
+
+    <div class="progress" id="progress"></div>
+  </div>
+</div>
+
+<!-- ═══════════ 跑馬燈 ═══════════ -->
+<div class="marquee" aria-hidden="true"><div class="mq-track" id="mqTrack"></div></div>
+
+<!-- ═══════════ 四大特點 ═══════════ -->
+<section class="sec sec-light" id="features">
+  <div class="shell">
+    <div class="sec-head rise">
+      <div class="label">Why This Stick</div>
+      <h2>一支要做完的四件事</h2>
+      <p>防曬棒的門檻不在係數，在於你願不願意每天帶著它、隨時拿出來補。</p>
+    </div>
+    <div class="feats rise">
+      <article>
+        <span class="en">Glide</span>
+        <h3>一抹順滑不黏膩</h3>
+        <p>固體棒狀質地，輕輕一抹服貼成膜，清爽不泛油光。</p>
+      </article>
+      <article>
+        <span class="en">Tone-up</span>
+        <h3>瞬時提亮素顏光</h3>
+        <p>爆白系同源潤色科技，上臉即刻透出自然白皙光感。</p>
+      </article>
+      <article>
+        <span class="en">Portable</span>
+        <h3>口袋尺寸隨時補</h3>
+        <p>不沾手設計，通勤、外出、運動隨時補擦不脫妝。</p>
+      </article>
+      <article>
+        <span class="en">Daily</span>
+        <h3>妝前妝後皆可用</h3>
+        <p>妝前打底、妝後加強，全天守護你的夏日肌。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ UV 時光機 ═══════════ -->
+<section class="sec sec-dark-2" id="uv">
+  <div class="shell">
+    <div class="sec-head rise">
+      <div class="label">UV Index ・ 台灣夏季實測區間</div>
+      <h2>你以為的安全時間，其實不安全</h2>
+      <p>拉動下面的時間軸，看看一天之中紫外線怎麼變化。橘色以上就是「過量級」——曬傷只需要 20 分鐘。</p>
+    </div>
+    <div class="uv-wrap rise">
+      <div class="uv-chart" id="uvChart"></div>
+      <div class="uv-scale" id="uvScale"></div>
+      <input type="range" class="uv-range" id="uvRange" min="0" max="12" step="1" value="6" aria-label="選擇時間" aria-describedby="uvNote">
+      <div class="uv-readout">
+        <span class="hr" id="uvHour">12:00</span>
+        <span class="idx">UV 指數 <b id="uvIdx">11</b></span>
+        <span class="lvl" id="uvLvl">危險級</span>
+      </div>
+      <p class="uv-note" id="uvNote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 成分 ═══════════ -->
+<section class="sec sec-light" id="ingredients">
+  <div class="shell">
+    <div class="sec-head rise">
+      <div class="label">Key Actives</div>
+      <h2>不只擋光，還在養</h2>
+      <p>防曬棒最常見的問題是「只防不養」。這支把保養品的成分放進了防曬裡。</p>
+    </div>
+    <div class="ing rise">
+      <article>
+        <span class="mark"></span>
+        <h3>專利植萃美白勻亮因子</h3>
+        <span class="en">Marshmallow Root · Rice Bran · Licorice</span>
+        <p>棉花糖根、米糠與甘草根複方，針對日曬後的暗沉堆積，讓膚色回到勻亮的狀態。</p>
+      </article>
+      <article>
+        <span class="mark"></span>
+        <h3>天然發酵紅沒藥醇</h3>
+        <span class="en">Bisabolol</span>
+        <p>洋甘菊中最溫和的舒緩成分。日曬後的泛紅、緊繃與不適，交給它處理。</p>
+      </article>
+      <article>
+        <span class="mark"></span>
+        <h3>超進化控油因子</h3>
+        <span class="en">Sebum Control Complex</span>
+        <p>台灣夏天的真正敵人不是曬黑，是出油脫妝。全天維持不泛油光的霧面感。</p>
+      </article>
+      <article>
+        <span class="mark"></span>
+        <h3>澳洲天然茶樹精油</h3>
+        <span class="en">Australian Tea Tree Oil</span>
+        <p>淨化毛孔、平衡油脂。通過不致粉刺測試，痘痘肌也可以放心整天帶著。</p>
+      </article>
+    </div>
+    <dl class="spec-strip rise">
+      <div><dt>防曬係數</dt><dd>SPF50+ ★★★★</dd></div>
+      <div><dt>容量</dt><dd>NET 15g / 0.53oz</dd></div>
+      <div><dt>質地</dt><dd>固體潤色膏體</dd></div>
+      <div><dt>測試</dt><dd>不致粉刺</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ═══════════ 購買 ═══════════ -->
+<section class="sec sec-dark-2">
+  <div class="shell">
+    <div class="buybox rise">
+      <div class="label">New Arrival</div>
+      <h2 class="pname">爆白潤色防曬棒</h2>
+      <div class="peng">Bright Tone-Up Sunscreen Stick</div>
+      <div class="pprice"><small>NT$</small>790</div>
+      <a class="cta" href="https://www.heiweibeauty.com/products/suncare-1" target="_blank" rel="noopener">立 即 選 購</a>
+      <div class="fine">全台宅配 ・ 專業美容師研製 ・ 產品責任險</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 熱銷排行 ═══════════ -->
+<section class="sec sec-light sec-light-2" id="ranking">
+  <div class="shell">
+    <div class="sec-head rise">
+      <div class="label">Bestsellers</div>
+      <h2>熱銷排行</h2>
+      <p>老客戶回購最多的三支。防曬是新品，這裡放的是已經被驗證過的。</p>
+    </div>
+    <div class="rank rise" id="rank"></div>
+  </div>
+</section>
+
+<!-- ═══════════ 肌膚問題 ═══════════ -->
+<section class="sec sec-dark-2" id="concerns">
+  <div class="shell">
+    <div class="sec-head rise">
+      <div class="label">Skin Concerns</div>
+      <h2>你想解決哪種肌膚問題</h2>
+      <p>選一個最困擾你的，我們把對應的產品挑出來。</p>
+    </div>
+    <div class="chips rise" id="chips" role="group" aria-label="肌膚問題"></div>
+    <div class="result" id="result" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ═══════════ 全系列 ═══════════ -->
+<section class="sec sec-light" id="catalog">
+  <div class="shell">
+    <div class="sec-head rise">
+      <div class="label">The Collection</div>
+      <h2>和你為肌膚之美而生</h2>
+      <p>由專業美容師研製的完整保養序列。溫和有效，讓保養成為每日的儀式。</p>
+    </div>
+    <div class="cat rise" id="cat"></div>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const lerp = (a,b,t) => a + (b - a) * t;
+const smooth = t => t * t * (3 - 2 * t);          // smoothstep，讓位移不會生硬
+
+/* ───────── 1. 影格序列 ───────── */
+/* ⚠️ 影格圖的公開網址（結尾要有斜線）。
+   Shopline 讀不到本機的 assets/，101×2 張影格必須放在外部靜態空間。 */
+const FRAME_BASE = "https://heiwei-v7-frames.vercel.app/stick/";
+
+const FRAMES = 101;
+const mobile = matchMedia("(max-width:860px)").matches || (window.devicePixelRatio < 1.5 && innerWidth < 1100);
+const SET = mobile ? {p:"m", w:264, h:914} : {p:"d", w:440, h:1524};
+const canvas = document.getElementById("seq");
+const ctx = canvas.getContext("2d", {alpha:true});
+canvas.width = SET.w; canvas.height = SET.h;
+
+const imgs = new Array(FRAMES);
+let loaded = 0, ready = false;
+const lbar = document.getElementById("lbar"), lpct = document.getElementById("lpct"),
+      loader = document.getElementById("loader");
+function finishLoad(){
+  if (ready) return;
+  ready = true; loader.classList.add("done"); draw(0); onScroll();
+}
+for (let i = 0; i < FRAMES; i++){
+  const im = new Image(); im.decoding = "async";
+  im.onload = im.onerror = () => {
+    loaded++;
+    const pc = Math.round(loaded / FRAMES * 100);
+    lbar.style.width = pc + "%"; lpct.textContent = pc + "%";
+    if (loaded === FRAMES) finishLoad();
+  };
+  im.src = FRAME_BASE + `${SET.p}_${String(i).padStart(4,"0")}.webp`;
+  imgs[i] = im;
+}
+setTimeout(finishLoad, 4000);
+
+let curFrame = -1;
+function draw(n){
+  n = Math.max(0, Math.min(FRAMES - 1, n | 0));
+  if (n === curFrame) return;
+  const im = imgs[n];
+  if (!im || !im.complete || !im.naturalWidth) return;
+  curFrame = n;
+  ctx.clearRect(0, 0, SET.w, SET.h);
+  ctx.drawImage(im, 0, 0, SET.w, SET.h);
+}
+
+/* ───────── 2. 產品運鏡路徑 ─────────
+   x = 相對畫面寬的位移(vw)，s = 縮放，r = 傾角(deg)
+   只在開蓋段移動一次到左側，之後全程固定，避免來回擺動造成暈眩 */
+/* 影格 26–86 是產品本體轉一整圈（同時膏體升起），放大就掛在這一段。
+   安全上限實測：旋轉段內容只佔畫布高 80% → 可放到 1.5x；
+   但最終影格佔 97% → 只能到 1.29x，所以收尾一定要降回來。
+   向下補償位移交給下面的 yFix() 依實際畫布尺寸算。 */
+const PATH = [
+  {p:0,    x:  0, s:1.00, r: 0},   // 開場：正中
+  {p:.26,  x:-19, s:1.06, r:-4},   // 開蓋段移到左側定位，旋轉正要開始
+  {p:.42,  x:-19, s:1.26, r:-4},   // 旋轉起手 → 推近
+  {p:.70,  x:-19, s:1.26, r:-4},   // 整圈轉完都維持在最近，不忽大忽小
+  {p:.86,  x:-19, s:1.10, r:-4},   // 膏體開始完全伸出 → 拉遠讓位
+  {p:1,    x:-19, s:1.04, r:-4}    // 收尾：產品最高，縮到最小才不會切到
+];
+// 手機沒有側欄可放文案（文字在下方），位移只會讓構圖失衡 → 完全不位移
+const XF = mobile ? 0 : 1;
+// 手機畫布下方要留給文案，放大幅度收斂
+const ZF = mobile ? .55 : 1;
+function poseAt(p){
+  let i = 0;
+  while (i < PATH.length - 2 && p > PATH[i+1].p) i++;
+  const a = PATH[i], b = PATH[i+1];
+  const t = smooth(Math.max(0, Math.min(1, (p - a.p) / (b.p - a.p || 1))));
+  const s = 1 + (lerp(a.s, b.s, t) - 1) * ZF;
+  return { x: lerp(a.x, b.x, t) * XF, y: yFix(s), s, r: lerp(a.r, b.r, t) };
+}
+/* 放大時的向下補償（px）。
+   內容在畫布裡是靠上的（約從 1.3% 起算），純放大會讓瓶蓋鑽到導覽列底下。
+   導覽列高度是固定 px、不隨視窗高度縮放，所以補償不能用 vh —— 必須依實際
+   畫布尺寸即時算，矮視窗才不會補不夠。s=1 時結果為 0，不影響原本構圖。 */
+const TOP_MIN = 80;
+function yFix(s){
+  const C = canvas.offsetHeight;                 // 版面高度，不受 transform 影響
+  if (!C) return 0;
+  return Math.max(0, TOP_MIN - innerHeight / 2 + (C * s / 2) * 0.974);
+}
+
+/* ───────── 3. 光位 ───────── */
+const KEY = [
+  {p:0,  x:18, y:82, c1:"#E8A45C", c2:"rgba(232,164,92,.18)",  o:.45},
+  {p:.5, x:50, y:12, c1:"#FBEBCB", c2:"rgba(251,235,203,.22)", o:.85},
+  {p:1,  x:82, y:80, c1:"#C98098", c2:"rgba(201,128,152,.18)", o:.50}
+];
+function mixHex(h1, h2, t){
+  const n = h => [1,3,5].map(i => parseInt(h.substr(i,2),16));
+  const [r1,g1,b1] = n(h1), [r2,g2,b2] = n(h2);
+  return `rgb(${Math.round(lerp(r1,r2,t))},${Math.round(lerp(g1,g2,t))},${Math.round(lerp(b1,b2,t))})`;
+}
+const halo = document.getElementById("halo");
+function setHalo(p){
+  let a = KEY[0], b = KEY[1];
+  if (p > .5){ a = KEY[1]; b = KEY[2]; }
+  const t = (p - a.p) / (b.p - a.p || 1);
+  const s = halo.style;
+  s.setProperty("--hx", lerp(a.x,b.x,t).toFixed(1) + "%");
+  s.setProperty("--hy", lerp(a.y,b.y,t).toFixed(1) + "%");
+  s.setProperty("--hc1", mixHex(a.c1, b.c1, t));
+  s.setProperty("--hc2", t < .5 ? a.c2 : b.c2);
+  s.setProperty("--ho", lerp(a.o,b.o,t).toFixed(2));
+}
+
+/* ───────── 4. 捲軸驅動 ───────── */
+const stage = document.getElementById("stage");
+const opening = document.getElementById("opening");
+const beats = [...document.querySelectorAll(".beat")].map(el => ({
+  el, from: parseFloat(el.dataset.from), to: parseFloat(el.dataset.to)
+}));
+
+/* 進度指示器兼章節導覽 */
+const progress = document.getElementById("progress");
+const CHAPTERS = ["06:00","09:00","12:00","16:00"];
+progress.innerHTML = CHAPTERS.map((t,i) =>
+  `<button type="button" data-i="${i}" aria-label="跳到 ${t} 這一段"><span class="dot"></span><span class="t">${t}</span></button>`
+).join("");
+const pBtns = [...progress.querySelectorAll("button")];
+progress.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const i = +b.dataset.i;
+  const mid = (beats[i].from + beats[i].to) / 2;
+  const total = stage.offsetHeight - innerHeight;
+  scrollTo({ top: stage.offsetTop + mid * total, behavior: reduce ? "auto" : "smooth" });
+});
+
+let ticking = false, lastP = -1;
+function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(apply); } }
+function apply(){
+  ticking = false;
+
+  // 導覽列進亮段換色（必須在 early-return 前）
+  const cRect = document.getElementById("catalog").getBoundingClientRect();
+  document.getElementById("nav").classList.toggle("on-light", cRect.top < 70 && cRect.bottom > 70);
+
+  const r = stage.getBoundingClientRect();
+  const total = stage.offsetHeight - innerHeight;
+  const p = total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
+  if (Math.abs(p - lastP) < .0004) return;
+  lastP = p;
+
+  draw(Math.round(p * (FRAMES - 1)));
+  setHalo(p);
+
+  const q = poseAt(p);
+  // translate 在最外層 → 位移量不受 scale 影響，y 才能穩定用 vh 計算
+  canvas.style.transform =
+    `translate(${q.x.toFixed(2)}vw, ${q.y.toFixed(1)}px) scale(${q.s.toFixed(3)}) rotate(${q.r.toFixed(2)}deg)`;
+
+  const oFade = 1 - Math.min(1, p / .11);
+  opening.style.opacity = oFade;
+  progress.style.opacity = Math.min(1, Math.max(0, (p - .10) / .06));
+
+  let active = -1;
+  beats.forEach((b, i) => {
+    const on = p >= b.from && p < b.to;
+    b.el.classList.toggle("in", on);
+    if (on) active = i;
+  });
+  pBtns.forEach((b, i) => b.classList.toggle("on", i === active));
+}
+if (!reduce){
+  addEventListener("scroll", onScroll, {passive:true});
+  addEventListener("resize", () => { lastP = -1; onScroll(); }, {passive:true});
+} else {
+  const show = () => { draw(FRAMES - 1); beats.forEach(b => b.el.classList.add("in")); };
+  imgs[FRAMES-1].complete ? show() : imgs[FRAMES-1].addEventListener("load", show);
+}
+
+/* ───────── 5. 行動版選單 ───────── */
+const nav = document.getElementById("nav"), navToggle = document.getElementById("navToggle");
+navToggle.addEventListener("click", () => {
+  const open = nav.classList.toggle("menu-open");
+  navToggle.setAttribute("aria-expanded", String(open));
+  navToggle.setAttribute("aria-label", open ? "關閉選單" : "開啟選單");
+});
+document.getElementById("navLinks").addEventListener("click", e => {
+  if (e.target.tagName === "A"){
+    nav.classList.remove("menu-open");
+    navToggle.setAttribute("aria-expanded", "false");
+  }
+});
+
+/* ───────── 6. 跑馬燈 ───────── */
+const MQ = ["New Arrival","爆白潤色防曬棒","SPF50+ ★★★★","NET 15g","NT$ 790","HEIWEI 何謂美","和你為肌膚之美而生"];
+document.getElementById("mqTrack").innerHTML =
+  [0,1,2].map(() => MQ.map(t => `<span>${t}</span>`).join("")).join("");
+
+/* ───────── 7. UV 時光機 ───────── */
+const UV = [
+  {h:"06:00", v:0,  t:"太陽剛升起，紫外線幾乎為零。但這也是唯一不需要防曬的時段。"},
+  {h:"07:00", v:1,  t:"UVA 已經開始作用了 —— 它不會讓你曬紅，但會讓你變老。"},
+  {h:"08:00", v:3,  t:"通勤時段。等公車的十五分鐘，累積量比你想像得多。"},
+  {h:"09:00", v:5,  t:"進辦公室前的最後機會。此時補一次，可以撐到中午。"},
+  {h:"10:00", v:8,  t:"已達過量級。裸肌曬傷所需時間縮短到約 25 分鐘。"},
+  {h:"11:00", v:10, t:"接近全日高點。這個時候出門買午餐，就該補擦。"},
+  {h:"12:00", v:11, t:"全日最強。危險級 —— 曬傷只需要 20 分鐘，防曬必須是物理性遮蔽等級。"},
+  {h:"13:00", v:11, t:"午休外出的高風險時段。多數人的防曬在這時已經失效兩小時了。"},
+  {h:"14:00", v:9,  t:"仍在過量級。台灣夏季一天中被低估最嚴重的時間。"},
+  {h:"15:00", v:6,  t:"下降到高量級，但累積傷害不會下降。今天的量已經滿了。"},
+  {h:"16:00", v:4,  t:"中量級。接小孩、運動、外出，這一段仍然需要防護。"},
+  {h:"17:00", v:2,  t:"低量級。UVB 減弱，但 UVA 依然穿透雲層與玻璃。"},
+  {h:"18:00", v:1,  t:"一天結束。可以卸妝了 —— 防曬要卸，這是最後一步。"}
+];
+const LVL = [
+  {max:2,  n:"低量級", c:"#8FBF9F"},
+  {max:5,  n:"中量級", c:"#E3CE73"},
+  {max:7,  n:"高量級", c:"#E8A45C"},
+  {max:10, n:"過量級", c:"#DE7F63"},
+  {max:99, n:"危險級", c:"#C9556E"}
+];
+const lvlOf = v => LVL.find(l => v <= l.max);
+const chart = document.getElementById("uvChart"), scale = document.getElementById("uvScale");
+UV.forEach(u => {
+  const b = document.createElement("div");
+  b.className = "uv-bar";
+  b.style.height = Math.max(4, u.v / 11 * 100) + "%";
+  b.style.background = lvlOf(u.v).c;
+  chart.appendChild(b);
+  const s = document.createElement("span");
+  s.textContent = u.h.slice(0,2);
+  scale.appendChild(s);
+});
+const range = document.getElementById("uvRange"),
+      elHour = document.getElementById("uvHour"), elIdx = document.getElementById("uvIdx"),
+      elLvl = document.getElementById("uvLvl"), elNote = document.getElementById("uvNote"),
+      bars = [...chart.children];
+function renderUV(){
+  const i = +range.value, u = UV[i], l = lvlOf(u.v);
+  elHour.textContent = u.h; elIdx.textContent = u.v;
+  elIdx.style.color = l.c; elLvl.textContent = l.n; elLvl.style.color = l.c;
+  elNote.textContent = u.t;
+  bars.forEach((b,k) => b.classList.toggle("act", k === i));
+}
+range.addEventListener("input", renderUV);
+renderUV();
+
+/* ───────── 8. 產品資料 ───────── */
+const OWNER = "648be21890a1b5008d602f77";
+const img = id => `https://img.shoplineapp.com/media/image_clips/${id}/original.png?owner_id=${OWNER}`;
+const SHOP = "https://www.heiweibeauty.com/products/";
+const PRODUCTS = [
+  {id:"sunstick", n:"爆白潤色防曬棒", e:"Bright Tone-Up Sunscreen Stick", p:790,  u:SHOP+"suncare-1",
+   a:img("6a5706f19cf13236e45b9203"), b:null, c:["sun"], isNew:true},
+  {id:"sunspray", n:"爆白防曬隔離噴霧", e:"Physical Sun Spray", p:840, u:SHOP+"suncare",
+   a:img("6981ad0f230253b0be850216"), b:img("698d901ea78ddc41e777d910"), c:["sun"]},
+  {id:"toner",    n:"魚子亮白保濕化妝水", e:"Dazzling Toner", p:2730, u:SHOP+"dazzling-brightening-toner",
+   a:img("6981ad0f7b72c9b3b091d6f4"), b:img("698d901d4ac2a303fd23afb5"), c:["dry","dull"]},
+  {id:"ampoule",  n:"高端精華水安瓶", e:"A Plus Ampoule Essence", p:2290, u:SHOP+"a-plus-ampoule-essence",
+   a:img("6981ad0e492669fa02b64aad"), b:img("698d901e01d855dcd94bc4fe"), c:["aging"]},
+  {id:"mask5d",   n:"光透波5D養膚面膜", e:"5D Revitalizing Mask", p:1490,
+   u:SHOP+"%E5%85%89%E9%80%8F%E6%B3%A25d%E9%A4%8A%E8%86%9A%E9%9D%A2%E8%86%9C",
+   a:img("6981ad0ea235e06fc83d6d13"), b:img("698d9026328659ee70d6a918"), c:["dull"]},
+  {id:"cream",    n:"亮顏保濕蜜蜜霜", e:"Honey Honey Cream", p:2290, u:SHOP+"honey-honey-cream",
+   a:img("6981ad0cccc31123f0e4a489"), b:img("698d901e18b9c326964f1732"), c:["dry","aging"]},
+  {id:"exfo",     n:"白膜淨去角質泥膜", e:"Exfoliating Mask", p:2050, u:SHOP+"clarifyingoil-absorbing-exfoliating-mask",
+   a:img("6981ad0fb829d7deedffc981"), b:img("698d901fa6581a3eea116405"), c:["pores"]},
+  {id:"cleanser", n:"潔淨舒壓洗面乳", e:"Perfect Facial Cleanser", p:1080, u:SHOP+"perfect-facial-cleanser",
+   a:img("6981ad0f9c236f3b3ec54609"), b:img("698d901f099a485560d884fd"), c:["pores"]},
+  {id:"capsule",  n:"妝前智能5GF柔敏膠囊", e:"5GF Soothing Capsules", p:1160, u:SHOP+"revitalizing-5gf-soothing-capsules",
+   a:img("6981ad0fce8301b97b8f4b66"), b:img("698d90208656d62acc721d4a"), c:["sensitive"]},
+  {id:"bspray",   n:"活氧B群保濕噴霧", e:"Vitamin B Spray", p:1190, u:SHOP+"vitamin-b-water",
+   a:img("6981ad0f04a901c8c352248c"), b:img("699ebb3b32b1bac734237200"), c:["dry","sensitive"]}
+];
+// ⚠️ 名次目前沿用 v4 的暫定順序，真實名次確認後改這一行即可
+const TOP3 = ["toner","ampoule","mask5d"];
+const CONCERNS = [
+  {id:"sun",       label:"防曬隔離"},
+  {id:"dry",       label:"乾燥缺水"},
+  {id:"dull",      label:"暗沉蠟黃"},
+  {id:"pores",     label:"毛孔油光"},
+  {id:"sensitive", label:"敏感泛紅"},
+  {id:"aging",     label:"初老緊緻"}
+];
+const P = id => PRODUCTS.find(x => x.id === id);
+const nt = n => "NT$ " + n.toLocaleString("en-US");
+
+/* ───────── 9. 熱銷排行（2 / 1 / 3 頒獎台） ───────── */
+document.getElementById("rank").innerHTML = [
+  {id:TOP3[1], n:2}, {id:TOP3[0], n:1}, {id:TOP3[2], n:3}
+].map(({id,n}) => {
+  const p = P(id);
+  return `<a href="${p.u}" target="_blank" rel="noopener"${n===1?' class="first"':''}>
+    <div class="no">0${n}</div>
+    <div class="im"><img src="${p.a}" alt="${p.n}" loading="lazy"></div>
+    <div class="body">
+      <span class="badge">${n===1?"BESTSELLER":"NO. "+n}</span>
+      <h3>${p.n}</h3>
+      <div class="en">${p.e}</div>
+      <div class="pr">${nt(p.p)}</div>
+    </div>
+  </a>`;
+}).join("");
+
+/* ───────── 10. 肌膚問題篩選 ───────── */
+const chips = document.getElementById("chips"), result = document.getElementById("result");
+chips.innerHTML = CONCERNS.map((c,i) => {
+  const n = PRODUCTS.filter(p => p.c.includes(c.id)).length;
+  return `<button type="button" class="chip" data-c="${c.id}" aria-pressed="${i===0}">${c.label}<span class="n">${n}</span></button>`;
+}).join("");
+function renderConcern(cid){
+  const list = PRODUCTS.filter(p => p.c.includes(cid));
+  result.innerHTML = list.map((p,i) => `
+    <a href="${p.u}" target="_blank" rel="noopener" style="animation-delay:${i*70}ms">
+      <div class="im"><img src="${p.a}" alt="${p.n}" loading="lazy"></div>
+      <h3>${p.n}${p.isNew?'<span class="new">NEW</span>':""}</h3>
+      <div class="pr">${nt(p.p)}</div>
+    </a>`).join("");
+}
+chips.addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  chips.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed","false"));
+  b.setAttribute("aria-pressed","true");
+  renderConcern(b.dataset.c);
+});
+renderConcern(CONCERNS[0].id);
+
+/* ───────── 11. 全系列 ───────── */
+document.getElementById("cat").innerHTML = PRODUCTS.map(p => `
+  <a href="${p.u}" target="_blank" rel="noopener"${p.b ? "" : ' class="single"'}>
+    <div class="thumb">
+      ${p.isNew ? '<span class="tag">NEW</span>' : ""}
+      <img class="a" src="${p.a}" alt="${p.n}" loading="lazy">
+      ${p.b ? `<img class="b" src="${p.b}" alt="" loading="lazy">` : ""}
+    </div>
+    <h3>${p.n}</h3>
+    <div class="en">${p.e}</div>
+    <div class="pr">${nt(p.p)}</div>
+  </a>`).join("");
+
+/* ───────── 12. 進場淡入 ＋ 數字跑動 ───────── */
+function countUp(el){
+  const to = +el.dataset.to, dur = 1400, t0 = performance.now();
+  if (reduce){ el.textContent = to.toLocaleString("en-US"); return; }
+  (function step(now){
+    const t = Math.min(1, (now - t0) / dur);
+    el.textContent = Math.round(to * (1 - Math.pow(1 - t, 3))).toLocaleString("en-US");
+    if (t < 1) requestAnimationFrame(step);
+  })(t0);
+}
+const io = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("in");
+    e.target.querySelectorAll?.("[data-to]").forEach(countUp);
+    io.unobserve(e.target);
+  });
+}, {threshold:.12, rootMargin:"0px 0px -8% 0px"});
+document.querySelectorAll(".rise").forEach(el => io.observe(el));
+
+})();
+</script>
+
+</div>
+<div class="note">↑ .CustomPage 結束</div>
+</body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="theme_common.css">
+<style>html,body{overflow-x:hidden}body{margin:0;background:#fff;font-family:sans-serif}
+.CustomPage{overflow:hidden;max-width:1200px;margin:0 auto;padding:0 15px}
+a{color:#2E7BC4;text-decoration:underline}
+.note{padding:30px 20px;color:#555}</style></head><body>
+<div class="CustomPage"><!-- ═══════════════════════════════════════════════════════════
+     HEIWEI — 超商取貨送咖啡券 跑馬燈（米杏底版）
+     貼進 Shopline「客製化語法」元件（不是商品描述，那邊會砍 CSS 變數）。
+     純 CSS，不需要 JS。內容在下方三個段落裡改，三份必須改成完全一樣。
+     ═══════════════════════════════════════════════════════════ -->
+<style>
+/* ⚠️ Shopline 的 .CustomPage 有 overflow:hidden，會把下面的滿版寬度裁成 1200px。
+   跟 v7 橫幅用同一條逃脫規則（同頁重複宣告無害）。 */
+.CustomPage{overflow:visible !important;}
+.hw-mq{
+  /* ── 米杏底配色（--balm 家族，貼近活動圖的暖色調）──
+     ⚠️ 不能只換底色：原本的琥珀點 #E8A45C 在米杏底上只有 1.58:1，等於看不見。
+     以下每個顏色都量過對比度（括號內為對米杏底的比值）。 */
+  --mq-bg:#F0DCB8;        /* --balm 米杏 */
+  --mq-ink:#2E211B;       /* 主字：深咖啡（11.6:1）*/
+  --mq-soft:#6B5647;      /* 次要字：中咖啡（5.1:1，正文合格）*/
+  --mq-dot:#AE5069;       /* 分隔點：店內 --blush-deep（3.8:1，非文字合格）*/
+
+  --mq-line:rgba(46,33,27,.16);
+  --mq-speed:30s;         /* 跑一輪的時間，數字越大越慢 */
+  --mq-gap:46px;          /* 詞與詞的間距 */
+
+  position:relative;
+  width:100vw;margin-left:calc(50% - 50vw);   /* 破出 .CustomPage 邊界，滿版 */
+  background:var(--mq-bg);
+  border-top:1px solid var(--mq-line);
+  border-bottom:1px solid var(--mq-line);
+  overflow:hidden;
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.hw-mq *{box-sizing:border-box}
+/* 兩側淡出，看起來像從邊緣捲進來 */
+.hw-mq::before,.hw-mq::after{
+  content:"";position:absolute;top:0;bottom:0;width:48px;z-index:2;pointer-events:none;
+}
+.hw-mq::before{left:0;background:linear-gradient(to right,var(--mq-bg),transparent)}
+.hw-mq::after{right:0;background:linear-gradient(to left,var(--mq-bg),transparent)}
+
+/* 整條可點：用一個覆蓋整塊的 <a>，不動跑馬燈本身的結構與動畫。
+   z-index 要比兩側漸層(2)高，滑鼠才點得到。 */
+.hw-mq-link{
+  position:absolute;inset:0;z-index:3;display:block;
+  text-decoration:none !important;border:0;
+  font-size:0;line-height:0;color:transparent;
+}
+.hw-mq{cursor:pointer}
+.hw-mq:hover{filter:brightness(1.03)}
+.hw-mq:focus-within{outline:2px solid #AE5069;outline-offset:-2px}
+
+.hw-mq-track{
+  display:flex;width:max-content;
+  padding:13px 0;
+  animation:hw-mq-slide var(--mq-speed) linear infinite;
+}
+.hw-mq:hover .hw-mq-track{animation-play-state:paused}
+
+.hw-mq-track p{
+  display:flex;align-items:center;gap:var(--mq-gap);
+  margin:0;padding:0 calc(var(--mq-gap) / 2);
+  white-space:nowrap;
+  font-size:13.5px;font-weight:400;letter-spacing:.14em;
+  color:var(--mq-soft);
+}
+/* 每個詞之間放一顆琥珀點 */
+.hw-mq-track p span{display:flex;align-items:center;gap:var(--mq-gap)}
+.hw-mq-track p span::after{
+  content:"";width:5px;height:5px;flex:0 0 5px;border-radius:50%;background:var(--mq-dot);
+}
+/* 主打訊息加重 */
+.hw-mq-track p .hw-mq-key{color:var(--mq-ink);font-weight:500;letter-spacing:.1em}
+.hw-mq-track p .hw-mq-brand{
+  color:var(--mq-ink);font-weight:500;letter-spacing:.06em;
+  font-family:"Helvetica Neue",Arial,sans-serif;
+}
+
+@keyframes hw-mq-slide{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-33.3333%,0,0)}
+}
+@media(max-width:640px){
+  .hw-mq{--mq-gap:34px;--mq-speed:24s}
+  .hw-mq-track p{font-size:12.5px}
+  .hw-mq::before,.hw-mq::after{width:28px}
+}
+/* 系統開了「減少動態效果」就不要跑，改成靜態顯示第一份 */
+@media(prefers-reduced-motion:reduce){
+  .hw-mq-track{animation:none}
+}
+</style>
+
+<div class="hw-mq">
+  <a class="hw-mq-link" href="https://www.heiweibeauty.com/categories/%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8" aria-label="前往商品列表，選擇 7-ELEVEN 取貨送中杯冰美式兌換券"></a>
+  <div class="hw-mq-track">
+    <!-- ① 這份是給讀螢幕軟體讀的 -->
+    <p>
+      <span class="hw-mq-key">領包裹，再領一杯冰美式</span>
+      <span>官網下單 · 選擇 <b class="hw-mq-brand">7-ELEVEN</b> 取貨</span>
+      <span class="hw-mq-key">不限金額，贈中杯冰美式兌換券乙張</span>
+      <span>數量有限 · 送完為止</span>
+      <span>兌換券隨包裹寄出</span>
+    </p>
+    <!-- ②③ 是為了無縫循環的複本，不重複朗讀 -->
+    <p aria-hidden="true">
+      <span class="hw-mq-key">領包裹，再領一杯冰美式</span>
+      <span>官網下單 · 選擇 <b class="hw-mq-brand">7-ELEVEN</b> 取貨</span>
+      <span class="hw-mq-key">不限金額，贈中杯冰美式兌換券乙張</span>
+      <span>數量有限 · 送完為止</span>
+      <span>兌換券隨包裹寄出</span>
+    </p>
+    <p aria-hidden="true">
+      <span class="hw-mq-key">領包裹，再領一杯冰美式</span>
+      <span>官網下單 · 選擇 <b class="hw-mq-brand">7-ELEVEN</b> 取貨</span>
+      <span class="hw-mq-key">不限金額，贈中杯冰美式兌換券乙張</span>
+      <span>數量有限 · 送完為止</span>
+      <span>兌換券隨包裹寄出</span>
+    </p>
+  </div>
+</div>
+</div><div class="note">下方商店內容</div></body></html>
