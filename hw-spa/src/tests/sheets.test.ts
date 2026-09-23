@@ -41,9 +41,12 @@ describe('getKnowledgeBase', () => {
 
   it('解析療程、FAQ、轉人工關鍵字三個分頁', async () => {
     mockGetValues
-      .mockResolvedValueOnce({ data: { values: [['深層清潔', '90分鐘', 'NT$2800', '油肌', '去除老廢角質', '敏感期告知']] } })
-      .mockResolvedValueOnce({ data: { values: [['防曬可補噴嗎', '可以', '防曬']] } })
-      .mockResolvedValueOnce({ data: { values: [['要預約', '需確認時段']] } });
+      .mockResolvedValueOnce({ data: { values: [['深層清潔', '90分鐘', 'NT$2800', '油肌', '去除老廢角質', '敏感期告知']] } }) // 療程與服務
+      .mockResolvedValueOnce({ data: { values: [['防曬可補噴嗎', '可以', '防曬']] } }) // 產品FAQ
+      .mockResolvedValueOnce({ data: { values: [] } }) // 客服FAQ
+      .mockResolvedValueOnce({ data: { values: [] } }) // 課程FAQ
+      .mockResolvedValueOnce({ data: { values: [['要預約', '需確認時段']] } }) // 轉人工關鍵字
+      .mockResolvedValueOnce({ data: { values: [] } }); // 圖片關鍵字
 
     const kb = await getKnowledgeBase();
 
@@ -75,9 +78,12 @@ describe('getKnowledgeBase', () => {
 
   it('Google Sheets 取回後寫入 Redis', async () => {
     mockGetValues
-      .mockResolvedValueOnce({ data: { values: [['深層清潔', '90分鐘', 'NT$2800', '油肌', '去除老廢角質', '敏感期告知']] } })
-      .mockResolvedValueOnce({ data: { values: [] } })
-      .mockResolvedValueOnce({ data: { values: [] } });
+      .mockResolvedValueOnce({ data: { values: [['深層清潔', '90分鐘', 'NT$2800', '油肌', '去除老廢角質', '敏感期告知']] } }) // 療程與服務
+      .mockResolvedValueOnce({ data: { values: [] } }) // 產品FAQ
+      .mockResolvedValueOnce({ data: { values: [] } }) // 客服FAQ
+      .mockResolvedValueOnce({ data: { values: [] } }) // 課程FAQ
+      .mockResolvedValueOnce({ data: { values: [] } }) // 轉人工關鍵字
+      .mockResolvedValueOnce({ data: { values: [] } }); // 圖片關鍵字
 
     await getKnowledgeBase();
 
@@ -91,6 +97,7 @@ describe('formatKnowledgeForPrompt', () => {
       services: [{ name: '深層清潔', duration: '90分鐘', price: 'NT$2800', skinType: '油肌', description: '去角質', notes: '敏感期告知' }],
       faqs: [{ question: '可以補噴嗎', answer: '可以', category: '防曬' }],
       handoffKeywords: [],
+      imageKeywords: [],
     };
     const result = formatKnowledgeForPrompt(kb);
     expect(result).toContain('深層清潔');
@@ -104,6 +111,7 @@ describe('getHandoffKeywords', () => {
       services: [],
       faqs: [],
       handoffKeywords: [{ keyword: '要預約', reason: '確認時段' }, { keyword: '退費', reason: '客訴' }],
+      imageKeywords: [],
     };
     expect(getHandoffKeywords(kb)).toEqual(['要預約', '退費']);
   });

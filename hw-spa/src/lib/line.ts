@@ -47,6 +47,15 @@ export async function replyWithHandoffOption(replyToken: string, text: string): 
   });
 }
 
+export async function replyImage(replyToken: string, imageUrl: string, caption?: string, imageUrl2?: string, imageUrl3?: string): Promise<void> {
+  const messages: messagingApi.Message[] = [];
+  if (caption) messages.push({ type: 'text', text: caption });
+  messages.push({ type: 'image', originalContentUrl: imageUrl, previewImageUrl: imageUrl });
+  if (imageUrl2) messages.push({ type: 'image', originalContentUrl: imageUrl2, previewImageUrl: imageUrl2 });
+  if (imageUrl3) messages.push({ type: 'image', originalContentUrl: imageUrl3, previewImageUrl: imageUrl3 });
+  await client.replyMessage({ replyToken, messages });
+}
+
 export async function pushToAdmin(summary: string): Promise<void> {
   const adminId = process.env.ADMIN_LINE_USER_ID;
   if (!adminId) return;

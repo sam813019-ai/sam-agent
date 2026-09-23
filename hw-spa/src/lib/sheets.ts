@@ -10,10 +10,12 @@ export type ServiceItem = {
 };
 export type FaqItem = { question: string; answer: string; category: string };
 export type HandoffKeyword = { keyword: string; reason: string };
+export type ImageKeyword = { keyword: string; imageUrl: string; caption: string; imageUrl2?: string; imageUrl3?: string };
 export type KnowledgeBase = {
   services: ServiceItem[];
   faqs: FaqItem[];
   handoffKeywords: HandoffKeyword[];
+  imageKeywords: ImageKeyword[];
 };
 
 const redis = Redis.fromEnv();
@@ -47,25 +49,38 @@ export async function getKnowledgeBase(): Promise<KnowledgeBase> {
   const sheets = google.sheets({ version: 'v4', auth: auth() });
   const id = process.env.GOOGLE_SHEET_ID!;
 
-  const [svc, faq, ho] = await Promise.all([
+  const [svc, faqProduct, faqService, faqCourse, ho, img] = await Promise.all([
     sheets.spreadsheets.values.get({ spreadsheetId: id, range: '療程與服務!A2:F' }),
     sheets.spreadsheets.values.get({ spreadsheetId: id, range: '產品FAQ!A2:C' }),
+    sheets.spreadsheets.values.get({ spreadsheetId: id, range: '客服FAQ!A2:C' }).catch(() => ({ data: { values: [] } })),
+    sheets.spreadsheets.values.get({ spreadsheetId: id, range: '課程FAQ!A2:C' }).catch(() => ({ data: { values: [] } })),
     sheets.spreadsheets.values.get({ spreadsheetId: id, range: '轉人工關鍵字!A2:B' }),
+    sheets.spreadsheets.values.get({ spreadsheetId: id, range: '圖片關鍵字!A2:E' }).catch(() => ({ data: { values: [] } })),
   ]);
 
   const row = (r: string[] | undefined, i: number) => r?.[i] ?? '';
+  const allFaqRows = [
+    ...(faqProduct.data.values ?? []),
+    ...(faqService.data.values ?? []),
+    ...(faqCourse.data.values ?? []),
+  ].filter(r => r[0] && r[1]); // 只取有問題且有答案的列
 
   const data: KnowledgeBase = {
     services: (svc.data.values ?? []).map(r => ({
       name: row(r, 0), duration: row(r, 1), price: row(r, 2),
       skinType: row(r, 3), description: row(r, 4), notes: row(r, 5),
     })),
-    faqs: (faq.data.values ?? []).map(r => ({
+    faqs: allFaqRows.map(r => ({
       question: row(r, 0), answer: row(r, 1), category: row(r, 2),
     })),
     handoffKeywords: (ho.data.values ?? []).map(r => ({
       keyword: row(r, 0), reason: row(r, 1),
     })),
+    imageKeywords: (img.data.values ?? []).map(r => ({
+      keyword: row(r, 0), imageUrl: row(r, 1), caption: row(r, 2),
+      ...(row(r, 3) ? { imageUrl2: row(r, 3) } : {}),
+      ...(row(r, 4) ? { imageUrl3: row(r, 4) } : {}),
+    })).filter(r => r.keyword && r.imageUrl),
   };
 
   _mem = { data, ts: Date.now() };
@@ -83,4 +98,23 @@ export function formatKnowledgeForPrompt(kb: KnowledgeBase): string {
 
 export function getHandoffKeywords(kb: KnowledgeBase): string[] {
   return kb.handoffKeywords.map(h => h.keyword);
+}
+
+function toProxyUrl(url: string): string {
+  const base = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://hw-spa.vercel.app';
+  const m = url.match(/[?&]id=([\w-]+)/);
+  if (m) return `${base}/api/img?id=${m[1]}`;
+  return url;
+}
+
+export function matchImageKeyword(kb: KnowledgeBase, text: string): ImageKeyword | null {
+  const t = text.trim();
+  const match = (kb.imageKeywords ?? []).find(ik => t.includes(ik.keyword));
+  if (!match) return null;
+  return {
+    ...match,
+    imageUrl: toProxyUrl(match.imageUrl),
+    ...(match.imageUrl2 ? { imageUrl2: toProxyUrl(match.imageUrl2) } : {}),
+    ...(match.imageUrl3 ? { imageUrl3: toProxyUrl(match.imageUrl3) } : {}),
+  };
 }
