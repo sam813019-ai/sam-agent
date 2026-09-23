@@ -57,6 +57,11 @@ export async function POST(req: Request) {
     const settings = await getSettings();
     const campaign = settings.title;
 
+    // 運費含進總額，客人匯的金額就是這個數字（訂單明細不加運費列，
+    // 那張表是叫貨統計的來源）
+    const shippingFee = settings.shippingFee;
+    total += shippingFee;
+
     await appendOrder(payload, orderId, total, campaign);
     await notifyAdmin(payload, orderId, total);
 

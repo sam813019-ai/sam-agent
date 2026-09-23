@@ -1,8 +1,21 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+/**
+ * 圖片大小上限。
+ * Vercel Function 的 request body 硬上限是 4.5MB，超過的話平台會直接回 413
+ * （純文字 FUNCTION_PAYLOAD_TOO_LARGE），請求根本不會進到 /api/admin/upload-image，
+ * 所以一定要在送出前先擋，否則使用者只會看到看不懂的「網路錯誤，請重試」。
+ * 抓 4MB 留一點安全距離給 multipart 的封裝開銷。
+ */
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 
-type Tab = 'product' | 'purchase' | 'sales' | 'proxy' | 'orders' | 'report' | 'manage' | 'stats';
+function formatBytes(bytes: number): string {
+  if (bytes >= 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)}MB`;
+  return `${Math.round(bytes / 1024)}KB`;
+}
+
+type Tab = 'product' | 'purchase' | 'sales' | 'proxy' | 'orders' | 'payment' | 'report' | 'manage' | 'stats';
 
 interface InventoryItem {
   code: string;
@@ -64,12 +77,26 @@ function ImageSlot({
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState('');
   const [uploadError, setUploadError] = useState('');
+  const [sizeNote, setSizeNote] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploadError('');
+    setSizeNote('');
+
+    // 送出前先擋大檔。超過 4.5MB 的話 Vercel 會在平台層回 413 純文字，
+    // 請求根本進不到 API，前端只能顯示「網路錯誤」，使用者完全不知道發生什麼事
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setUploadError(
+        `圖片太大：${formatBytes(file.size)}（上限 4MB）。請先縮圖或改用下方「貼圖片連結」。`
+      );
+      setPreview('');
+      if (inputRef.current) inputRef.current.value = '';
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = (ev) => setPreview(ev.target?.result as string);
     reader.readAsDataURL(file);
@@ -78,9 +105,25 @@ function ImageSlot({
       const formData = new FormData();
       formData.append('file', file);
       const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData });
-      const data = await res.json();
-      if (res.ok) { onUrlChange(data.url); } else { setUploadError(data.error || '上傳失敗'); setPreview(''); }
-    } catch { setUploadError('網路錯誤，請重試'); setPreview(''); }
+
+      if (!res.ok) {
+        // 平台層的錯誤（例如 413）回的是純文字不是 JSON，直接 res.json() 會炸
+        const raw = await res.text();
+        setUploadError(
+          res.status === 413
+            ? `圖片太大（${formatBytes(file.size)}），伺服器拒收，請縮圖後再上傳`
+            : raw.slice(0, 120) || `上傳失敗（HTTP ${res.status}）`
+        );
+        setPreview('');
+      } else {
+        const data = await res.json();
+        onUrlChange(data.url);
+        setSizeNote(formatBytes(file.size));
+      }
+    } catch {
+      setUploadError('網路錯誤，請重試');
+      setPreview('');
+    }
     setUploading(false);
     if (inputRef.current) inputRef.current.value = '';
   };
@@ -92,13 +135,16 @@ function ImageSlot({
         <button type="button" onClick={onDelete} className="text-xs text-red-400 hover:text-red-600 px-1">✕ 刪除</button>
       </div>
       <label className={`flex items-center justify-center gap-2 w-full py-2 border-2 border-dashed rounded-lg cursor-pointer text-sm transition-colors ${uploading ? 'border-gray-200 text-gray-400 pointer-events-none' : 'border-gray-300 text-gray-500 hover:border-blue-400 hover:text-blue-600'}`}>
-        <span>{uploading ? '上傳中...' : '📷 選擇圖片 / 拍照'}</span>
+        <span>{uploading ? '壓縮並上傳中...' : '📷 選擇圖片 / 拍照'}</span>
         <input ref={inputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
       </label>
       {preview && (
         <div className="flex items-center gap-2">
           <img src={preview} alt="預覽" className="w-14 h-14 object-cover rounded border" />
-          <span className="text-xs text-green-600">已上傳 ✓</span>
+          <div className="text-xs">
+            <span className="text-green-600">已上傳 ✓</span>
+            {sizeNote && <p className="text-gray-400">{sizeNote}</p>}
+          </div>
         </div>
       )}
       {uploadError && <p className="text-xs text-red-600">{uploadError}</p>}
@@ -155,6 +201,48 @@ function MultiImageUpload({
 
 // ─── 上架商品 ─────────────────────────────────────────────────────────────────
 
+function CategoryInput({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+}) {
+  const [open, setOpen] = useState(false);
+  const filtered = options.filter((o) =>
+    o.toLowerCase().includes(value.toLowerCase())
+  );
+
+  return (
+    <div className="relative">
+      <input
+        value={value}
+        onChange={(e) => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        className={inputCls}
+        placeholder="服飾、美妝保養、童裝…（可新增）"
+        autoComplete="off"
+      />
+      {open && filtered.length > 0 && (
+        <ul className="absolute z-20 top-full left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg max-h-40 overflow-y-auto">
+          {filtered.map((o) => (
+            <li
+              key={o}
+              onMouseDown={() => { onChange(o); setOpen(false); }}
+              className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50"
+            >
+              {o}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function ProductForm({
   onSuccess,
   onError,
@@ -164,6 +252,7 @@ function ProductForm({
 }) {
   const [loading, setLoading] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>(['']);
+  const [categories, setCategories] = useState<string[]>([]);
   const [form, setForm] = useState({
     code: '',
     name: '',
@@ -172,9 +261,22 @@ function ProductForm({
     price: '',
     stock: '',
     description: '',
+    category: '',
     writeToInventory: true,
     writeToProducts: true,
   });
+
+  useEffect(() => {
+    fetch('/api/products', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d) => {
+        const cats = [...new Set<string>(
+          (d.products ?? []).map((p: { category?: string }) => p.category).filter(Boolean)
+        )];
+        setCategories(cats);
+      })
+      .catch(() => {});
+  }, []);
 
   const set = (k: string, v: string | boolean) =>
     setForm((f) => ({ ...f, [k]: v }));
@@ -182,7 +284,7 @@ function ProductForm({
   const reset = () => {
     setForm({
       code: '', name: '', spec: '', costPrice: '', price: '', stock: '',
-      description: '', writeToInventory: true, writeToProducts: true,
+      description: '', category: '', writeToInventory: true, writeToProducts: true,
     });
     setImageUrls(['']);
   };
@@ -255,6 +357,13 @@ function ProductForm({
         <Row label="備註">
           <input value={form.description} onChange={(e) => set('description', e.target.value)}
             className={inputCls} placeholder="選填" />
+        </Row>
+        <Row label="類別">
+          <CategoryInput
+            value={form.category}
+            onChange={(v) => set('category', v)}
+            options={categories}
+          />
         </Row>
       </Card>
 
@@ -720,6 +829,7 @@ export default function AdminPage() {
     { key: 'sales', label: '銷售' },
     { key: 'proxy', label: '代購' },
     { key: 'orders', label: '訂單管理' },
+    { key: 'payment', label: '匯款核對' },
     { key: 'report', label: '銷售報表' },
     { key: 'manage', label: '商品管理' },
     { key: 'stats', label: '叫貨統計' },
@@ -806,6 +916,7 @@ export default function AdminPage() {
             onError={(m) => showToast('error', m)}
           />
         )}
+        {tab === 'payment' && <PaymentVerify />}
         {tab === 'report' && <SalesReport />}
         {tab === 'manage' && (
           <ProductManagement
@@ -918,6 +1029,7 @@ interface ProxyOrderRow {
   date: string;
   customerName: string;
   productCode: string;
+  productName: string;
   spec: string;
   salePrice: number;
   quantity: number;
@@ -1038,7 +1150,7 @@ function OrdersManagement({
             </span>
           </div>
           <p className="text-sm text-gray-700 mb-3">
-            {o.productCode}{o.spec && ` / ${o.spec}`} × {o.quantity}
+            {o.productCode}{o.productName && ` · ${o.productName}`}{o.spec && ` / ${o.spec}`} × {o.quantity}
             {o.salePrice > 0 && ` — NT$${(o.salePrice * o.quantity).toLocaleString()}`}
           </p>
           <select
@@ -1341,25 +1453,327 @@ function ProductManagement({ onSuccess, onError }: { onSuccess: (m: string) => v
 
 interface OrderStatItem { code: string; name: string; spec: string; quantity: number; total: number; }
 
+type ReadyToShipRow = {
+  orderId: string;
+  displayName: string;
+  total: number;
+  campaign: string;
+  items: string;
+  shipName: string;
+  shipPhone: string;
+  shipStoreName: string;
+  shipStoreCode: string;
+  shipFilledAt: string;
+};
+
+type PendingPaymentRow = {
+  orderId: string;
+  time: string;
+  displayName: string;
+  userId: string;
+  total: number;
+  campaign: string;
+  paymentLast5: string;
+  paymentProof: string;
+  paymentReportedAt: string;
+};
+
+/** 匯款核對：只列「已回報」的訂單，確認收款或退回重填 */
+function PaymentVerify() {
+  const [view, setView] = useState<'pending' | 'ship'>('pending');
+  const [items, setItems] = useState<PendingPaymentRow[]>([]);
+  const [shipItems, setShipItems] = useState<ReadyToShipRow[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [zoom, setZoom] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/admin/payment-verify?view=${view}`, {
+        cache: 'no-store',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '讀取失敗');
+      if (view === 'ship') {
+        setShipItems(data.items || []);
+      } else {
+        setItems(data.items || []);
+      }
+      setTotal(data.total || 0);
+    } catch (e) {
+      setMsg({ text: e instanceof Error ? e.message : '讀取失敗', ok: false });
+    } finally {
+      setLoading(false);
+    }
+  }, [view]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function copyShipInfo(it: ReadyToShipRow) {
+    const text = `${it.shipName}\n${it.shipPhone}\n7-11 ${it.shipStoreName}（${it.shipStoreCode}）`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(it.orderId);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      setMsg({ text: '複製失敗，請手動選取', ok: false });
+    }
+  }
+
+  async function act(orderId: string, action: 'confirm' | 'reject' | 'ship') {
+    if (action === 'reject' && !confirm('退回後客人要重新回報匯款，確定嗎？')) return;
+    if (action === 'ship' && !confirm('標記為已出貨？這筆會從待出貨清單移除。')) return;
+    setBusyId(orderId);
+    setMsg(null);
+    try {
+      const res = await fetch('/api/admin/payment-verify', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, action }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '更新失敗');
+      if (action === 'ship') {
+        setShipItems((prev) => prev.filter((i) => i.orderId !== orderId));
+      } else {
+        setItems((prev) => prev.filter((i) => i.orderId !== orderId));
+      }
+      setMsg({
+        text:
+          action === 'confirm'
+            ? '已確認收款'
+            : action === 'ship'
+            ? '已標記出貨'
+            : '已退回，客人可重新回報',
+        ok: true,
+      });
+    } catch (e) {
+      setMsg({ text: e instanceof Error ? e.message : '更新失敗', ok: false });
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  if (loading) {
+    return <div className="text-center text-gray-400 py-12">載入中…</div>;
+  }
+
+  return (
+    <div className="space-y-3">
+      {/* 待核對 / 待出貨 切換 */}
+      <div className="flex gap-2">
+        {([
+          { key: 'pending' as const, label: '待核對' },
+          { key: 'ship' as const, label: '待出貨' },
+        ]).map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setView(key)}
+            className={`flex-1 py-2 rounded-xl text-sm font-medium border ${
+              view === key
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white text-gray-600'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex justify-between items-center bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
+        <span className="text-sm text-blue-800">
+          {view === 'ship' ? '待出貨' : '待核對'}{' '}
+          <strong>{view === 'ship' ? shipItems.length : items.length}</strong> 筆
+        </span>
+        <span className="font-bold text-blue-800">
+          NT$ {total.toLocaleString()}
+        </span>
+      </div>
+
+      {msg && (
+        <div
+          className={`text-sm rounded-lg px-3 py-2 ${
+            msg.ok
+              ? 'bg-green-50 text-green-700 border border-green-200'
+              : 'bg-red-50 text-red-700 border border-red-200'
+          }`}
+        >
+          {msg.text}
+        </div>
+      )}
+
+      <button
+        onClick={load}
+        className="w-full py-2 text-sm text-gray-500 border rounded-xl bg-white"
+      >
+        重新整理
+      </button>
+
+      {view === 'ship' ? (
+        shipItems.length === 0 ? (
+          <div className="text-center text-gray-400 py-16">
+            <div className="text-5xl mb-3">📦</div>
+            <p>目前沒有待出貨的訂單</p>
+          </div>
+        ) : (
+          shipItems.map((it) => (
+            <div key={it.orderId} className="bg-white border rounded-xl p-4">
+              <div className="flex justify-between items-start mb-2">
+                <div className="min-w-0">
+                  <p className="font-medium truncate">{it.displayName}</p>
+                  <p className="font-mono text-xs text-gray-400">{it.orderId}</p>
+                </div>
+                <p className="font-bold shrink-0 ml-2">
+                  NT$ {it.total.toLocaleString()}
+                </p>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-3 text-sm space-y-0.5 mb-2">
+                <p className="font-medium">{it.shipName}</p>
+                <p className="font-mono">{it.shipPhone}</p>
+                <p>
+                  7-11 {it.shipStoreName}
+                  {it.shipStoreCode ? `（${it.shipStoreCode}）` : ''}
+                </p>
+              </div>
+
+              <details className="mb-2">
+                <summary className="text-xs text-gray-400 cursor-pointer">
+                  商品明細
+                </summary>
+                <pre className="text-xs whitespace-pre-wrap font-sans text-gray-600 mt-1">
+                  {it.items}
+                </pre>
+              </details>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => copyShipInfo(it)}
+                  className="flex-1 py-2.5 border rounded-xl text-sm font-medium"
+                >
+                  {copiedId === it.orderId ? '已複製' : '複製收件資訊'}
+                </button>
+                <button
+                  onClick={() => act(it.orderId, 'ship')}
+                  disabled={busyId === it.orderId}
+                  className="flex-1 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium disabled:opacity-40"
+                >
+                  {busyId === it.orderId ? '處理中…' : '出貨'}
+                </button>
+              </div>
+            </div>
+          ))
+        )
+      ) : items.length === 0 ? (
+        <div className="text-center text-gray-400 py-16">
+          <div className="text-5xl mb-3">💰</div>
+          <p>目前沒有待核對的匯款</p>
+        </div>
+      ) : (
+        items.map((it) => (
+          <div key={it.orderId} className="bg-white border rounded-xl p-4">
+            <div className="flex justify-between items-start mb-2">
+              <div className="min-w-0">
+                <p className="font-medium truncate">{it.displayName}</p>
+                <p className="font-mono text-xs text-gray-400">{it.orderId}</p>
+              </div>
+              <p className="font-bold text-lg shrink-0 ml-2">
+                NT$ {it.total.toLocaleString()}
+              </p>
+            </div>
+
+            <div className="text-sm space-y-1 mb-3">
+              {it.paymentLast5 ? (
+                <p>
+                  後五碼{' '}
+                  <span className="font-mono font-bold text-base tracking-widest">
+                    {it.paymentLast5}
+                  </span>
+                </p>
+              ) : (
+                <p className="text-gray-400">未填後五碼</p>
+              )}
+              <p className="text-xs text-gray-400">回報於 {it.paymentReportedAt}</p>
+              {it.campaign && (
+                <p className="text-xs text-gray-400 truncate">{it.campaign}</p>
+              )}
+            </div>
+
+            {it.paymentProof && (
+              // 來源是 Google Drive，不走 next/image 最佳化
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={it.paymentProof}
+                alt="匯款截圖"
+                onClick={() => setZoom(it.paymentProof)}
+                className="w-full max-h-48 object-contain bg-gray-50 rounded-lg border mb-3 cursor-zoom-in"
+              />
+            )}
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => act(it.orderId, 'confirm')}
+                disabled={busyId === it.orderId}
+                className="flex-1 py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium disabled:opacity-40"
+              >
+                {busyId === it.orderId ? '處理中…' : '確認收款'}
+              </button>
+              <button
+                onClick={() => act(it.orderId, 'reject')}
+                disabled={busyId === it.orderId}
+                className="px-4 py-2.5 border border-red-300 text-red-600 rounded-xl text-sm disabled:opacity-40"
+              >
+                退回
+              </button>
+            </div>
+          </div>
+        ))
+      )}
+
+      {zoom && (
+        <div
+          onClick={() => setZoom(null)}
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={zoom} alt="匯款截圖放大" className="max-w-full max-h-full object-contain" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function OrderStats() {
   const [campaigns, setCampaigns] = useState<string[]>([]);
   const [campaign, setCampaign] = useState('');
+  const [paidOnly, setPaidOnly] = useState(false);
   const [items, setItems] = useState<OrderStatItem[]>([]);
+  const [orderCount, setOrderCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const load = (c: string) => {
+  const load = (c: string, paid: boolean) => {
     setLoading(true);
-    const params = c ? `?campaign=${encodeURIComponent(c)}` : '';
+    const qs = new URLSearchParams();
+    if (c) qs.set('campaign', c);
+    if (paid) qs.set('paid', '1');
+    const params = qs.toString() ? `?${qs.toString()}` : '';
     fetch(`/api/admin/order-stats${params}`)
       .then((r) => r.json())
       .then((d) => {
         setItems(d.items || []);
+        setOrderCount(d.orderCount || 0);
         if (campaigns.length === 0 && d.campaigns?.length) setCampaigns(d.campaigns);
       })
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { load(''); }, []);
+  useEffect(() => { load('', false); }, []);
 
   const totalQty = items.reduce((s, i) => s + i.quantity, 0);
   const totalAmt = items.reduce((s, i) => s + i.total, 0);
@@ -1368,12 +1782,37 @@ function OrderStats() {
     <div className="space-y-4">
       <div>
         <label className="block text-xs text-gray-500 mb-1">篩選連線</label>
-        <select value={campaign} onChange={(e) => { setCampaign(e.target.value); load(e.target.value); }}
+        <select value={campaign} onChange={(e) => { setCampaign(e.target.value); load(e.target.value, paidOnly); }}
           className={inputCls}>
           <option value="">全部連線</option>
           {campaigns.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
       </div>
+
+      {/* 全部訂單 / 只算已付款 */}
+      <div className="flex gap-2">
+        {([
+          { key: false, label: '全部訂單' },
+          { key: true, label: '只算已付款' },
+        ]).map(({ key, label }) => (
+          <button
+            key={String(key)}
+            onClick={() => { setPaidOnly(key); load(campaign, key); }}
+            className={`flex-1 py-2 rounded-xl text-sm font-medium border ${
+              paidOnly === key
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white text-gray-600'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-gray-400 -mt-2">
+        {paidOnly
+          ? '只計入已按過「確認收款」的訂單，可安心照這個數量叫貨'
+          : '包含尚未匯款的訂單，是最大可能量'}
+      </p>
 
       {loading && <p className="text-sm text-gray-400 text-center py-8">載入中...</p>}
 
@@ -1389,6 +1828,9 @@ function OrderStats() {
               <p className="text-lg font-bold">NT${totalAmt.toLocaleString()}</p>
             </div>
           </div>
+          <p className="text-xs text-gray-400 text-center -mt-2">
+            來自 {orderCount} 筆訂單
+          </p>
 
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
             <table className="w-full text-sm">

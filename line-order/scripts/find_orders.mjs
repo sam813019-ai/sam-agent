@@ -1,0 +1,12 @@
+import { google } from 'googleapis';
+import fs from 'fs';
+const env = Object.fromEntries(fs.readFileSync('.env.local','utf8').split('\n').filter(l=>l.includes('=')&&!l.startsWith('#')).map(l=>{const i=l.indexOf('=');return [l.slice(0,i).trim(), l.slice(i+1).trim().replace(/^"|"$/g,'')];}));
+const auth = new google.auth.JWT({ email: env.GOOGLE_SERVICE_ACCOUNT_EMAIL, key: env.GOOGLE_PRIVATE_KEY.replace(/\\n/g,'\n'), scopes:['https://www.googleapis.com/auth/spreadsheets.readonly'] });
+const sheets = google.sheets({version:'v4', auth});
+const SID = env.GOOGLE_SHEET_ID; const kw = process.argv[2];
+const o = (await sheets.spreadsheets.values.get({spreadsheetId:SID, range:`訂單表!A:R`})).data.values||[];
+console.log('== 訂單表 ==');
+o.forEach((r,i)=>{ if (String(r[3]||'').includes(kw)) console.log(`列${i+1} | ${r[0]} | ${r[1]} | ${r[3]} | ${String(r[4]||'').replace(/\n/g,' ; ')} | 總額${r[5]} | H=${r[7]} J=${r[9]||''} N=${r[13]||''}`); });
+const p = (await sheets.spreadsheets.values.get({spreadsheetId:SID, range:`代購訂單!A:J`})).data.values||[];
+console.log('== 代購訂單 ==');
+p.forEach((r,i)=>{ if (String(r[1]||'').includes(kw)) console.log(`列${i+1} | ${r.join(' | ')}`); });

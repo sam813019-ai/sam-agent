@@ -1,6 +1,13 @@
 import { google } from "googleapis";
 import { Readable } from "stream";
-import type { OrderPayload, OrderRecord, Product, Settings } from "@/types";
+import type {
+  OrderPayload,
+  OrderRecord,
+  PendingPayment,
+  Product,
+  ReadyToShip,
+  Settings,
+} from "@/types";
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID!;
 const PRODUCTS_TAB = process.env.PRODUCTS_SHEET_NAME || "商品表";
@@ -20,6 +27,34 @@ function getClient() {
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
   return google.sheets({ version: "v4", auth });
+}
+
+
+/**
+ * 附加一列到指定分頁。
+ *
+ * ⚠️ 不用 values.append —— 它會在給定 range 內「偵測資料表」再對齊那個表的起始欄，
+ * range 給 `A:R` 時偵測會不穩定，實測 2026-09-05 整批訂單被寫到 F 欄起（位移 5 欄）。
+ * 這裡自己算出下一列，用 values.update 寫明確範圍，位置 100% 確定。
+ */
+async function appendRowStrict(
+  tab: string,
+  values: (string | number)[],
+  lastCol: string
+) {
+  const sheets = getClient();
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${tab}!A:A`,
+  });
+  const nextRow = (res.data.values?.length || 0) + 1;
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${tab}!A${nextRow}:${lastCol}${nextRow}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: [values] },
+  });
+  return nextRow;
 }
 
 function normalizeImageUrl(url: string): string {
@@ -46,14 +81,14 @@ function parseImages(raw: string | undefined): string[] {
 }
 
 /**
- * 商品表欄位 (A~J)：
- * id | code | name | spec | price | stock | image | description | active | costPrice
+ * 商品表欄位 (A~K)：
+ * id | code | name | spec | price | stock | image | description | active | costPrice | category
  */
 export async function getProducts(): Promise<Product[]> {
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${PRODUCTS_TAB}!A2:J`,
+    range: `${PRODUCTS_TAB}!A2:K`,
   });
   const rows = res.data.values || [];
   return rows
@@ -69,8 +104,10 @@ export async function getProducts(): Promise<Product[]> {
       images: parseImages(r[6] ? String(r[6]) : undefined),
       description: r[7] ? String(r[7]) : undefined,
       active: String(r[8] || "").toUpperCase() !== "FALSE",
+      category: r[10] ? String(r[10]) : undefined,
     }))
-    .filter((p) => p.active);
+    .filter((p) => p.active)
+    .reverse();
 }
 
 /**
@@ -87,10 +124,34 @@ export async function getSettings(): Promise<Settings> {
     const map = Object.fromEntries(
       rows.filter((r) => r[0]).map((r) => [String(r[0]), String(r[1] || "")])
     );
-    return { title: map.title || "快速下單" };
+    return {
+      title: map.title || "快速下單",
+      ...paymentSettingsFrom(map),
+    };
   } catch {
-    return { title: "快速下單" };
+    return { title: "快速下單", ...paymentSettingsFrom({}) };
   }
+}
+
+/** 匯款預設值。設定分頁讀不到時用這組，避免下單流程直接壞掉 */
+const PAYMENT_FALLBACK = {
+  bank: "國泰世華（013）",
+  account: "014506140928",
+  note: "匯款後填入匯款後五碼或是上傳截圖畫面或拍照核對 才算完成下單預購喔🫶",
+  gift: "睫毛專用鑷子會隨貨附贈喔♥️",
+};
+
+function paymentSettingsFrom(map: Record<string, string>) {
+  const fee = Number(map.shipping_fee);
+  return {
+    shippingFee: Number.isFinite(fee) && fee >= 0 ? fee : 60,
+    giftNote: map.gift_note ?? PAYMENT_FALLBACK.gift,
+    // 只有明確寫 FALSE 才關閉，沒設定時預設開啟
+    paymentEnabled: String(map.payment_enabled || "").toUpperCase() !== "FALSE",
+    paymentBank: map.payment_bank || PAYMENT_FALLBACK.bank,
+    paymentAccount: map.payment_account || PAYMENT_FALLBACK.account,
+    paymentNote: map.payment_note || PAYMENT_FALLBACK.note,
+  };
 }
 
 /**
@@ -116,26 +177,32 @@ export async function appendOrder(
     .join("\n");
 
   // 主訂單
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: SHEET_ID,
-    range: `${ORDERS_TAB}!A:I`,
-    valueInputOption: "USER_ENTERED",
-    requestBody: {
-      values: [
-        [
-          now,
-          orderId,
-          payload.userId,
-          payload.displayName,
-          itemsText,
-          total,
-          payload.note || "",
-          "新訂單",
-          campaign,
-        ],
-      ],
-    },
-  });
+  await appendRowStrict(
+    ORDERS_TAB,
+    [
+      now,
+      orderId,
+      payload.userId,
+      payload.displayName,
+      itemsText,
+      total,
+      payload.note || "",
+      "新訂單",
+      campaign,
+      // J~M：匯款核對。下單當下一律待匯款，回報後才填 K/L/M
+      "待匯款",
+      "",
+      "",
+      "",
+      // N~R：7-11 取貨資訊，核對確認後客人才填
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
+    "R"
+  );
 
   // 訂單明細（一列一項商品，便於統計）
   try {
@@ -161,7 +228,7 @@ export async function appendOrder(
     console.warn("訂單明細分頁寫入失敗（可能尚未建立）:", e);
   }
 
-  // 代購訂單（與 HERA 共用分頁；10 欄：日期 姓名 商品編號 規格 進價 售價 數量 毛利 狀態 備註）
+  // 代購訂單（與 HERA 共用分頁；11 欄：日期 姓名 商品編號 品名 規格 進價 售價 數量 毛利 狀態 備註）
   try {
     // 從商品表查進價，建立 productId → costPrice 對照表
     const costMap = new Map<string, number>();
@@ -177,7 +244,7 @@ export async function appendOrder(
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${PROXY_ORDERS_TAB}!A:J`,
+      range: `${PROXY_ORDERS_TAB}!A:K`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: payload.items.map((i) => {
@@ -187,6 +254,7 @@ export async function appendOrder(
             now,
             payload.displayName,
             i.code || i.productId,
+            i.productName,
             i.spec || "",
             costPrice,
             i.unitPrice,
@@ -345,6 +413,7 @@ export interface AddProductPayload {
   imageUrls?: string[];  // 多圖，逗號串接存 Sheet
   imageUrl?: string;     // 舊欄位相容保留
   description?: string;
+  category?: string;
   writeToInventory: boolean;
   writeToProducts: boolean;
 }
@@ -387,7 +456,7 @@ export async function addInventoryProduct(
       : "";
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${PRODUCTS_TAB}!A:J`,
+      range: `${PRODUCTS_TAB}!A:K`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [[
@@ -401,6 +470,7 @@ export async function addInventoryProduct(
           payload.description || "",
           "TRUE",
           payload.costPrice,   // J欄：進價
+          payload.category || "",  // K欄：類別
         ]],
       },
     });
@@ -520,11 +590,11 @@ export async function addAdminProxyOrder(
   // 代購訂單（HERA 原生分頁）
   await sheets.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
-    range: `${PROXY_ORDERS_TAB}!A:J`,
+    range: `${PROXY_ORDERS_TAB}!A:K`,
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[
-        now, payload.customerName, payload.productCode, payload.spec,
+        now, payload.customerName, payload.productCode, payload.productName, payload.spec,
         payload.costPrice, payload.salePrice, payload.quantity,
         profit, "手動加單", orderId,
       ]],
@@ -664,6 +734,7 @@ export interface ProxyOrderRow {
   date: string;
   customerName: string;
   productCode: string;
+  productName: string;
   spec: string;
   costPrice: number;
   salePrice: number;
@@ -677,7 +748,7 @@ export async function getProxyOrders(): Promise<ProxyOrderRow[]> {
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${PROXY_ORDERS_TAB}!A2:J`,
+    range: `${PROXY_ORDERS_TAB}!A2:K`,
   });
   return (res.data.values || [])
     .map((r, i) => ({
@@ -685,13 +756,14 @@ export async function getProxyOrders(): Promise<ProxyOrderRow[]> {
       date: String(r[0] || ""),
       customerName: String(r[1] || ""),
       productCode: String(r[2] || ""),
-      spec: String(r[3] || ""),
-      costPrice: Number(r[4] || 0),
-      salePrice: Number(r[5] || 0),
-      quantity: Number(r[6] || 0),
-      profit: Number(r[7] || 0),
-      status: String(r[8] || "未取貨"),
-      note: String(r[9] || ""),
+      productName: String(r[3] || ""),
+      spec: String(r[4] || ""),
+      costPrice: Number(r[5] || 0),
+      salePrice: Number(r[6] || 0),
+      quantity: Number(r[7] || 0),
+      profit: Number(r[8] || 0),
+      status: String(r[9] || "未取貨"),
+      note: String(r[10] || ""),
     }))
     .filter((o) => o.date)
     .reverse();
@@ -703,18 +775,18 @@ export async function updateProxyOrderStatus(
 ): Promise<void> {
   const sheets = getClient();
 
-  // 1. 更新代購訂單!I欄
+  // 1. 更新代購訂單!J欄（狀態欄，品名欄插入後往後移一欄）
   await sheets.spreadsheets.values.update({
     spreadsheetId: SHEET_ID,
-    range: `${PROXY_ORDERS_TAB}!I${rowNum}`,
+    range: `${PROXY_ORDERS_TAB}!J${rowNum}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [[status]] },
   });
 
-  // 2. 讀取同列 J欄取得 orderId，同步更新訂單表!H欄
+  // 2. 讀取同列 K欄取得 orderId，同步更新訂單表!H欄
   const idRes = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${PROXY_ORDERS_TAB}!J${rowNum}`,
+    range: `${PROXY_ORDERS_TAB}!K${rowNum}`,
   });
   const orderId = idRes.data.values?.[0]?.[0];
   if (!orderId) return;
@@ -835,7 +907,7 @@ export async function getMonthlyProfitReport(
 
   const [salesRes, proxyRes, ordersRes] = await Promise.all([
     sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${SALES_TAB}!A2:G` }),
-    sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${PROXY_ORDERS_TAB}!A2:J` }),
+    sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${PROXY_ORDERS_TAB}!A2:K` }),
     sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: `${ORDERS_TAB}!A2:I` }),
   ]);
 
@@ -880,18 +952,18 @@ export async function getMonthlyProfitReport(
         .filter(([, c]) => c === campaignFilter)
         .map(([id]) => id)
     );
-    proxyRows = proxyRows.filter((r) => campaignOrderIds.has(String(r[9] || "")));
+    proxyRows = proxyRows.filter((r) => campaignOrderIds.has(String(r[10] || "")));
   }
 
   const campaignStats = new Map<string, CampaignStat>();
   proxyRows.forEach((r) => {
-    const status = String(r[8] || "未取貨");
+    const status = String(r[9] || "未取貨");
     if (status === "已取消") return;
-    const orderId = String(r[9] || "");
+    const orderId = String(r[10] || "");
     const campaign = campaignMap.get(orderId) || "（無連線）";
-    const costPrice = Number(r[4] || 0);
-    const salePrice = Number(r[5] || 0);
-    const quantity  = Number(r[6] || 0);
+    const costPrice = Number(r[5] || 0);
+    const salePrice = Number(r[6] || 0);
+    const quantity  = Number(r[7] || 0);
     const revenue = salePrice * quantity;
     const profit  = (salePrice - costPrice) * quantity;  // 實時計算，不信任 H 欄
     const confirmed = status === "已完成" || status === "已取貨" || status === "已付款";
@@ -976,9 +1048,18 @@ export interface OrderStatItem {
   total: number;
 }
 
-export async function getOrderStats(campaign?: string): Promise<{
+/**
+ * 叫貨統計。
+ * paidOnly=true 時只算「已確認收款」的訂單——訂單明細那張表沒有付款狀態，
+ * 所以要先從訂單表撈出已確認的訂單編號，再拿來篩明細。
+ */
+export async function getOrderStats(
+  campaign?: string,
+  paidOnly = false
+): Promise<{
   items: OrderStatItem[];
   campaigns: string[];
+  orderCount: number;
 }> {
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
@@ -986,14 +1067,38 @@ export async function getOrderStats(campaign?: string): Promise<{
     range: `${ORDER_ITEMS_TAB}!A2:I`,
   });
 
+  // 一律要讀訂單表：訂單明細沒有狀態欄，已取消的訂單得靠訂單編號排除，
+  // 否則取消後那些商品還是會被算進叫貨量。
+  const ordRes = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!A2:J`, // B=訂單編號、H=狀態、J=付款狀態
+  });
+  const ordRows = ordRes.data.values || [];
+  const cancelledIds = new Set(
+    ordRows
+      .filter((r) => String(r[7] || "") === "已取消")
+      .map((r) => String(r[1] || ""))
+  );
+  const paidOrderIds: Set<string> | null = paidOnly
+    ? new Set(
+        ordRows
+          .filter((r) => String(r[9] || "") === "已確認")
+          .map((r) => String(r[1] || ""))
+      )
+    : null;
+
   const allRows = (res.data.values || []).filter((r) => r[0]);
   const campaigns = Array.from(
     new Set(allRows.map((r) => String(r[8] || "")).filter(Boolean))
   ).sort();
 
-  const rows = campaign
+  let rows = campaign
     ? allRows.filter((r) => String(r[8] || "") === campaign)
     : allRows;
+  rows = rows.filter((r) => !cancelledIds.has(String(r[0] || "")));
+  if (paidOrderIds) {
+    rows = rows.filter((r) => paidOrderIds.has(String(r[0] || "")));
+  }
 
   const map = new Map<string, OrderStatItem>();
   rows.forEach((r) => {
@@ -1012,6 +1117,7 @@ export async function getOrderStats(campaign?: string): Promise<{
   return {
     items: Array.from(map.values()).sort((a, b) => b.quantity - a.quantity),
     campaigns,
+    orderCount: new Set(rows.map((r) => String(r[0] || ""))).size,
   };
 }
 
@@ -1024,7 +1130,7 @@ export async function getMyOrders(
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${ORDERS_TAB}!A2:I`,
+    range: `${ORDERS_TAB}!A2:R`,
   });
   const rows = res.data.values || [];
   return rows
@@ -1040,6 +1146,325 @@ export async function getMyOrders(
       note: String(r[6] || ""),
       status: String(r[7] || ""),
       campaign: String(r[8] || ""),
+      paymentStatus: String(r[9] || "") as OrderRecord["paymentStatus"],
+      paymentLast5: String(r[10] || ""),
+      paymentProof: String(r[11] || ""),
+      paymentReportedAt: String(r[12] || ""),
+      shipName: String(r[13] || ""),
+      shipPhone: String(r[14] || ""),
+      shipStoreName: String(r[15] || ""),
+      shipStoreCode: String(r[16] || ""),
+      shipFilledAt: String(r[17] || ""),
     }))
     .reverse();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   匯款核對（2026-09-05）
+   訂單表 J~M：付款狀態 | 匯款後五碼 | 匯款截圖 | 回報時間
+   H 欄的既有狀態不動，避免影響 HERA bot／叫貨統計／歷史訂單
+   ══════════════════════════════════════════════════════════════ */
+
+/** 後五碼必須是 5 位數字 */
+export function isValidLast5(v: string): boolean {
+  return /^\d{5}$/.test(v.trim());
+}
+
+/** 至少要有後五碼或截圖其中一項 */
+export function hasPaymentEvidence(last5: string, proofUrl: string): boolean {
+  return isValidLast5(last5) || Boolean(proofUrl.trim());
+}
+
+type OrderRow = { rowNumber: number; values: string[] };
+
+/**
+ * 依訂單編號找出該列（rowNumber 是 Sheet 上的實際列號，含標題列偏移）。
+ *
+ * ⚠️ 會重試：客人在「下單完成頁」馬上回報匯款時，訂單才剛 append 進去，
+ * 緊接著的 values.get 有時讀不到那一列，會誤判成「找不到訂單」。
+ * 實測 2026-09-05 就踩到這個。找不到才重試，找到了就直接回。
+ */
+async function findOrderRow(
+  orderId: string,
+  retries = 2
+): Promise<OrderRow | null> {
+  const sheets = getClient();
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    if (attempt > 0) {
+      await new Promise((r) => setTimeout(r, 700 * attempt));
+    }
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: SHEET_ID,
+      range: `${ORDERS_TAB}!A2:R`,
+    });
+    const rows = res.data.values || [];
+    const idx = rows.findIndex((r) => String(r[1] || "") === orderId);
+    if (idx !== -1) {
+      return {
+        rowNumber: idx + 2, // A2 起算
+        values: (rows[idx] || []).map((v) => String(v ?? "")),
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * 客人回報匯款。
+ * 這是公開端點會呼叫的函式，所以驗證都在這裡做：
+ * 訂單要存在、必須是本人、且狀態必須還在「待匯款」。
+ */
+export async function reportPayment(params: {
+  orderId: string;
+  userId: string;
+  last5: string;
+  proofUrl: string;
+}): Promise<{ ok: true } | { ok: false; reason: string }> {
+  const { orderId, userId, last5, proofUrl } = params;
+
+  if (!hasPaymentEvidence(last5, proofUrl)) {
+    return { ok: false, reason: "請填寫匯款後五碼或上傳截圖" };
+  }
+  if (last5.trim() && !isValidLast5(last5)) {
+    return { ok: false, reason: "匯款後五碼需為 5 位數字" };
+  }
+
+  const row = await findOrderRow(orderId);
+  // 找不到訂單、或不是本人，都回同一句話，不透露訂單是否存在
+  if (!row || row.values[2] !== userId) {
+    return { ok: false, reason: "找不到這筆訂單" };
+  }
+  if (row.values[9] === "已確認") {
+    return { ok: false, reason: "這筆訂單已完成核對，不需重複回報" };
+  }
+
+  const sheets = getClient();
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!J${row.rowNumber}:M${row.rowNumber}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: {
+      values: [
+        [
+          "已回報",
+          last5.trim(),
+          proofUrl.trim(),
+          new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+        ],
+      ],
+    },
+  });
+  return { ok: true };
+}
+
+// 訂單編號前 14 碼是下單時間戳，照它排才是真正的下單順序。
+// 不能靠 Sheet 列序：訂單表曾被手動排序過，列序已不等於時間序（2026-09-17 蔡天天那筆跑到最底就是這樣）。
+function byOrderIdDesc(a: { orderId: string }, b: { orderId: string }) {
+  return b.orderId.localeCompare(a.orderId);
+}
+
+/** 後台待核對清單：只列「已回報」的訂單 */
+export async function getPendingPayments(
+  campaign?: string
+): Promise<PendingPayment[]> {
+  const sheets = getClient();
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!A2:R`,
+  });
+  const rows = res.data.values || [];
+  return rows
+    .filter((r) => String(r[9] || "") === "已回報")
+    .filter((r) => String(r[7] || "") !== "已取消")
+    .filter((r) => !campaign || String(r[8] || "") === campaign)
+    .map((r) => ({
+      orderId: String(r[1] || ""),
+      time: String(r[0] || ""),
+      userId: String(r[2] || ""),
+      displayName: String(r[3] || ""),
+      total: Number(r[5] || 0),
+      campaign: String(r[8] || ""),
+      paymentLast5: String(r[10] || ""),
+      paymentProof: normalizeImageUrl(String(r[11] || "")),
+      paymentReportedAt: String(r[12] || ""),
+      shipName: String(r[13] || ""),
+      shipPhone: String(r[14] || ""),
+      shipStoreName: String(r[15] || ""),
+      shipStoreCode: String(r[16] || ""),
+      shipFilledAt: String(r[17] || ""),
+    }))
+    .sort(byOrderIdDesc);
+}
+
+/**
+ * 老闆核對。
+ * confirm → 已確認；reject → 退回待匯款並清空回報內容，讓客人重填
+ */
+export async function verifyPayment(
+  orderId: string,
+  action: "confirm" | "reject"
+): Promise<
+  { ok: true; userId: string; displayName: string } | { ok: false; reason: string }
+> {
+  const row = await findOrderRow(orderId);
+  if (!row) return { ok: false, reason: "找不到這筆訂單" };
+
+  const sheets = getClient();
+  const values =
+    action === "confirm"
+      ? [["已確認", row.values[10] || "", row.values[11] || "", row.values[12] || ""]]
+      : [["待匯款", "", "", ""]];
+
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!J${row.rowNumber}:M${row.rowNumber}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values },
+  });
+  return {
+    ok: true,
+    userId: row.values[2] || "",
+    displayName: row.values[3] || "",
+  };
+}
+
+/** 一次性：把 J~R 標題寫進訂單表第 1 列 */
+export async function migratePaymentColumns(): Promise<void> {
+  const sheets = getClient();
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!J1:R1`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: {
+      values: [
+        [
+          "付款狀態",
+          "匯款後五碼",
+          "匯款截圖",
+          "回報時間",
+          "收件人",
+          "電話",
+          "門市名稱",
+          "門市店號",
+          "取貨資訊填寫時間",
+        ],
+      ],
+    },
+  });
+}
+
+/* ── 7-11 取貨資訊（2026-09-05）訂單表 N~R ── */
+
+/** 台灣手機或市話，去掉分隔符後 8~10 碼數字 */
+export function isValidPhone(v: string): boolean {
+  return /^\d{8,10}$/.test(v.replace(/[\s-]/g, ""));
+}
+
+/**
+ * 客人填 7-11 取貨資訊。
+ * 與匯款回報同樣的所有權驗證；且必須已確認收款才能填。
+ */
+export async function saveShippingInfo(params: {
+  orderId: string;
+  userId: string;
+  name: string;
+  phone: string;
+  storeName: string;
+  storeCode: string;
+}): Promise<{ ok: true } | { ok: false; reason: string }> {
+  const { orderId, userId, name, phone, storeName, storeCode } = params;
+
+  if (!name.trim() || !phone.trim() || !storeName.trim() || !storeCode.trim()) {
+    return { ok: false, reason: "四個欄位都要填寫" };
+  }
+  if (!isValidPhone(phone)) {
+    return { ok: false, reason: "電話格式不正確" };
+  }
+
+  const row = await findOrderRow(orderId);
+  if (!row || row.values[2] !== userId) {
+    return { ok: false, reason: "找不到這筆訂單" };
+  }
+  if (row.values[9] !== "已確認") {
+    return { ok: false, reason: "這筆訂單尚未完成匯款核對" };
+  }
+
+  const sheets = getClient();
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!N${row.rowNumber}:R${row.rowNumber}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: {
+      values: [
+        [
+          name.trim(),
+          phone.replace(/[\s-]/g, ""),
+          storeName.trim(),
+          storeCode.trim(),
+          new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+        ],
+      ],
+    },
+  });
+  return { ok: true };
+}
+
+/** 待出貨：已確認收款且已填取貨資訊 */
+export async function getReadyToShip(campaign?: string): Promise<ReadyToShip[]> {
+  const sheets = getClient();
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!A2:R`,
+  });
+  const rows = res.data.values || [];
+  return rows
+    .filter((r) => String(r[9] || "") === "已確認")
+    .filter((r) => String(r[7] || "") !== "已取消")
+    .filter((r) => String(r[7] || "") !== "已出貨")
+    .filter((r) => String(r[13] || "").trim() !== "") // 已填收件人
+    .filter((r) => !campaign || String(r[8] || "") === campaign)
+    .map((r) => ({
+      orderId: String(r[1] || ""),
+      displayName: String(r[3] || ""),
+      items: String(r[4] || ""),
+      total: Number(r[5] || 0),
+      campaign: String(r[8] || ""),
+      shipName: String(r[13] || ""),
+      shipPhone: String(r[14] || ""),
+      shipStoreName: String(r[15] || ""),
+      shipStoreCode: String(r[16] || ""),
+      shipFilledAt: String(r[17] || ""),
+    }))
+    .sort(byOrderIdDesc);
+}
+
+/** 標記出貨：把訂單表 H 欄改成「已出貨」，該筆就會從待出貨清單消失 */
+export async function markShipped(orderId: string): Promise<
+  | {
+      ok: true;
+      userId: string;
+      storeName: string;
+      storeCode: string;
+    }
+  | { ok: false; reason: string }
+> {
+  const row = await findOrderRow(orderId);
+  if (!row) return { ok: false, reason: "找不到這筆訂單" };
+  if (row.values[7] === "已取消") {
+    return { ok: false, reason: "這筆訂單已取消，不能出貨" };
+  }
+
+  const sheets = getClient();
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!H${row.rowNumber}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: [["已出貨"]] },
+  });
+  return {
+    ok: true,
+    userId: row.values[2] || "",
+    storeName: row.values[15] || "",
+    storeCode: row.values[16] || "",
+  };
 }
