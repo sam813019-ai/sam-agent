@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { appendOrder, getProducts, getSettings } from "@/lib/sheets";
+import {
+  appendOrder,
+  getProducts,
+  getSettings,
+  hasOpenOrder,
+} from "@/lib/sheets";
 import { notifyAdmin } from "@/lib/line";
 import type { OrderPayload } from "@/types";
 
@@ -47,20 +52,40 @@ export async function POST(req: Request) {
         productName: p.name,
         spec: p.spec,
         code: p.code,
+        campaign: p.campaign,
         quantity: i.quantity,
         unitPrice,
       };
     });
 
     const orderId = genOrderId();
-    const payload: OrderPayload = { ...body, items: normalized };
     const settings = await getSettings();
     const campaign = settings.title;
 
     // 運費含進總額，客人匯的金額就是這個數字（訂單明細不加運費列，
     // 那張表是叫貨統計的來源）
-    const shippingFee = settings.shippingFee;
+    // 免運門檻以「商品小計」判斷（此時 total 還沒加運費），跨連線的商品一起計算。
+    // 一定要在後端算，前端只負責顯示，不能信任送上來的金額。
+    const subtotal = total;
+    const threshold = settings.freeShippingThreshold;
+    // 門市自取不經物流，一律免運；其次看免運門檻；
+    // 最後看這位客人本檔是否已有未出貨的訂單——有的話會併箱寄，第二筆起不重複收運費。
+    const isPickup =
+      settings.pickupEnabled && body.deliveryMethod === "pickup";
+    const repeatOrder = isPickup
+      ? false
+      : await hasOpenOrder(body.userId, campaign);
+    const shippingFee =
+      isPickup || repeatOrder || (threshold > 0 && subtotal >= threshold)
+        ? 0
+        : settings.shippingFee;
     total += shippingFee;
+
+    const payload: OrderPayload = {
+      ...body,
+      items: normalized,
+      deliveryMethod: isPickup ? "pickup" : "store",
+    };
 
     await appendOrder(payload, orderId, total, campaign);
     await notifyAdmin(payload, orderId, total);

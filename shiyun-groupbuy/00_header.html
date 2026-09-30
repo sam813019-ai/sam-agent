@@ -1,0 +1,138 @@
+<!-- ═══════════════ 首屏／團主形象照／開團倒數 ═══════════════
+     改開團日期：搜尋下方 START 與 END 兩行，以及 .sy-hero 裡的 date-badge 文字
+     形象照已上傳 Shopline 圖床、用絕對網址（assets/ 只是本機備份）。
+     首屏與名牌頭像吃同一張圖，頭像靠 .ava 的 overflow 視窗裁臉。
+     ══════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;600;700&display=swap');
+
+.sy-hero{
+  --ink:#1A1918; --muted:#8B8783; --nude:#C3A092;
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+  position:relative; overflow:hidden; line-height:1.78;
+  /* 冷白文字帶：色值取自形象照的白牆，讓文字區與照片頂端無縫銜接 */
+  background:linear-gradient(180deg,#FBFAF9 0%,#F4F2EF 60%,#EDEBE7 100%);
+}
+.sy-hero *{box-sizing:border-box; margin:0; padding:0;}
+.sy-hero-img{position:relative; padding-top:352px;}  /* 讓出上方文字帶的高度（要容得下倒數，改文案長度時記得回來調）*/
+.sy-hero-img img{width:100%; display:block;}
+.sy-hero-txt{position:absolute; z-index:2; top:0; left:0; right:0; padding:30px 22px 0; text-align:center;}
+.sy-hero .co{
+  font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:600;
+  letter-spacing:.38em; color:var(--muted); text-transform:uppercase;
+}
+/* 編輯風斜體標語：呼應照片裡的報紙排版 */
+.sy-hero .edit{
+  font-family:'Cormorant Garamond','Times New Roman',serif; font-style:italic; font-weight:400;
+  font-size:31px; line-height:1; letter-spacing:.02em; color:var(--ink); margin-top:14px;
+}
+.sy-hero h1{
+  font-family:'Noto Serif TC',serif; font-size:26px; font-weight:600;
+  letter-spacing:.08em; margin:10px 0 8px; color:var(--ink);
+}
+.sy-hero .sub{font-size:14px; color:#6E6B67; letter-spacing:.02em;}
+/* 細橫線＋中央小方塊，取代 YB 版的金色星光 */
+.sy-hero .rule{display:flex; align-items:center; justify-content:center; gap:9px; margin-top:16px;}
+.sy-hero .rule i{display:block; width:46px; height:1px; background:linear-gradient(90deg,rgba(26,25,24,0),rgba(26,25,24,.35));}
+.sy-hero .rule i+i{background:linear-gradient(90deg,rgba(26,25,24,.35),rgba(26,25,24,0));}
+.sy-hero .rule span{width:5px; height:5px; background:var(--nude); transform:rotate(45deg);}
+.sy-hero .date-badge{
+  display:inline-block; margin-top:16px; padding:8px 20px;
+  background:var(--ink); color:#F7F6F3; font-weight:500; font-size:13.5px; letter-spacing:.06em;
+  font-family:'Outfit','Noto Sans TC',sans-serif;
+}
+.sy-hero .cd-note{font-size:11px; color:var(--muted); margin-top:18px; letter-spacing:.24em; text-transform:uppercase; font-family:'Outfit',sans-serif; font-weight:600;}
+.sy-hero .countdown{display:flex; justify-content:center; gap:20px; margin-top:8px;}
+.sy-hero .cd-cell{text-align:center;}
+.sy-hero .cd-num{font-family:'Outfit',sans-serif; font-size:26px; font-weight:300; line-height:1; color:var(--ink); font-variant-numeric:tabular-nums;}
+.sy-hero .cd-lab{font-size:10px; color:var(--muted); letter-spacing:.14em; margin-top:5px;}
+/* 團主名牌 */
+.sy-host{
+  display:flex; align-items:center; gap:13px; justify-content:center;
+  background:#fff; margin:-30px 20px 0; position:relative; z-index:3;
+  padding:13px 18px; box-shadow:0 10px 30px rgba(26,25,24,.10);
+  font-family:'Noto Sans TC','PingFang TC','Helvetica Neue',Arial,sans-serif;
+}
+/* 頭像：直接吃首屏同一張原圖（1672×2508），用 overflow 視窗把臉框出來，
+   省掉再上傳一張 400×400 裁圖。換照片要重算 margin：
+   img 寬 156px → 縮放比 156/原圖寬；margin-left = 26 - 臉中心x×比，margin-top = 26 - 臉中心y×比 */
+.sy-host .ava{width:52px; height:52px; border-radius:50%; overflow:hidden; flex:0 0 52px; background:#EFEDE9;}
+.sy-host .ava img{width:156px; height:auto; max-width:none; display:block; margin:-30px 0 0 -51px;}
+.sy-host b{display:block; font-size:15.5px; color:#1A1918; letter-spacing:.04em;}
+.sy-host span{display:block; font-size:12.5px; color:#8B8783; line-height:1.5;}
+@media (min-width:721px){
+  /* 桌機：左文字右照片兩欄，避免整張直式照撐爆版面 */
+  .sy-hero{max-width:980px; margin:0 auto;}
+  .sy-hero .edit{font-size:44px;}
+  .sy-hero h1{font-size:32px;}
+  .sy-hero-img{padding-top:0; display:grid; grid-template-columns:1fr 1fr; align-items:stretch;}
+  .sy-hero-img img{order:2; height:560px; object-fit:cover; object-position:50% 16%;}
+  .sy-hero-txt{position:static; order:1; padding:56px 40px; text-align:left; align-self:center;}
+  .sy-hero .rule{justify-content:flex-start;}
+  .sy-hero .countdown{justify-content:flex-start;}
+  .sy-host{margin:-34px auto 0; max-width:430px;}
+}
+@media (prefers-reduced-motion:reduce){ .sy-hero *{animation:none;} }
+</style>
+
+<header class="sy-hero">
+  <div class="sy-hero-img">
+    <img src="https://img.shoplineapp.com/media/image_clips/6abb4c367db3f8b958bd9303/original.jpg?1790659638=&owner_id=648be21890a1b5008d602f77" alt="團主詩芸的形象照">
+    <div class="sy-hero-txt">
+      <p class="co">Shiyun × HEIWEI 何謂美</p>
+      <p class="edit">The Clean Edit</p>
+      <h1>詩芸的選物團</h1>
+      <p class="sub">像白襯衫一樣的保養：乾淨、好搭、每天都想用。</p>
+      <div class="rule"><i></i><span></span><i></i></div>
+      <p class="date-badge">2026 / 10 / 04（日） — 10 / 09（五）</p>
+
+      <p class="cd-note" id="sy-cd-note">距離開團</p>
+      <div class="countdown" id="sy-cd" aria-live="polite">
+        <div class="cd-cell"><div class="cd-num" data-cd="d">--</div><div class="cd-lab">天</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="h">--</div><div class="cd-lab">時</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="m">--</div><div class="cd-lab">分</div></div>
+        <div class="cd-cell"><div class="cd-num" data-cd="s">--</div><div class="cd-lab">秒</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="sy-host">
+  <span class="ava"><img src="https://img.shoplineapp.com/media/image_clips/6abb4c367db3f8b958bd9303/original.jpg?1790659638=&owner_id=648be21890a1b5008d602f77" alt="團主詩芸"></span>
+  <div>
+    <b>團主・詩芸</b>
+    <span>本團商品皆為 HEIWEI 何謂美官方現貨</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* ── 開團／結團時間，要改日期改這兩行 ── */
+  var START = new Date('2026-10-04T00:00:00+08:00').getTime();
+  var END   = new Date('2026-10-09T23:59:59+08:00').getTime();
+
+  var cd = document.getElementById('sy-cd');
+  var note = document.getElementById('sy-cd-note');
+  if (!cd) return;
+  var cell = {
+    d: cd.querySelector('[data-cd="d"]'), h: cd.querySelector('[data-cd="h"]'),
+    m: cd.querySelector('[data-cd="m"]'), s: cd.querySelector('[data-cd="s"]')
+  };
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick() {
+    var now = Date.now(), target, label;
+    if (now < START)     { target = START; label = '距離開團'; }
+    else if (now <= END) { target = END;   label = '距離結團'; }
+    else { cd.style.display = 'none'; note.textContent = '本團已結束，感謝支持'; return false; }
+    var left = Math.max(0, Math.floor((target - now) / 1000));
+    cell.d.textContent = Math.floor(left / 86400);
+    cell.h.textContent = pad(Math.floor(left % 86400 / 3600));
+    cell.m.textContent = pad(Math.floor(left % 3600 / 60));
+    cell.s.textContent = pad(left % 60);
+    note.textContent = label;
+    return true;
+  }
+  if (tick()) { var t = setInterval(function(){ if (!tick()) clearInterval(t); }, 1000); }
+})();
+</script>

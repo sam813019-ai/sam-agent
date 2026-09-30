@@ -5,6 +5,10 @@ import { useState } from "react";
 type Props = {
   orderId: string;
   userId: string;
+  /** 門市自取的單不用填 7-11 門市，只要姓名電話 */
+  pickup?: boolean;
+  pickupLabel?: string;
+  pickupAddress?: string;
   onSaved: (info: {
     name: string;
     phone: string;
@@ -14,7 +18,14 @@ type Props = {
 };
 
 /** 7-11 取貨資訊。核對確認後才會出現 */
-export default function ShippingInfoForm({ orderId, userId, onSaved }: Props) {
+export default function ShippingInfoForm({
+  orderId,
+  userId,
+  pickup = false,
+  pickupLabel = "門市自取",
+  pickupAddress = "",
+  onSaved,
+}: Props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [storeName, setStoreName] = useState("");
@@ -24,7 +35,8 @@ export default function ShippingInfoForm({ orderId, userId, onSaved }: Props) {
 
   const phoneValid = /^\d{8,10}$/.test(phone.replace(/[\s-]/g, ""));
   const canSubmit =
-    Boolean(name.trim() && storeName.trim() && storeCode.trim()) &&
+    Boolean(name.trim()) &&
+    (pickup || Boolean(storeName.trim() && storeCode.trim())) &&
     phoneValid &&
     !saving;
 
@@ -41,8 +53,8 @@ export default function ShippingInfoForm({ orderId, userId, onSaved }: Props) {
           userId,
           name: name.trim(),
           phone: phone.replace(/[\s-]/g, ""),
-          storeName: storeName.trim(),
-          storeCode: storeCode.trim(),
+          storeName: pickup ? pickupLabel : storeName.trim(),
+          storeCode: pickup ? "—" : storeCode.trim(),
         }),
       });
       const data = await res.json();
@@ -50,8 +62,8 @@ export default function ShippingInfoForm({ orderId, userId, onSaved }: Props) {
       onSaved({
         name: name.trim(),
         phone: phone.replace(/[\s-]/g, ""),
-        storeName: storeName.trim(),
-        storeCode: storeCode.trim(),
+        storeName: pickup ? pickupLabel : storeName.trim(),
+        storeCode: pickup ? "—" : storeCode.trim(),
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : "儲存失敗，請稍後再試");
@@ -69,7 +81,7 @@ export default function ShippingInfoForm({ orderId, userId, onSaved }: Props) {
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="取貨時出示證件的姓名"
+          placeholder={pickup ? "到店取貨時報這個名字" : "取貨時出示證件的姓名"}
           className={inputClass}
         />
       </div>
@@ -88,6 +100,18 @@ export default function ShippingInfoForm({ orderId, userId, onSaved }: Props) {
         )}
       </div>
 
+      {pickup ? (
+        <div className="rounded-xl bg-brand-accent/5 border border-brand-accent/30 px-3 py-2">
+          <p className="text-sm font-medium text-gray-800">📍 {pickupLabel}</p>
+          {pickupAddress && (
+            <p className="text-xs text-gray-600 mt-0.5">{pickupAddress}</p>
+          )}
+          <p className="text-[11px] text-gray-500 mt-1">
+            備貨完成後我們會通知您，再麻煩您前來取貨
+          </p>
+        </div>
+      ) : (
+      <>
       <div>
         <label className="block text-sm font-medium mb-1">7-11 門市名稱</label>
         <input
@@ -111,6 +135,8 @@ export default function ShippingInfoForm({ orderId, userId, onSaved }: Props) {
           可至 7-11 官網或 iOPEN Mall App 查詢門市店號
         </p>
       </div>
+      </>
+      )}
 
       {error && (
         <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">

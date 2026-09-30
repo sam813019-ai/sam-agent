@@ -253,6 +253,7 @@ function ProductForm({
   const [loading, setLoading] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>(['']);
   const [categories, setCategories] = useState<string[]>([]);
+  const [campaigns, setCampaigns] = useState<string[]>([]);
   const [form, setForm] = useState({
     code: '',
     name: '',
@@ -262,6 +263,7 @@ function ProductForm({
     stock: '',
     description: '',
     category: '',
+    campaign: '',
     writeToInventory: true,
     writeToProducts: true,
   });
@@ -274,6 +276,20 @@ function ProductForm({
           (d.products ?? []).map((p: { category?: string }) => p.category).filter(Boolean)
         )];
         setCategories(cats);
+        const cps = [...new Set<string>(
+          (d.products ?? []).map((p: { campaign?: string }) => p.campaign).filter(Boolean)
+        )];
+        setCampaigns(cps);
+      })
+      .catch(() => {});
+    // 預設帶入設定分頁的當期連線，省得每次自己選
+    fetch('/api/settings', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.title) {
+          setForm((f) => (f.campaign ? f : { ...f, campaign: d.title }));
+          setCampaigns((c) => (c.includes(d.title) ? c : [...c, d.title]));
+        }
       })
       .catch(() => {});
   }, []);
@@ -284,7 +300,8 @@ function ProductForm({
   const reset = () => {
     setForm({
       code: '', name: '', spec: '', costPrice: '', price: '', stock: '',
-      description: '', category: '', writeToInventory: true, writeToProducts: true,
+      description: '', category: '', campaign: form.campaign,
+      writeToInventory: true, writeToProducts: true,
     });
     setImageUrls(['']);
   };
@@ -364,6 +381,16 @@ function ProductForm({
             onChange={(v) => set('category', v)}
             options={categories}
           />
+        </Row>
+        <Row label="連線">
+          <CategoryInput
+            value={form.campaign}
+            onChange={(v) => set('campaign', v)}
+            options={campaigns}
+          />
+          <p className="text-[11px] text-gray-400 mt-1">
+            決定這項商品算在哪一檔的叫貨統計，也決定它出現在下單頁哪一個專區
+          </p>
         </Row>
       </Card>
 
@@ -1025,6 +1052,7 @@ function PurchaseForm({
 // ─── 代購訂單管理 ─────────────────────────────────────────────────────────────
 
 interface ProxyOrderRow {
+  campaign: string;
   rowNum: number;
   date: string;
   customerName: string;
@@ -1059,6 +1087,7 @@ function OrdersManagement({
   const [orders, setOrders] = useState<ProxyOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCustomer, setSelectedCustomer] = useState('');
+  const [selectedCampaign, setSelectedCampaign] = useState('');
   const [updating, setUpdating] = useState<number | null>(null);
 
   useEffect(() => {
@@ -1088,12 +1117,21 @@ function OrdersManagement({
     setUpdating(null);
   };
 
+  const campaigns = Array.from(
+    new Set(orders.map((o) => o.campaign).filter(Boolean))
+  ).sort((a, b) => b.localeCompare(a, 'zh-TW'));
+
+  // 先用連線縮小範圍，客人下拉才不會列出所有檔期的人
+  const inCampaign = selectedCampaign
+    ? orders.filter((o) => o.campaign === selectedCampaign)
+    : orders;
+
   const customers = Array.from(
-    new Set(orders.map((o) => o.customerName).filter(Boolean))
+    new Set(inCampaign.map((o) => o.customerName).filter(Boolean))
   ).sort((a, b) => a.localeCompare(b, 'zh-TW'));
 
   const filtered = selectedCustomer
-    ? orders.filter((o) => o.customerName === selectedCustomer && o.status !== '已取消')
+    ? inCampaign.filter((o) => o.customerName === selectedCustomer && o.status !== '已取消')
     : [];
 
   const totalAmount = filtered.reduce((s, o) => s + o.salePrice * o.quantity, 0);
@@ -1101,6 +1139,26 @@ function OrdersManagement({
 
   return (
     <div className="space-y-4">
+      {/* 連線下拉 */}
+      {campaigns.length > 0 && (
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">篩選連線</label>
+          <select
+            value={selectedCampaign}
+            onChange={(e) => {
+              setSelectedCampaign(e.target.value);
+              setSelectedCustomer('');
+            }}
+            className={inputCls}
+          >
+            <option value="">全部連線</option>
+            {campaigns.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* 客人下拉 */}
       <div>
         <label className="block text-xs text-gray-500 mb-1">選擇客人</label>
@@ -1365,7 +1423,7 @@ function SalesReport() {
 
 // ─── 商品管理（批次上下架）────────────────────────────────────────────────────
 
-interface ManagedProduct { rowNum: number; id: string; code: string; name: string; spec: string; price: number; stock: number; active: boolean; }
+interface ManagedProduct { rowNum: number; id: string; code: string; name: string; spec: string; price: number; stock: number; active: boolean; campaign?: string; }
 
 function ProductManagement({ onSuccess, onError }: { onSuccess: (m: string) => void; onError: (m: string) => void }) {
   const [products, setProducts] = useState<ManagedProduct[]>([]);
@@ -1373,15 +1431,28 @@ function ProductManagement({ onSuccess, onError }: { onSuccess: (m: string) => v
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [saving, setSaving] = useState(false);
   const [showInactive, setShowInactive] = useState(false);
+  const [keyword, setKeyword] = useState('');
+  // 上架時要把商品歸到哪一檔連線（寫商品表 L 欄）
+  const [campaign, setCampaign] = useState('');
+  const [campaignOpts, setCampaignOpts] = useState<string[]>([]);
 
   const reload = () => {
     setLoading(true);
     fetch('/api/admin/products-manage')
       .then((r) => r.json())
-      .then(setProducts)
+      .then((d: ManagedProduct[]) => {
+        setProducts(d);
+        setCampaignOpts([...new Set(d.map((p) => p.campaign).filter(Boolean) as string[])]);
+      })
       .finally(() => setLoading(false));
   };
   useEffect(reload, []);
+  useEffect(() => {
+    fetch('/api/settings', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d) => { if (d.title) setCampaign((c) => c || d.title); })
+      .catch(() => {});
+  }, []);
 
   const toggle = (rowNum: number) =>
     setSelected((s) => { const n = new Set(s); n.has(rowNum) ? n.delete(rowNum) : n.add(rowNum); return n; });
@@ -1392,10 +1463,14 @@ function ProductManagement({ onSuccess, onError }: { onSuccess: (m: string) => v
     const res = await fetch('/api/admin/products-manage', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rowNums: Array.from(selected), active }),
+      body: JSON.stringify({ rowNums: Array.from(selected), active, campaign: active ? campaign : undefined }),
     });
     if (res.ok) {
-      onSuccess(`已${active ? '上架' : '下架'} ${selected.size} 件商品`);
+      onSuccess(
+        active
+          ? `已上架 ${selected.size} 件商品${campaign ? `，歸到「${campaign}」` : ''}`
+          : `已下架 ${selected.size} 件商品`
+      );
       setSelected(new Set());
       reload();
     } else {
@@ -1404,10 +1479,33 @@ function ProductManagement({ onSuccess, onError }: { onSuccess: (m: string) => v
     setSaving(false);
   };
 
-  const visible = products.filter((p) => showInactive || p.active);
+  const kw = keyword.trim().toLowerCase();
+  const visible = products
+    .filter((p) => showInactive || p.active)
+    .filter(
+      (p) =>
+        !kw ||
+        `${p.code} ${p.name} ${p.spec}`.toLowerCase().includes(kw)
+    );
 
   return (
     <div className="space-y-4">
+      {/* 搜尋：商品表有近三百筆，沒有搜尋很難從下架商品裡撈出要重新上架的 */}
+      <input
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        className={inputCls}
+        placeholder="搜尋貨號 / 品名 / 規格"
+      />
+
+      <div>
+        <label className="block text-xs text-gray-500 mb-1">上架時歸到哪一檔連線</label>
+        <CategoryInput value={campaign} onChange={setCampaign} options={campaignOpts} />
+        <p className="text-[11px] text-gray-400 mt-1">
+          按「上架選取」時會一併寫入；下架不會動到連線
+        </p>
+      </div>
+
       <div className="flex items-center justify-between">
         <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
           <input type="checkbox" checked={showInactive} onChange={(e) => setShowInactive(e.target.checked)} className="accent-blue-600" />
@@ -1439,6 +1537,9 @@ function ProductManagement({ onSuccess, onError }: { onSuccess: (m: string) => v
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">{p.code} {p.name}</p>
             <p className="text-xs text-gray-500">{p.spec} | NT${p.price} | 庫存 {p.stock}</p>
+            {p.campaign && (
+              <p className="text-[11px] text-gray-400 truncate">連線：{p.campaign}</p>
+            )}
           </div>
           <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${p.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
             {p.active ? '上架中' : '已下架'}
@@ -1466,6 +1567,19 @@ type ReadyToShipRow = {
   shipFilledAt: string;
 };
 
+/** 同一客人、同一收件資訊的訂單併成一組，一箱寄出 */
+type ReadyToShipGroupRow = {
+  key: string;
+  displayName: string;
+  shipName: string;
+  shipPhone: string;
+  shipStoreName: string;
+  shipStoreCode: string;
+  campaign: string;
+  total: number;
+  orders: ReadyToShipRow[];
+};
+
 type PendingPaymentRow = {
   orderId: string;
   time: string;
@@ -1474,6 +1588,7 @@ type PendingPaymentRow = {
   total: number;
   campaign: string;
   paymentLast5: string;
+  paymentMethod: string;
   paymentProof: string;
   paymentReportedAt: string;
 };
@@ -1482,44 +1597,53 @@ type PendingPaymentRow = {
 function PaymentVerify() {
   const [view, setView] = useState<'pending' | 'ship'>('pending');
   const [items, setItems] = useState<PendingPaymentRow[]>([]);
-  const [shipItems, setShipItems] = useState<ReadyToShipRow[]>([]);
+  const [shipItems, setShipItems] = useState<ReadyToShipGroupRow[]>([]);
+  const [shipOrderCount, setShipOrderCount] = useState(0);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
   const [zoom, setZoom] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [campaign, setCampaign] = useState('');
+  const [campaigns, setCampaigns] = useState<string[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/payment-verify?view=${view}`, {
+      const qs = new URLSearchParams({ view });
+      if (campaign) qs.set('campaign', campaign);
+      const res = await fetch(`/api/admin/payment-verify?${qs}`, {
         cache: 'no-store',
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || '讀取失敗');
       if (view === 'ship') {
         setShipItems(data.items || []);
+        setShipOrderCount(data.orderCount || 0);
       } else {
         setItems(data.items || []);
       }
       setTotal(data.total || 0);
+      setCampaigns(data.campaigns || []);
     } catch (e) {
       setMsg({ text: e instanceof Error ? e.message : '讀取失敗', ok: false });
     } finally {
       setLoading(false);
     }
-  }, [view]);
+  }, [view, campaign]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  async function copyShipInfo(it: ReadyToShipRow) {
-    const text = `${it.shipName}\n${it.shipPhone}\n7-11 ${it.shipStoreName}（${it.shipStoreCode}）`;
+  async function copyShipInfo(g: ReadyToShipGroupRow) {
+    const text = g.shipStoreName.includes('自取')
+      ? `${g.shipName}\n${g.shipPhone}\n${g.shipStoreName}`
+      : `${g.shipName}\n${g.shipPhone}\n7-11 ${g.shipStoreName}（${g.shipStoreCode}）`;
     try {
       await navigator.clipboard.writeText(text);
-      setCopiedId(it.orderId);
+      setCopiedId(g.key);
       setTimeout(() => setCopiedId(null), 2000);
     } catch {
       setMsg({ text: '複製失敗，請手動選取', ok: false });
@@ -1540,7 +1664,20 @@ function PaymentVerify() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || '更新失敗');
       if (action === 'ship') {
-        setShipItems((prev) => prev.filter((i) => i.orderId !== orderId));
+        // 單筆出貨：把該筆從所屬分組移除，整組空了才拿掉整張卡
+        setShipItems((prev) =>
+          prev
+            .map((g) => ({
+              ...g,
+              orders: g.orders.filter((o) => o.orderId !== orderId),
+            }))
+            .map((g) => ({
+              ...g,
+              total: g.orders.reduce((n, o) => n + o.total, 0),
+            }))
+            .filter((g) => g.orders.length > 0)
+        );
+        setShipOrderCount((n) => Math.max(0, n - 1));
       } else {
         setItems((prev) => prev.filter((i) => i.orderId !== orderId));
       }
@@ -1560,12 +1697,63 @@ function PaymentVerify() {
     }
   }
 
+  /** 整組出貨：同一客人同箱寄出，後端只推一則通知 */
+  async function shipGroup(g: ReadyToShipGroupRow) {
+    const n = g.orders.length;
+    if (
+      !confirm(
+        n > 1
+          ? `將 ${g.displayName} 的 ${n} 筆訂單合併為一箱標記出貨？客人只會收到一則通知。`
+          : '標記為已出貨？這筆會從待出貨清單移除。'
+      )
+    )
+      return;
+    setBusyId(g.key);
+    setMsg(null);
+    try {
+      const res = await fetch('/api/admin/payment-verify', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderIds: g.orders.map((o) => o.orderId),
+          action: 'ship',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '更新失敗');
+      setShipItems((prev) => prev.filter((x) => x.key !== g.key));
+      setShipOrderCount((c) => Math.max(0, c - n));
+      setMsg({ text: `已標記出貨（${n} 筆）`, ok: true });
+    } catch (e) {
+      setMsg({ text: e instanceof Error ? e.message : '更新失敗', ok: false });
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   if (loading) {
     return <div className="text-center text-gray-400 py-12">載入中…</div>;
   }
 
   return (
     <div className="space-y-3">
+      {/* 連線篩選 */}
+      {campaigns.length > 0 && (
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">篩選連線</label>
+          <select
+            value={campaign}
+            onChange={(e) => setCampaign(e.target.value)}
+            className={inputCls}
+          >
+            <option value="">全部連線</option>
+            {campaigns.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* 待核對 / 待出貨 切換 */}
       <div className="flex gap-2">
         {([
@@ -1589,7 +1777,18 @@ function PaymentVerify() {
       <div className="flex justify-between items-center bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
         <span className="text-sm text-blue-800">
           {view === 'ship' ? '待出貨' : '待核對'}{' '}
-          <strong>{view === 'ship' ? shipItems.length : items.length}</strong> 筆
+          {view === 'ship' ? (
+            <>
+              <strong>{shipItems.length}</strong> 箱
+              {shipOrderCount !== shipItems.length && (
+                <span className="text-blue-600">（{shipOrderCount} 筆訂單）</span>
+              )}
+            </>
+          ) : (
+            <>
+              <strong>{items.length}</strong> 筆
+            </>
+          )}
         </span>
         <span className="font-bold text-blue-800">
           NT$ {total.toLocaleString()}
@@ -1622,53 +1821,111 @@ function PaymentVerify() {
             <p>目前沒有待出貨的訂單</p>
           </div>
         ) : (
-          shipItems.map((it) => (
-            <div key={it.orderId} className="bg-white border rounded-xl p-4">
+          shipItems.map((g) => {
+            const multi = g.orders.length > 1;
+            const pickup = g.shipStoreName.includes('自取');
+            return (
+            <div key={g.key} className={`bg-white border rounded-xl p-4 ${multi ? 'ring-2 ring-blue-300' : ''}`}>
               <div className="flex justify-between items-start mb-2">
                 <div className="min-w-0">
-                  <p className="font-medium truncate">{it.displayName}</p>
-                  <p className="font-mono text-xs text-gray-400">{it.orderId}</p>
+                  <p className="font-medium truncate">{g.displayName}</p>
+                  {multi ? (
+                    <p className="text-xs text-blue-600 font-medium">
+                      📦 {g.orders.length} 筆訂單・同箱出貨
+                    </p>
+                  ) : (
+                    <p className="font-mono text-xs text-gray-400">
+                      {g.orders[0].orderId}
+                    </p>
+                  )}
                 </div>
                 <p className="font-bold shrink-0 ml-2">
-                  NT$ {it.total.toLocaleString()}
+                  NT$ {g.total.toLocaleString()}
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-3 text-sm space-y-0.5 mb-2">
-                <p className="font-medium">{it.shipName}</p>
-                <p className="font-mono">{it.shipPhone}</p>
-                <p>
-                  7-11 {it.shipStoreName}
-                  {it.shipStoreCode ? `（${it.shipStoreCode}）` : ''}
-                </p>
+              {multi && (
+                <div className="mb-2 rounded-lg border border-blue-100 bg-blue-50/60 divide-y divide-blue-100">
+                  {g.orders.map((o) => (
+                    <div key={o.orderId} className="px-2.5 py-1.5">
+                      <div className="flex justify-between items-center gap-2">
+                        <span className="font-mono text-[11px] text-gray-500 truncate">
+                          {o.orderId}
+                        </span>
+                        <span className="text-xs shrink-0">
+                          NT$ {o.total.toLocaleString()}
+                        </span>
+                        <button
+                          onClick={() => act(o.orderId, 'ship')}
+                          disabled={busyId === o.orderId}
+                          className="text-[11px] text-gray-400 underline shrink-0 disabled:opacity-40"
+                        >
+                          單獨出貨
+                        </button>
+                      </div>
+                      <details>
+                        <summary className="text-[11px] text-gray-400 cursor-pointer">
+                          明細
+                        </summary>
+                        <pre className="text-[11px] whitespace-pre-wrap font-sans text-gray-600 mt-0.5">
+                          {o.items}
+                        </pre>
+                      </details>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className={`rounded-lg p-3 text-sm space-y-0.5 mb-2 ${
+                pickup ? 'bg-amber-50 border border-amber-200' : 'bg-gray-50'
+              }`}>
+                <p className="font-medium">{g.shipName}</p>
+                <p className="font-mono">{g.shipPhone}</p>
+                {pickup ? (
+                  <p className="font-medium text-amber-700">
+                    🏠 {g.shipStoreName}（不用寄，客人來店拿）
+                  </p>
+                ) : (
+                  <p>
+                    7-11 {g.shipStoreName}
+                    {g.shipStoreCode ? `（${g.shipStoreCode}）` : ''}
+                  </p>
+                )}
               </div>
 
-              <details className="mb-2">
-                <summary className="text-xs text-gray-400 cursor-pointer">
-                  商品明細
-                </summary>
-                <pre className="text-xs whitespace-pre-wrap font-sans text-gray-600 mt-1">
-                  {it.items}
-                </pre>
-              </details>
+              {!multi && (
+                <details className="mb-2">
+                  <summary className="text-xs text-gray-400 cursor-pointer">
+                    商品明細
+                  </summary>
+                  <pre className="text-xs whitespace-pre-wrap font-sans text-gray-600 mt-1">
+                    {g.orders[0].items}
+                  </pre>
+                </details>
+              )}
 
               <div className="flex gap-2">
                 <button
-                  onClick={() => copyShipInfo(it)}
+                  onClick={() => copyShipInfo(g)}
                   className="flex-1 py-2.5 border rounded-xl text-sm font-medium"
                 >
-                  {copiedId === it.orderId ? '已複製' : '複製收件資訊'}
+                  {copiedId === g.key ? '已複製' : '複製收件資訊'}
                 </button>
                 <button
-                  onClick={() => act(it.orderId, 'ship')}
-                  disabled={busyId === it.orderId}
+                  onClick={() => shipGroup(g)}
+                  disabled={busyId === g.key}
                   className="flex-1 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium disabled:opacity-40"
                 >
-                  {busyId === it.orderId ? '處理中…' : '出貨'}
+                  {busyId === g.key
+                    ? '處理中…'
+                    : multi
+                      ? `整組出貨（${g.orders.length}）`
+                      : '出貨'}
                 </button>
               </div>
             </div>
-          ))
+            );
+          })
         )
       ) : items.length === 0 ? (
         <div className="text-center text-gray-400 py-16">
@@ -1689,7 +1946,12 @@ function PaymentVerify() {
             </div>
 
             <div className="text-sm space-y-1 mb-3">
-              {it.paymentLast5 ? (
+              {/* 付款方式決定去哪裡對帳：LINE Pay 後台 vs 銀行 */}
+              {it.paymentMethod === 'LINE Pay' ? (
+                <p className="inline-flex items-center gap-1.5 rounded-lg bg-[#06C755]/10 border border-[#06C755]/40 px-2 py-1 text-[#06813a] font-medium text-xs">
+                  💳 LINE Pay・請到 LINE Pay 後台比對金額與時間
+                </p>
+              ) : it.paymentLast5 ? (
                 <p>
                   後五碼{' '}
                   <span className="font-mono font-bold text-base tracking-widest">

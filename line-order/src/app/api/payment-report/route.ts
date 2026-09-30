@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
     const orderId = String(form.get("orderId") || "").trim();
     const userId = String(form.get("userId") || "").trim();
     const last5 = String(form.get("last5") || "").trim();
+    const method = String(form.get("method") || "bank").trim();
     const file = form.get("proof") as File | null;
 
     if (!orderId || !userId) {
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const result = await reportPayment({ orderId, userId, last5, proofUrl });
+    const result = await reportPayment({ orderId, userId, last5, proofUrl, method });
     if (!result.ok) {
       return NextResponse.json({ error: result.reason }, { status: 400 });
     }

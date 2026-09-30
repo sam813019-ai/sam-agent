@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang=zh-Hant><head><meta charset=utf-8><style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box;animation:none!important}
+html,body{margin:0;padding:0}
+:root{--gray:#97999B;--leaf:#8C9A8E;--amber:#EF9F27;--ink:#25262a;--gold:#C9A15C}
+body{font-family:"Noto Sans CJK TC","Noto Sans TC","PingFang TC","Heiti TC",sans-serif;
+ color:var(--ink);font-size:9.4pt;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;padding:13mm 15mm 11mm;position:relative;overflow:hidden;page-break-after:always}
+.page:last-child{page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:3.4mm}
+.logo{font-size:18.5pt;font-weight:700;letter-spacing:.34em;line-height:1}
+.logo .sub{font-size:8pt;font-weight:400;letter-spacing:.62em;color:var(--gray);margin-top:2.2mm}
+.hdr{text-align:right;line-height:1.55}
+.hdr .t1{font-size:9.2pt;font-weight:700}
+.hdr .t2{font-size:8.4pt;color:var(--gray)}
+.hdr .t3{font-size:8.2pt;color:#5f6064}
+h1{font-size:20pt;font-weight:700;margin:8mm 0 2.2mm}
+.meta{font-size:9.2pt;color:#4d4e52}
+.meta2{font-size:8.6pt;color:var(--gray);margin-top:1.2mm}
+.rule{width:26mm;height:2.4px;background:var(--ink);margin:3.4mm 0 0}
+.sec{margin-top:6mm}
+.sh{display:flex;align-items:center;gap:3mm;margin-bottom:2.8mm}
+.sh::before{content:"";width:1.6mm;height:4.4mm;background:var(--ink);display:block}
+.sh b{font-size:11pt;letter-spacing:.04em}
+.sh span{font-size:7.8pt;color:var(--gray);letter-spacing:.2em}
+.ov{background:#f5f5f5;padding:4.4mm 5.5mm;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:3.2mm 7mm;font-size:9.2pt}
+.ov .k{color:#5f6064;white-space:nowrap}
+.ov .v{font-weight:700;text-align:right;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3.4mm}
+.kpi{border:1px solid #dcdcdd;padding:3.6mm 4.2mm 4mm}
+.kpi.dark{background:#25262a;border-color:#25262a;color:#fff}
+.kpi .l{font-size:8.2pt;color:#63646a}
+.kpi.dark .l{color:#c6c7ca}
+.kpi .v{font-size:19.5pt;font-weight:700;letter-spacing:-.012em;line-height:1.28;margin-top:.8mm}
+.kpi .v small{font-size:9pt;font-weight:700}
+.kpi .s{font-size:7.8pt;color:var(--gray);margin-top:1mm}
+.kpi.dark .s{color:#9b9ca0}
+table{width:100%;border-collapse:collapse}
+th{font-size:8.4pt;color:#4d4e52;font-weight:600;text-align:left;background:#efefef;padding:2.4mm 3mm}
+td{padding:2.4mm 3mm;border-bottom:1px solid #ededee;font-size:9.2pt}
+.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{background:#f5f5f5;font-weight:700;border-bottom:none}
+tr.dim td{color:var(--gray)}
+.pill{display:inline-block;background:#25262a;color:#fff;font-size:7.8pt;font-weight:600;border-radius:9px;padding:.8mm 2.8mm}
+.pill.g{background:var(--leaf)}
+.pill.a{background:var(--amber)}
+.pill.o{background:#fff;color:var(--gray);border:1px solid #dcdcdd}
+.mute{color:var(--gray);font-size:8.6pt}
+.callout{border-left:3px solid var(--leaf);background:#f6f7f6;padding:3mm 4mm;font-size:8.8pt;color:#4d4e52;margin-top:3mm;line-height:1.7}
+.callout.warn{border-left-color:var(--amber);background:#fdf8f0}
+.callout.dark{border-left-color:var(--ink);background:#f1f1f2}
+.callout b{color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:start}
+.dtl{display:flex;align-items:center;gap:3.5mm;padding:1.5mm 0}
+.dtl .d{width:13mm;font-size:8.8pt;color:#4d4e52;font-variant-numeric:tabular-nums}
+.dtl .track{flex:1;background:#ececed;border-radius:1.6mm;height:3.2mm;overflow:hidden}
+.dtl .fill{height:100%;background:#b6b7b9;border-radius:1.6mm}
+.dtl .fill.top{background:#25262a}
+.dtl .v{width:34mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+.trendbox{border:1px solid #e4e4e5;padding:4mm 5mm}
+.bar{height:2.6mm;background:#b6b7b9;border-radius:1.3mm;display:inline-block;vertical-align:middle}
+.bar.g{background:var(--leaf)}
+.bar.a{background:var(--amber)}
+ul.ins{list-style:none;margin:0;padding:0}
+ul.ins li{position:relative;padding:1.8mm 0 1.8mm 6mm;font-size:9.2pt;border-bottom:1px solid #f0f0f1}
+ul.ins li::before{content:"";position:absolute;left:1.2mm;top:3.8mm;width:2.4mm;height:2.4mm;border-radius:50%;background:var(--leaf)}
+ul.ins li.a::before{background:var(--amber)}
+ul.ins li.g::before{background:var(--gray)}
+ul.ins b{font-weight:700}
+.band{background:#25262a;color:#fff;padding:3.4mm 5mm;font-size:9.6pt;font-weight:700}
+.settle{border:1px solid #dcdcdd;border-top:none;padding:1mm 5mm 3mm}
+.srow{display:flex;justify-content:space-between;align-items:baseline;padding:2.8mm 0;border-bottom:1px dotted #d5d5d6}
+.srow:last-child{border-bottom:none}
+.srow .lab{font-size:9.2pt}
+.srow .amt{font-size:15pt;font-weight:700;font-variant-numeric:tabular-nums}
+.srow.off{color:var(--gray)}
+.srow.off .amt{font-size:10pt;font-weight:600}
+.ft{position:absolute;left:15mm;right:15mm;bottom:8mm;display:flex;justify-content:space-between;
+ border-top:1px solid #e4e4e5;padding-top:2.4mm;font-size:7.6pt;color:#a9aaad}
+.big{font-size:34pt;font-weight:700;letter-spacing:-.02em;line-height:1}
+.big small{font-size:11pt}
+.seg{display:flex;align-items:center;gap:3mm;padding:2mm 0;border-bottom:1px solid #f0f0f1}
+.seg .nm{width:34mm;font-size:8.8pt}
+.seg .track{flex:1;background:#ececed;height:4mm;border-radius:2mm;overflow:hidden}
+.seg .fill{height:100%;border-radius:2mm;background:var(--leaf)}
+.seg .fill.dim{background:#cfd0d1}
+.seg .v{width:30mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+</style></head><body><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V1 成效報告</div><div class=t2>CRM WAVE-1 PERFORMANCE</div><div class=t3>製表：2026/09/27　｜　品牌行銷</div></div></div>
+<h1>V1 標籤名單・回購成效驗證</h1>
+<div class=meta>驗證場域：楊楊生日慶ｘ何謂美（2026/09/20–09/27）　｜　V1 標籤上線：2026/09/04</div>
+<div class=meta2>⚠ 歸因限制：V1 七波 Email 已陸續發送，但<b>發送波次、時間與寄出量尚未回報</b>。以下為「標籤分群整體成效」，<b>不等於 Email 成效</b>；要分離 Email 增量需補齊發送紀錄。</div>
+<div class=rule></div>
+
+<div class=sec><div class=sh><b>一句話結論</b><span>BOTTOM LINE</span></div>
+<div class=callout dark style="border-left-color:#25262a;background:#f1f1f2;font-size:9.6pt">
+V1 名單 <b>4,247 位</b>中有 <b>172 位</b>（4.0%）在本團回購，
+貢獻 <b>NT$490,017</b>，占全團營業額 <b>35.9%</b>；
+其客單價 <b>NT$2,849</b>，比非名單客戶高 <b>37%</b>。
+但回購幾乎全部集中在<b>同一位團主的舊客</b>，跨團名單接近於零。
+</div></div>
+
+<div class=sec><div class=sh><b>核心數字</b><span>KEY RESULTS</span></div>
+<div class=kpis>
+  <div class="kpi dark"><div class=l>V1 名單回購貢獻</div>
+    <div class=v><small>NT$</small>490,017</div>
+    <div class=s>占全團 35.9%・172 位客戶</div></div>
+  <div class=kpi><div class=l>名單整體回購率</div><div class=v>4.0<small>%</small></div>
+    <div class=s>4,247 位名單 → 172 位回購</div></div>
+  <div class=kpi><div class=l>客單價落差</div><div class=v>+37<small>%</small></div>
+    <div class=s>NT$2,849 vs NT$2,082</div></div>
+</div></div>
+
+<div class=sec><div class=sh><b>名單客 vs 非名單客</b><span>SEGMENT SPLIT</span></div>
+<table>
+<tr><th>客群</th><th class=n>人數</th><th class=n>占比</th><th class=n>營業額</th><th class=n>占營收</th><th class=n>客單價</th></tr>
+<tr><td>V1 名單客（帶任一 V1 標籤）</td><td class=n>172</td>
+  <td class=n>29.1%</td><td class=n>NT$490,017</td>
+  <td class=n>35.9%</td><td class=n><b>NT$2,849</b></td></tr>
+<tr><td>非名單客</td><td class=n>420</td>
+  <td class=n>70.9%</td><td class=n>NT$874,291</td>
+  <td class=n>64.1%</td><td class=n>NT$2,082</td></tr>
+<tr class=sum><td>本團合計</td><td class=n>592</td><td class=n>100%</td>
+  <td class=n>NT$1,364,308</td><td class=n>100%</td><td class=n>NT$2,305</td></tr>
+</table>
+<div class=callout>名單客只占人數 29%，卻貢獻 36% 營收——
+<b>標籤分群本身就有價值</b>，即使一封信都還沒發。</div>
+</div>
+<div class=sec><div class=sh><b>舊客與新客結構</b><span>OLD vs NEW</span></div>
+<div class=kpis>
+  <div class=kpi><div class=l>YB 系舊客回購</div><div class=v>131 <small>位</small></div>
+    <div class=s>NT$370,557・客單 NT$2,829</div></div>
+  <div class=kpi><div class=l>全新客（無任何既有標籤）</div><div class=v>416 <small>位</small></div>
+    <div class=s>NT$851,112・客單 NT$2,046</div></div>
+  <div class="kpi dark"><div class=l>本團新增名單</div><div class=v>416 <small>位</small></div>
+    <div class=s>已標 團購-Yboutique，可進 V2</div></div>
+</div>
+<div class=callout>本團 <b>70%</b> 是全新客，客單 NT$2,046；
+舊客雖只 131 位，客單高出 <b>38%</b>。
+新客進得來、舊客買得多，兩邊要用不同的下一步。</div>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>楊楊生日慶ｘ何謂美・CRM V1 成效　・　1 / 3</div></div></div><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V1 成效報告</div><div class=t2>楊楊生日慶ｘ何謂美・2026/09/20–09/27</div><div class=t3></div></div></div>
+<div class=sec><div class=sh><b>八個 V1 波次標籤・逐條成效</b><span>BY WAVE TAG</span></div>
+<table>
+<tr><th>V1 標籤</th><th class=n>名單數</th><th class=n>回購人數</th><th class=n>回購率</th>
+  <th class=n>訂單</th><th class=n>營業額</th><th class=n>客單價</th><th style="padding-left:5mm">回購率</th></tr>
+<tr><td>V1-YB忠誠客</td><td class=n>93</td><td class=n>17</td><td class=n><b>18.3%</b></td><td class=n>18</td><td class=n>NT$37,891</td><td class=n>NT$2,229</td><td style='padding-left:5mm'><span class='bar g' style='width:24.0mm'></span></td></tr><tr><td>V1-YB回購</td><td class=n>830</td><td class=n>114</td><td class=n><b>13.7%</b></td><td class=n>122</td><td class=n>NT$332,666</td><td class=n>NT$2,918</td><td style='padding-left:5mm'><span class='bar g' style='width:18.0mm'></span></td></tr><tr><td>V1-補貨加新品</td><td class=n>1,375</td><td class=n>38</td><td class=n><b>2.8%</b></td><td class=n>41</td><td class=n>NT$108,210</td><td class=n>NT$2,848</td><td style='padding-left:5mm'><span class='bar' style='width:3.6mm'></span></td></tr><tr><td>V1-新品優先</td><td class=n>62</td><td class=n>1</td><td class=n><b>1.6%</b></td><td class=n>1</td><td class=n>NT$6,150</td><td class=n>NT$6,150</td><td style='padding-left:5mm'><span class='bar' style='width:2.1mm'></span></td></tr><tr><td>V1-純新品</td><td class=n>1,440</td><td class=n>2</td><td class=n><b>0.1%</b></td><td class=n>2</td><td class=n>NT$5,100</td><td class=n>NT$2,550</td><td style='padding-left:5mm'><span class='bar' style='width:0.2mm'></span></td></tr><tr class=dim><td>V1-保養線</td><td class=n>322</td><td class=n>0</td><td class=n><b>0.0%</b></td><td class=n>0</td><td class=n>NT$0</td><td class=n>—</td><td style='padding-left:5mm'><span class='bar' style='width:0.0mm'></span></td></tr><tr class=dim><td>V1-VIP人工</td><td class=n>41</td><td class=n>0</td><td class=n><b>0.0%</b></td><td class=n>0</td><td class=n>NT$0</td><td class=n>—</td><td style='padding-left:5mm'><span class='bar' style='width:0.0mm'></span></td></tr><tr class=dim><td>V1-品馨回購</td><td class=n>92</td><td class=n>0</td><td class=n><b>0.0%</b></td><td class=n>0</td><td class=n>NT$0</td><td class=n>—</td><td style='padding-left:5mm'><span class='bar' style='width:0.0mm'></span></td></tr>
+<tr class=sum><td>合計（去重）</td><td class=n>4,247</td><td class=n>172</td>
+  <td class=n>4.0%</td><td class=n>184</td>
+  <td class=n>NT$490,017</td><td class=n>NT$2,849</td><td></td></tr>
+</table>
+<div class=callout warn><b>斷層非常明顯</b>：前兩名（V1-YB忠誠客 18.3%、V1-YB回購 13.7%）
+都是<b>這位團主自己的舊客</b>；其餘六個標籤合計 41 位回購，
+其中 V1-保養線、V1-VIP人工、V1-品馨回購 <b>掛零</b>。名單大小與回購率無關——
+V1-純新品有 1,440 人卻只回來 2 位（0.1%）。</div>
+</div>
+
+<div class=sec><div class=sh><b>狀態標籤表現</b><span>STATUS TAGS</span></div>
+<table>
+<tr><th>狀態標籤</th><th class=n>名單數</th><th class=n>回購人數</th><th class=n>回購率</th>
+  <th class=n>營業額</th><th class=n>客單價</th></tr>
+<tr><td>VIP-高價值</td><td class=n>79</td><td class=n>1</td><td class=n>1.3%</td><td class=n>NT$11,145</td><td class=n>NT$11,145</td></tr><tr><td>回頭客</td><td class=n>563</td><td class=n>37</td><td class=n>6.6%</td><td class=n>NT$132,605</td><td class=n>NT$3,584</td></tr><tr><td>大量採購</td><td class=n>253</td><td class=n>11</td><td class=n>4.3%</td><td class=n>NT$36,658</td><td class=n>NT$3,333</td></tr>
+</table>
+<div class=callout>「回頭客」名單回購率 6.6%、客單 NT$3,584，
+明顯優於整團平均 NT$2,305——<b>有回購史的人最值得投放</b>。
+反觀「VIP-高價值」79 位只回來 1 位，高價值客與團購檔期的商品結構不合，應走一對一而非團購推播。</div>
+</div>
+
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>楊楊生日慶ｘ何謂美・CRM V1 成效　・　2 / 3</div></div></div><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V1 成效報告</div><div class=t2>楊楊生日慶ｘ何謂美・2026/09/20–09/27</div><div class=t3></div></div></div>
+<div class=sec><div class=sh><b>三條結論</b><span>FINDINGS</span></div>
+<ul class=ins>
+<li><b>① 團主名單有效，品牌名單無效。</b>
+YB 系標籤回購率 13.7–18.3%，跨團名單（純新品 0.1%、保養線 0%、品馨回購 0%）幾近於零。
+這再次驗證 V1 總方案的結論③「團主回頭率 ≠ 品牌留存」——
+<b>顧客記得的是團主，不是 HEIWEI</b>。V2 的名單切分應以「團主」為第一維度，而非波次主題。</li>
+<li class=a><b>② 標籤分群有效，但 Email 的功勞目前算不出來。</b>
+名單客貢獻 NT$490,017（全團 36%），然而七波 Email 的
+<b>發送波次、時間與寄出量尚未回報</b>，無法分離「標籤本身」與「Email 推播」各自的貢獻。
+補齊發送紀錄後即可比對；下一檔起建議直接對 V1-YB回購（830 位、本團已證實 13.7% 會回購）
+做<b>寄信組 vs 對照組 A/B 測試</b>，一次量出 Email 的真實增量。</li>
+<li class=g><b>③ 名單大小不等於價值，該砍的要砍。</b>
+V1-純新品 1,440 人回購 2 位、V1-保養線 322 人掛零、V1-VIP人工 41 人掛零。
+這三個標籤合計 1,803 人、貢獻 NT$5,100。V2 不應繼續對這批人發團購訊息，
+改走「新品體驗包」或一對一，否則只是消耗品牌信任與發信額度。</li>
+</ul></div>
+
+<div class=sec><div class=sh><b>V2 建議動作</b><span>NEXT ACTIONS</span></div>
+<table>
+<tr><th>優先</th><th>對象</th><th class=n>人數</th><th style="padding-left:4mm">動作</th></tr>
+<tr><td><span class=pill>最高</span></td><td>補齊 V1 Email 發送紀錄</td><td class=n>—</td>
+  <td style="padding-left:4mm">波次／日期／寄出量，沒有這個無法算 Email 增量</td></tr>
+<tr><td><span class=pill>最高</span></td><td>V1-YB回購 ÷ 對照組</td><td class=n>830</td>
+  <td style="padding-left:4mm">A/B 測 Email 增量，是唯一已證實會回購的大名單</td></tr>
+<tr><td><span class="pill g">高</span></td><td>本團全新客</td><td class=n>416</td>
+  <td style="padding-left:4mm">下一檔 YB 團開團前 3 天預告；趁團主記憶還新</td></tr>
+<tr><td><span class="pill g">高</span></td><td>回頭客（客單 NT$3,584）</td><td class=n>563</td>
+  <td style="padding-left:4mm">跨團主推薦：有回購史，對品牌本身的接受度較高</td></tr>
+<tr><td><span class="pill a">中</span></td><td>VIP-高價值</td><td class=n>79</td>
+  <td style="padding-left:4mm">退出團購推播，改一對一；團購商品結構不符其消費習慣</td></tr>
+<tr class=dim><td><span class="pill o">暫停</span></td><td>V1-純新品／保養線／品馨回購</td><td class=n>1,803</td>
+  <td style="padding-left:4mm">停止團購訊息，避免消耗信任；改以新品體驗切入</td></tr>
+</table></div>
+
+<div class=sec><div class=sh><b>量測方式（給 V2 的規格）</b><span>MEASUREMENT</span></div>
+<div class=callout>本報告的算法可重複執行：以 <code>order_source.source_id</code> 圈出單一團的訂單 →
+取其 <code>customer_id</code> 集合 → 與各標籤的會員集合取交集 → 得回購人數、營業額與客單價。
+腳本：<b>scripts/shopline/yangyang_reports.py</b>，資料快照在 <b>data/yangyang/</b>。
+下一團只需換 source_id 即可產出同格式報告，兩團之間可直接比較。</div>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>楊楊生日慶ｘ何謂美・CRM V1 成效　・　3 / 3</div></div></div></body></html>

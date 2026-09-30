@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import type { OrderRecord } from "@/types";
 import PaymentReportForm from "@/components/PaymentReportForm";
 import ShippingInfoForm from "@/components/ShippingInfoForm";
+import OrderProgress from "@/components/OrderProgress";
 
 type Profile = { userId: string; displayName: string };
-type PaymentInfo = { enabled: boolean; bank: string; account: string; note: string };
+type PaymentInfo = { enabled: boolean; bank: string; account: string; note: string; pickupLabel?: string; pickupAddress?: string; linepayUrl?: string };
 
 /** 付款狀態徽章的顏色。空字串（HERA bot 加的單）不顯示徽章 */
 const PAYMENT_BADGE: Record<string, string> = {
@@ -19,6 +20,9 @@ export default function MyOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [orders, setOrders] = useState<OrderRecord[]>([]);
+  // 訂單跨多檔連線時，卡片才標出檔期；只有一檔就不佔版面
+  const multiCampaign =
+    new Set(orders.map((o) => o.campaign).filter(Boolean)).size > 1;
   const [campaign, setCampaign] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [payment, setPayment] = useState<PaymentInfo | null>(null);
@@ -42,7 +46,7 @@ export default function MyOrdersPage() {
 
         const [res, sRes] = await Promise.all([
           fetch(
-            `/api/my-orders?userId=${encodeURIComponent(p.userId)}&scope=current`,
+            `/api/my-orders?userId=${encodeURIComponent(p.userId)}&scope=all`,
             { cache: "no-store" }
           ),
           fetch("/api/settings", { cache: "no-store" }),
@@ -50,14 +54,18 @@ export default function MyOrdersPage() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "查詢失敗");
         setOrders(data.orders || []);
-        if (data.campaign) setCampaign(data.campaign);
+        // scope=all 時 API 不回 campaign，改用設定分頁的當期名稱當副標
 
         const sData = await sRes.json();
+        if (sData.title) setCampaign(sData.title);
         setPayment({
           enabled: sData.paymentEnabled !== false,
           bank: sData.paymentBank || "",
           account: sData.paymentAccount || "",
           note: sData.paymentNote || "",
+          pickupLabel: sData.pickupLabel,
+          pickupAddress: sData.pickupAddress,
+          linepayUrl: sData.linepayUrl,
         });
       } catch (e) {
         setError(e instanceof Error ? e.message : "載入失敗");
@@ -133,7 +141,16 @@ export default function MyOrdersPage() {
                   </span>
                 </div>
               </div>
-              <div className="font-mono text-xs text-gray-300 mb-2">{o.orderId}</div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-mono text-xs text-gray-300">
+                  {o.orderId}
+                </span>
+                {multiCampaign && o.campaign && (
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 border shrink-0">
+                    {o.campaign}
+                  </span>
+                )}
+              </div>
               <pre className="text-sm whitespace-pre-wrap font-sans text-gray-800">
                 {o.items}
               </pre>
@@ -143,6 +160,18 @@ export default function MyOrdersPage() {
               <div className="text-right font-semibold text-brand-accent mt-3">
                 NT$ {o.total.toLocaleString()}
               </div>
+
+              {/* 進度條：客人一眼看得到現在在哪一步、下一步誰要動作 */}
+              {o.paymentStatus && o.status !== "已取消" && (
+                <div className="mt-3 pt-3 border-t">
+                  <OrderProgress
+                    paymentStatus={o.paymentStatus}
+                    hasShipInfo={Boolean(o.shipName)}
+                    shipped={o.status === "已出貨"}
+                    pickup={o.deliveryMethod === "pickup"}
+                  />
+                </div>
+              )}
 
               {payment?.enabled && o.paymentStatus === "待匯款" && (
                 <div className="mt-3 pt-3 border-t">
@@ -155,6 +184,7 @@ export default function MyOrdersPage() {
                         bank={payment.bank}
                         account={payment.account}
                         note={payment.note}
+                        linepayUrl={payment.linepayUrl}
                         onReported={() => {
                           setOrders((prev) =>
                             prev.map((x) =>
@@ -184,9 +214,9 @@ export default function MyOrdersPage() {
                 </div>
               )}
 
-              {o.paymentStatus === "已回報" && (
-                <p className="mt-3 pt-3 border-t text-xs text-blue-600">
-                  已回報{o.paymentLast5 ? `（後五碼 ${o.paymentLast5}）` : ""}，等待確認中
+              {o.paymentStatus === "已回報" && o.paymentLast5 && (
+                <p className="mt-2 text-xs text-gray-400">
+                  已回報後五碼 {o.paymentLast5}
                 </p>
               )}
 
@@ -198,6 +228,9 @@ export default function MyOrdersPage() {
                       <ShippingInfoForm
                         orderId={o.orderId}
                         userId={profile?.userId || ""}
+                        pickup={o.deliveryMethod === "pickup"}
+                        pickupLabel={payment?.pickupLabel}
+                        pickupAddress={payment?.pickupAddress}
                         onSaved={(info) => {
                           setOrders((prev) =>
                             prev.map((x) =>
@@ -225,7 +258,9 @@ export default function MyOrdersPage() {
                   ) : (
                     <>
                       <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-2">
-                        款項已收到，請填寫 7-11 取貨資訊才能出貨
+                        {o.deliveryMethod === "pickup"
+                          ? "款項已收到，請留下取貨人姓名與電話，我們備貨完成會通知您來取貨"
+                          : "款項已收到，請填寫 7-11 取貨資訊才能出貨"}
                       </p>
                       <button
                         onClick={() => setShippingId(o.orderId)}
@@ -246,9 +281,13 @@ export default function MyOrdersPage() {
                     {o.shipName}・{o.shipPhone}
                   </p>
                   <p>
-                    7-11 {o.shipStoreName}
-                    {o.shipStoreCode ? `（${o.shipStoreCode}）` : ""}
+                    {o.deliveryMethod === "pickup"
+                      ? `🏠 ${o.shipStoreName}`
+                      : `7-11 ${o.shipStoreName}${o.shipStoreCode ? `（${o.shipStoreCode}）` : ""}`}
                   </p>
+                  {o.deliveryMethod === "pickup" && payment?.pickupAddress && (
+                    <p className="text-gray-400">{payment.pickupAddress}</p>
+                  )}
                 </div>
               )}
             </div>

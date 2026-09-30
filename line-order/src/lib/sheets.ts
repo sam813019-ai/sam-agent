@@ -6,6 +6,7 @@ import type {
   PendingPayment,
   Product,
   ReadyToShip,
+  ReadyToShipGroup,
   Settings,
 } from "@/types";
 
@@ -82,13 +83,13 @@ function parseImages(raw: string | undefined): string[] {
 
 /**
  * 商品表欄位 (A~K)：
- * id | code | name | spec | price | stock | image | description | active | costPrice | category
+ * id | code | name | spec | price | stock | image | description | active | costPrice | category | campaign
  */
 export async function getProducts(): Promise<Product[]> {
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${PRODUCTS_TAB}!A2:K`,
+    range: `${PRODUCTS_TAB}!A2:L`,
   });
   const rows = res.data.values || [];
   return rows
@@ -105,6 +106,8 @@ export async function getProducts(): Promise<Product[]> {
       description: r[7] ? String(r[7]) : undefined,
       active: String(r[8] || "").toUpperCase() !== "FALSE",
       category: r[10] ? String(r[10]) : undefined,
+      // L 欄：所屬連線。留空代表跟著當期連線，維持舊行為
+      campaign: r[11] ? String(r[11]).trim() : undefined,
     }))
     .filter((p) => p.active)
     .reverse();
@@ -143,8 +146,21 @@ const PAYMENT_FALLBACK = {
 
 function paymentSettingsFrom(map: Record<string, string>) {
   const fee = Number(map.shipping_fee);
+  // 免運門檻：商品小計（不含運費）達到就免運。留空或 0 = 不啟用
+  const freeAt = Number(map.free_shipping_threshold);
+  // 門市自取：pickup_address 有填就視為啟用；自取一律免運
+  const pickupAddress = (map.pickup_address || "").trim();
+  // LINE Pay 固定收款連結（商家 QR 解出來的網址）。有填就在付款區塊多一個按鈕
+  const linepayUrl = (map.linepay_url || "").trim();
   return {
+    linepayUrl,
+    pickupEnabled:
+      Boolean(pickupAddress) &&
+      String(map.pickup_enabled || "").toUpperCase() !== "FALSE",
+    pickupLabel: map.pickup_label || "門市自取",
+    pickupAddress,
     shippingFee: Number.isFinite(fee) && fee >= 0 ? fee : 60,
+    freeShippingThreshold: Number.isFinite(freeAt) && freeAt > 0 ? freeAt : 0,
     giftNote: map.gift_note ?? PAYMENT_FALLBACK.gift,
     // 只有明確寫 FALSE 才關閉，沒設定時預設開啟
     paymentEnabled: String(map.payment_enabled || "").toUpperCase() !== "FALSE",
@@ -200,8 +216,10 @@ export async function appendOrder(
       "",
       "",
       "",
+      // S：取貨方式。自取的單不用 7-11 門市，出貨流程也不同
+      payload.deliveryMethod === "pickup" ? "門市自取" : "7-11 超商取貨",
     ],
-    "R"
+    "S"
   );
 
   // 訂單明細（一列一項商品，便於統計）
@@ -220,7 +238,8 @@ export async function appendOrder(
           i.unitPrice,
           i.quantity,
           i.unitPrice * i.quantity,
-          campaign,
+          // 叫貨統計讀這欄。商品有指定連線就用它，否則跟著當期連線
+          i.campaign || campaign,
         ]),
       },
     });
@@ -414,6 +433,8 @@ export interface AddProductPayload {
   imageUrl?: string;     // 舊欄位相容保留
   description?: string;
   category?: string;
+  /** 所屬連線，寫商品表 L 欄；留空則跟著當期 title */
+  campaign?: string;
   writeToInventory: boolean;
   writeToProducts: boolean;
 }
@@ -456,7 +477,7 @@ export async function addInventoryProduct(
       : "";
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${PRODUCTS_TAB}!A:K`,
+      range: `${PRODUCTS_TAB}!A:L`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [[
@@ -471,6 +492,7 @@ export async function addInventoryProduct(
           "TRUE",
           payload.costPrice,   // J欄：進價
           payload.category || "",  // K欄：類別
+          payload.campaign || "",  // L欄：所屬連線
         ]],
       },
     });
@@ -731,6 +753,8 @@ export async function addPurchaseRecord(
 
 export interface ProxyOrderRow {
   rowNum: number;
+  /** 從訂單表對回來的連線名稱；HERA bot 店面單會是空字串 */
+  campaign: string;
   date: string;
   customerName: string;
   productCode: string;
@@ -746,12 +770,27 @@ export interface ProxyOrderRow {
 
 export async function getProxyOrders(): Promise<ProxyOrderRow[]> {
   const sheets = getClient();
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SHEET_ID,
-    range: `${PROXY_ORDERS_TAB}!A2:K`,
-  });
+  const [res, orderRes] = await Promise.all([
+    sheets.spreadsheets.values.get({
+      spreadsheetId: SHEET_ID,
+      range: `${PROXY_ORDERS_TAB}!A2:K`,
+    }),
+    sheets.spreadsheets.values.get({
+      spreadsheetId: SHEET_ID,
+      range: `${ORDERS_TAB}!A2:I`,
+    }),
+  ]);
+  // 代購訂單沒有連線欄，用「下單時間＋顧客名稱」對回訂單表補上，供後台篩選用。
+  // 對不到的（HERA bot 在店面開的單）就留空，篩選時歸在「其他」。
+  const campaignByKey = new Map<string, string>();
+  for (const r of orderRes.data.values || []) {
+    const key = `${String(r[0] || "")}|${String(r[3] || "")}`;
+    if (r[8]) campaignByKey.set(key, String(r[8]));
+  }
   return (res.data.values || [])
     .map((r, i) => ({
+      campaign:
+        campaignByKey.get(`${String(r[0] || "")}|${String(r[1] || "")}`) || "",
       rowNum: i + 2,
       date: String(r[0] || ""),
       customerName: String(r[1] || ""),
@@ -991,6 +1030,8 @@ export async function getMonthlyProfitReport(
 // ─── 商品管理（批次上下架）────────────────────────────────────────────────────
 
 export interface ManagedProduct {
+  /** 所屬連線（商品表 L 欄） */
+  campaign?: string;
   rowNum: number;
   id: string;
   code: string;
@@ -1005,7 +1046,7 @@ export async function getManagedProducts(): Promise<ManagedProduct[]> {
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${PRODUCTS_TAB}!A2:I`,
+    range: `${PRODUCTS_TAB}!A2:L`,
   });
   return (res.data.values || [])
     .filter((r) => r[0])
@@ -1018,23 +1059,32 @@ export async function getManagedProducts(): Promise<ManagedProduct[]> {
       price: Number(r[4] || 0),
       stock: Number(r[5] || 0),
       active: String(r[8] || "").toUpperCase() !== "FALSE",
+      campaign: String(r[11] || ""),
     }));
 }
 
+/**
+ * 批次上下架。上架時可一併指定連線（寫 L 欄）——把舊商品拉出來賣給新一檔時，
+ * 連線一定要跟著換，否則訂單明細會沿用當期 title，叫貨統計就算到錯的檔期。
+ */
 export async function setProductsActive(
   rowNums: number[],
-  active: boolean
+  active: boolean,
+  campaign?: string
 ): Promise<void> {
   const sheets = getClient();
+  const data = rowNums.map((n) => ({
+    range: `${PRODUCTS_TAB}!I${n}`,
+    values: [[active ? "TRUE" : "FALSE"]],
+  }));
+  if (active && campaign) {
+    for (const n of rowNums) {
+      data.push({ range: `${PRODUCTS_TAB}!L${n}`, values: [[campaign]] });
+    }
+  }
   await sheets.spreadsheets.values.batchUpdate({
     spreadsheetId: SHEET_ID,
-    requestBody: {
-      valueInputOption: "USER_ENTERED",
-      data: rowNums.map((n) => ({
-        range: `${PRODUCTS_TAB}!I${n}`,
-        values: [[active ? "TRUE" : "FALSE"]],
-      })),
-    },
+    requestBody: { valueInputOption: "USER_ENTERED", data },
   });
 }
 
@@ -1130,7 +1180,7 @@ export async function getMyOrders(
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${ORDERS_TAB}!A2:R`,
+    range: `${ORDERS_TAB}!A2:S`,
   });
   const rows = res.data.values || [];
   return rows
@@ -1155,6 +1205,10 @@ export async function getMyOrders(
       shipStoreName: String(r[15] || ""),
       shipStoreCode: String(r[16] || ""),
       shipFilledAt: String(r[17] || ""),
+      // S 欄：取貨方式。舊訂單沒有這欄，一律當成超商取貨
+      deliveryMethod: (String(r[18] || "") === "門市自取"
+        ? "pickup"
+        : "store") as OrderRecord["deliveryMethod"],
     }))
     .reverse();
 }
@@ -1167,11 +1221,22 @@ export async function getMyOrders(
 
 /** 後五碼必須是 5 位數字 */
 export function isValidLast5(v: string): boolean {
-  return /^\d{5}$/.test(v.trim());
+  const t = v.trim();
+  // 銀行轉帳的後五碼，或 LINE Pay 的交易序號（較長、可能含英文字母）
+  return /^\d{5}$/.test(t) || /^[A-Za-z0-9-]{6,32}$/.test(t);
 }
 
-/** 至少要有後五碼或截圖其中一項 */
-export function hasPaymentEvidence(last5: string, proofUrl: string): boolean {
+/**
+ * 至少要有後五碼或截圖其中一項。
+ * LINE Pay 例外——付完會跳回頁面，客人根本記不住交易序號，
+ * 老闆本來就要到 LINE Pay 後台用金額＋時間比對，所以不強制證明。
+ */
+export function hasPaymentEvidence(
+  last5: string,
+  proofUrl: string,
+  method?: string
+): boolean {
+  if (method === "linepay") return true;
   return isValidLast5(last5) || Boolean(proofUrl.trim());
 }
 
@@ -1195,7 +1260,8 @@ async function findOrderRow(
     }
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
-      range: `${ORDERS_TAB}!A2:R`,
+      // 要讀到 S 欄取貨方式，核對確認時才知道該叫客人填 7-11 還是自取
+      range: `${ORDERS_TAB}!A2:S`,
     });
     const rows = res.data.values || [];
     const idx = rows.findIndex((r) => String(r[1] || "") === orderId);
@@ -1219,10 +1285,13 @@ export async function reportPayment(params: {
   userId: string;
   last5: string;
   proofUrl: string;
+  /** 'linepay' | 'bank'，沒給就當 bank */
+  method?: string;
 }): Promise<{ ok: true } | { ok: false; reason: string }> {
   const { orderId, userId, last5, proofUrl } = params;
+  const method = params.method === "linepay" ? "linepay" : "bank";
 
-  if (!hasPaymentEvidence(last5, proofUrl)) {
+  if (!hasPaymentEvidence(last5, proofUrl, method)) {
     return { ok: false, reason: "請填寫匯款後五碼或上傳截圖" };
   }
   if (last5.trim() && !isValidLast5(last5)) {
@@ -1254,7 +1323,39 @@ export async function reportPayment(params: {
       ],
     },
   });
+
+  // T 欄記付款方式，老闆才知道要去銀行對帳還是去 LINE Pay 後台對帳
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!T${row.rowNumber}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: {
+      values: [[method === "linepay" ? "LINE Pay" : "銀行轉帳"]],
+    },
+  });
   return { ok: true };
+}
+
+/**
+ * 解析 Sheet 裡的中文時間字串，例如「2026/9/5 下午11:07:15」。
+ * 讀不懂就回 0，呼叫端會退回用訂單編號排序。
+ */
+function parseTwDateTime(v: string): number {
+  const m = String(v || "").match(
+    /(\d{4})\/(\d{1,2})\/(\d{1,2})\s*(上午|下午)?\s*(\d{1,2}):(\d{2})(?::(\d{2}))?/
+  );
+  if (!m) return 0;
+  let hour = Number(m[5]);
+  if (m[4] === "下午" && hour < 12) hour += 12;
+  if (m[4] === "上午" && hour === 12) hour = 0;
+  return new Date(
+    Number(m[1]),
+    Number(m[2]) - 1,
+    Number(m[3]),
+    hour,
+    Number(m[6]),
+    Number(m[7] || 0)
+  ).getTime();
 }
 
 // 訂單編號前 14 碼是下單時間戳，照它排才是真正的下單順序。
@@ -1270,7 +1371,7 @@ export async function getPendingPayments(
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${ORDERS_TAB}!A2:R`,
+    range: `${ORDERS_TAB}!A2:T`,
   });
   const rows = res.data.values || [];
   return rows
@@ -1292,8 +1393,17 @@ export async function getPendingPayments(
       shipStoreName: String(r[15] || ""),
       shipStoreCode: String(r[16] || ""),
       shipFilledAt: String(r[17] || ""),
+      // T 欄：付款方式，決定要去銀行還是 LINE Pay 後台對帳
+      paymentMethod: String(r[19] || ""),
     }))
-    .sort(byOrderIdDesc);
+    // 跟待出貨同一套：照「匯款回報時間」新→舊排，老闆從清單最下面開始核對，
+    // 也就是先回報的先核對。讀不到時間就退回用訂單編號。
+    .sort((a, b) => {
+      const ta = parseTwDateTime(a.paymentReportedAt);
+      const tb = parseTwDateTime(b.paymentReportedAt);
+      if (ta && tb && ta !== tb) return tb - ta;
+      return byOrderIdDesc(a, b);
+    });
 }
 
 /**
@@ -1304,7 +1414,8 @@ export async function verifyPayment(
   orderId: string,
   action: "confirm" | "reject"
 ): Promise<
-  { ok: true; userId: string; displayName: string } | { ok: false; reason: string }
+  | { ok: true; userId: string; displayName: string; deliveryMethod: string }
+  | { ok: false; reason: string }
 > {
   const row = await findOrderRow(orderId);
   if (!row) return { ok: false, reason: "找不到這筆訂單" };
@@ -1325,6 +1436,8 @@ export async function verifyPayment(
     ok: true,
     userId: row.values[2] || "",
     displayName: row.values[3] || "",
+    // S 欄取貨方式，決定要叫客人填 7-11 門市還是只留姓名電話
+    deliveryMethod: row.values[18] === "門市自取" ? "pickup" : "store",
   };
 }
 
@@ -1414,7 +1527,7 @@ export async function getReadyToShip(campaign?: string): Promise<ReadyToShip[]> 
   const sheets = getClient();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `${ORDERS_TAB}!A2:R`,
+    range: `${ORDERS_TAB}!A2:S`,
   });
   const rows = res.data.values || [];
   return rows
@@ -1434,8 +1547,91 @@ export async function getReadyToShip(campaign?: string): Promise<ReadyToShip[]> 
       shipStoreName: String(r[15] || ""),
       shipStoreCode: String(r[16] || ""),
       shipFilledAt: String(r[17] || ""),
+      paymentReportedAt: String(r[12] || ""),
+      userId: String(r[2] || ""),
     }))
-    .sort(byOrderIdDesc);
+    // 依「匯款回報時間」排序而不是下單時間：晚下單但早付款的人不該被排到後面。
+    // 維持新→舊，老闆習慣從清單最下面（最早付款的那筆）開始出貨。
+    // 回報時間讀不到就退回用訂單編號，至少順序穩定。
+    .sort((a, b) => {
+      const ta = parseTwDateTime(a.paymentReportedAt);
+      const tb = parseTwDateTime(b.paymentReportedAt);
+      if (ta && tb && ta !== tb) return tb - ta;
+      return byOrderIdDesc(a, b);
+    });
+}
+
+/**
+ * 待出貨分組：同一位客人、收件資訊完全相同、都還沒出貨的訂單併成一組，
+ * 因為實際上就是一箱寄出去。收件資訊只要有一個字不同就不併（那是真的要寄兩箱）。
+ */
+export async function getReadyToShipGroups(
+  campaign?: string
+): Promise<ReadyToShipGroup[]> {
+  const items = await getReadyToShip(campaign);
+  const map = new Map<string, ReadyToShipGroup>();
+  for (const it of items) {
+    const key = [
+      it.userId || it.displayName,
+      it.shipName.trim(),
+      it.shipPhone.trim(),
+      it.shipStoreName.trim(),
+      it.shipStoreCode.trim(),
+    ].join("|");
+    const g = map.get(key);
+    if (g) {
+      g.orders.push(it);
+      g.total += it.total;
+    } else {
+      map.set(key, {
+        key,
+        displayName: it.displayName,
+        shipName: it.shipName,
+        shipPhone: it.shipPhone,
+        shipStoreName: it.shipStoreName,
+        shipStoreCode: it.shipStoreCode,
+        campaign: it.campaign,
+        total: it.total,
+        // 整組的排序基準用組內最早的付款時間，先付款的先出貨
+        paymentReportedAt: it.paymentReportedAt,
+        orders: [it],
+      });
+    }
+  }
+  return Array.from(map.values()).map((g) => {
+    // 組內排序與排序基準：最早付款的那筆代表這組
+    g.orders.sort(
+      (a, b) =>
+        parseTwDateTime(a.paymentReportedAt) -
+        parseTwDateTime(b.paymentReportedAt)
+    );
+    g.paymentReportedAt = g.orders[0].paymentReportedAt;
+    return g;
+  });
+}
+
+/**
+ * 這位客人在本檔是否已有「還沒出貨」的訂單。
+ * 有的話第二筆起免運——反正會跟前一筆併箱寄出，運費成本只有一次。
+ * 前一筆若已出貨就不算，那是真的要另外寄一箱。
+ */
+export async function hasOpenOrder(
+  userId: string,
+  campaign: string
+): Promise<boolean> {
+  if (!userId) return false;
+  const sheets = getClient();
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${ORDERS_TAB}!A2:I`,
+  });
+  return (res.data.values || []).some(
+    (r) =>
+      String(r[2] || "") === userId &&
+      String(r[8] || "") === campaign &&
+      String(r[7] || "") !== "已取消" &&
+      String(r[7] || "") !== "已出貨"
+  );
 }
 
 /** 標記出貨：把訂單表 H 欄改成「已出貨」，該筆就會從待出貨清單消失 */

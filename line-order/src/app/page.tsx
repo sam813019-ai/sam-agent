@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import PaymentReportForm from "@/components/PaymentReportForm";
+import OrderProgress from "@/components/OrderProgress";
 import type { OrderRecord, Product, ProductGroup } from "@/types";
 
 type Profile = { userId: string; displayName: string };
@@ -12,6 +13,11 @@ type PaymentInfo = {
   account: string;
   note: string;
   shippingFee: number;
+  freeShippingThreshold: number;
+  pickupEnabled: boolean;
+  pickupLabel: string;
+  pickupAddress: string;
+  linepayUrl: string;
   giftNote: string;
 };
 
@@ -31,6 +37,11 @@ export default function OrderPage() {
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number; name: string } | null>(null);
   const [sheetGroup, setSheetGroup] = useState<ProductGroup | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("全部");
+  // 取貨方式：超商取貨要運費，門市自取免運
+  const [delivery, setDelivery] = useState<"store" | "pickup">("store");
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  // 本檔已有未出貨的訂單 → 這筆會併箱寄，不重複收運費
+  const [hasOpenOrder, setHasOpenOrder] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
 
   // 底部彈窗開著時鎖背景捲動
@@ -74,6 +85,13 @@ export default function OrderPage() {
           fetch("/api/settings", { cache: "no-store" }),
         ]);
         const pData = await pRes.json();
+        fetch(`/api/open-order?userId=${encodeURIComponent(p.userId)}`, {
+          cache: "no-store",
+        })
+          .then((r) => r.json())
+          .then((d) => setHasOpenOrder(Boolean(d.hasOpen)))
+          .catch(() => {});
+
         const sData = await sRes.json();
         if (!pRes.ok) throw new Error(pData.error || "載入商品失敗");
         setProducts(pData.products);
@@ -84,6 +102,11 @@ export default function OrderPage() {
           account: sData.paymentAccount || "",
           note: sData.paymentNote || "",
           shippingFee: Number(sData.shippingFee ?? 60),
+          freeShippingThreshold: Number(sData.freeShippingThreshold ?? 0),
+          pickupEnabled: Boolean(sData.pickupEnabled),
+          pickupLabel: sData.pickupLabel || "門市自取",
+          pickupAddress: sData.pickupAddress || "",
+          linepayUrl: sData.linepayUrl || "",
           giftNote: sData.giftNote ?? "",
         });
       } catch (e) {
@@ -106,6 +129,7 @@ export default function OrderPage() {
         if (!g.code && p.code) g.code = p.code;
         if (!g.description && p.description) g.description = p.description;
         if (!g.category && p.category) g.category = p.category;
+        if (!g.campaign && p.campaign) g.campaign = p.campaign;
       } else {
         map.set(p.name, {
           name: p.name,
@@ -113,6 +137,7 @@ export default function OrderPage() {
           images: [...p.images],
           description: p.description,
           category: p.category,
+          campaign: p.campaign,
           variants: [p],
         });
       }
@@ -133,12 +158,37 @@ export default function OrderPage() {
     return groups.filter((g) => g.category === selectedCategory);
   }, [groups, selectedCategory]);
 
+  // 依「連線」分專區。商品表 L 欄沒填時只會有一個無名專區，畫面跟以前一模一樣。
+  const sections = useMemo(() => {
+    const map = new Map<string, ProductGroup[]>();
+    for (const g of filteredGroups) {
+      const key = g.campaign || "";
+      const arr = map.get(key);
+      if (arr) arr.push(g);
+      else map.set(key, [g]);
+    }
+    return Array.from(map.entries()).map(([campaign, groups]) => ({
+      campaign,
+      groups,
+    }));
+  }, [filteredGroups]);
+  const showSectionHeaders = sections.length > 1;
+
   const items = products
     .map((p) => ({ product: p, q: qty[p.id] || 0 }))
     .filter((x) => x.q > 0);
   const subtotal = items.reduce((s, x) => s + x.product.price * x.q, 0);
   const totalQty = items.reduce((s, x) => s + x.q, 0);
-  const shippingFee = payment?.shippingFee ?? 60;
+  const baseShippingFee = payment?.shippingFee ?? 60;
+  const pickupEnabled = Boolean(payment?.pickupEnabled);
+  const isPickup = pickupEnabled && delivery === "pickup";
+  // 免運門檻：以商品小計判斷，跨連線的商品一起算。真正的金額以後端為準，這裡只負責顯示。
+  const freeThreshold = payment?.freeShippingThreshold ?? 0;
+  // 自取本來就免運，就不用再顯示「再買多少免運」
+  const freeShipping =
+    isPickup || hasOpenOrder || (freeThreshold > 0 && subtotal >= freeThreshold);
+  const shippingFee = freeShipping ? 0 : baseShippingFee;
+  const amountToFree = freeThreshold > 0 ? freeThreshold - subtotal : 0;
   // 有東西才算運費，購物車空的時候不要顯示 60
   const total = items.length > 0 ? subtotal + shippingFee : 0;
 
@@ -158,6 +208,7 @@ export default function OrderPage() {
           userId: profile.userId,
           displayName: profile.displayName,
           note,
+          deliveryMethod: isPickup ? "pickup" : "store",
           items: items.map((x) => ({
             productId: x.product.id,
             productName: x.product.name,
@@ -200,6 +251,17 @@ export default function OrderPage() {
             NT$ {result.total.toLocaleString()}
           </p>
 
+          {payment?.enabled && (
+            <div className="text-left mb-4">
+              <OrderProgress
+                paymentStatus={reported ? "已回報" : "待匯款"}
+                hasShipInfo={false}
+                shipped={false}
+                pickup={isPickup}
+              />
+            </div>
+          )}
+
           {payment?.enabled && profile && !reported && (
             <PaymentReportForm
               orderId={result.orderId}
@@ -208,15 +270,21 @@ export default function OrderPage() {
               bank={payment.bank}
               account={payment.account}
               note={payment.note}
+              linepayUrl={payment.linepayUrl}
               onReported={() => setReported(true)}
             />
           )}
 
           {payment?.enabled && reported && (
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-left">
-              <p className="font-medium text-blue-800 mb-1">✅ 已收到您的匯款回報</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-left space-y-2">
+              <p className="font-medium text-blue-800">✅ 已收到您的匯款回報</p>
               <p className="text-sm text-blue-700">
-                我們核對後會更新訂單狀態，可在「我的訂單」查看。
+                接下來我們會核對這筆款項，
+                <b>核對完成後會用 LINE 傳「取貨資訊表單」給您填寫</b>
+                ，填好我們才能安排出貨。
+              </p>
+              <p className="text-xs text-blue-600">
+                核對通常需要一些時間，這段期間不用重複回報，也可以隨時到「我的訂單」查看進度 🙏
               </p>
             </div>
           )}
@@ -280,8 +348,21 @@ export default function OrderPage() {
       )}
 
       {/* 商品列表（緊湊卡片） */}
-      <ul className="p-4 space-y-3">
-        {filteredGroups.map((g) => {
+      {sections.map((sec) => (
+        <section key={sec.campaign || "_default"}>
+          {showSectionHeaders && (
+            <div className="px-4 pt-4 pb-1 flex items-center gap-2">
+              <span className="h-4 w-1 rounded bg-brand-accent" />
+              <h2 className="text-sm font-bold text-gray-800">
+                {sec.campaign || "其他商品"}
+              </h2>
+              <span className="text-[11px] text-gray-400">
+                {sec.groups.length} 項
+              </span>
+            </div>
+          )}
+          <ul className={showSectionHeaders ? "px-4 pb-1 space-y-3" : "p-4 space-y-3"}>
+            {sec.groups.map((g) => {
           const prices = g.variants.map((v) => v.price);
           const minPrice = Math.min(...prices);
           const maxPrice = Math.max(...prices);
@@ -344,13 +425,15 @@ export default function OrderPage() {
               </button>
             </li>
           );
-        })}
-        {filteredGroups.length === 0 && (
-          <li className="text-center text-gray-400 py-10">
-            {groups.length === 0 ? "目前沒有商品" : "此分類暫無商品"}
-          </li>
-        )}
-      </ul>
+            })}
+          </ul>
+        </section>
+      ))}
+      {filteredGroups.length === 0 && (
+        <p className="text-center text-gray-400 py-10">
+          {groups.length === 0 ? "目前沒有商品" : "此分類暫無商品"}
+        </p>
+      )}
 
       {/* 底部送出列 */}
       <div className="fixed bottom-0 inset-x-0 bg-white border-t">
@@ -372,11 +455,27 @@ export default function OrderPage() {
               </div>
             ))}
             <div className="flex items-center justify-between text-sm pt-1.5 border-t">
-              <span className="text-gray-500">7-11 超商運費</span>
+              <span className="text-gray-500">
+                {isPickup ? "運費" : "7-11 超商運費"}
+              </span>
               <span className="font-medium text-gray-700">
-                NT$ {shippingFee}
+                {freeShipping ? (
+                  <>
+                    <span className="text-gray-400 line-through mr-1.5">
+                      NT$ {baseShippingFee}
+                    </span>
+                    <span className="text-brand-accent">免運 ✓</span>
+                  </>
+                ) : (
+                  <>NT$ {shippingFee}</>
+                )}
               </span>
             </div>
+            {freeThreshold > 0 && !freeShipping && !isPickup && (
+              <div className="text-[11px] text-brand-accent text-right">
+                再買 NT$ {amountToFree.toLocaleString()} 免運費 🚚
+              </div>
+            )}
           </div>
         )}
 
@@ -384,7 +483,25 @@ export default function OrderPage() {
         <div className="px-4 pt-2 space-y-0.5">
           <div className="text-[11px] text-gray-500 flex items-center gap-1">
             <span>📦</span>
-            <span>僅限 7-11 超商取貨・每筆運費 NT$ {shippingFee}</span>
+            <span>
+              {isPickup ? (
+                <>
+                  {payment?.pickupLabel}・免運費
+                  {payment?.pickupAddress ? `（${payment.pickupAddress}）` : ""}
+                </>
+              ) : (
+                hasOpenOrder ? (
+                  <>7-11 超商取貨・與您先前的訂單併箱寄出，本筆免運費</>
+                ) : (
+                <>
+                  7-11 超商取貨・每筆運費 NT$ {baseShippingFee}
+                  {freeThreshold > 0
+                    ? `（滿 NT$ ${freeThreshold.toLocaleString()} 免運）`
+                    : ""}
+                </>
+                )
+              )}
+            </span>
           </div>
           {payment?.giftNote && (
             <div className="text-[11px] font-medium text-brand-accent flex items-center gap-1">
@@ -415,21 +532,160 @@ export default function OrderPage() {
               </div>
               {items.length > 0 && (
                 <div className="text-[11px] text-gray-400">
-                  商品 NT$ {subtotal.toLocaleString()} ＋ 運費 NT$ {shippingFee}
+                  商品 NT$ {subtotal.toLocaleString()}
+                  {freeShipping
+                    ? " ＋ 運費 0（已免運）"
+                    : ` ＋ 運費 NT$ ${shippingFee}`}
                 </div>
               )}
               <div className="font-bold text-lg">NT$ {total.toLocaleString()}</div>
             </button>
             <button
-              onClick={submit}
+              onClick={() => setConfirmOpen(true)}
               disabled={submitting || items.length === 0}
               className="px-6 py-3 bg-brand text-white rounded-xl font-medium disabled:opacity-40"
             >
-              {submitting ? "送出中…" : "送出訂單"}
+              {submitting ? "送出中…" : "下一步"}
             </button>
           </div>
         </div>
       </div>
+
+      {/* 送出前的確認視窗：取貨方式一定要在這裡看得到，不能藏在收合的購物車裡 */}
+      {confirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
+          <div className="w-full max-w-md bg-white rounded-t-2xl max-h-[88vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white px-4 py-3 border-b flex items-center justify-between">
+              <h2 className="font-bold">確認訂單</h2>
+              <button
+                onClick={() => setConfirmOpen(false)}
+                className="text-gray-400 text-sm px-2 py-1"
+              >
+                返回修改
+              </button>
+            </div>
+
+            <div className="p-4 space-y-4">
+              {pickupEnabled && (
+                <div>
+                  <p className="text-sm font-medium mb-2">
+                    取貨方式 <span className="text-red-500">*</span>
+                  </p>
+                  <div className="space-y-2">
+                    {([
+                      {
+                        key: "store" as const,
+                        title: "7-11 超商取貨",
+                        desc: hasOpenOrder
+                          ? "與您先前的訂單併箱寄出，本筆免運費"
+                          : freeThreshold > 0 && subtotal >= freeThreshold
+                            ? `已滿 NT$ ${freeThreshold.toLocaleString()}，免運費`
+                            : `運費 NT$ ${baseShippingFee}${freeThreshold > 0 ? `，滿 NT$ ${freeThreshold.toLocaleString()} 免運` : ""}`,
+                      },
+                      {
+                        key: "pickup" as const,
+                        title: payment?.pickupLabel || "門市自取",
+                        desc: `免運費${payment?.pickupAddress ? `・${payment.pickupAddress}` : ""}`,
+                      },
+                    ]).map((opt) => (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => setDelivery(opt.key)}
+                        className={`w-full text-left rounded-xl border-2 px-3 py-3 ${
+                          delivery === opt.key
+                            ? "border-brand-accent bg-brand-accent/5"
+                            : "border-gray-200 bg-white"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`h-4 w-4 rounded-full border-[5px] shrink-0 ${
+                              delivery === opt.key
+                                ? "border-brand-accent"
+                                : "border-gray-300"
+                            }`}
+                          />
+                          <span className="text-sm font-semibold text-gray-900">
+                            {opt.title}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 ml-6 mt-0.5">
+                          {opt.desc}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="rounded-xl bg-gray-50 p-3 text-sm space-y-1">
+                {items.map(({ product: p, q }) => (
+                  <div key={p.id} className="flex justify-between gap-2">
+                    <span className="text-gray-600 truncate">
+                      {p.name}
+                      {p.spec ? ` / ${p.spec}` : ""} ×{q}
+                    </span>
+                    <span className="shrink-0">
+                      NT$ {(p.price * q).toLocaleString()}
+                    </span>
+                  </div>
+                ))}
+                <div className="flex justify-between pt-1 border-t text-gray-600">
+                  <span>商品小計</span>
+                  <span>NT$ {subtotal.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>
+                    {isPickup
+                      ? "運費（自取免運）"
+                      : hasOpenOrder
+                        ? "運費（併箱免運）"
+                        : "運費"}
+                  </span>
+                  <span>
+                    {freeShipping ? (
+                      <>
+                        <span className="line-through text-gray-400 mr-1">
+                          NT$ {baseShippingFee}
+                        </span>
+                        <span className="text-brand-accent">0</span>
+                      </>
+                    ) : (
+                      <>NT$ {shippingFee}</>
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between pt-1 border-t font-bold text-base">
+                  <span>應付金額</span>
+                  <span className="text-brand-accent">
+                    NT$ {total.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              {isPickup && payment?.pickupAddress && (
+                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                  📍 取貨地點：{payment.pickupAddress}
+                  <br />
+                  備貨完成後我們會用 LINE 通知您，再前來取貨即可。
+                </p>
+              )}
+
+              <button
+                onClick={() => {
+                  setConfirmOpen(false);
+                  submit();
+                }}
+                disabled={submitting || items.length === 0}
+                className="w-full py-3 bg-brand text-white rounded-xl font-medium disabled:opacity-40"
+              >
+                {submitting ? "送出中…" : "確認送出訂單"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showOrders && profile && (
         <MyOrdersModal
