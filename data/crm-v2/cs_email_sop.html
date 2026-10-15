@@ -1,0 +1,238 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<title>HEIWEI_客服_Shopline電郵廣播操作手冊</title><style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box;animation:none!important}
+html,body{margin:0;padding:0}
+:root{--gray:#97999B;--leaf:#8C9A8E;--amber:#EF9F27;--ink:#25262a;--gold:#C9A15C}
+body{font-family:"Noto Sans CJK TC","Noto Sans TC","PingFang TC","Heiti TC",sans-serif;
+ color:var(--ink);font-size:9.4pt;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;padding:13mm 15mm 11mm;position:relative;overflow:hidden;page-break-after:always}
+.page:last-child{page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:3.4mm}
+.logo{font-size:18.5pt;font-weight:700;letter-spacing:.34em;line-height:1}
+.logo .sub{font-size:8pt;font-weight:400;letter-spacing:.62em;color:var(--gray);margin-top:2.2mm}
+.hdr{text-align:right;line-height:1.55}
+.hdr .t1{font-size:9.2pt;font-weight:700}
+.hdr .t2{font-size:8.4pt;color:var(--gray)}
+.hdr .t3{font-size:8.2pt;color:#5f6064}
+h1{font-size:20pt;font-weight:700;margin:8mm 0 2.2mm}
+.meta{font-size:9.2pt;color:#4d4e52}
+.meta2{font-size:8.6pt;color:var(--gray);margin-top:1.2mm}
+.rule{width:26mm;height:2.4px;background:var(--ink);margin:3.4mm 0 0}
+.sec{margin-top:6mm}
+.sh{display:flex;align-items:center;gap:3mm;margin-bottom:2.8mm}
+.sh::before{content:"";width:1.6mm;height:4.4mm;background:var(--ink);display:block}
+.sh b{font-size:11pt;letter-spacing:.04em}
+.sh span{font-size:7.8pt;color:var(--gray);letter-spacing:.2em}
+.ov{background:#f5f5f5;padding:4.4mm 5.5mm;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:3.2mm 7mm;font-size:9.2pt}
+.ov .k{color:#5f6064;white-space:nowrap}
+.ov .v{font-weight:700;text-align:right;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3.4mm}
+.kpi{border:1px solid #dcdcdd;padding:3.6mm 4.2mm 4mm}
+.kpi.dark{background:#25262a;border-color:#25262a;color:#fff}
+.kpi .l{font-size:8.2pt;color:#63646a}
+.kpi.dark .l{color:#c6c7ca}
+.kpi .v{font-size:19.5pt;font-weight:700;letter-spacing:-.012em;line-height:1.28;margin-top:.8mm}
+.kpi .v small{font-size:9pt;font-weight:700}
+.kpi .s{font-size:7.8pt;color:var(--gray);margin-top:1mm}
+.kpi.dark .s{color:#9b9ca0}
+table{width:100%;border-collapse:collapse}
+th{font-size:8.4pt;color:#4d4e52;font-weight:600;text-align:left;background:#efefef;padding:2.4mm 3mm}
+td{padding:2.4mm 3mm;border-bottom:1px solid #ededee;font-size:9.2pt}
+.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{background:#f5f5f5;font-weight:700;border-bottom:none}
+tr.dim td{color:var(--gray)}
+.pill{display:inline-block;background:#25262a;color:#fff;font-size:7.8pt;font-weight:600;border-radius:9px;padding:.8mm 2.8mm}
+.pill.g{background:var(--leaf)}
+.pill.a{background:var(--amber)}
+.pill.o{background:#fff;color:var(--gray);border:1px solid #dcdcdd}
+.mute{color:var(--gray);font-size:8.6pt}
+.callout{border-left:3px solid var(--leaf);background:#f6f7f6;padding:3mm 4mm;font-size:8.8pt;color:#4d4e52;margin-top:3mm;line-height:1.7}
+.callout.warn{border-left-color:var(--amber);background:#fdf8f0}
+.callout.dark{border-left-color:var(--ink);background:#f1f1f2}
+.callout b{color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:start}
+.dtl{display:flex;align-items:center;gap:3.5mm;padding:1.5mm 0}
+.dtl .d{width:13mm;font-size:8.8pt;color:#4d4e52;font-variant-numeric:tabular-nums}
+.dtl .track{flex:1;background:#ececed;border-radius:1.6mm;height:3.2mm;overflow:hidden}
+.dtl .fill{height:100%;background:#b6b7b9;border-radius:1.6mm}
+.dtl .fill.top{background:#25262a}
+.dtl .v{width:34mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+.trendbox{border:1px solid #e4e4e5;padding:4mm 5mm}
+.bar{height:2.6mm;background:#b6b7b9;border-radius:1.3mm;display:inline-block;vertical-align:middle}
+.bar.g{background:var(--leaf)}
+.bar.a{background:var(--amber)}
+ul.ins{list-style:none;margin:0;padding:0}
+ul.ins li{position:relative;padding:1.8mm 0 1.8mm 6mm;font-size:9.2pt;border-bottom:1px solid #f0f0f1}
+ul.ins li::before{content:"";position:absolute;left:1.2mm;top:3.8mm;width:2.4mm;height:2.4mm;border-radius:50%;background:var(--leaf)}
+ul.ins li.a::before{background:var(--amber)}
+ul.ins li.g::before{background:var(--gray)}
+ul.ins b{font-weight:700}
+.band{background:#25262a;color:#fff;padding:3.4mm 5mm;font-size:9.6pt;font-weight:700}
+.settle{border:1px solid #dcdcdd;border-top:none;padding:1mm 5mm 3mm}
+.srow{display:flex;justify-content:space-between;align-items:baseline;padding:2.8mm 0;border-bottom:1px dotted #d5d5d6}
+.srow:last-child{border-bottom:none}
+.srow .lab{font-size:9.2pt}
+.srow .amt{font-size:15pt;font-weight:700;font-variant-numeric:tabular-nums}
+.srow.off{color:var(--gray)}
+.srow.off .amt{font-size:10pt;font-weight:600}
+.ft{position:absolute;left:15mm;right:15mm;bottom:8mm;display:flex;justify-content:space-between;
+ border-top:1px solid #e4e4e5;padding-top:2.4mm;font-size:7.6pt;color:#a9aaad}
+.big{font-size:34pt;font-weight:700;letter-spacing:-.02em;line-height:1}
+.big small{font-size:11pt}
+.seg{display:flex;align-items:center;gap:3mm;padding:2mm 0;border-bottom:1px solid #f0f0f1}
+.seg .nm{width:34mm;font-size:8.8pt}
+.seg .track{flex:1;background:#ececed;height:4mm;border-radius:2mm;overflow:hidden}
+.seg .fill{height:100%;border-radius:2mm;background:var(--leaf)}
+.seg .fill.dim{background:#cfd0d1}
+.seg .v{width:30mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+</style><style>
+table.tight td,table.tight th{padding-top:1.55mm;padding-bottom:1.55mm}
+.chk{display:inline-block;width:3.6mm;height:3.6mm;border:1.2px solid #8a8b8e;margin-right:2.2mm;vertical-align:-0.4mm;border-radius:0.6mm}
+.who{display:inline-block;background:#25262a;color:#fff;font-size:7.6pt;font-weight:700;border-radius:8px;padding:.6mm 2.4mm;margin-right:2mm}
+.who.m{background:#8C9A8E}.who.c{background:#C9A15C}.who.f{background:#6f7f96}
+.step{border:1px solid #e0e0e1;padding:3.2mm 4mm;margin-bottom:2.6mm;page-break-inside:avoid}
+.step b.t{font-size:10pt}
+.fill{border-bottom:1px solid #b9babd;display:inline-block;min-width:22mm}
+code{background:#f2f2f3;padding:.3mm 1.2mm;font-size:8.6pt;border-radius:2px}
+table.sop td{vertical-align:middle;padding-top:2mm;padding-bottom:2mm}
+table.sop .fill{min-width:17mm}
+</style></head><body><div class=page><div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>Shopline 電郵廣播操作手冊</div><div class=t2>EMAIL BROADCAST SOP</div><div class=t3>客服營運部</div></div></div>
+<h1>Shopline 電郵廣播操作手冊</h1>
+<div class=meta>本次 A 軌「綁定戰役」改用 Shopline 廣播中心發送，不再用 Gmail 手動寄</div>
+<div class=meta2>可列印執行版。每項完成後在方框打勾，並填上完成日期與執行人。</div>
+<div class=rule></div>
+
+<div class=sec><div class=sh><b>為什麼不用 Gmail 了</b><span>WHY</span></div>
+<table class=tight>
+<tr><th style="width:34mm">項目</th><th>Gmail 手動寄</th><th>Shopline 廣播中心</th></tr>
+<tr><td>一次能寄幾封</td><td>500–2,000 封／日，<b>要分好幾天</b></td><td><b>一次送完</b></td></tr>
+<tr><td>退訂連結</td><td>沒有，<b>有違反個資法疑慮</b></td><td>信底自動附上</td></tr>
+<tr><td>誰點了連結</td><td>不知道</td><td><b>看得到點擊人數</b></td></tr>
+<tr><td>誰下單了</td><td>不知道</td><td><b>看得到下單人數與營收</b></td></tr>
+<tr><td>落垃圾信風險</td><td>高</td><td>低</td></tr>
+</table>
+</div>
+
+<div class=sec><div class=sh><b>這次要寄給誰</b><span>AUDIENCE</span></div>
+<table class=tight>
+<tr><th style="width:52mm">名單</th><th style="width:26mm">人數</th><th>說明</th></tr>
+<tr><td>CRM V1 標籤客（總數）</td><td>4,247 位</td><td>有 V1-* 標籤的所有人</td></tr>
+<tr><td>其中未綁 LINE、有 Email</td><td>3,671 位</td><td>這是名單總數</td></tr>
+<tr><td><b>其中同意接收行銷信</b></td><td><b>約 2,427 位</b></td><td><b>這才是實際寄得到的人</b></td></tr>
+<tr class=dim><td>未同意接收行銷信</td><td>1,222 位</td><td><b>不能寄</b>，法規限制，系統會自動擋掉</td></tr>
+<tr class=dim><td>V1-VIP人工</td><td>22 位</td><td>改由行銷／客服個別聯繫，不進這封信</td></tr>
+</table>
+<div class="callout" style="line-height:1.55"><b>回報數字時請用「實際寄送數」，不要用 3,671。</b>
+兩個數字意義不同：3,671 是名單總人數，約 2,427 才是真正收得到信的人。
+系統試算的結果為準，若與 2,427 相差超過 200 位請先回報 Sam 再寄。</div>
+</div>
+
+<div class=sec><div class=sh><b>三個步驟</b><span>OVERVIEW</span></div>
+<table class=tight>
+<tr><th style="width:16mm">步驟</th><th>做什麼</th><th style="width:34mm">在哪裡</th><th style="width:20mm">頁次</th></tr>
+<tr><td>1</td><td>建立顧客分群（篩出收件名單）</td><td>顧客管理 &gt; 顧客分群</td><td>第 2 頁</td></tr>
+<tr><td>2</td><td>建立並發送電郵廣播</td><td>顧客管理 &gt; 廣播中心</td><td>第 2 頁</td></tr>
+<tr><td>3</td><td>看成效、回報數字</td><td>顧客管理 &gt; 顧客分群</td><td>第 3 頁</td></tr>
+</table>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　2026/10/15 版　｜　列印後依序執行，完成請打勾</div><div>客服操作手冊　・　1 / 3</div></div></div><div class=page><div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>Shopline 電郵廣播操作手冊</div><div class=t2>EMAIL BROADCAST SOP</div><div class=t3>第一、二步：建分群與發信</div></div></div>
+<div class=sec><div class=sh><b>第一步　建立顧客分群</b><span>STEP 1 · SEGMENT</span></div>
+<div class=mute style="margin-bottom:2.4mm">路徑：商店後台 &gt; <b>顧客管理 &gt; 顧客分群</b> &gt; 右上「建立分群」</div>
+
+<div class=step>
+<b class=t>分群名稱</b>
+<div style="margin-top:1.8mm"><code>CRM V2 A軌-未綁LINE</code>　（上限 50 字，照抄即可）</div>
+</div>
+
+<div class=step>
+<b class=t>篩選條件</b>
+<table style="margin-top:2.2mm">
+<tr><th style="width:21mm;white-space:nowrap">包含／排除</th><th style="width:48mm">條件</th><th>設定值</th></tr>
+<tr><td><b>包含</b></td><td>顧客標籤</td><td>勾選這 7 個：<code>V1-純新品</code> <code>V1-補貨加新品</code> <code>V1-YB回購</code> <code>V1-保養線</code> <code>V1-YB忠誠客</code> <code>V1-品馨回購</code> <code>V1-新品優先</code></td></tr>
+<tr><td><b>而且</b></td><td>是否有 LINE 註冊 ID</td><td><b>否</b>　←　這條是關鍵，選錯會寄給已綁定的人</td></tr>
+<tr><td><b>而且</b></td><td>是否有電郵</td><td><b>是</b></td></tr>
+<tr><td><b>排除</b></td><td>是黑名單</td><td>系統預設，<b>不要刪掉</b></td></tr>
+<tr><td><b>排除</b></td><td>顧客標籤</td><td>勾選 <code>V1-VIP人工</code></td></tr>
+</table>
+<div class=mute style="margin-top:1.6mm">條件之間用「而且」串接，不是「或者」。</div>
+</div>
+
+<div class=step>
+<b class=t>更新方式與儲存</b>
+<div style="margin-top:1.8mm;line-height:1.72">
+<span class=chk></span>更新方式選「<b>手動更新</b>」（這是一次性活動，不需自動更新）<br>
+<span class=chk></span>按右側「<b>試算</b>」，確認人數約 <b>2,427 位</b>（±200 內可接受）<br>
+<span class=chk></span>人數無誤後按右上「<b>儲存</b>」<br>
+<span class=chk></span>完成日 <span class=fill style="min-width:24mm"></span>　實際人數 <span class=fill style="min-width:20mm"></span>　執行人 <span class=fill style="min-width:22mm"></span>
+</div>
+</div>
+</div>
+
+<div class=sec style="margin-top:4mm"><div class=sh><b>第二步　建立並發送電郵廣播</b><span>STEP 2 · BROADCAST</span></div>
+<div class=mute style="margin-bottom:2.4mm">路徑：商店後台 &gt; <b>顧客管理 &gt; 廣播中心</b> &gt;「新增廣播訊息」&gt; 選「<b>電郵</b>」</div>
+
+<div class=step>
+<b class=t>依序完成</b>
+<div style="margin-top:1.8mm;line-height:1.72">
+<span class=chk></span>1. 訊息標題：向行銷部索取（上限 80 字）<br>
+<span class=chk></span>2. 訊息內容：貼上行銷部定稿文案<br>
+<span class=chk></span>3. 設定目標時間 → 選「<b>預約發送</b>」，時間訂 <b>10/21（三）</b><br>
+<span class=chk></span>4. 切到「設定目標群組」分頁 → 目標群組選項選「<b>顧客分群</b>」<br>
+<span class=chk></span>5. 下拉選單選剛才建的 <code>CRM V2 A軌-未綁LINE</code><br>
+<span class=chk></span>6. 確認頁面下方顯示的人數正確<br>
+<span class=chk></span>7. 按「<b>送出</b>」，回到列表確認狀態是「等待中」
+</div>
+</div>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　2026/10/15 版　｜　列印後依序執行，完成請打勾</div><div>客服操作手冊　・　2 / 3</div></div></div><div class=page><div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>Shopline 電郵廣播操作手冊</div><div class=t2>EMAIL BROADCAST SOP</div><div class=t3>注意事項與成效回報</div></div></div>
+<div class=sec><div class=sh><b>三個會出事的地方</b><span>PITFALLS</span></div>
+
+<div class=step>
+<b class=t>① 連結一定要貼完整網址</b>
+<div style="margin-top:1.8mm;line-height:1.75">
+要貼 <code>https://www.heiweibeauty.com/...</code> 這種<b>完整含 https 的網址</b>。<br>
+系統會自動幫你轉成短網址並記錄點擊 ——
+<b>不要自己先用短網址工具縮過再貼</b>，會導致點擊數追蹤不到。
+</div>
+</div>
+
+<div class=step>
+<b class=t>② 一封信最多只能放 10 個連結</b>
+<div style="margin-top:1.8mm;line-height:1.75">
+超過 10 個，顧客收到的連結會是錯的。<br>
+本次信件預計只需要 2 個：綁定教學連結、官網連結。
+</div>
+</div>
+
+<div class=step>
+<b class=t>③ 一律用「預約發送」，不要用「直接發送」</b>
+<div style="margin-top:1.8mm;line-height:1.75">
+「直接發送」按下去就<b>不能修改也不能取消</b>。<br>
+「預約發送」在設定時間到之前都還能改內容、改對象、整個取消。
+</div>
+</div>
+
+<div class="callout warn" style="line-height:1.55"><b>寄出前務必先試寄一封給自己。</b>
+做法：另外建一個只含你自己的顧客分群，先發一封測試，確認版面、連結、折扣碼都正確，再發正式的那封。
+</div>
+</div>
+
+<div class=sec style="margin-top:5mm"><div class=sh><b>第三步　看成效並回報</b><span>STEP 3 · REPORT</span></div>
+<div class=mute style="margin-bottom:2.4mm">路徑：顧客管理 &gt; 顧客分群 &gt; 該分群「檢視名單」&gt;「查看」　｜　數據每小時更新一次</div>
+
+<table class=tight>
+<tr><th style="width:44mm">要回報的數字</th><th>哪裡看</th><th style="width:30mm">填寫</th></tr>
+<tr><td><b>實際寄送人數</b></td><td>廣播中心 &gt; 該筆廣播 &gt; 查閱</td><td><span class=fill style="min-width:26mm"></span></td></tr>
+<tr><td><b>點擊人數</b></td><td>活動列表 &gt; 查看 &gt; 狀態與成效</td><td><span class=fill style="min-width:26mm"></span></td></tr>
+<tr><td><b>下單人數</b></td><td>同上</td><td><span class=fill style="min-width:26mm"></span></td></tr>
+<tr><td>歸因於活動的營業額</td><td>分群數據頁</td><td>NT$<span class=fill style="min-width:22mm"></span></td></tr>
+<tr><td>開封率（若畫面上有）</td><td>廣播中心 &gt; 查閱</td><td><span class=fill style="min-width:26mm"></span></td></tr>
+<tr><td>回報人／日期</td><td colspan=2><span class=fill style="min-width:56mm"></span></td></tr>
+</table>
+
+<div class="callout" style="line-height:1.55"><b>10/22 前把上表填好交給 Sam。</b>
+若「開封率」在畫面上找不到，直接寫「無此欄位」即可，不用另外查 —— LINE 與 Shopline 的分眾廣播不一定提供這項。
+重點是<b>點擊人數與下單人數</b>，那才是這封信有沒有用的證據。</div>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　2026/10/15 版　｜　列印後依序執行，完成請打勾</div><div>客服操作手冊　・　3 / 3</div></div></div></body></html>

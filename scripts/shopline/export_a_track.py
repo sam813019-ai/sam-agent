@@ -4,6 +4,10 @@
 這批人推播不到（Shopline 沒有 line_id），只能走 Email，
 目的是請他們綁定 LINE，讓下一波改用推播。
 
+⚠️ 2026-10-15 起，實際寄送改走 Shopline 顧客分群＋廣播中心，不再用這份 CSV 寄信。
+   本檔保留作為「對帳用」：客服建好分群後，用這裡的人數交叉驗證試算結果。
+   欄位 可寄送 標示是否同意接收行銷信 —— 未同意者 Shopline 不會寄，法規限制。
+
 用法：
   python3 export_a_track.py                  # 產出 CSV 到 data/crm-v2/
   python3 export_a_track.py --out 路徑.csv
@@ -52,6 +56,8 @@ def main():
         rows.append({
             '姓名': name or '(未填)',
             'Email': email,
+            '可寄送': '是' if c.get('is_subscribed_marketing_email') else '否（未同意行銷信）',
+            'VIP人工': '是' if 'V1-VIP人工' in tg else '',
             '累計消費': int(money(c.get('orders_total_sum'))),
             '訂單數': int(c.get('order_count') or 0),
             '標籤': '／'.join(sorted(tg)),
@@ -66,14 +72,18 @@ def main():
         w.writeheader()
         w.writerows(rows)
 
+    sendable = [r for r in rows if r['可寄送'] == '是' and not r['VIP人工']]
     tot = sum(r['累計消費'] for r in rows)
     print('=' * 60)
     print(f'CRM V1 標籤客　　　{stat["v1"]:,} 位')
     print(f'  已綁 LINE（走 B 軌推播）　{stat["bound"]:,} 位')
     print(f'  未綁且無 Email（撈不到）　{stat["no_email"]:,} 位')
     print(f'  永久排除　　　　　　　　　{stat["excluded"]} 位')
-    print(f'→ A 軌 Email 名單　{len(rows):,} 位')
+    print(f'→ A 軌名單總數　　{len(rows):,} 位')
     print(f'   累計消費 NT${tot:,}　人均 NT${tot//max(len(rows),1):,}')
+    print()
+    print(f'★ Shopline 廣播實際寄得到　{len(sendable):,} 位')
+    print(f'   （已扣除未同意行銷信者與 V1-VIP人工，此數應與後台分群試算相符）')
     print('=' * 60)
     print(f'已寫出：{a.out}')
 
