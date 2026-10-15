@@ -39,3 +39,20 @@ docs/HEIWEI_CRM_執行手冊.md
 德妍思/*.pptx
 scripts/backup/backup.log
 scripts/backup/launchd.err
+
+# Shopline 訂單快取（含顧客資料）
+data/.sl_cache/
+
+# KAJU bot：程式內含 LINE Token，勿進 repo
+kaju-bot/
+
+# CRM V2 名單（含姓名/Email，個資）
+data/crm-v2/*.csv
+# 推播紀錄（recipients 含顧客姓名與 ID，個資）
+data/line-push/
+# 排版 QA 用的暫存圖與備份
+data/crm-v2/s-*.jpg
+data/crm-v2/*.pdf.png
+data/crm-v2/*.bak
+# PDF 為產出物，原始檔是同名 .html（沿用 docs/*.pdf 既有政策）
+data/crm-v2/*.pdf

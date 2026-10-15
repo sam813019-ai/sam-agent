@@ -1,0 +1,249 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<title>HEIWEI_CRM_V2執行方案</title><style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box;animation:none!important}
+html,body{margin:0;padding:0}
+:root{--gray:#97999B;--leaf:#8C9A8E;--amber:#EF9F27;--ink:#25262a;--gold:#C9A15C}
+body{font-family:"Noto Sans CJK TC","Noto Sans TC","PingFang TC","Heiti TC",sans-serif;
+ color:var(--ink);font-size:9.4pt;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;padding:13mm 15mm 11mm;position:relative;overflow:hidden;page-break-after:always}
+.page:last-child{page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:3.4mm}
+.logo{font-size:18.5pt;font-weight:700;letter-spacing:.34em;line-height:1}
+.logo .sub{font-size:8pt;font-weight:400;letter-spacing:.62em;color:var(--gray);margin-top:2.2mm}
+.hdr{text-align:right;line-height:1.55}
+.hdr .t1{font-size:9.2pt;font-weight:700}
+.hdr .t2{font-size:8.4pt;color:var(--gray)}
+.hdr .t3{font-size:8.2pt;color:#5f6064}
+h1{font-size:20pt;font-weight:700;margin:8mm 0 2.2mm}
+.meta{font-size:9.2pt;color:#4d4e52}
+.meta2{font-size:8.6pt;color:var(--gray);margin-top:1.2mm}
+.rule{width:26mm;height:2.4px;background:var(--ink);margin:3.4mm 0 0}
+.sec{margin-top:6mm}
+.sh{display:flex;align-items:center;gap:3mm;margin-bottom:2.8mm}
+.sh::before{content:"";width:1.6mm;height:4.4mm;background:var(--ink);display:block}
+.sh b{font-size:11pt;letter-spacing:.04em}
+.sh span{font-size:7.8pt;color:var(--gray);letter-spacing:.2em}
+.ov{background:#f5f5f5;padding:4.4mm 5.5mm;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:3.2mm 7mm;font-size:9.2pt}
+.ov .k{color:#5f6064;white-space:nowrap}
+.ov .v{font-weight:700;text-align:right;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3.4mm}
+.kpi{border:1px solid #dcdcdd;padding:3.6mm 4.2mm 4mm}
+.kpi.dark{background:#25262a;border-color:#25262a;color:#fff}
+.kpi .l{font-size:8.2pt;color:#63646a}
+.kpi.dark .l{color:#c6c7ca}
+.kpi .v{font-size:19.5pt;font-weight:700;letter-spacing:-.012em;line-height:1.28;margin-top:.8mm}
+.kpi .v small{font-size:9pt;font-weight:700}
+.kpi .s{font-size:7.8pt;color:var(--gray);margin-top:1mm}
+.kpi.dark .s{color:#9b9ca0}
+table{width:100%;border-collapse:collapse}
+th{font-size:8.4pt;color:#4d4e52;font-weight:600;text-align:left;background:#efefef;padding:2.4mm 3mm}
+td{padding:2.4mm 3mm;border-bottom:1px solid #ededee;font-size:9.2pt}
+.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{background:#f5f5f5;font-weight:700;border-bottom:none}
+tr.dim td{color:var(--gray)}
+.pill{display:inline-block;background:#25262a;color:#fff;font-size:7.8pt;font-weight:600;border-radius:9px;padding:.8mm 2.8mm}
+.pill.g{background:var(--leaf)}
+.pill.a{background:var(--amber)}
+.pill.o{background:#fff;color:var(--gray);border:1px solid #dcdcdd}
+.mute{color:var(--gray);font-size:8.6pt}
+.callout{border-left:3px solid var(--leaf);background:#f6f7f6;padding:3mm 4mm;font-size:8.8pt;color:#4d4e52;margin-top:3mm;line-height:1.7}
+.callout.warn{border-left-color:var(--amber);background:#fdf8f0}
+.callout.dark{border-left-color:var(--ink);background:#f1f1f2}
+.callout b{color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:start}
+.dtl{display:flex;align-items:center;gap:3.5mm;padding:1.5mm 0}
+.dtl .d{width:13mm;font-size:8.8pt;color:#4d4e52;font-variant-numeric:tabular-nums}
+.dtl .track{flex:1;background:#ececed;border-radius:1.6mm;height:3.2mm;overflow:hidden}
+.dtl .fill{height:100%;background:#b6b7b9;border-radius:1.6mm}
+.dtl .fill.top{background:#25262a}
+.dtl .v{width:34mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+.trendbox{border:1px solid #e4e4e5;padding:4mm 5mm}
+.bar{height:2.6mm;background:#b6b7b9;border-radius:1.3mm;display:inline-block;vertical-align:middle}
+.bar.g{background:var(--leaf)}
+.bar.a{background:var(--amber)}
+ul.ins{list-style:none;margin:0;padding:0}
+ul.ins li{position:relative;padding:1.8mm 0 1.8mm 6mm;font-size:9.2pt;border-bottom:1px solid #f0f0f1}
+ul.ins li::before{content:"";position:absolute;left:1.2mm;top:3.8mm;width:2.4mm;height:2.4mm;border-radius:50%;background:var(--leaf)}
+ul.ins li.a::before{background:var(--amber)}
+ul.ins li.g::before{background:var(--gray)}
+ul.ins b{font-weight:700}
+.band{background:#25262a;color:#fff;padding:3.4mm 5mm;font-size:9.6pt;font-weight:700}
+.settle{border:1px solid #dcdcdd;border-top:none;padding:1mm 5mm 3mm}
+.srow{display:flex;justify-content:space-between;align-items:baseline;padding:2.8mm 0;border-bottom:1px dotted #d5d5d6}
+.srow:last-child{border-bottom:none}
+.srow .lab{font-size:9.2pt}
+.srow .amt{font-size:15pt;font-weight:700;font-variant-numeric:tabular-nums}
+.srow.off{color:var(--gray)}
+.srow.off .amt{font-size:10pt;font-weight:600}
+.ft{position:absolute;left:15mm;right:15mm;bottom:8mm;display:flex;justify-content:space-between;
+ border-top:1px solid #e4e4e5;padding-top:2.4mm;font-size:7.6pt;color:#a9aaad}
+.big{font-size:34pt;font-weight:700;letter-spacing:-.02em;line-height:1}
+.big small{font-size:11pt}
+.seg{display:flex;align-items:center;gap:3mm;padding:2mm 0;border-bottom:1px solid #f0f0f1}
+.seg .nm{width:34mm;font-size:8.8pt}
+.seg .track{flex:1;background:#ececed;height:4mm;border-radius:2mm;overflow:hidden}
+.seg .fill{height:100%;border-radius:2mm;background:var(--leaf)}
+.seg .fill.dim{background:#cfd0d1}
+.seg .v{width:30mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+</style></head><body><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V2 執行方案</div><div class=t2>CRM WAVE-2 PLAN</div><div class=t3>製表：2026/10/15　｜　電商營運</div></div></div>
+<h1>CRM V2 執行方案・LINE 推播轉型</h1>
+<div class=meta>目的：V1 以 Email 發送無法追蹤成效，V2 改以 LINE 官方帳號推播　｜　資料截至 2026/10/15</div>
+<div class=meta2>人數皆為 Shopline API 實查；技術可行性已實測驗證（見第 4 頁）。</div>
+<div class=rule></div>
+
+<div class=sec><div class=sh><b>核心判斷</b><span>KEY FINDING</span></div>
+<div class=kpis>
+  <div class="kpi dark"><div class=l>V1 名單的 LINE 綁定率</div>
+    <div class=v>13.6<small>%</small></div>
+    <div class=s>4,247 位中僅 576 位已綁</div></div>
+  <div class=kpi><div class=l>全站綁定率</div>
+    <div class=v>25.3<small>%</small></div>
+    <div class=s>8,555 位中 2,168 位已綁</div></div>
+  <div class=kpi><div class=l>綁定且回購者人均消費</div>
+    <div class=v><small>NT$</small>13,250</div>
+    <div class=s>買過 2 次以上的 388 位</div></div>
+</div>
+<div class="callout warn"><b>⚠ 如果 V2 只走 LINE，會失去 86% 的名單。</b>
+兩個最大的波次 —— V1-補貨加新品（1,375 人，綁定率 9.7%）與 V1-純新品（1,440 人，12.2%）——
+加起來 2,815 人裡只推得到 310 人。樣本數小到看不出成效，等於重蹈 V1 覆轍。</div>
+</div>
+
+<div class=sec><div class=sh><b>V1 名單綁定率逐波明細</b><span>BY SEGMENT</span></div>
+<table>
+<tr><th>V1 波次標籤</th><th class=n>名單數</th><th class=n>已綁 LINE</th><th class=n>綁定率</th><th>判讀</th></tr>
+<tr><td>V1-新品優先</td><td class=n>62</td><td class=n>29</td><td class=n><b>46.8%</b></td><td>最高，但人數少</td></tr>
+<tr><td>VIP-高價值</td><td class=n>79</td><td class=n>27</td><td class=n>34.2%</td><td>高價值客綁定意願高</td></tr>
+<tr><td>大量採購</td><td class=n>253</td><td class=n>68</td><td class=n>26.9%</td><td>經銷候選</td></tr>
+<tr><td>V1-YB忠誠客</td><td class=n>93</td><td class=n>22</td><td class=n>23.7%</td><td>三檔都買的老客</td></tr>
+<tr><td>回頭客</td><td class=n>563</td><td class=n>132</td><td class=n>23.4%</td><td>最大的高綁定群</td></tr>
+<tr><td>V1-品馨回購</td><td class=n>92</td><td class=n>20</td><td class=n>21.7%</td><td>—</td></tr>
+<tr><td>V1-YB回購</td><td class=n>830</td><td class=n>163</td><td class=n>19.6%</td><td>—</td></tr>
+<tr><td>V1-VIP人工</td><td class=n>41</td><td class=n>8</td><td class=n>19.5%</td><td>—</td></tr>
+<tr class=dim><td>V1-純新品</td><td class=n>1,440</td><td class=n>176</td><td class=n><b>12.2%</b></td><td>最大波次，綁定最低</td></tr>
+<tr class=dim><td>V1-補貨加新品</td><td class=n>1,375</td><td class=n>134</td><td class=n><b>9.7%</b></td><td>第二大波次</td></tr>
+<tr class=dim><td>V1-保養線</td><td class=n>322</td><td class=n>28</td><td class=n>8.7%</td><td>最低</td></tr>
+</table>
+<div class="callout dark"><b>規律很清楚：越有價值的客人，綁定率越高。</b>
+已綁 LINE 且買過 2 次以上的 388 位人均 NT$13,250，只買過一次的 1,300 位人均 NT$1,848，<b>相差 7.2 倍</b>。
+LINE 天然打到對的人，但打不到待開發的大多數。</div>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>CRM V2 執行方案　・　1 / 5</div></div>
+</div><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V2 執行方案</div><div class=t2>CRM WAVE-2 PLAN</div><div class=t3>兩軌並行策略</div></div></div>
+
+<div class=sec><div class=sh><b>策略：兩軌並行，不要只選一邊</b><span>TWO TRACKS</span></div>
+<table>
+<tr><th>　</th><th>A 軌：綁定戰役</th><th>B 軌：V2 首波試水</th></tr>
+<tr><td><b>對象</b></td><td>V1 未綁 LINE 且有 Email<br><b>3,671 位</b>（人均消費 NT$2,422）</td><td>高價值且已綁 LINE<br><b>171 位</b>（人均消費 NT$9,669）</td></tr>
+<tr><td><b>通道</b></td><td>Email（唯一還能觸及九成的管道）</td><td>LINE 官方帳號推播</td></tr>
+<tr><td><b>目的</b></td><td>把 Email 名單換成 LINE 名單</td><td>驗證 LINE 推播的實際成效</td></tr>
+<tr><td><b>成功指標</b></td><td>綁定率 13.6% → 目標 30%</td><td>開啟率、點擊率、轉換筆數、帶動營收</td></tr>
+<tr><td><b>為何現在做</b></td><td>綁定率不拉，V2 永遠只能推 13%</td><td>量小可控，有數據才知道值不值得投資</td></tr>
+</table>
+<div class="callout"><b>為什麼不是「整理後重推一次」：</b>
+V1 失敗的原因不是「用了 Email」，是<b>沒有追蹤機制</b> —— 用 Gmail 手動寄，所以沒有數據。
+換成 LINE 不會自動解決「沒人負責回報數字」。本方案的 B 軌一定要指定負責人與回報日。</div>
+</div>
+
+<div class=sec><div class=sh><b>B 軌分群與人數</b><span>SEGMENTS</span></div>
+<table>
+<tr><th>分群</th><th class=n>可推人數</th><th>特性</th><th>建議動作</th></tr>
+<tr><td><b>VIP-高價值</b></td><td class=n>27</td><td>累計消費 ≥ NT$20,000</td><td><b>一對一</b>，不群發、不給折扣碼</td></tr>
+<tr><td><b>大量採購</b></td><td class=n>68</td><td>單團購買 ≥ 7 瓶</td><td>經銷邀請，非促銷</td></tr>
+<tr><td><b>回頭客</b></td><td class=n>132</td><td>買過 2 次以上</td><td>週年慶優先通知＋專屬折扣</td></tr>
+<tr><td>V1-新品優先</td><td class=n>29</td><td>綁定率最高 46.8%</td><td>新品預告</td></tr>
+<tr><td>V1-YB忠誠客</td><td class=n>22</td><td>三檔都買</td><td>併入回頭客</td></tr>
+<tr class=sum><td>去重後合計</td><td class=n>171</td><td>人均消費 NT$9,669</td><td>累計貢獻 NT$165 萬</td></tr>
+</table>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>CRM V2 執行方案　・　2 / 5</div></div>
+</div><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V2 執行方案</div><div class=t2>CRM WAVE-2 PLAN</div><div class=t3>需要在 Shopline 設定的優惠</div></div></div>
+
+<div class=sec><div class=sh><b>要設定的優惠一覽</b><span>DISCOUNTS TO SET UP</span></div>
+<div class=mute style="margin-bottom:3mm">⚠️ Shopline 的 <code>create_promotion</code> API 會回 500，<b>促銷一律在後台手動建立</b>。
+每個方案給獨立折扣碼，這是唯一能把營收歸因到該波推播的方法。</div>
+<table>
+<tr><th>#</th><th>方案名稱</th><th>對象</th><th>優惠內容</th><th class=n>折扣碼</th></tr>
+<tr><td>1</td><td><b>綁定禮</b></td><td>A 軌 3,671 位</td><td>完成 LINE 綁定送 <b>NT$100 購物金</b>（無消費門檻）</td><td class=n>BIND100</td></tr>
+<tr><td>2</td><td><b>回頭客週年慶先行</b></td><td>回頭客 132 位</td><td>週年慶開跑<b>前 48 小時</b>可下單，滿 2,000 再折 200</td><td class=n>V2RETURN</td></tr>
+<tr><td>3</td><td><b>新品優先通知</b></td><td>新品優先 29 位</td><td>新品上架優先購買權，首批限量</td><td class=n>V2NEW</td></tr>
+<tr><td>4</td><td>VIP 專屬</td><td>VIP 27 位</td><td><b>不設折扣碼</b> —— 一對一聯繫，依個案給方案</td><td class=n>—</td></tr>
+<tr><td>5</td><td>大量採購轉經銷</td><td>68 位</td><td><b>不是折扣</b> —— 寄經銷合作說明，走業務流程</td><td class=n>—</td></tr>
+</table>
+<div class="callout warn"><b>⚠ 購物金發放方式待確認：</b>
+Shopline 顧客資料有 <code>credit_balance</code> 欄位，但<b>能否用 API 批次發放尚未驗證</b>。
+若不行則需後台逐筆操作 —— 3,671 位不可能手動發。
+<b>建議改為「綁定後自動發 100 元折扣碼」</b>，折扣碼可一次建立、所有人共用，後台設定「每人限用一次」。</div>
+</div>
+
+<div class=sec><div class=sh><b>與既有檔期的關係</b><span>CALENDAR FIT</span></div>
+<table>
+<tr><th>日期</th><th>既有檔期</th><th>CRM V2 如何配合</th></tr>
+<tr><td>10/15 – 10/31</td><td>無檔期</td><td><b>A 軌綁定戰役</b>＋B 軌試水，不打折扣戰</td></tr>
+<tr><td><b>11/02 – 11/15</b></td><td><b>官網週年慶</b>（9 組合，已有方案）</td><td>B 軌回頭客<b>提前 48 小時</b>通知；綁定者優先</td></tr>
+<tr><td>11/09 – 11/15</td><td>鈞鈞團（11/09 開團）</td><td>不重疊推播，避免同一批人被打兩次</td></tr>
+<tr><td>12 月</td><td><b>目前零檔期</b></td><td>依 B 軌成效決定是否加開 LINE 專屬檔</td></tr>
+</table>
+<div class="callout"><b>把綁定戰役綁在週年慶上，動機最強。</b>
+文案主軸建議：「綁定 LINE，週年慶優惠提前 48 小時通知你」——
+這比單純送 100 元有說服力，而且 11/02 就能驗收綁了多少人真的回來買。</div>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>CRM V2 執行方案　・　3 / 5</div></div>
+</div><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V2 執行方案</div><div class=t2>CRM WAVE-2 PLAN</div><div class=t3>執行與技術</div></div></div>
+
+<div class=sec><div class=sh><b>執行時程</b><span>TIMELINE</span></div>
+<table>
+<tr><th>時間</th><th>項目</th><th>產出</th><th class=n>負責</th></tr>
+<tr><td>10/16</td><td>後台建立 5 個方案與折扣碼</td><td>促銷設定完成</td><td class=n>Sam</td></tr>
+<tr><td>10/16</td><td>撰寫 A 軌 Email 與 B 軌 LINE 文案</td><td>文案 2 式</td><td class=n>行銷部</td></tr>
+<tr><td>10/17</td><td>B 軌先推（171 位，量小可控）</td><td>推播紀錄</td><td class=n>Sam</td></tr>
+<tr><td>10/20</td><td>B 軌成效回報</td><td>開啟／點擊／轉換</td><td class=n>行銷部</td></tr>
+<tr><td>10/21</td><td>A 軌綁定戰役發送（3,671 位）</td><td>寄送紀錄</td><td class=n>客服營運部</td></tr>
+<tr><td>10/31</td><td>綁定率回測</td><td>13.6% → ?</td><td class=n>Sam</td></tr>
+<tr><td><b>11/02</b></td><td><b>週年慶開跑</b>，回頭客提前 48 小時已於 10/31 通知</td><td>—</td><td class=n>全體</td></tr>
+<tr><td>11/16</td><td>週年慶結案＋V2 首波總檢討</td><td>成效報告</td><td class=n>Sam</td></tr>
+</table>
+</div>
+
+<div class=sec><div class=sh><b>技術可行性（已實測）</b><span>VERIFIED</span></div>
+<table>
+<tr><th>項目</th><th>狀態</th><th>說明</th></tr>
+<tr><td>Shopline 的 line_id 可否用於推播</td><td><b>✅ 已驗證</b></td><td>隨機取 5 位實測 LINE Profile API，<b>5/5 全部查得到</b>；兩個 Channel 在同一 Provider</td></tr>
+<tr><td>名單篩選</td><td>✅ 可自動</td><td>Shopline API 可依標籤＋line_id 篩選</td></tr>
+<tr><td>批次推播</td><td>✅ 可自動</td><td>LINE multicast 每批 500 人，自動分批</td></tr>
+<tr><td>執行紀錄</td><td>✅ 可自動</td><td>寫入 Google Sheet：時間／標籤／人數／成功失敗</td></tr>
+<tr class=dim><td>購物金批次發放</td><td>⚠ 待驗證</td><td>建議改用折扣碼規避</td></tr>
+<tr class=dim><td>推播成效追蹤</td><td>⚠ 需設計</td><td>LINE 無原生開啟率；以折扣碼使用數回推轉換</td></tr>
+</table>
+<div class="callout warn"><b>⚠ 推播不可逆。</b>腳本將內建三道防呆：
+<b>① 預設只預覽</b>（未加 <code>--do</code> 一律不發送）<b>② 列出完整名單與訊息內容供確認</b>
+<b>③ 執行紀錄寫入 Sheet</b>。發送前一律先跑 dry-run。</div>
+</div>
+
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>CRM V2 執行方案　・　4 / 5</div></div>
+</div><div class=page>
+<div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V2 執行方案</div><div class=t2>CRM WAVE-2 PLAN</div><div class=t3>待確認事項</div></div></div>
+<div class=sec><div class=sh><b>待確認事項</b><span>OPEN ITEMS</span></div>
+<ul class=ins>
+<li><b>① LINE 推播額度</b>：本次 B 軌僅 171 則、A 軌走 Email 不耗額度。但綁定率若拉到 30%，
+後續七波將達 2,000+ 則／波，<b>需確認月額度上限</b>。</li>
+<li class=a><b>② 負責人與回報日</b>：V1 失敗在沒人回報數字。B 軌推播後的開啟與轉換，
+<b>需指定行銷部於 10/20 回報</b>，否則 V2 會重蹈覆轍。</li>
+<li class=a><b>③ 購物金 vs 折扣碼</b>：購物金批次發放未驗證，建議改折扣碼。需你決定。</li>
+<li class=g><b>④ 大量採購 68 位</b>：是 CRM 名單也是經銷名單，<b>應走業務流程而非促銷推播</b>，
+需與 Amanda 確認由誰接手。</li>
+</ul>
+</div>
+<div class=sec><div class=sh><b>一句話總結</b><span>BOTTOM LINE</span></div>
+<div class="callout dark"><b>不要把 V1 名單整理後重推一次 —— 那會砍掉 86%。</b><br><br>
+先用<b>還能觸及九成的 Email</b> 去換 LINE 綁定（A 軌 3,671 位），
+同時用<b>已綁定的高價值小群</b>（B 軌 171 位）驗證 LINE 推播到底有沒有效。
+兩軌的成效在 11/02 週年慶一起驗收：綁定率拉到多少、LINE 推播帶回多少營收。</div>
+</div>
+<div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>CRM V2 執行方案　・　5 / 5</div></div>
+</div>
+</body></html>

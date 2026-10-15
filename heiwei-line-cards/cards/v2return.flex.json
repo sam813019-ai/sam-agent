@@ -1,0 +1,101 @@
+{
+  "type": "flex",
+  "altText": "HEIWEI｜週年慶優惠提前 48 小時通知",
+  "contents": {
+    "type": "bubble",
+    "size": "mega",
+    "hero": {
+      "type": "image",
+      "url": "https://heiwei-line-cards.vercel.app/cards/v2return.png",
+      "size": "full",
+      "aspectRatio": "1:1",
+      "aspectMode": "cover",
+      "action": {
+        "type": "uri",
+        "label": "看詳情",
+        "uri": "https://www.heiweibeauty.com"
+      }
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "md",
+      "paddingAll": "18px",
+      "contents": [
+        {
+          "type": "text",
+          "text": "週年慶優惠，提前 48 小時",
+          "weight": "bold",
+          "size": "lg",
+          "color": "#25262A",
+          "wrap": true
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "xs",
+          "contents": [
+            {
+              "type": "text",
+              "text": "單筆滿 NT$2,000 折抵 200 元",
+              "size": "sm",
+              "color": "#5F6064",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "10/31 起可用，不必等 11/02",
+              "size": "sm",
+              "color": "#5F6064",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "每人限用一次・數量有限",
+              "size": "sm",
+              "color": "#5F6064",
+              "wrap": true
+            }
+          ]
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "paddingAll": "14px",
+      "contents": [
+        {
+          "type": "button",
+          "style": "secondary",
+          "height": "sm",
+          "action": {
+            "type": "clipboard",
+            "label": "複製折扣碼 V2RETURN",
+            "clipboardText": "V2RETURN"
+          }
+        },
+        {
+          "type": "button",
+          "style": "primary",
+          "color": "#C9A15C",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "立即選購",
+            "uri": "https://www.heiweibeauty.com"
+          }
+        },
+        {
+          "type": "text",
+          "text": "複製後到結帳頁貼上即可折抵",
+          "size": "xxs",
+          "color": "#9A9B9F",
+          "align": "center",
+          "margin": "sm"
+        }
+      ]
+    }
+  }
+}
