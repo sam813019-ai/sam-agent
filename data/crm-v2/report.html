@@ -198,17 +198,18 @@ Shopline 顧客資料有 <code>credit_balance</code> 欄位，但<b>能否用 AP
 <div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>CRM V2 執行方案</div><div class=t2>CRM WAVE-2 PLAN</div><div class=t3>執行與技術</div></div></div>
 
 <div class=sec><div class=sh><b>執行時程</b><span>TIMELINE</span></div>
-<table>
-<tr><th>時間</th><th>項目</th><th>產出</th><th class=n>負責</th></tr>
+<table class=tight>
+<tr><th style="width:14mm">時間</th><th>項目</th><th style="width:41mm">產出</th><th class=n style="width:21mm">負責</th></tr>
 <tr><td>10/16</td><td>後台建立 <b>2 組</b>折扣碼（V2NEW 無新品、不建）</td><td>促銷設定完成</td><td class=n>Sam</td></tr>
 <tr><td>10/16</td><td>撰寫 A 軌 Email 文案；B 軌圖卡已完成，僅需複核</td><td>Email 文案 1 式</td><td class=n>行銷部</td></tr>
-<tr><td>10/17</td><td>B 軌先推 <b>136 位</b>（已扣失效與 VIP 人工）</td><td>推播紀錄</td><td class=n>Sam</td></tr>
-<tr><td>10/17</td><td>個別私訊 <b>V1-VIP人工 41 位</b>（人均 NT$22,655，不走群發）</td><td>聯繫紀錄</td><td class=n>行銷部<br>客服營運部</td></tr>
-<tr><td>10/20</td><td>B 軌成效報告（<code>v2_report.py</code> 自動產出）</td><td>送達／使用／營收／轉換／封鎖</td><td class=n>Sam</td></tr>
-<tr><td>10/20</td><td>清點 LINE 聊天室顧客回覆則數（唯一需人工的指標）</td><td>回覆則數</td><td class=n>客服營運部</td></tr>
-<tr><td>10/21</td><td>A 軌綁定戰役發送（<b>約 2,427 位</b>，Shopline 廣播中心）</td><td>寄送／點擊／下單數</td><td class=n>客服營運部</td></tr>
+<tr><td>10/21</td><td>A 軌綁定戰役發送（<b>約 2,427 位</b>，Shopline 廣播中心）</td><td style="white-space:nowrap">寄送／點擊／下單數</td><td class=n>客服營運部</td></tr>
+<tr><td>10/22</td><td>A 軌成效回報</td><td style="white-space:nowrap">寄送／點擊／下單數</td><td class=n>客服營運部</td></tr>
+<tr><td>10/30</td><td>個別私訊 <b>V1-VIP人工 41 位</b>（人均 NT$22,655，不走群發）</td><td>聯繫紀錄</td><td class=n>行銷部<br>客服營運部</td></tr>
+<tr><td><b>10/31</b></td><td><b>B 軌 LINE 推播</b>　<b>當天即可下單</b><br><span class=mute>名單當天重跑；A 軌新綁定者加入，人數比 136 多，這是 A 軌貢獻的直接證據</span></td><td>推播紀錄</td><td class=n>Sam</td></tr>
 <tr><td>10/31</td><td>綁定率回測</td><td>13.6% → ?</td><td class=n>Sam</td></tr>
 <tr><td><b>11/02</b></td><td><b>週年慶開跑</b>，回頭客提前 48 小時已於 10/31 通知</td><td>—</td><td class=n>全體</td></tr>
+<tr><td>11/03</td><td>B 軌成效報告（<code>v2_report.py</code> 自動產出）</td><td style="white-space:nowrap">送達／使用／營收／轉換</td><td class=n>Sam</td></tr>
+<tr><td>11/03</td><td>清點 LINE 聊天室顧客回覆則數（唯一需人工的指標）</td><td>回覆則數</td><td class=n>客服營運部</td></tr>
 <tr><td>11/16</td><td>週年慶結案＋V2 首波總檢討</td><td>成效報告</td><td class=n>Sam</td></tr>
 </table>
 </div>
@@ -223,9 +224,7 @@ Shopline 顧客資料有 <code>credit_balance</code> 欄位，但<b>能否用 AP
 <tr class=dim><td>購物金批次發放</td><td style="white-space:nowrap">⚠ 未採用</td><td>改走折扣碼</td></tr>
 <tr><td>推播成效追蹤</td><td style="white-space:nowrap">✅ 已自動</td><td><code>v2_report.py</code>：送達／使用次數／營收／轉換率／封鎖變化</td></tr>
 </table>
-<div class="callout warn"><b>⚠ 推播不可逆。</b>腳本將內建三道防呆：
-<b>① 預設只預覽</b>（未加 <code>--do</code> 一律不發送）<b>② 列出完整名單與訊息內容供確認</b>
-<b>③ 執行紀錄寫入 Sheet</b>。發送前一律先跑 dry-run。</div>
+<div class="callout warn" style="line-height:1.5;margin-top:2.2mm"><b>⚠ 推播不可逆。</b>腳本內建三道防呆：<b>預設只預覽</b>（未加 <code>--do</code> 不發送）、<b>列出完整名單供確認</b>、<b>執行紀錄留檔</b>。</div>
 </div>
 
 <div class=ft><div>HEIWEI 何謂美　｜　機密・內部文件</div><div>CRM V2 執行方案　・　4 / 5</div></div>
