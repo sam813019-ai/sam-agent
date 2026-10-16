@@ -13,7 +13,7 @@
       "action": {
         "type": "uri",
         "label": "立即領取",
-        "uri": "https://www.heiweibeauty.com/get_coupon/__PROMOTION_ID__"
+        "uri": "https://www.heiweibeauty.com/get_coupon/6ad1c696f794eec6c7f40c79"
       }
     },
     "body": {
@@ -74,7 +74,7 @@
           "action": {
             "type": "uri",
             "label": "立即領取優惠券",
-            "uri": "https://www.heiweibeauty.com/get_coupon/__PROMOTION_ID__"
+            "uri": "https://www.heiweibeauty.com/get_coupon/6ad1c696f794eec6c7f40c79"
           }
         },
         {
