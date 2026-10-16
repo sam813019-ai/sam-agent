@@ -1,6 +1,6 @@
 {
   "type": "flex",
-  "altText": "HEIWEI｜綁定 LINE 立刻折 100 元",
+  "altText": "HEIWEI｜綁定 LINE 領 100 元優惠券",
   "contents": {
     "type": "bubble",
     "size": "mega",
@@ -12,8 +12,8 @@
       "aspectMode": "cover",
       "action": {
         "type": "uri",
-        "label": "看詳情",
-        "uri": "https://www.heiweibeauty.com/users/sign_in"
+        "label": "立即領取",
+        "uri": "https://www.heiweibeauty.com/get_coupon/__PROMOTION_ID__"
       }
     },
     "body": {
@@ -37,21 +37,21 @@
           "contents": [
             {
               "type": "text",
-              "text": "無消費門檻，綁定後即可使用",
+              "text": "無消費門檻，領取後即可使用",
               "size": "sm",
               "color": "#5F6064",
               "wrap": true
             },
             {
               "type": "text",
-              "text": "點按鈕後選「使用 LINE 登入」",
+              "text": "點下方按鈕 →「使用 LINE 登入」",
               "size": "sm",
               "color": "#5F6064",
               "wrap": true
             },
             {
               "type": "text",
-              "text": "登入完成即自動綁定，免設定",
+              "text": "登入完成，優惠券自動進你的帳戶",
               "size": "sm",
               "color": "#5F6064",
               "wrap": true
@@ -68,28 +68,18 @@
       "contents": [
         {
           "type": "button",
-          "style": "secondary",
-          "height": "sm",
-          "action": {
-            "type": "clipboard",
-            "label": "複製折扣碼 BIND100",
-            "clipboardText": "BIND100"
-          }
-        },
-        {
-          "type": "button",
           "style": "primary",
           "color": "#8C9A8E",
           "height": "sm",
           "action": {
             "type": "uri",
-            "label": "前往 LINE 登入",
-            "uri": "https://www.heiweibeauty.com/users/sign_in"
+            "label": "立即領取優惠券",
+            "uri": "https://www.heiweibeauty.com/get_coupon/__PROMOTION_ID__"
           }
         },
         {
           "type": "text",
-          "text": "請用您在本站註冊的信箱所綁定的 LINE 帳號登入",
+          "text": "使用期限 10/21 – 11/15　每人限領一次",
           "size": "xxs",
           "color": "#9A9B9F",
           "align": "center",
