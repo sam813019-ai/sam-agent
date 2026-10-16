@@ -1,39 +1,47 @@
 <meta charset="utf-8">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{width:1040px;height:1040px;overflow:hidden;
+body{width:1540px;height:1000px;overflow:hidden;
   font-family:"PingFang TC","Noto Sans TC","Helvetica Neue",sans-serif;
   -webkit-font-smoothing:antialiased}
-/* ⚠️ LINE 卡片訊息會在圖上疊自己的標題（左上）與按鈕（下方置中）。
-   上緣 18%、下緣 28% 必須淨空，否則會被蓋住。 */
-.card{width:1040px;height:1040px;position:relative;background:#F4F2ED;color:#25262A;
-  padding:195px 80px 300px;display:flex;flex-direction:column;justify-content:center}
-.card::after{content:"";position:absolute;right:-200px;top:40px;width:620px;height:620px;
-  border-radius:50%;background:radial-gradient(circle,rgba(140,154,142,.30),transparent 68%)}
-.in{position:relative;z-index:2}
-.headline{font-size:56px;font-weight:700;line-height:1.26;letter-spacing:-.01em}
-.big{font-size:150px;font-weight:700;line-height:.95;letter-spacing:-.045em;color:#8C9A8E;margin:14px 0 0}
-.big small{font-size:46px;font-weight:700;letter-spacing:0}
-.steps{font-size:26px;line-height:1.9;opacity:.82;margin-top:26px}
+/* LINE 多頁訊息（卡片訊息）官方比例 1.54:1，工作尺寸 1540×1000。
+   ⚠️ 比例不對會被系統拉伸放大 → 文字變糊（1110×1000 實測糊掉）。
+   ⚠️ LINE 會在圖上疊自己的標題（左上）與按鈕（下方置中），
+      上緣 180px、下緣 280px 必須淨空。 */
+.card{width:1540px;height:1000px;position:relative;background:#F4F2ED;color:#25262A;
+  padding:180px 90px 280px;display:flex;align-items:center;gap:76px}
+.card::after{content:"";position:absolute;right:-180px;top:20px;width:720px;height:720px;
+  border-radius:50%;background:radial-gradient(circle,rgba(140,154,142,.28),transparent 68%)}
+.col{position:relative;z-index:2}
+.l{flex:0 0 660px}
+.r{flex:1;padding-top:8px}
+.headline{font-size:62px;font-weight:700;line-height:1.24;letter-spacing:-.01em}
+.big{font-size:172px;font-weight:700;line-height:.95;letter-spacing:-.045em;color:#8C9A8E;margin:18px 0 0}
+.big small{font-size:52px;font-weight:700;letter-spacing:0}
+.steps{font-size:30px;line-height:2.0;opacity:.84}
 .steps b{font-weight:700}
-.num{display:inline-block;width:34px;height:34px;line-height:34px;text-align:center;
-  background:#25262A;color:#F7F6F3;border-radius:50%;font-size:19px;font-weight:700;
-  margin-right:13px;vertical-align:2px}
-.foot{font-size:22px;letter-spacing:.04em;opacity:.58;line-height:1.7;margin-top:30px}
-/* logo 放右上：LINE 的標題只佔左半邊（約 5%–46% 寬），右側安全 */
-.mark{position:absolute;top:72px;right:80px;text-align:right;z-index:2}
-.mark .w{font-size:30px;font-weight:700;letter-spacing:.34em;line-height:1}
-.mark .sub{font-size:13px;font-weight:400;letter-spacing:.62em;opacity:.5;margin-top:10px}
+.num{display:inline-block;width:40px;height:40px;line-height:40px;text-align:center;
+  background:#25262A;color:#F7F6F3;border-radius:50%;font-size:22px;font-weight:700;
+  margin-right:16px;vertical-align:1px}
+.rule{height:2px;width:120px;background:#8C9A8E;margin:26px 0 22px}
+.foot{font-size:25px;letter-spacing:.03em;opacity:.58;line-height:1.75}
+.mark{position:absolute;top:64px;right:90px;text-align:right;z-index:2}
+.mark .w{font-size:32px;font-weight:700;letter-spacing:.34em;line-height:1}
+.mark .sub{font-size:14px;font-weight:400;letter-spacing:.62em;opacity:.5;margin-top:11px}
 </style>
 <div class=card>
-<div class=mark><div class=w>HEIWEI</div><div class=sub>何 謂 美</div></div>
-<div class=in>
-  <div class=headline>送你一張<br>100 元優惠券</div>
-  <div class=big>100<small> 元</small></div>
-  <div class=steps>
-    <span class=num>1</span>點下方「立即領取」<br>
-    <span class=num>2</span>選「<b>使用 LINE 登入</b>」<br>
-    <span class=num>3</span>優惠券自動進你的帳戶
+  <div class=mark><div class=w>HEIWEI</div><div class=sub>何 謂 美</div></div>
+  <div class="col l">
+    <div class=headline>送你一張<br>100 元優惠券</div>
+    <div class=big>100<small> 元</small></div>
   </div>
-  <div class=foot>無消費門檻　｜　11/15 前有效　｜　每人限領一次</div>
-</div></div>
+  <div class="col r">
+    <div class=steps>
+      <span class=num>1</span>點下方「立即領取」<br>
+      <span class=num>2</span>選「<b>使用 LINE 登入</b>」<br>
+      <span class=num>3</span>優惠券自動進你的帳戶
+    </div>
+    <div class=rule></div>
+    <div class=foot>無消費門檻　｜　11/15 前有效<br>每人限領一次</div>
+  </div>
+</div>
