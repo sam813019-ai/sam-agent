@@ -4,36 +4,28 @@
 body{width:1040px;height:1040px;overflow:hidden;
   font-family:"PingFang TC","Noto Sans TC","Helvetica Neue",sans-serif;
   -webkit-font-smoothing:antialiased}
-/* ⚠️ LINE 卡片訊息會在圖上疊自己的標題（左上）與按鈕（下方置中）。
-   上緣 18%、下緣 28% 必須淨空，否則會被蓋住。 */
+/* 多頁訊息＝輪播卡片，每張僅約 240pt 寬，圖會被大幅縮小。
+   ⚠️ 圖裡只放「一個大訊息」，細項文字請放在 LINE 卡片的文字欄位，
+      放進圖裡一定會糊。
+   ⚠️ 上緣 190px、下緣 310px 淨空，避開 LINE 疊的標題與按鈕。 */
 .card{width:1040px;height:1040px;position:relative;background:#F4F2ED;color:#25262A;
-  padding:195px 80px 300px;display:flex;flex-direction:column;justify-content:center}
-.card::after{content:"";position:absolute;right:-200px;top:40px;width:620px;height:620px;
+  padding:190px 80px 310px;display:flex;flex-direction:column;justify-content:center}
+.card::after{content:"";position:absolute;right:-190px;top:30px;width:640px;height:640px;
   border-radius:50%;background:radial-gradient(circle,rgba(140,154,142,.30),transparent 68%)}
 .in{position:relative;z-index:2}
-.headline{font-size:56px;font-weight:700;line-height:1.26;letter-spacing:-.01em}
-.big{font-size:150px;font-weight:700;line-height:.95;letter-spacing:-.045em;color:#8C9A8E;margin:14px 0 0}
-.big small{font-size:46px;font-weight:700;letter-spacing:0}
-.steps{font-size:26px;line-height:1.9;opacity:.82;margin-top:26px}
-.steps b{font-weight:700}
-.num{display:inline-block;width:34px;height:34px;line-height:34px;text-align:center;
-  background:#25262A;color:#F7F6F3;border-radius:50%;font-size:19px;font-weight:700;
-  margin-right:13px;vertical-align:2px}
-.foot{font-size:22px;letter-spacing:.04em;opacity:.58;line-height:1.7;margin-top:30px}
-/* logo 放右上：LINE 的標題只佔左半邊（約 5%–46% 寬），右側安全 */
-.mark{position:absolute;top:72px;right:80px;text-align:right;z-index:2}
+.eyebrow{font-size:42px;font-weight:700;letter-spacing:.3em;opacity:.55;margin-bottom:18px}
+.big{font-size:300px;font-weight:700;line-height:.86;letter-spacing:-.05em;color:#8C9A8E}
+.big small{font-size:96px;font-weight:700;letter-spacing:0}
+.sub{font-size:52px;font-weight:700;line-height:1.35;margin-top:26px}
+.mark{position:absolute;top:70px;right:80px;text-align:right;z-index:2}
 .mark .w{font-size:30px;font-weight:700;letter-spacing:.34em;line-height:1}
-.mark .sub{font-size:13px;font-weight:400;letter-spacing:.62em;opacity:.5;margin-top:10px}
+.mark .sub2{font-size:13px;font-weight:400;letter-spacing:.62em;opacity:.5;margin-top:10px}
 </style>
 <div class=card>
-<div class=mark><div class=w>HEIWEI</div><div class=sub>何 謂 美</div></div>
-<div class=in>
-  <div class=headline>送你一張<br>100 元優惠券</div>
-  <div class=big>100<small> 元</small></div>
-  <div class=steps>
-    <span class=num>1</span>點下方「立即領取」<br>
-    <span class=num>2</span>選「<b>使用 LINE 登入</b>」<br>
-    <span class=num>3</span>優惠券自動進你的帳戶
+  <div class=mark><div class=w>HEIWEI</div><div class=sub2>何 謂 美</div></div>
+  <div class=in>
+    <div class=eyebrow>歡 迎 禮</div>
+    <div class=big>100<small> 元</small></div>
+    <div class=sub>優惠券　無消費門檻</div>
   </div>
-  <div class=foot>無消費門檻　｜　11/15 前有效　｜　每人限領一次</div>
-</div></div>
+</div>
