@@ -1,0 +1,83 @@
+{
+  "type": "flex",
+  "altText": "歡迎加入 HEIWEI｜送你 100 元優惠券",
+  "contents": {
+    "type": "bubble",
+    "size": "mega",
+    "hero": {
+      "type": "image",
+      "url": "https://heiwei-line-cards.vercel.app/cards/welcome.png",
+      "size": "full",
+      "aspectRatio": "1:1",
+      "aspectMode": "cover",
+      "action": {
+        "type": "uri",
+        "label": "立即領取",
+        "uri": "https://www.heiweibeauty.com/get_coupon/6ad1c696f794eec6c7f40c79"
+      }
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "md",
+      "paddingAll": "18px",
+      "contents": [
+        {
+          "type": "text",
+          "text": "歡迎加入，送你 100 元優惠券",
+          "weight": "bold",
+          "size": "lg",
+          "color": "#25262A",
+          "wrap": true
+        },
+        {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "xs",
+          "contents": [
+            {
+              "type": "text",
+              "text": "點下方按鈕 →「使用 LINE 登入」",
+              "size": "sm",
+              "color": "#5F6064",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "登入完成，優惠券自動進你的帳戶",
+              "size": "sm",
+              "color": "#5F6064",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "無消費門檻，11/15 前有效",
+              "size": "sm",
+              "color": "#5F6064",
+              "wrap": true
+            }
+          ]
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "paddingAll": "14px",
+      "contents": [
+        {
+          "type": "button",
+          "style": "primary",
+          "color": "#8C9A8E",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "立即領取優惠券",
+            "uri": "https://www.heiweibeauty.com/get_coupon/6ad1c696f794eec6c7f40c79"
+          }
+        }
+      ]
+    }
+  }
+}
