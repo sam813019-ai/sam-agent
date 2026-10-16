@@ -1,0 +1,146 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<title>HEIWEI_A軌_目的說明</title><style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box;animation:none!important}
+html,body{margin:0;padding:0}
+:root{--gray:#97999B;--leaf:#8C9A8E;--amber:#EF9F27;--ink:#25262a;--gold:#C9A15C}
+body{font-family:"Noto Sans CJK TC","Noto Sans TC","PingFang TC","Heiti TC",sans-serif;
+ color:var(--ink);font-size:9.4pt;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;padding:13mm 15mm 11mm;position:relative;overflow:hidden;page-break-after:always}
+.page:last-child{page-break-after:auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:3.4mm}
+.logo{font-size:18.5pt;font-weight:700;letter-spacing:.34em;line-height:1}
+.logo .sub{font-size:8pt;font-weight:400;letter-spacing:.62em;color:var(--gray);margin-top:2.2mm}
+.hdr{text-align:right;line-height:1.55}
+.hdr .t1{font-size:9.2pt;font-weight:700}
+.hdr .t2{font-size:8.4pt;color:var(--gray)}
+.hdr .t3{font-size:8.2pt;color:#5f6064}
+h1{font-size:20pt;font-weight:700;margin:8mm 0 2.2mm}
+.meta{font-size:9.2pt;color:#4d4e52}
+.meta2{font-size:8.6pt;color:var(--gray);margin-top:1.2mm}
+.rule{width:26mm;height:2.4px;background:var(--ink);margin:3.4mm 0 0}
+.sec{margin-top:6mm}
+.sh{display:flex;align-items:center;gap:3mm;margin-bottom:2.8mm}
+.sh::before{content:"";width:1.6mm;height:4.4mm;background:var(--ink);display:block}
+.sh b{font-size:11pt;letter-spacing:.04em}
+.sh span{font-size:7.8pt;color:var(--gray);letter-spacing:.2em}
+.ov{background:#f5f5f5;padding:4.4mm 5.5mm;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:3.2mm 7mm;font-size:9.2pt}
+.ov .k{color:#5f6064;white-space:nowrap}
+.ov .v{font-weight:700;text-align:right;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3.4mm}
+.kpi{border:1px solid #dcdcdd;padding:3.6mm 4.2mm 4mm}
+.kpi.dark{background:#25262a;border-color:#25262a;color:#fff}
+.kpi .l{font-size:8.2pt;color:#63646a}
+.kpi.dark .l{color:#c6c7ca}
+.kpi .v{font-size:19.5pt;font-weight:700;letter-spacing:-.012em;line-height:1.28;margin-top:.8mm}
+.kpi .v small{font-size:9pt;font-weight:700}
+.kpi .s{font-size:7.8pt;color:var(--gray);margin-top:1mm}
+.kpi.dark .s{color:#9b9ca0}
+table{width:100%;border-collapse:collapse}
+th{font-size:8.4pt;color:#4d4e52;font-weight:600;text-align:left;background:#efefef;padding:2.4mm 3mm}
+td{padding:2.4mm 3mm;border-bottom:1px solid #ededee;font-size:9.2pt}
+.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{background:#f5f5f5;font-weight:700;border-bottom:none}
+tr.dim td{color:var(--gray)}
+.pill{display:inline-block;background:#25262a;color:#fff;font-size:7.8pt;font-weight:600;border-radius:9px;padding:.8mm 2.8mm}
+.pill.g{background:var(--leaf)}
+.pill.a{background:var(--amber)}
+.pill.o{background:#fff;color:var(--gray);border:1px solid #dcdcdd}
+.mute{color:var(--gray);font-size:8.6pt}
+.callout{border-left:3px solid var(--leaf);background:#f6f7f6;padding:3mm 4mm;font-size:8.8pt;color:#4d4e52;margin-top:3mm;line-height:1.7}
+.callout.warn{border-left-color:var(--amber);background:#fdf8f0}
+.callout.dark{border-left-color:var(--ink);background:#f1f1f2}
+.callout b{color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:start}
+.dtl{display:flex;align-items:center;gap:3.5mm;padding:1.5mm 0}
+.dtl .d{width:13mm;font-size:8.8pt;color:#4d4e52;font-variant-numeric:tabular-nums}
+.dtl .track{flex:1;background:#ececed;border-radius:1.6mm;height:3.2mm;overflow:hidden}
+.dtl .fill{height:100%;background:#b6b7b9;border-radius:1.6mm}
+.dtl .fill.top{background:#25262a}
+.dtl .v{width:34mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+.trendbox{border:1px solid #e4e4e5;padding:4mm 5mm}
+.bar{height:2.6mm;background:#b6b7b9;border-radius:1.3mm;display:inline-block;vertical-align:middle}
+.bar.g{background:var(--leaf)}
+.bar.a{background:var(--amber)}
+ul.ins{list-style:none;margin:0;padding:0}
+ul.ins li{position:relative;padding:1.8mm 0 1.8mm 6mm;font-size:9.2pt;border-bottom:1px solid #f0f0f1}
+ul.ins li::before{content:"";position:absolute;left:1.2mm;top:3.8mm;width:2.4mm;height:2.4mm;border-radius:50%;background:var(--leaf)}
+ul.ins li.a::before{background:var(--amber)}
+ul.ins li.g::before{background:var(--gray)}
+ul.ins b{font-weight:700}
+.band{background:#25262a;color:#fff;padding:3.4mm 5mm;font-size:9.6pt;font-weight:700}
+.settle{border:1px solid #dcdcdd;border-top:none;padding:1mm 5mm 3mm}
+.srow{display:flex;justify-content:space-between;align-items:baseline;padding:2.8mm 0;border-bottom:1px dotted #d5d5d6}
+.srow:last-child{border-bottom:none}
+.srow .lab{font-size:9.2pt}
+.srow .amt{font-size:15pt;font-weight:700;font-variant-numeric:tabular-nums}
+.srow.off{color:var(--gray)}
+.srow.off .amt{font-size:10pt;font-weight:600}
+.ft{position:absolute;left:15mm;right:15mm;bottom:8mm;display:flex;justify-content:space-between;
+ border-top:1px solid #e4e4e5;padding-top:2.4mm;font-size:7.6pt;color:#a9aaad}
+.big{font-size:34pt;font-weight:700;letter-spacing:-.02em;line-height:1}
+.big small{font-size:11pt}
+.seg{display:flex;align-items:center;gap:3mm;padding:2mm 0;border-bottom:1px solid #f0f0f1}
+.seg .nm{width:34mm;font-size:8.8pt}
+.seg .track{flex:1;background:#ececed;height:4mm;border-radius:2mm;overflow:hidden}
+.seg .fill{height:100%;border-radius:2mm;background:var(--leaf)}
+.seg .fill.dim{background:#cfd0d1}
+.seg .v{width:30mm;text-align:right;font-size:8.8pt;font-weight:600;font-variant-numeric:tabular-nums}
+</style><style>
+table.tight td,table.tight th{padding-top:1.55mm;padding-bottom:1.55mm}
+.chk{display:inline-block;width:3.6mm;height:3.6mm;border:1.2px solid #8a8b8e;margin-right:2.2mm;vertical-align:-0.4mm;border-radius:0.6mm}
+.who{display:inline-block;background:#25262a;color:#fff;font-size:7.6pt;font-weight:700;border-radius:8px;padding:.6mm 2.4mm;margin-right:2mm}
+.who.m{background:#8C9A8E}.who.c{background:#C9A15C}.who.f{background:#6f7f96}
+.step{border:1px solid #e0e0e1;padding:3.2mm 4mm;margin-bottom:2.6mm;page-break-inside:avoid}
+.step b.t{font-size:10pt}
+.fill{border-bottom:1px solid #b9babd;display:inline-block;min-width:22mm}
+code{background:#f2f2f3;padding:.3mm 1.2mm;font-size:8.6pt;border-radius:2px}
+table.sop td{vertical-align:middle;padding-top:2mm;padding-bottom:2mm}
+table.sop .fill{min-width:17mm}
+
+.lead{font-size:9.6pt;line-height:1.72;margin-bottom:2.4mm}
+.lead b{font-weight:700}
+.kv{display:grid;grid-template-columns:28mm 1fr;gap:2mm 6mm;font-size:9.2pt;line-height:1.6}
+.kv .k{font-weight:700;color:#4d4e52}
+.calc{background:#f5f5f5;padding:3.2mm 4mm;font-family:ui-monospace,Menlo,monospace;
+  font-size:7.9pt;line-height:1.6;border-radius:2px}
+</style></head><body><div class=page><div class=hd><div class=logo>HEIWEI<div class=sub>何 謂 美</div></div><div class=hdr><div class=t1>A 軌・綁定戰役</div><div class=t2>OBJECTIVE</div><div class=t3>客群與目的</div></div></div>
+<h1>A 軌・綁定戰役</h1>
+<div class=meta>CRM V2 第一波　｜　預約發送 2026/10/21（三）</div>
+<div class=rule></div>
+
+<div class=sec><div class=sh><b>客群</b><span>AUDIENCE</span></div>
+<div class=lead>CRM V1 名單中「<b>有 Email、但還沒綁定 LINE</b>」的舊客，共 3,671 位。扣除 1,222 位未同意接收行銷訊息（法規上不能寄）與 22 位改走一對一的高價值客，<b>實際寄送約 2,427 位</b>。</div>
+<div class=kv>
+<div class=k>累計消費</div><div>NT$532 萬</div>
+<div class=k>人均消費</div><div>約 NT$2,200</div>
+<div class=k>共同特徵</div><div>買過、認得品牌，但目前只能靠 Email 單向接觸</div>
+</div>
+</div>
+
+<div class=sec><div class=sh><b>目的</b><span>WHY</span></div>
+<div class=lead><b>把「只能寄 Email」的名單，換成「可以 LINE 推播」的名單。</b></div>
+<div class=lead>V1 用 Email 發送的最大問題不是通路本身，而是<b>沒有任何追蹤機制</b>——寄出去後不知道誰看了、誰點了、誰買了，做了卻無法判斷值不值得。<br>綁定 LINE 之後，每一次接觸都看得到點擊、下單與帶動營收。而且<b>這是一次性投資</b>：綁定完成後，往後每檔新品、每次週年慶都能直接觸及，不必再付獲取成本。</div>
+</div>
+
+<div class=sec><div class=sh><b>這封信的合理目標</b><span>TARGET</span></div>
+<div class=lead>新增 <b>100–150 位</b>可推播會員，綁定率由 <b>13.6% 推至 16–17%</b>。</div>
+<div class=lead style="margin-bottom:2.2mm"><b>成本</b>：每位完成綁定者獲得 100 元優惠券（無門檻、限官網、每人限領一次）。<b>只有實際領取並使用的人才產生成本</b>，非全額發放。</div>
+<div class=calc>目標 30% ＝ 4,247 位 V1 客中要有 1,274 位綁定（現已綁 575 位）<br>
+→ 單靠這封信需帶來 699 位，等於 2,427 位中有 28.8% 完成整條動線<br><br>
+實際動線有四道關卡，層層遞減：<br>
+　開信 40% × 點擊 20% × 完成綁定 70% ≈ <b>136 位</b></div>
+<div class="callout warn" style="line-height:1.6;margin-top:2.4mm"><b>「綁定率 30%」是整個 CRM V2 系列（多波 Email）跑完的終點，不是單封信的目標。</b>
+若以 30% 為本次驗收標準，11/16 必然達不到，會把正常表現誤判為失敗。</div>
+</div>
+
+<div class=sec><div class=sh><b>驗收時點</b><span>CHECKPOINTS</span></div>
+<table class=tight>
+<tr><th style="width:20mm">日期</th><th style="width:26mm">性質</th><th>看什麼</th></tr>
+<tr><td><b>10/31</b></td><td><b>期中</b></td><td>綁定率跑到多少　<span class=mute>用於確定 B 軌當天的推播名單規模</span></td></tr>
+<tr><td><b>11/16</b></td><td><b>結案驗收</b></td><td>最終綁定率、優惠券使用數、帶動營收、投報比<br><span class=mute>券 11/15 到期；在那之前仍會持續有人綁定，故最終數字以此為準</span></td></tr>
+</table>
+
+</div>
+
+<div class=ft><div>HEIWEI 何謂美　｜　2026/10/16　｜　內部說明</div><div>A 軌・綁定戰役　・　1 / 1</div></div></div></body></html>
