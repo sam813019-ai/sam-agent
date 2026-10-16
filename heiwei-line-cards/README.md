@@ -30,3 +30,16 @@ Shopline 的領券連結是 `https://www.heiweibeauty.com/get_coupon/<promotion_
 
 券建好後執行 `python3 set_claim_link.py --code BIND100` 把 id 填進
 `cards/bind100.flex.json`，同一條連結也可貼到 LINE 加入好友歡迎訊息與關鍵字自動回應。
+
+## 歡迎訊息有兩張圖，依 LINE 的訊息格式選用
+
+LINE OA 後台的「**多頁訊息**」（卡片訊息）會在圖上**疊自己的標題與按鈕**，
+會蓋掉圖內同位置的元素；「**圖文訊息**」與 API 發的 **Flex** 則不會疊任何東西。
+
+| 檔案 | 用在 | 說明 |
+|---|---|---|
+| `cards/welcome.png` | 圖文訊息、Flex | 完整版，含 logo、歡迎標籤、立即領取按鈕 |
+| `cards/welcome_card.png` | **多頁訊息** | 上緣 19%、下緣 30% 淨空，logo 移至右上避開 LINE 標題 |
+
+多頁訊息的安全區：LINE 標題在左上（約 5–46% 寬、6–14% 高），
+按鈕在下方置中（約 77–89% 高）。做新圖時這兩塊要留白。
